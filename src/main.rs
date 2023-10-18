@@ -84,7 +84,7 @@ fn main() -> Result<()> {
     let mut unnmaintained_pkgs = Vec::new();
 
     for pkg in &metadata.packages {
-        let upgradeable_deps = outdated_deps(&opts, &metadata, &pkg)?;
+        let upgradeable_deps = outdated_deps(&opts, &metadata, pkg)?;
 
         if upgradeable_deps.is_empty() {
             continue;
@@ -146,7 +146,7 @@ fn outdated_deps<'a>(
                 dep,
                 version_used: &dep_pkg.version,
                 version_latest,
-            })
+            });
         };
     }
     Ok(deps)
@@ -171,13 +171,13 @@ fn latest_commit_age(opts: &Opts, pkg: &Package) -> Result<Option<u64>> {
     };
     let tempdir = tempdir()?;
 
-    let success = clone_repository(repository, &tempdir.path())?;
+    let success = clone_repository(repository, tempdir.path())?;
     if !success {
         warn!(opts, "failed to clone `{}`", repository);
         return Ok(None);
     }
 
-    let latest_commit_time = latest_commit_time(&tempdir.path())?;
+    let latest_commit_time = latest_commit_time(tempdir.path())?;
 
     let duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
 
@@ -253,10 +253,7 @@ fn display_unmaintained_pkg(opts: &Opts, unmaintained_pkg: &UnmaintainedPkg) -> 
     {
         println!(
             "    {} (requirement: {}, version used: {}, latest: {})",
-            dep.name,
-            dep.req.to_string(),
-            version_used,
-            version_latest
+            dep.name, dep.req, version_used, version_latest
         );
     }
     if opts.tree {
@@ -267,7 +264,7 @@ fn display_unmaintained_pkg(opts: &Opts, unmaintained_pkg: &UnmaintainedPkg) -> 
 }
 
 fn display_path(name: &str, version: &Version) -> Result<()> {
-    let spec = format!("{name}@{}", version.to_string());
+    let spec = format!("{name}@{version}");
     let mut command = Command::new("cargo");
     command.args(["tree", "--workspace", "--invert", &spec]);
     let status = command
