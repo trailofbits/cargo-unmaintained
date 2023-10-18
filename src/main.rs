@@ -1,3 +1,5 @@
+#![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
+
 use anyhow::{anyhow, ensure, Context, Result};
 use cargo_metadata::{
     semver::Version, Dependency, DependencyKind, Metadata, MetadataCommand, Package,
@@ -61,6 +63,7 @@ struct OutdatedDep<'a> {
 }
 
 thread_local! {
+    #[allow(clippy::unwrap_used)]
     static INDEX: Lazy<GitIndex> = Lazy::new(|| GitIndex::new_cargo_default().unwrap());
 }
 
@@ -213,8 +216,10 @@ fn clone_repository(repository: &str, path: &Path) -> Result<bool> {
     Ok(success)
 }
 
+#[allow(clippy::unwrap_used)]
 static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").unwrap());
 
+#[allow(clippy::unwrap_used)]
 fn shortened_url(url: &str) -> Option<&str> {
     RE.captures(url)
         .map(|captures| captures.get(0).unwrap().as_str())
