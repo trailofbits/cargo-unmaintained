@@ -10,6 +10,8 @@ use log::debug;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
+    cell::RefCell,
+    collections::HashMap,
     env::args,
     path::Path,
     process::{Command, Stdio},
@@ -67,6 +69,8 @@ struct OutdatedDep<'a> {
 thread_local! {
     #[allow(clippy::unwrap_used)]
     static INDEX: Lazy<GitIndex> = Lazy::new(|| GitIndex::new_cargo_default().unwrap());
+    static LATEST_VERSION_CACHE: RefCell<Option<HashMap<String, Version>>> = RefCell::new(None);
+    static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, u64>>> = RefCell::new(None);
 }
 
 macro_rules! warn {
@@ -123,6 +127,7 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+#[allow(clippy::unnecessary_wraps)]
 fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
         return Ok(Vec::new());
@@ -139,15 +144,12 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
             debug_assert!(dep.kind == DependencyKind::Development || dep.optional);
             continue;
         };
-        let Some(krate) = INDEX.with(|index| index.crate_(&dep.name)) else {
-            debug!("failed to find `{}` in index", &dep.name);
+        let Ok(version_latest) = latest_version(&dep.name).map_err(|error| {
+            warn!("failed to get latest version of `{}`: {}", &dep.name, error);
             debug_assert!(!published(dep_pkg));
+        }) else {
             continue;
         };
-        let version_latest_index = krate
-            .highest_normal_version()
-            .ok_or_else(|| anyhow!("`{}` has no normal version", &dep.name))?;
-        let version_latest = Version::from_str(version_latest_index.version())?;
         if dep_pkg.version <= version_latest && !dep.req.matches(&version_latest) {
             deps.push(OutdatedDep {
                 dep,
@@ -166,6 +168,25 @@ fn find_package<'a>(metadata: &'a Metadata, dep: &Dependency) -> Option<&'a Pack
         .find(|pkg| dep.name == pkg.name && dep.req.matches(&pkg.version))
 }
 
+#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+fn latest_version(name: &str) -> Result<Version> {
+    LATEST_VERSION_CACHE.with_borrow_mut(|latest_version_cache| {
+        let latest_version_cache = latest_version_cache.get_or_insert_with(HashMap::new);
+        if let Some(version) = latest_version_cache.get(name) {
+            return Ok(version.clone());
+        }
+        let krate = INDEX
+            .with(|index| index.crate_(name))
+            .ok_or_else(|| anyhow!("failed to find `{}` in index", name))?;
+        let latest_version_index = krate
+            .highest_normal_version()
+            .ok_or_else(|| anyhow!("`{}` has no normal version", name))?;
+        let latest_version = Version::from_str(latest_version_index.version())?;
+        latest_version_cache.insert(name.to_owned(), latest_version.clone());
+        Ok(latest_version)
+    })
+}
+
 fn published(pkg: &Package) -> bool {
     pkg.publish
         .as_ref()
@@ -176,18 +197,14 @@ fn latest_commit_age(pkg: &Package) -> Result<Option<(&str, u64)>> {
     let Some(url) = &pkg.repository else {
         return Ok(None);
     };
-    let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
 
-    let Some(url) = clone_repository(url, tempdir.path())? else {
-        warn!("failed to clone `{}`", url);
+    let Some((url, timestamp)) = timestamp(url)? else {
         return Ok(None);
     };
 
-    let latest_commit_time = latest_commit_time(tempdir.path())?;
-
     let duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
 
-    Ok(Some((url, duration.as_secs() - latest_commit_time)))
+    Ok(Some((url, duration.as_secs() - timestamp)))
 }
 
 fn clone_repository<'a>(url: &'a str, path: &Path) -> Result<Option<&'a str>> {
@@ -232,18 +249,48 @@ fn shorten_url(url: &str) -> Option<&str> {
         .map(|captures| captures.get(0).unwrap().as_str())
 }
 
-fn latest_commit_time(path: &Path) -> Result<u64> {
+#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
+    TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
+        let timestamp_cache = timestamp_cache.get_or_insert_with(HashMap::new);
+        // smoelius: Check both the regular and the shortened url.
+        if let Some(timestamp) = timestamp_cache.get(url) {
+            return Ok(Some((url, *timestamp)));
+        }
+        if let Some(url) = shorten_url(url) {
+            if let Some(timestamp) = timestamp_cache.get(url) {
+                return Ok(Some((url, *timestamp)));
+            }
+        }
+        let Some((url, timestamp)) = timestamp_from_clone(url)? else {
+            return Ok(None);
+        };
+        timestamp_cache.insert(url.to_owned(), timestamp);
+        Ok(Some((url, timestamp)))
+    })
+}
+
+fn timestamp_from_clone(url: &str) -> Result<Option<(&str, u64)>> {
+    let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
+
+    let Some(url) = clone_repository(url, tempdir.path())? else {
+        warn!("failed to clone `{}`", url);
+        return Ok(None);
+    };
+
     let mut command = Command::new("git");
     command
         .args(["log", "-1", "--pretty=format:%ct"])
-        .current_dir(path);
+        .current_dir(&tempdir);
     let output = command
         .output()
         .with_context(|| format!("failed to run command: {command:?}"))?;
     ensure!(output.status.success(), "command failed: {command:?}");
 
     let stdout = std::str::from_utf8(&output.stdout)?;
-    u64::from_str(stdout.trim_end()).map_err(Into::into)
+    let timestamp = u64::from_str(stdout.trim_end())?;
+
+    Ok(Some((url, timestamp)))
 }
 
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
