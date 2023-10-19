@@ -18,6 +18,8 @@ use std::{
 };
 use tempfile::tempdir;
 
+mod opts;
+
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
 #[derive(Debug, Parser)]
@@ -68,8 +70,8 @@ thread_local! {
 }
 
 macro_rules! warn {
-    ($opts: expr, $format:literal, $($arg:expr),*) => {
-        if !$opts.quiet {
+    ($format:literal, $($arg:expr),*) => {
+        if !crate::opts::get().quiet {
             eprintln!(concat!("warning: ", $format), $($arg),*);
         }
     };
@@ -82,20 +84,22 @@ fn main() -> Result<()> {
         subcmd: CargoSubCommand::Unmaintained(opts),
     } = Cargo::parse_from(args());
 
+    opts::init(opts);
+
     let metadata = MetadataCommand::new().exec()?;
 
     let mut unnmaintained_pkgs = Vec::new();
 
     for pkg in &metadata.packages {
-        let upgradeable_deps = outdated_deps(&opts, &metadata, pkg)?;
+        let upgradeable_deps = outdated_deps(&metadata, pkg)?;
 
         if upgradeable_deps.is_empty() {
             continue;
         }
 
-        let age = latest_commit_age(&opts, pkg)?;
+        let age = latest_commit_age(pkg)?;
 
-        if age.map_or(false, |age| age < opts.max_age * SECS_PER_DAY) {
+        if age.map_or(false, |age| age < opts::get().max_age * SECS_PER_DAY) {
             continue;
         }
 
@@ -109,17 +113,13 @@ fn main() -> Result<()> {
     unnmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.age);
 
     for unmaintained_pkg in unnmaintained_pkgs {
-        display_unmaintained_pkg(&opts, &unmaintained_pkg)?;
+        display_unmaintained_pkg(&unmaintained_pkg)?;
     }
 
     Ok(())
 }
 
-fn outdated_deps<'a>(
-    _opts: &Opts,
-    metadata: &'a Metadata,
-    pkg: &'a Package,
-) -> Result<Vec<OutdatedDep<'a>>> {
+fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
         return Ok(Vec::new());
     }
@@ -168,7 +168,7 @@ fn published(pkg: &Package) -> bool {
         .map_or(true, |registries| !registries.is_empty())
 }
 
-fn latest_commit_age(opts: &Opts, pkg: &Package) -> Result<Option<u64>> {
+fn latest_commit_age(pkg: &Package) -> Result<Option<u64>> {
     let Some(repository) = &pkg.repository else {
         return Ok(None);
     };
@@ -176,7 +176,7 @@ fn latest_commit_age(opts: &Opts, pkg: &Package) -> Result<Option<u64>> {
 
     let success = clone_repository(repository, tempdir.path())?;
     if !success {
-        warn!(opts, "failed to clone `{}`", repository);
+        warn!("failed to clone `{}`", repository);
         return Ok(None);
     }
 
@@ -239,7 +239,7 @@ fn latest_commit_time(path: &Path) -> Result<u64> {
     u64::from_str(stdout.trim_end()).map_err(Into::into)
 }
 
-fn display_unmaintained_pkg(opts: &Opts, unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
+fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
     let UnmaintainedPkg {
         pkg,
         age,
@@ -261,7 +261,7 @@ fn display_unmaintained_pkg(opts: &Opts, unmaintained_pkg: &UnmaintainedPkg) -> 
             dep.name, dep.req, version_used, version_latest
         );
     }
-    if opts.tree {
+    if opts::get().tree {
         display_path(&pkg.name, &pkg.version)?;
         println!();
     }
