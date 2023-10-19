@@ -247,7 +247,7 @@ fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
     } = unmaintained_pkg;
     let repo_msg = pkg.repository.as_deref().unwrap_or("no repository");
     let age_msg = age
-        .map(|age| format!(" last updated {} days ago", age / SECS_PER_DAY))
+        .map(|age| format!(" updated {} days ago", age / SECS_PER_DAY))
         .unwrap_or_default();
     println!("{} ({}{})", pkg.name, repo_msg, age_msg);
     for OutdatedDep {
