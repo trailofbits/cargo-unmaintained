@@ -211,48 +211,6 @@ fn latest_commit_age(pkg: &Package) -> Result<Option<(&str, u64)>> {
     Ok(Some((url, duration.as_secs() - timestamp)))
 }
 
-fn clone_repository<'a>(url: &'a str, path: &Path) -> Result<Option<&'a str>> {
-    let mut urls = vec![url];
-    if let Some(url) = shorten_url(url) {
-        urls.push(url);
-    }
-    let successful_url =
-        urls.into_iter()
-            .try_fold(None, |successful_url, url| -> Result<Option<&str>> {
-                if successful_url.is_some() {
-                    return Ok(successful_url);
-                }
-                let mut command = Command::new("git");
-                command
-                    .args([
-                        "clone",
-                        "--depth=1",
-                        "--quiet",
-                        url,
-                        &path.to_string_lossy(),
-                    ])
-                    .stderr(Stdio::null());
-                let status = command
-                    .status()
-                    .with_context(|| format!("failed to run command: {command:?}"))?;
-                if status.success() {
-                    Ok(Some(url))
-                } else {
-                    Ok(None)
-                }
-            })?;
-    Ok(successful_url)
-}
-
-#[allow(clippy::unwrap_used)]
-static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").unwrap());
-
-#[allow(clippy::unwrap_used)]
-fn shorten_url(url: &str) -> Option<&str> {
-    RE.captures(url)
-        .map(|captures| captures.get(0).unwrap().as_str())
-}
-
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
@@ -295,6 +253,48 @@ fn timestamp_from_clone(url: &str) -> Result<Option<(&str, u64)>> {
     let timestamp = u64::from_str(stdout.trim_end())?;
 
     Ok(Some((url, timestamp)))
+}
+
+fn clone_repository<'a>(url: &'a str, path: &Path) -> Result<Option<&'a str>> {
+    let mut urls = vec![url];
+    if let Some(url) = shorten_url(url) {
+        urls.push(url);
+    }
+    let successful_url =
+        urls.into_iter()
+            .try_fold(None, |successful_url, url| -> Result<Option<&str>> {
+                if successful_url.is_some() {
+                    return Ok(successful_url);
+                }
+                let mut command = Command::new("git");
+                command
+                    .args([
+                        "clone",
+                        "--depth=1",
+                        "--quiet",
+                        url,
+                        &path.to_string_lossy(),
+                    ])
+                    .stderr(Stdio::null());
+                let status = command
+                    .status()
+                    .with_context(|| format!("failed to run command: {command:?}"))?;
+                if status.success() {
+                    Ok(Some(url))
+                } else {
+                    Ok(None)
+                }
+            })?;
+    Ok(successful_url)
+}
+
+#[allow(clippy::unwrap_used)]
+static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").unwrap());
+
+#[allow(clippy::unwrap_used)]
+fn shorten_url(url: &str) -> Option<&str> {
+    RE.captures(url)
+        .map(|captures| captures.get(0).unwrap().as_str())
 }
 
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
