@@ -1,3 +1,6 @@
+#![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
+#![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
+
 use anyhow::Result;
 use rayon::prelude::*;
 use snapbox::{

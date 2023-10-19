@@ -24,3 +24,12 @@ ctor = "0.2"
 predicates = "3.0"
 rayon = "1.8"
 snapbox = "0.4"
+
+[workspace.metadata.dylint]
+libraries = [
+    { git = "https://github.com/trailofbits/dylint", pattern = "examples/general" },
+    { git = "https://github.com/trailofbits/dylint", pattern = "examples/supplementary" },
+    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/inconsistent_qualification" },
+    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/suboptimal_pattern" },
+    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/try_io_result" },
+]

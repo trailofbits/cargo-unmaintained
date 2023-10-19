@@ -169,7 +169,7 @@ fn latest_commit_age(opts: &Opts, pkg: &Package) -> Result<Option<u64>> {
     let Some(repository) = &pkg.repository else {
         return Ok(None);
     };
-    let tempdir = tempdir()?;
+    let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
 
     let success = clone_repository(repository, tempdir.path())?;
     if !success {
