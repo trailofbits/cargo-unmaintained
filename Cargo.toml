@@ -23,7 +23,9 @@ assert_cmd = "2.0"
 ctor = "0.2"
 predicates = "3.0"
 rayon = "1.8"
+serde = "1.0"
 snapbox = "0.4"
+toml = "0.8"
 
 [workspace.metadata.dylint]
 libraries = [

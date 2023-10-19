@@ -209,8 +209,10 @@ dependencies = [
  "predicates",
  "rayon",
  "regex",
+ "serde",
  "snapbox",
  "tempfile",
+ "toml",
 ]
 
 [[package]]

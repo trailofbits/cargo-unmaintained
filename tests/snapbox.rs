@@ -3,6 +3,7 @@
 
 use anyhow::Result;
 use rayon::prelude::*;
+use serde::Deserialize;
 use snapbox::{
     assert_matches_path,
     cmd::{cargo_bin, Command},
@@ -13,33 +14,54 @@ use std::{
 };
 use tempfile::tempdir;
 
+#[derive(Deserialize)]
+#[serde(deny_unknown_fields)]
+struct Test {
+    /// Repo url
+    url: String,
+
+    /// Repo revision; `None` (the default) means the head of the default branch
+    #[serde(default)]
+    rev: Option<String>,
+}
+
 #[test]
 fn snapbox() -> Result<()> {
     let mut read_dir = read_dir("tests/cases")?;
 
-    let url_paths = read_dir.try_fold(Vec::new(), |mut url_paths, entry| {
+    let test_paths = read_dir.try_fold(Vec::new(), |mut url_paths, entry| {
         let entry = entry?;
         let path = entry.path();
-        if path.extension() == Some(OsStr::new("url")) {
+        if path.extension() == Some(OsStr::new("toml")) {
             url_paths.push(path);
         }
         Result::<_>::Ok(url_paths)
     })?;
 
-    url_paths.into_par_iter().try_for_each(|input_path| {
+    test_paths.into_par_iter().try_for_each(|input_path| {
         let stdout_path = input_path.with_extension("stdout");
         let stderr_path = input_path.with_extension("stderr");
 
         let raw = read_to_string(input_path)?;
 
-        let url = raw.trim_end();
+        let test: Test = toml::from_str(&raw).unwrap();
 
         let tempdir = tempdir()?;
 
-        Command::new("git")
-            .args(["clone", "--depth=1", url, &tempdir.path().to_string_lossy()])
-            .assert()
-            .success();
+        let mut command =
+            Command::new("git").args(["clone", &test.url, &tempdir.path().to_string_lossy()]);
+        if test.rev.is_none() {
+            command = command.arg("--depth=1");
+        }
+        command.assert().success();
+
+        if let Some(rev) = &test.rev {
+            Command::new("git")
+                .args(["checkout", rev])
+                .current_dir(&tempdir)
+                .assert()
+                .success();
+        }
 
         let output = Command::new(cargo_bin("cargo-unmaintained"))
             .args(["unmaintained"])
