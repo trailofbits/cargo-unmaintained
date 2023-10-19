@@ -54,7 +54,7 @@ struct Opts {
 
 struct UnmaintainedPkg<'a> {
     pkg: &'a Package,
-    age: Option<u64>,
+    url_and_age: Option<(&'a str, u64)>,
     outdated_deps: Vec<OutdatedDep<'a>>,
 }
 
@@ -97,20 +97,24 @@ fn main() -> Result<()> {
             continue;
         }
 
-        let age = latest_commit_age(pkg)?;
+        let url_and_age = latest_commit_age(pkg)?;
 
-        if age.map_or(false, |age| age < opts::get().max_age * SECS_PER_DAY) {
+        if url_and_age
+            .as_ref()
+            .map_or(false, |&(_, age)| age < opts::get().max_age * SECS_PER_DAY)
+        {
             continue;
         }
 
         unnmaintained_pkgs.push(UnmaintainedPkg {
             pkg,
-            age,
+            url_and_age,
             outdated_deps: upgradeable_deps,
         });
     }
 
-    unnmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.age);
+    unnmaintained_pkgs
+        .sort_by_key(|unmaintained| unmaintained.url_and_age.as_ref().map(|&(_, age)| age));
 
     for unmaintained_pkg in unnmaintained_pkgs {
         display_unmaintained_pkg(&unmaintained_pkg)?;
@@ -168,59 +172,62 @@ fn published(pkg: &Package) -> bool {
         .map_or(true, |registries| !registries.is_empty())
 }
 
-fn latest_commit_age(pkg: &Package) -> Result<Option<u64>> {
-    let Some(repository) = &pkg.repository else {
+fn latest_commit_age(pkg: &Package) -> Result<Option<(&str, u64)>> {
+    let Some(url) = &pkg.repository else {
         return Ok(None);
     };
     let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
 
-    let success = clone_repository(repository, tempdir.path())?;
-    if !success {
-        warn!("failed to clone `{}`", repository);
+    let Some(url) = clone_repository(url, tempdir.path())? else {
+        warn!("failed to clone `{}`", url);
         return Ok(None);
-    }
+    };
 
     let latest_commit_time = latest_commit_time(tempdir.path())?;
 
     let duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
 
-    Ok(Some(duration.as_secs() - latest_commit_time))
+    Ok(Some((url, duration.as_secs() - latest_commit_time)))
 }
 
-fn clone_repository(repository: &str, path: &Path) -> Result<bool> {
-    let mut urls = vec![repository];
-    if let Some(url) = shortened_url(repository) {
+fn clone_repository<'a>(url: &'a str, path: &Path) -> Result<Option<&'a str>> {
+    let mut urls = vec![url];
+    if let Some(url) = shorten_url(url) {
         urls.push(url);
     }
-    let success = urls
-        .into_iter()
-        .try_fold(false, |success, url| -> Result<bool> {
-            if success {
-                return Ok(success);
-            }
-            let mut command = Command::new("git");
-            command
-                .args([
-                    "clone",
-                    "--depth=1",
-                    "--quiet",
-                    url,
-                    &path.to_string_lossy(),
-                ])
-                .stderr(Stdio::null());
-            let status = command
-                .status()
-                .with_context(|| format!("failed to run command: {command:?}"))?;
-            Ok(status.success())
-        })?;
-    Ok(success)
+    let successful_url =
+        urls.into_iter()
+            .try_fold(None, |successful_url, url| -> Result<Option<&str>> {
+                if successful_url.is_some() {
+                    return Ok(successful_url);
+                }
+                let mut command = Command::new("git");
+                command
+                    .args([
+                        "clone",
+                        "--depth=1",
+                        "--quiet",
+                        url,
+                        &path.to_string_lossy(),
+                    ])
+                    .stderr(Stdio::null());
+                let status = command
+                    .status()
+                    .with_context(|| format!("failed to run command: {command:?}"))?;
+                if status.success() {
+                    Ok(Some(url))
+                } else {
+                    Ok(None)
+                }
+            })?;
+    Ok(successful_url)
 }
 
 #[allow(clippy::unwrap_used)]
 static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").unwrap());
 
 #[allow(clippy::unwrap_used)]
-fn shortened_url(url: &str) -> Option<&str> {
+fn shorten_url(url: &str) -> Option<&str> {
     RE.captures(url)
         .map(|captures| captures.get(0).unwrap().as_str())
 }
@@ -242,14 +249,15 @@ fn latest_commit_time(path: &Path) -> Result<u64> {
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
     let UnmaintainedPkg {
         pkg,
-        age,
+        url_and_age,
         outdated_deps,
     } = unmaintained_pkg;
-    let repo_msg = pkg.repository.as_deref().unwrap_or("no repository");
-    let age_msg = age
-        .map(|age| format!(" updated {} days ago", age / SECS_PER_DAY))
-        .unwrap_or_default();
-    println!("{} ({}{})", pkg.name, repo_msg, age_msg);
+    let url_and_age_msg = if let Some((url, age)) = url_and_age {
+        format!("{url} updated {} days ago", age / SECS_PER_DAY)
+    } else {
+        String::from("no repository")
+    };
+    println!("{} ({})", pkg.name, url_and_age_msg);
     for OutdatedDep {
         dep,
         version_used,
