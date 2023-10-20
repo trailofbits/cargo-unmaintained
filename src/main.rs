@@ -114,9 +114,9 @@ fn main() -> Result<()> {
     let mut unnmaintained_pkgs = Vec::new();
 
     for pkg in &metadata.packages {
-        let upgradeable_deps = outdated_deps(&metadata, pkg)?;
+        let outdated_deps = outdated_deps(&metadata, pkg)?;
 
-        if upgradeable_deps.is_empty() {
+        if outdated_deps.is_empty() {
             continue;
         }
 
@@ -132,7 +132,7 @@ fn main() -> Result<()> {
         unnmaintained_pkgs.push(UnmaintainedPkg {
             pkg,
             url_and_age,
-            outdated_deps: upgradeable_deps,
+            outdated_deps,
         });
     }
 
