@@ -14,9 +14,11 @@ clap = { version = "4.4", features = ["cargo", "derive", "wrap_help"] }
 crates-index = { version = "2.2", features = ["git"] }
 env_logger = "0.10"
 log = "0.4"
+octocrab = "0.31"
 once_cell = "1.18"
 regex = "1.10"
 tempfile = "3.8"
+tokio = "1.33"
 
 [dev-dependencies]
 assert_cmd = "2.0"

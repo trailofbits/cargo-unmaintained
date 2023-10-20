@@ -12,7 +12,7 @@ use regex::Regex;
 use std::{
     cell::RefCell,
     collections::HashMap,
-    env::args,
+    env::{args, var},
     path::Path,
     process::{exit, Command, Stdio},
     str::FromStr,
@@ -20,6 +20,7 @@ use std::{
 };
 use tempfile::tempdir;
 
+mod github;
 mod opts;
 mod verbose;
 
@@ -42,6 +43,9 @@ enum CargoSubCommand {
 #[clap(
     version = crate_version!(),
     after_help = "\
+The `GITHUB_TOKEN` environment variable can be set to the path of a file containing a personal \
+access token, which will be used to authenticate to GitHub.
+
 Unless --no-exit-code is passed, the exit status is 0 if-and-only-if no unmaintained dependencies \
 were found and no irrecoverable errors occurred."
 )]
@@ -102,6 +106,10 @@ macro_rules! warn {
 
 fn main() -> Result<()> {
     env_logger::init();
+
+    if let Ok(path) = var("GITHUB_TOKEN") {
+        github::load_token(&path)?;
+    }
 
     let Cargo {
         subcmd: CargoSubCommand::Unmaintained(opts),
@@ -249,7 +257,7 @@ fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
         }
         verbose::wrap!(
             || {
-                let Some((url, timestamp)) = timestamp_from_clone(url)? else {
+                let Some((url, timestamp)) = timestamp_uncached(url)? else {
                     return Ok(None);
                 };
                 timestamp_cache.insert(url.to_owned(), timestamp);
@@ -259,6 +267,41 @@ fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
             url
         )
     })
+}
+
+fn timestamp_uncached(url: &str) -> Result<Option<(&str, u64)>> {
+    if url.starts_with("https://github.com/") {
+        verbose::update!("using GitHub API");
+
+        match github::timestamp(url) {
+            Ok((url, timestamp)) => {
+                return Ok(Some((url, timestamp)));
+            }
+            Err(error) => {
+                if var("GITHUB_TOKEN").is_err() {
+                    debug!(
+                        "failed to get timestamp for {} using GitHub API: {}",
+                        url, error
+                    );
+                } else {
+                    warn!(
+                        "failed to get timestamp for {} using GitHub API: {}",
+                        url,
+                        first_line(&error.to_string())
+                    );
+                }
+                verbose::update!("falling back to shallow clone");
+            }
+        }
+    } else {
+        verbose::update!("using shallow clone");
+    }
+
+    timestamp_from_clone(url)
+}
+
+fn first_line(s: &str) -> &str {
+    s.lines().next().unwrap_or(s)
 }
 
 fn timestamp_from_clone(url: &str) -> Result<Option<(&str, u64)>> {
