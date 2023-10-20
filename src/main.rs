@@ -42,6 +42,7 @@ enum CargoSubCommand {
 #[derive(Debug, Parser)]
 #[clap(
     version = crate_version!(),
+    about = "Find unmaintained dependencies in Rust projects",
     after_help = "\
 The `GITHUB_TOKEN` environment variable can be set to the path of a file containing a personal \
 access token, which will be used to authenticate to GitHub.
@@ -50,7 +51,7 @@ Unless --no-exit-code is passed, the exit status is 0 if-and-only-if no unmainta
 were found and no irrecoverable errors occurred."
 )]
 struct Opts {
-    #[clap(long, help = "Show paths to dependencies")]
+    #[clap(long, help = "Show paths to unmaintained dependencies")]
     tree: bool,
 
     #[clap(
@@ -65,7 +66,9 @@ struct Opts {
     #[clap(
         long,
         help = "Age in days that a repository's last commit must not exceed for the repository to \
-                be considered current",
+                be considered current; 0 effectively disables this check, though ages are still \
+                reported",
+        value_name = "DAYS",
         default_value = "365"
     )]
     max_age: u64,
