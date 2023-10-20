@@ -190,6 +190,9 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
             });
         };
     }
+    // smoelius: A dependency could appear more than once, e.g., because it is used with different
+    // features as a normal and as a development dependency.
+    deps.dedup_by(|lhs, rhs| lhs.dep.name == rhs.dep.name && lhs.dep.req == rhs.dep.req);
     Ok(deps)
 }
 
