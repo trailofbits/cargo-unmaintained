@@ -1,6 +1,6 @@
 use assert_cmd::Command;
 use regex::Regex;
-use std::env::remove_var;
+use std::{env::remove_var, fs::read_to_string};
 use tempfile::tempdir;
 
 #[ctor::ctor]
@@ -83,6 +83,25 @@ fn prettier() {
         .current_dir(&tempdir)
         .assert()
         .success();
+}
+
+#[test]
+fn readme_contains_usage() {
+    let readme = read_to_string("README.md").unwrap();
+
+    let assert = Command::cargo_bin("cargo-unmaintained")
+        .unwrap()
+        .args(["unmaintained", "--help"])
+        .assert();
+    let stdout = &assert.get_output().stdout;
+
+    let usage = std::str::from_utf8(stdout)
+        .unwrap()
+        .split_inclusive('\n')
+        .skip(2)
+        .collect::<String>();
+
+    assert!(readme.contains(&usage));
 }
 
 #[test]
