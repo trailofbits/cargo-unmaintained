@@ -40,3 +40,5 @@ jobs:
 
       - name: Test
         run: cargo test
+        env:
+          RUST_BACKTRACE: 1
