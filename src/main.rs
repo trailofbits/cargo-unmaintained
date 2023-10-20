@@ -53,8 +53,8 @@ struct Opts {
     )]
     no_exit_code: bool,
 
-    #[clap(long, help = "Suppress warnings")]
-    quiet: bool,
+    #[clap(long, help = "Do not show warnings")]
+    no_warnings: bool,
 
     #[clap(
         long,
@@ -86,7 +86,7 @@ thread_local! {
 
 macro_rules! warn {
     ($format:literal, $($arg:expr),*) => {
-        if !crate::opts::get().quiet {
+        if !crate::opts::get().no_warnings {
             eprintln!(concat!("warning: ", $format), $($arg),*);
         }
     };
