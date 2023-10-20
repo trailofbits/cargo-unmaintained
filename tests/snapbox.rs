@@ -39,8 +39,8 @@ fn snapbox() -> Result<()> {
     })?;
 
     test_paths.into_par_iter().try_for_each(|input_path| {
-        let stdout_path = input_path.with_extension("stdout");
         let stderr_path = input_path.with_extension("stderr");
+        let stdout_path = input_path.with_extension("stdout");
 
         let raw = read_to_string(input_path)?;
 
@@ -68,11 +68,12 @@ fn snapbox() -> Result<()> {
             .current_dir(&tempdir)
             .output()?;
 
-        let stdout_actual = String::from_utf8(output.stdout)?;
         let stderr_actual = String::from_utf8(output.stderr)?;
+        let stdout_actual = String::from_utf8(output.stdout)?;
 
-        assert_matches_path(stdout_path, stdout_actual);
+        // smoelius: Compare stderr before stdout so that you can see any errors that occurred.
         assert_matches_path(stderr_path, stderr_actual);
+        assert_matches_path(stdout_path, stdout_actual);
 
         Result::<_>::Ok(())
     })?;
