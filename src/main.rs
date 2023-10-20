@@ -21,6 +21,7 @@ use std::{
 use tempfile::tempdir;
 
 mod opts;
+mod verbose;
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
@@ -36,6 +37,7 @@ enum CargoSubCommand {
     Unmaintained(Opts),
 }
 
+#[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Parser)]
 #[clap(
     version = crate_version!(),
@@ -63,6 +65,9 @@ struct Opts {
         default_value = "365"
     )]
     max_age: u64,
+
+    #[clap(long, help = "Show information about what cargo-unmaintained is doing")]
+    verbose: bool,
 }
 
 struct UnmaintainedPkg<'a> {
@@ -85,9 +90,12 @@ thread_local! {
 }
 
 macro_rules! warn {
-    ($format:literal, $($arg:expr),*) => {
-        if !crate::opts::get().no_warnings {
-            eprintln!(concat!("warning: ", $format), $($arg),*);
+    ($fmt:expr, $($arg:tt)*) => {
+        if crate::opts::get().no_warnings {
+            debug!($fmt, $($arg)*);
+        } else {
+            verbose::newline!();
+            eprintln!(concat!("warning: ", $fmt), $($arg)*);
         }
     };
 }
@@ -194,15 +202,21 @@ fn latest_version(name: &str) -> Result<Version> {
         if let Some(version) = latest_version_cache.get(name) {
             return Ok(version.clone());
         }
-        let krate = INDEX
-            .with(|index| index.crate_(name))
-            .ok_or_else(|| anyhow!("failed to find `{}` in index", name))?;
-        let latest_version_index = krate
-            .highest_normal_version()
-            .ok_or_else(|| anyhow!("`{}` has no normal version", name))?;
-        let latest_version = Version::from_str(latest_version_index.version())?;
-        latest_version_cache.insert(name.to_owned(), latest_version.clone());
-        Ok(latest_version)
+        verbose::wrap!(
+            || {
+                let krate = INDEX
+                    .with(|index| index.crate_(name))
+                    .ok_or_else(|| anyhow!("failed to find `{}` in index", name))?;
+                let latest_version_index = krate
+                    .highest_normal_version()
+                    .ok_or_else(|| anyhow!("`{}` has no normal version", name))?;
+                let latest_version = Version::from_str(latest_version_index.version())?;
+                latest_version_cache.insert(name.to_owned(), latest_version.clone());
+                Ok(latest_version)
+            },
+            "latest version of `{}` using crates.io index",
+            name,
+        )
     })
 }
 
@@ -239,11 +253,17 @@ fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
                 return Ok(Some((url, *timestamp)));
             }
         }
-        let Some((url, timestamp)) = timestamp_from_clone(url)? else {
-            return Ok(None);
-        };
-        timestamp_cache.insert(url.to_owned(), timestamp);
-        Ok(Some((url, timestamp)))
+        verbose::wrap!(
+            || {
+                let Some((url, timestamp)) = timestamp_from_clone(url)? else {
+                    return Ok(None);
+                };
+                timestamp_cache.insert(url.to_owned(), timestamp);
+                Ok(Some((url, timestamp)))
+            },
+            "timestamp of `{}`",
+            url
+        )
     })
 }
 
