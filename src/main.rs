@@ -134,6 +134,10 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
     }
     let mut deps = Vec::new();
     for dep in &pkg.dependencies {
+        // smoelius: Don't check dependencies specified by path.
+        if dep.path.is_some() {
+            continue;
+        }
         let Some(dep_pkg) = find_package(metadata, dep) else {
             debug!(
                 "warning: failed to find `{}` dependency `{}` ({})",
@@ -146,7 +150,7 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
         };
         let Ok(version_latest) = latest_version(&dep.name).map_err(|error| {
             warn!("failed to get latest version of `{}`: {}", &dep.name, error);
-            debug_assert!(!published(dep_pkg));
+            debug_assert!(false);
         }) else {
             continue;
         };
