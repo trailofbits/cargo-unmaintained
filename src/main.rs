@@ -14,7 +14,7 @@ use std::{
     collections::HashMap,
     env::args,
     path::Path,
-    process::{Command, Stdio},
+    process::{exit, Command, Stdio},
     str::FromStr,
     time::SystemTime,
 };
@@ -37,10 +37,21 @@ enum CargoSubCommand {
 }
 
 #[derive(Debug, Parser)]
-#[clap(version = crate_version!())]
+#[clap(
+    version = crate_version!(),
+    after_help = "\
+Unless --no-exit-code is passed, the exit status is 0 if-and-only-if no unmaintained dependencies \
+were found and no irrecoverable errors occurred."
+)]
 struct Opts {
     #[clap(long, help = "Show paths to dependencies")]
     tree: bool,
+
+    #[clap(
+        long,
+        help = "Do not set exit status when unmaintained dependencies are found"
+    )]
+    no_exit_code: bool,
 
     #[clap(long, help = "Suppress warnings")]
     quiet: bool,
@@ -120,8 +131,12 @@ fn main() -> Result<()> {
     unnmaintained_pkgs
         .sort_by_key(|unmaintained| unmaintained.url_and_age.as_ref().map(|&(_, age)| age));
 
-    for unmaintained_pkg in unnmaintained_pkgs {
-        display_unmaintained_pkg(&unmaintained_pkg)?;
+    for unmaintained_pkg in &unnmaintained_pkgs {
+        display_unmaintained_pkg(unmaintained_pkg)?;
+    }
+
+    if !opts::get().no_exit_code && !unnmaintained_pkgs.is_empty() {
+        exit(1);
     }
 
     Ok(())
