@@ -162,12 +162,6 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
             continue;
         }
         let Some(dep_pkg) = find_package(metadata, dep) else {
-            debug!(
-                "warning: failed to find `{}` dependency `{}` ({})",
-                pkg.name,
-                dep.name,
-                dep.req.to_string()
-            );
             debug_assert!(dep.kind == DependencyKind::Development || dep.optional);
             continue;
         };
