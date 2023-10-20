@@ -30,7 +30,10 @@ jobs:
 
       - name: Install tools
         run: |
+          rm -f "$HOME"/.cargo/bin/cargo-fmt
+          rm -f "$HOME"/.cargo/bin/rustfmt
           rustup install nightly
+          rustup component add rustfmt --toolchain nightly
           cargo install cargo-dylint dylint-link || true
           cargo install cargo-license            || true
           cargo install cargo-sort               || true
