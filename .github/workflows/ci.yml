@@ -35,6 +35,7 @@ jobs:
           rustup install nightly
           rustup component add rustfmt --toolchain nightly
           cargo install cargo-dylint dylint-link || true
+          cargo install cargo-hack               || true
           cargo install cargo-license            || true
           cargo install cargo-sort               || true
 

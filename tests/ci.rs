@@ -41,6 +41,15 @@ fn format() {
 }
 
 #[test]
+fn hack_feature_powerset() {
+    Command::new("cargo")
+        .env("RUSTFLAGS", "-D warnings")
+        .args(["hack", "--feature-powerset", "check"])
+        .assert()
+        .success();
+}
+
+#[test]
 fn license() {
     let re = Regex::new(r"^[^:]*\b(Apache-2.0|BSD-3-Clause|ISC|MIT)\b").unwrap();
 
