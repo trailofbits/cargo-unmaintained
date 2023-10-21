@@ -250,6 +250,10 @@ fn latest_commit_age(pkg: &Package) -> Result<Option<(&str, u64)>> {
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
+    // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained via the
+    // GitHub API or a shallow clone would be distinguishable.
+    let url = trim_trailing_slash(url);
+
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
         let timestamp_cache = timestamp_cache.get_or_insert_with(HashMap::new);
         // smoelius: Check both the regular and the shortened url.
@@ -273,6 +277,10 @@ fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
             url
         )
     })
+}
+
+fn trim_trailing_slash(url: &str) -> &str {
+    url.strip_suffix('/').unwrap_or(url)
 }
 
 fn timestamp_uncached(url: &str) -> Result<Option<(&str, u64)>> {
