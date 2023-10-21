@@ -248,6 +248,8 @@ dependencies = [
  "crates-index",
  "ctor",
  "env_logger",
+ "home",
+ "libc",
  "log",
  "octocrab",
  "once_cell",

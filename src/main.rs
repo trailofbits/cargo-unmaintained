@@ -6,6 +6,7 @@ use cargo_metadata::{
 };
 use clap::{crate_version, Parser};
 use crates_index::GitIndex;
+use home::cargo_home;
 use log::debug;
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -13,7 +14,8 @@ use std::{
     cell::RefCell,
     collections::HashMap,
     env::{args, var},
-    path::Path,
+    fs::File,
+    path::{Path, PathBuf},
     process::{exit, Command, Stdio},
     str::FromStr,
     time::SystemTime,
@@ -23,6 +25,9 @@ use tempfile::tempdir;
 mod github;
 mod opts;
 mod verbose;
+
+#[cfg(all(unix, feature = "lock_index"))]
+mod flock;
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
@@ -91,7 +96,10 @@ struct OutdatedDep<'a> {
 
 thread_local! {
     #[allow(clippy::unwrap_used)]
-    static INDEX: Lazy<GitIndex> = Lazy::new(|| GitIndex::new_cargo_default().unwrap());
+    static INDEX: Lazy<GitIndex> = Lazy::new(|| {
+        let _lock = lock_index().unwrap();
+        GitIndex::new_cargo_default().unwrap()
+    });
     static LATEST_VERSION_CACHE: RefCell<Option<HashMap<String, Version>>> = RefCell::new(None);
     static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, u64>>> = RefCell::new(None);
 }
@@ -212,9 +220,13 @@ fn latest_version(name: &str) -> Result<Version> {
         }
         verbose::wrap!(
             || {
-                let krate = INDEX
-                    .with(|index| index.crate_(name))
-                    .ok_or_else(|| anyhow!("failed to find `{}` in index", name))?;
+                let krate = INDEX.with(|index| {
+                    let _ = Lazy::force(index);
+                    let _lock = lock_index()?;
+                    index
+                        .crate_(name)
+                        .ok_or_else(|| anyhow!("failed to find `{}` in index", name))
+                })?;
                 let latest_version_index = krate
                     .highest_normal_version()
                     .ok_or_else(|| anyhow!("`{}` has no normal version", name))?;
@@ -422,6 +434,22 @@ fn display_path(name: &str, version: &Version) -> Result<()> {
         .with_context(|| format!("failed to run command: {command:?}"))?;
     ensure!(status.success(), "command failed: {command:?}");
     Ok(())
+}
+
+static INDEX_PATH: Lazy<PathBuf> = Lazy::new(|| {
+    #[allow(clippy::unwrap_used)]
+    let cargo_home = cargo_home().unwrap();
+    cargo_home.join("registry/index")
+});
+
+#[cfg(all(unix, feature = "lock_index"))]
+fn lock_index() -> Result<File> {
+    flock::lock_path(&INDEX_PATH).with_context(|| format!("failed to lock {INDEX_PATH:?}"))
+}
+
+#[cfg(not(all(unix, feature = "lock_index")))]
+fn lock_index() -> Result<File> {
+    File::open(&*INDEX_PATH).with_context(|| format!("failed to open {INDEX_PATH:?}"))
 }
 
 #[cfg(test)]

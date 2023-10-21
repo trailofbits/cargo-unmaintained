@@ -13,6 +13,8 @@ cargo_metadata = "0.18"
 clap = { version = "4.4", features = ["cargo", "derive", "wrap_help"] }
 crates-index = { version = "2.2", features = ["git-https"] }
 env_logger = "0.10"
+home = "0.5"
+libc = { version = "0.2", optional = true }
 log = "0.4"
 octocrab = "0.31"
 once_cell = "1.18"
@@ -28,6 +30,10 @@ rayon = "1.8"
 serde = "1.0"
 snapbox = "0.4"
 toml = "0.8"
+
+[features]
+default = ["lock_index"]
+lock_index = ["libc"]
 
 [workspace.metadata.dylint]
 libraries = [
