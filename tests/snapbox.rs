@@ -38,45 +38,46 @@ fn snapbox() -> Result<()> {
         Result::<_>::Ok(url_paths)
     })?;
 
-    test_paths.into_par_iter().try_for_each(|input_path| {
-        let stderr_path = input_path.with_extension("stderr");
-        let stdout_path = input_path.with_extension("stdout");
+    test_paths
+        .into_par_iter()
+        .panic_fuse()
+        .try_for_each(|input_path| {
+            let stderr_path = input_path.with_extension("stderr");
+            let stdout_path = input_path.with_extension("stdout");
 
-        let raw = read_to_string(input_path)?;
+            let raw = read_to_string(input_path)?;
 
-        let test: Test = toml::from_str(&raw).unwrap();
+            let test: Test = toml::from_str(&raw).unwrap();
 
-        let tempdir = tempdir()?;
+            let tempdir = tempdir()?;
 
-        let mut command =
-            Command::new("git").args(["clone", &test.url, &tempdir.path().to_string_lossy()]);
-        if test.rev.is_none() {
-            command = command.arg("--depth=1");
-        }
-        command.assert().success();
+            let mut command =
+                Command::new("git").args(["clone", &test.url, &tempdir.path().to_string_lossy()]);
+            if test.rev.is_none() {
+                command = command.arg("--depth=1");
+            }
+            command.assert().success();
 
-        if let Some(rev) = &test.rev {
-            Command::new("git")
-                .args(["checkout", rev])
+            if let Some(rev) = &test.rev {
+                Command::new("git")
+                    .args(["checkout", rev])
+                    .current_dir(&tempdir)
+                    .assert()
+                    .success();
+            }
+
+            let output = Command::new(cargo_bin("cargo-unmaintained"))
+                .args(["unmaintained"])
                 .current_dir(&tempdir)
-                .assert()
-                .success();
-        }
+                .output()?;
 
-        let output = Command::new(cargo_bin("cargo-unmaintained"))
-            .args(["unmaintained"])
-            .current_dir(&tempdir)
-            .output()?;
+            let stderr_actual = String::from_utf8(output.stderr)?;
+            let stdout_actual = String::from_utf8(output.stdout)?;
 
-        let stderr_actual = String::from_utf8(output.stderr)?;
-        let stdout_actual = String::from_utf8(output.stdout)?;
+            // smoelius: Compare stderr before stdout so that you can see any errors that occurred.
+            assert_matches_path(stderr_path, stderr_actual);
+            assert_matches_path(stdout_path, stdout_actual);
 
-        // smoelius: Compare stderr before stdout so that you can see any errors that occurred.
-        assert_matches_path(stderr_path, stderr_actual);
-        assert_matches_path(stdout_path, stdout_actual);
-
-        Result::<_>::Ok(())
-    })?;
-
-    Ok(())
+            Ok(())
+        })
 }
