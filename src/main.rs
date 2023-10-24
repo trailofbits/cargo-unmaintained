@@ -256,11 +256,7 @@ fn published(pkg: &Package) -> bool {
 }
 
 fn latest_commit_age(pkg: &Package) -> Result<Option<(&str, u64)>> {
-    let Some(url) = &pkg.repository else {
-        return Ok(None);
-    };
-
-    let Some((url, timestamp)) = timestamp(url)? else {
+    let Some((url, timestamp)) = timestamp(pkg)? else {
         return Ok(None);
     };
 
@@ -270,41 +266,34 @@ fn latest_commit_age(pkg: &Package) -> Result<Option<(&str, u64)>> {
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-fn timestamp(url: &str) -> Result<Option<(&str, u64)>> {
-    // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained via the
-    // GitHub API or a shallow clone would be distinguishable.
-    let url = trim_trailing_slash(url);
-
+fn timestamp(pkg: &Package) -> Result<Option<(&str, u64)>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
         let timestamp_cache = timestamp_cache.get_or_insert_with(HashMap::new);
         // smoelius: Check both the regular and the shortened url.
-        if let Some(timestamp) = timestamp_cache.get(url) {
-            return Ok(Some((url, *timestamp)));
-        }
-        if let Some(url) = shorten_url(url) {
+        for url in urls(pkg) {
             if let Some(timestamp) = timestamp_cache.get(url) {
                 return Ok(Some((url, *timestamp)));
             }
         }
         verbose::wrap!(
             || {
-                let Some((url, timestamp)) = timestamp_uncached(url)? else {
+                let Some((url, timestamp)) = timestamp_uncached(pkg)? else {
                     return Ok(None);
                 };
                 timestamp_cache.insert(url.to_owned(), timestamp);
                 Ok(Some((url, timestamp)))
             },
             "timestamp of `{}`",
-            url
+            pkg.name
         )
     })
 }
 
-fn trim_trailing_slash(url: &str) -> &str {
-    url.strip_suffix('/').unwrap_or(url)
-}
+fn timestamp_uncached(pkg: &Package) -> Result<Option<(&str, u64)>> {
+    let Some(url) = &pkg.repository else {
+        return Ok(None);
+    };
 
-fn timestamp_uncached(url: &str) -> Result<Option<(&str, u64)>> {
     if url.starts_with("https://github.com/") {
         verbose::update!("using GitHub API");
 
@@ -332,18 +321,20 @@ fn timestamp_uncached(url: &str) -> Result<Option<(&str, u64)>> {
         verbose::update!("using shallow clone");
     }
 
-    timestamp_from_clone(url)
+    timestamp_from_clone(pkg)
 }
 
 fn first_line(s: &str) -> &str {
     s.lines().next().unwrap_or(s)
 }
 
-fn timestamp_from_clone(url: &str) -> Result<Option<(&str, u64)>> {
+fn timestamp_from_clone(pkg: &Package) -> Result<Option<(&str, u64)>> {
     let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
 
-    let Some(url) = clone_repository(url, tempdir.path())? else {
-        warn!("failed to clone `{}`", url);
+    let Some(url) = clone_repository(pkg, tempdir.path())? else {
+        if let Some(url) = &pkg.repository {
+            warn!("failed to clone `{}`", url);
+        }
         return Ok(None);
     };
 
@@ -362,37 +353,54 @@ fn timestamp_from_clone(url: &str) -> Result<Option<(&str, u64)>> {
     Ok(Some((url, timestamp)))
 }
 
-fn clone_repository<'a>(url: &'a str, path: &Path) -> Result<Option<&'a str>> {
-    let mut urls = vec![url];
-    if let Some(url) = shorten_url(url) {
+fn clone_repository<'a>(pkg: &'a Package, path: &Path) -> Result<Option<&'a str>> {
+    urls(pkg)
+        .into_iter()
+        .try_fold(None, |successful_url, url| -> Result<Option<&str>> {
+            if successful_url.is_some() {
+                return Ok(successful_url);
+            }
+            let mut command = Command::new("git");
+            command
+                .args([
+                    "clone",
+                    "--depth=1",
+                    "--quiet",
+                    url,
+                    &path.to_string_lossy(),
+                ])
+                .stderr(Stdio::null());
+            let status = command
+                .status()
+                .with_context(|| format!("failed to run command: {command:?}"))?;
+            if status.success() {
+                Ok(Some(url))
+            } else {
+                Ok(None)
+            }
+        })
+}
+
+fn urls(pkg: &Package) -> impl IntoIterator<Item = &str> {
+    let mut urls = Vec::new();
+
+    if let Some(url) = &pkg.repository {
+        // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained via
+        // the GitHub API or a shallow clone would be distinguishable.
+        let url = trim_trailing_slash(url);
+
         urls.push(url);
+
+        if let Some(shortened_url) = shorten_url(url) {
+            urls.push(shortened_url);
+        }
     }
-    let successful_url =
-        urls.into_iter()
-            .try_fold(None, |successful_url, url| -> Result<Option<&str>> {
-                if successful_url.is_some() {
-                    return Ok(successful_url);
-                }
-                let mut command = Command::new("git");
-                command
-                    .args([
-                        "clone",
-                        "--depth=1",
-                        "--quiet",
-                        url,
-                        &path.to_string_lossy(),
-                    ])
-                    .stderr(Stdio::null());
-                let status = command
-                    .status()
-                    .with_context(|| format!("failed to run command: {command:?}"))?;
-                if status.success() {
-                    Ok(Some(url))
-                } else {
-                    Ok(None)
-                }
-            })?;
-    Ok(successful_url)
+
+    urls
+}
+
+fn trim_trailing_slash(url: &str) -> &str {
+    url.strip_suffix('/').unwrap_or(url)
 }
 
 #[allow(clippy::unwrap_used)]
