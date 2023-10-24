@@ -53,8 +53,9 @@ enum CargoSubCommand {
 The `GITHUB_TOKEN` environment variable can be set to the path of a file containing a personal \
 access token, which will be used to authenticate to GitHub.
 
-Unless --no-exit-code is passed, the exit status is 0 if-and-only-if no unmaintained dependencies \
-were found and no irrecoverable errors occurred."
+Unless --no-exit-code is passed, the exit status is 0 if no unmaintained dependencies were found \
+and no irrecoverable errors occurred, 1 if unmaintained dependencies were found, and 2 if an \
+irrecoverable error occurred."
 )]
 struct Opts {
     #[clap(
@@ -129,6 +130,17 @@ fn main() -> Result<()> {
 
     opts::init(opts);
 
+    match unmaintained() {
+        Ok(false) => exit(0),
+        Ok(true) => exit(1),
+        Err(error) => {
+            eprintln!("Error: {error}");
+            exit(2);
+        }
+    }
+}
+
+fn unmaintained() -> Result<bool> {
     let metadata = MetadataCommand::new().exec()?;
 
     let mut unnmaintained_pkgs = Vec::new();
@@ -163,11 +175,7 @@ fn main() -> Result<()> {
         display_unmaintained_pkg(unmaintained_pkg)?;
     }
 
-    if !opts::get().no_exit_code && !unnmaintained_pkgs.is_empty() {
-        exit(1);
-    }
-
-    Ok(())
+    Ok(!opts::get().no_exit_code && !unnmaintained_pkgs.is_empty())
 }
 
 #[allow(clippy::unnecessary_wraps)]

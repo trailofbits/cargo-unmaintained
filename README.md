@@ -54,8 +54,9 @@ Options:
 The `GITHUB_TOKEN` environment variable can be set to the path of a file containing a personal
 access token, which will be used to authenticate to GitHub.
 
-Unless --no-exit-code is passed, the exit status is 0 if-and-only-if no unmaintained dependencies
-were found and no irrecoverable errors occurred.
+Unless --no-exit-code is passed, the exit status is 0 if no unmaintained dependencies were found and
+no irrecoverable errors occurred, 1 if unmaintained dependencies were found, and 2 if an
+irrecoverable error occurred.
 ```
 
 ## License
