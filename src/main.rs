@@ -103,7 +103,7 @@ thread_local! {
         GitIndex::new_cargo_default().unwrap()
     });
     static LATEST_VERSION_CACHE: RefCell<Option<HashMap<String, Version>>> = RefCell::new(None);
-    static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, u64>>> = RefCell::new(None);
+    static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, Option<u64>>>> = RefCell::new(None);
 }
 
 macro_rules! warn {
@@ -272,16 +272,21 @@ fn timestamp(pkg: &Package) -> Result<Option<(&str, u64)>> {
         // smoelius: Check both the regular and the shortened url.
         for url in urls(pkg) {
             if let Some(timestamp) = timestamp_cache.get(url) {
-                return Ok(Some((url, *timestamp)));
+                return Ok(timestamp.map(|timestamp| (url, timestamp)));
             }
         }
         verbose::wrap!(
             || {
-                let Some((url, timestamp)) = timestamp_uncached(pkg)? else {
-                    return Ok(None);
-                };
-                timestamp_cache.insert(url.to_owned(), timestamp);
-                Ok(Some((url, timestamp)))
+                if let Some((url, timestamp)) = timestamp_uncached(pkg)? {
+                    timestamp_cache.insert(url.to_owned(), Some(timestamp));
+                    return Ok(Some((url, timestamp)));
+                }
+                // smoelius: In the event of failure, set all urls associated with the repository to
+                // `None`.
+                for url in urls(pkg) {
+                    timestamp_cache.insert(url.to_owned(), None);
+                }
+                Ok(None)
             },
             "timestamp of `{}`",
             pkg.name
