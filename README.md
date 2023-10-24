@@ -41,12 +41,12 @@ anes (https://github.com/zrzka/anes-rs updated 1421 days ago)
 Usage: cargo unmaintained [OPTIONS]
 
 Options:
-      --tree            Show paths to unmaintained dependencies
-      --no-exit-code    Do not set exit status when unmaintained dependencies are found
-      --no-warnings     Do not show warnings
       --max-age <DAYS>  Age in days that a repository's last commit must not exceed for the
                         repository to be considered current; 0 effectively disables this check,
                         though ages are still reported [default: 365]
+      --no-exit-code    Do not set exit status when unmaintained dependencies are found
+      --no-warnings     Do not show warnings
+      --tree            Show paths to unmaintained dependencies
       --verbose         Show information about what cargo-unmaintained is doing
   -h, --help            Print help
   -V, --version         Print version

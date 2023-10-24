@@ -1,5 +1,6 @@
 use assert_cmd::Command;
 use regex::Regex;
+use similar_asserts::SimpleDiff;
 use std::{env::remove_var, fs::read_to_string};
 use tempfile::tempdir;
 
@@ -110,7 +111,11 @@ fn readme_contains_usage() {
         .skip(2)
         .collect::<String>();
 
-    assert!(readme.contains(&usage));
+    assert!(
+        readme.contains(&usage),
+        "{}",
+        SimpleDiff::from_str(&readme, &usage, "left", "right")
+    );
 }
 
 #[test]

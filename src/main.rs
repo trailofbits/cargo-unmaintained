@@ -45,6 +45,7 @@ enum CargoSubCommand {
 
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Parser)]
+#[remain::sorted]
 #[clap(
     version = crate_version!(),
     about = "Find unmaintained dependencies in Rust projects",
@@ -56,8 +57,15 @@ Unless --no-exit-code is passed, the exit status is 0 if-and-only-if no unmainta
 were found and no irrecoverable errors occurred."
 )]
 struct Opts {
-    #[clap(long, help = "Show paths to unmaintained dependencies")]
-    tree: bool,
+    #[clap(
+        long,
+        help = "Age in days that a repository's last commit must not exceed for the repository to \
+                be considered current; 0 effectively disables this check, though ages are still \
+                reported",
+        value_name = "DAYS",
+        default_value = "365"
+    )]
+    max_age: u64,
 
     #[clap(
         long,
@@ -68,15 +76,8 @@ struct Opts {
     #[clap(long, help = "Do not show warnings")]
     no_warnings: bool,
 
-    #[clap(
-        long,
-        help = "Age in days that a repository's last commit must not exceed for the repository to \
-                be considered current; 0 effectively disables this check, though ages are still \
-                reported",
-        value_name = "DAYS",
-        default_value = "365"
-    )]
-    max_age: u64,
+    #[clap(long, help = "Show paths to unmaintained dependencies")]
+    tree: bool,
 
     #[clap(long, help = "Show information about what cargo-unmaintained is doing")]
     verbose: bool,
