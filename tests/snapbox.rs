@@ -67,7 +67,7 @@ fn snapbox() -> Result<()> {
             }
 
             let output = Command::new(cargo_bin("cargo-unmaintained"))
-                .args(["unmaintained"])
+                .args(["unmaintained", "--imprecise"])
                 .current_dir(&tempdir)
                 .output()?;
 

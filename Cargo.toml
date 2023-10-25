@@ -22,6 +22,8 @@ regex = "1.10"
 remain = "0.2"
 tempfile = "3.8"
 tokio = "1.33"
+toml = "0.8"
+walkdir = "2.4"
 
 [dev-dependencies]
 assert_cmd = "2.0"
@@ -31,7 +33,6 @@ rayon = "1.8"
 serde = "1.0"
 similar-asserts = "1.5"
 snapbox = "0.4"
-toml = "0.8"
 
 [features]
 default = ["lock_index"]

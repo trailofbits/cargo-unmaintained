@@ -41,6 +41,9 @@ anes (https://github.com/zrzka/anes-rs updated 1421 days ago)
 Usage: cargo unmaintained [OPTIONS]
 
 Options:
+      --imprecise       Do not check whether package repository contains package; enables checking
+                        last commit timestamps using the GitHub API, which is faster, but can
+                        produce false negatives
       --max-age <DAYS>  Age in days that a repository's last commit must not exceed for the
                         repository to be considered current; 0 effectively disables this check,
                         though ages are still reported [default: 365]

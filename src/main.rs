@@ -14,13 +14,16 @@ use std::{
     cell::RefCell,
     collections::HashMap,
     env::{args, var},
-    fs::File,
-    path::PathBuf,
+    ffi::OsStr,
+    fs::{read_to_string, File},
+    path::{Path, PathBuf},
     process::{exit, Command, Stdio},
     str::FromStr,
     time::SystemTime,
 };
 use tempfile::tempdir;
+use toml::{Table, Value};
+use walkdir::WalkDir;
 
 mod github;
 mod opts;
@@ -58,6 +61,14 @@ and no irrecoverable errors occurred, 1 if unmaintained dependencies were found,
 irrecoverable error occurred."
 )]
 struct Opts {
+    #[clap(
+        long,
+        help = "Do not check whether package repository contains package; enables checking last \
+                commit timestamps using the GitHub API, which is faster, but can produce false \
+                negatives"
+    )]
+    imprecise: bool,
+
     #[clap(
         long,
         help = "Age in days that a repository's last commit must not exceed for the repository to \
@@ -271,9 +282,23 @@ fn timestamp(pkg: &Package) -> Result<Option<(&str, u64)>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
         let timestamp_cache = timestamp_cache.get_or_insert_with(HashMap::new);
         // smoelius: Check both the regular and the shortened url.
-        for url in urls(pkg) {
-            if let Some(timestamp) = timestamp_cache.get(url) {
-                return Ok(timestamp.map(|timestamp| (url, timestamp)));
+        for url_cached in urls(pkg) {
+            if let Some(timestamp) = timestamp_cache.get(url_cached) {
+                if opts::get().imprecise {
+                    return Ok(timestamp.map(|timestamp| (url_cached, timestamp)));
+                }
+                // smoelius: `pkg`'s repository could contain other packages that were already
+                // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
+                // But in that case, we still need to verify that `pkg` appears in its repository.
+                #[allow(clippy::panic)]
+                let Some((url_cloned, repo_dir)) = clone_repository(pkg)?
+                else {
+                    panic!("url in timestamp cache is uncloneable: {url_cached}");
+                };
+                assert_eq!(url_cached, url_cloned);
+                if verify_membership(pkg, &repo_dir)? {
+                    return Ok(timestamp.map(|timestamp| (url_cached, timestamp)));
+                }
             }
         }
         verbose::wrap!(
@@ -300,7 +325,7 @@ fn timestamp_uncached(pkg: &Package) -> Result<Option<(&str, u64)>> {
         return Ok(None);
     };
 
-    if url.starts_with("https://github.com/") {
+    if opts::get().imprecise && url.starts_with("https://github.com/") {
         verbose::update!("using GitHub API");
 
         match github::timestamp(url) {
@@ -338,6 +363,10 @@ fn timestamp_from_clone(pkg: &Package) -> Result<Option<(&str, u64)>> {
     let Some((url, repo_dir)) = clone_repository(pkg)? else {
         return Ok(None);
     };
+
+    if !opts::get().imprecise && !verify_membership(pkg, &repo_dir)? {
+        return Ok(None);
+    }
 
     let mut command = Command::new("git");
     command
@@ -439,6 +468,37 @@ static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").
 fn shorten_url(url: &str) -> Option<&str> {
     RE.captures(url)
         .map(|captures| captures.get(0).unwrap().as_str())
+}
+
+fn verify_membership(pkg: &Package, repo_dir: &Path) -> Result<bool> {
+    for entry in WalkDir::new(repo_dir) {
+        let entry = entry?;
+        let path = entry.path();
+        if path.file_name() != Some(OsStr::new("Cargo.toml")) {
+            continue;
+        }
+        let contents = read_to_string(path).with_context(|| format!("failed to read {path:?}"))?;
+        let Ok(table) = contents.parse::<Table>().map_err(|error| {
+            warn!(
+                "failed to parse {:?}: {}",
+                path,
+                error.to_string().trim_end()
+            );
+        }) else {
+            continue;
+        };
+        if table
+            .get("package")
+            .and_then(Value::as_table)
+            .and_then(|table| table.get("name"))
+            .and_then(Value::as_str)
+            == Some(&pkg.name)
+        {
+            return Ok(true);
+        }
+    }
+
+    Ok(false)
 }
 
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
