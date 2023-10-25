@@ -2,7 +2,9 @@
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
 use anyhow::Result;
+use once_cell::sync::Lazy;
 use rayon::prelude::*;
+use regex::Regex;
 use serde::Deserialize;
 use snapbox::{
     assert_matches_path,
@@ -80,4 +82,33 @@ fn snapbox() -> Result<()> {
 
             Ok(())
         })
+}
+
+static RES: Lazy<[Regex; 2]> = Lazy::new(|| {
+    [
+        Regex::new(r"([^ ]*) days").unwrap(),
+        Regex::new(r"latest: ([^ )]*)").unwrap(),
+    ]
+});
+
+#[test]
+fn snapbox_expected() -> Result<()> {
+    for entry in read_dir("tests/cases")? {
+        let entry = entry?;
+        let path = entry.path();
+        if path.extension() != Some(OsStr::new("stdout")) {
+            continue;
+        }
+        let contents = read_to_string(path)?;
+        for line in contents.lines() {
+            for re in &*RES {
+                if let Some(captures) = re.captures(line) {
+                    assert_eq!(2, captures.len());
+                    assert_eq!("[..]", &captures[1]);
+                }
+            }
+        }
+    }
+
+    Ok(())
 }
