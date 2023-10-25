@@ -15,7 +15,7 @@ use std::{
     collections::HashMap,
     env::{args, var},
     fs::File,
-    path::{Path, PathBuf},
+    path::PathBuf,
     process::{exit, Command, Stdio},
     str::FromStr,
     time::SystemTime,
@@ -104,6 +104,7 @@ thread_local! {
     });
     static LATEST_VERSION_CACHE: RefCell<Option<HashMap<String, Version>>> = RefCell::new(None);
     static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, Option<u64>>>> = RefCell::new(None);
+    static REPOSITORY_CACHE: RefCell<Option<HashMap<String, Option<PathBuf>>>> = RefCell::new(None);
 }
 
 macro_rules! warn {
@@ -334,19 +335,14 @@ fn first_line(s: &str) -> &str {
 }
 
 fn timestamp_from_clone(pkg: &Package) -> Result<Option<(&str, u64)>> {
-    let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
-
-    let Some(url) = clone_repository(pkg, tempdir.path())? else {
-        if let Some(url) = &pkg.repository {
-            warn!("failed to clone `{}`", url);
-        }
+    let Some((url, repo_dir)) = clone_repository(pkg)? else {
         return Ok(None);
     };
 
     let mut command = Command::new("git");
     command
         .args(["log", "-1", "--pretty=format:%ct"])
-        .current_dir(&tempdir);
+        .current_dir(repo_dir);
     let output = command
         .output()
         .with_context(|| format!("failed to run command: {command:?}"))?;
@@ -358,13 +354,39 @@ fn timestamp_from_clone(pkg: &Package) -> Result<Option<(&str, u64)>> {
     Ok(Some((url, timestamp)))
 }
 
-fn clone_repository<'a>(pkg: &'a Package, path: &Path) -> Result<Option<&'a str>> {
-    urls(pkg)
-        .into_iter()
-        .try_fold(None, |successful_url, url| -> Result<Option<&str>> {
-            if successful_url.is_some() {
-                return Ok(successful_url);
+#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+fn clone_repository(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
+    REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
+        let repository_cache = repository_cache.get_or_insert_with(HashMap::new);
+        // smoelius: Check all urls associated with the package.
+        for url in urls(pkg) {
+            if let Some(repo_dir) = repository_cache.get(url) {
+                return Ok(repo_dir.clone().map(|repo_dir| (url, repo_dir)));
             }
+        }
+        if let Some((url, repo_dir)) = clone_repository_uncached(pkg)? {
+            repository_cache.insert(url.to_owned(), Some(repo_dir.clone()));
+            return Ok(Some((url, repo_dir)));
+        }
+        if let Some(url) = &pkg.repository {
+            warn!("failed to clone `{}`", url);
+        }
+        // smoelius: In the event of failure, set all urls associated with the repository to `None`.
+        for url in urls(pkg) {
+            repository_cache.insert(url.to_owned(), None);
+        }
+        Ok(None)
+    })
+}
+
+fn clone_repository_uncached(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
+    urls(pkg).into_iter().try_fold(
+        None,
+        |successful_url_and_path, url| -> Result<Option<(&str, PathBuf)>> {
+            if successful_url_and_path.is_some() {
+                return Ok(successful_url_and_path);
+            }
+            let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
             let mut command = Command::new("git");
             command
                 .args([
@@ -372,18 +394,20 @@ fn clone_repository<'a>(pkg: &'a Package, path: &Path) -> Result<Option<&'a str>
                     "--depth=1",
                     "--quiet",
                     url,
-                    &path.to_string_lossy(),
+                    &tempdir.path().to_string_lossy(),
                 ])
                 .stderr(Stdio::null());
             let status = command
                 .status()
                 .with_context(|| format!("failed to run command: {command:?}"))?;
             if status.success() {
-                Ok(Some(url))
+                // smoelius: Leak temporary directory.
+                Ok(Some((url, tempdir.into_path())))
             } else {
                 Ok(None)
             }
-        })
+        },
+    )
 }
 
 fn urls(pkg: &Package) -> impl IntoIterator<Item = &str> {
