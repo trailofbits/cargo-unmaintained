@@ -1,8 +1,9 @@
 #![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
 
-use anyhow::{anyhow, ensure, Context, Result};
+use anyhow::{anyhow, bail, ensure, Context, Result};
 use cargo_metadata::{
-    semver::Version, Dependency, DependencyKind, Metadata, MetadataCommand, Package,
+    semver::{Version, VersionReq},
+    Dependency, DependencyKind, Metadata, MetadataCommand, Package,
 };
 use clap::{crate_version, Parser};
 use crates_index::GitIndex;
@@ -88,6 +89,14 @@ struct Opts {
     #[clap(long, help = "Do not show warnings")]
     no_warnings: bool,
 
+    #[clap(
+        long,
+        short,
+        help = "Check only whether package SPEC is unmaintained",
+        value_name = "SPEC"
+    )]
+    package: Option<String>,
+
     #[clap(long, help = "Show paths to unmaintained dependencies")]
     tree: bool,
 
@@ -105,6 +114,26 @@ struct OutdatedDep<'a> {
     dep: &'a Dependency,
     version_used: &'a Version,
     version_latest: Version,
+}
+
+struct DepReq<'a> {
+    name: &'a str,
+    req: VersionReq,
+}
+
+impl<'a> DepReq<'a> {
+    fn new(name: &'a str, req: VersionReq) -> Self {
+        Self { name, req }
+    }
+}
+
+impl<'a> From<&'a Dependency> for DepReq<'a> {
+    fn from(value: &'a Dependency) -> Self {
+        Self {
+            name: &value.name,
+            req: value.req.clone(),
+        }
+    }
 }
 
 thread_local! {
@@ -153,11 +182,13 @@ fn main() -> Result<()> {
 }
 
 fn unmaintained() -> Result<bool> {
-    let metadata = MetadataCommand::new().exec()?;
-
     let mut unnmaintained_pkgs = Vec::new();
 
-    for pkg in &metadata.packages {
+    let metadata = MetadataCommand::new().exec()?;
+
+    let packages = maybe_filter_packages(&metadata)?;
+
+    for pkg in packages {
         let outdated_deps = outdated_deps(&metadata, pkg)?;
 
         if outdated_deps.is_empty() {
@@ -190,6 +221,31 @@ fn unmaintained() -> Result<bool> {
     Ok(!opts::get().no_exit_code && !unnmaintained_pkgs.is_empty())
 }
 
+fn maybe_filter_packages(metadata: &Metadata) -> Result<Vec<&Package>> {
+    let Some(spec) = &opts::get().package else {
+        return Ok(metadata.packages.iter().collect());
+    };
+
+    let dep_req = if let Some((name, req)) = spec.split_once('@') {
+        let req = VersionReq::from_str(req)?;
+        DepReq::new(name, req)
+    } else {
+        DepReq::new(spec, VersionReq::STAR)
+    };
+
+    let packages = find_packages(metadata, dep_req).collect::<Vec<_>>();
+
+    if packages.len() >= 2 {
+        bail!("found multiple packages matching `{spec}`: {:#?}", packages);
+    }
+
+    if packages.is_empty() {
+        bail!("found no packages matching `{spec}`");
+    }
+
+    Ok(packages)
+}
+
 #[allow(clippy::unnecessary_wraps)]
 fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
@@ -201,7 +257,7 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
         if dep.path.is_some() {
             continue;
         }
-        let Some(dep_pkg) = find_package(metadata, dep) else {
+        let Some(dep_pkg) = find_packages(metadata, dep.into()).next() else {
             debug_assert!(dep.kind == DependencyKind::Development || dep.optional);
             continue;
         };
@@ -225,11 +281,14 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
     Ok(deps)
 }
 
-fn find_package<'a>(metadata: &'a Metadata, dep: &Dependency) -> Option<&'a Package> {
+fn find_packages<'a>(
+    metadata: &'a Metadata,
+    dep_req: DepReq<'a>,
+) -> impl Iterator<Item = &'a Package> {
     metadata
         .packages
         .iter()
-        .find(|pkg| dep.name == pkg.name && dep.req.matches(&pkg.version))
+        .filter(move |pkg| dep_req.name == pkg.name && dep_req.req.matches(&pkg.version))
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
