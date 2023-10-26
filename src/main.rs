@@ -425,6 +425,8 @@ fn clone_repository_uncached(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
                     url,
                     &tempdir.path().to_string_lossy(),
                 ])
+                .env_remove("GIT_ASKPASS")
+                .env("GIT_TERMINAL_PROMPT", "0")
                 .stderr(Stdio::null());
             let status = command
                 .status()
