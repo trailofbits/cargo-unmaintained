@@ -64,6 +64,13 @@ irrecoverable error occurred."
 struct Opts {
     #[clap(
         long,
+        help = "Exit as soon as an unmaintained dependency is found",
+        conflicts_with = "no_exit_code"
+    )]
+    fail_fast: bool,
+
+    #[clap(
+        long,
         help = "Do not check whether package repository contains package; enables checking last \
                 commit timestamps using the GitHub API, which is faster, but can produce false \
                 negatives"
@@ -82,7 +89,8 @@ struct Opts {
 
     #[clap(
         long,
-        help = "Do not set exit status when unmaintained dependencies are found"
+        help = "Do not set exit status when unmaintained dependencies are found",
+        conflicts_with = "fail_fast"
     )]
     no_exit_code: bool,
 
@@ -209,6 +217,10 @@ fn unmaintained() -> Result<bool> {
             url_and_age,
             outdated_deps,
         });
+
+        if opts::get().fail_fast {
+            break;
+        }
     }
 
     unnmaintained_pkgs

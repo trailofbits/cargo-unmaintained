@@ -41,6 +41,7 @@ anes (https://github.com/zrzka/anes-rs updated 1421 days ago)
 Usage: cargo unmaintained [OPTIONS]
 
 Options:
+      --fail-fast       Exit as soon as an unmaintained dependency is found
       --imprecise       Do not check whether package repository contains package; enables checking
                         last commit timestamps using the GitHub API, which is faster, but can
                         produce false negatives
