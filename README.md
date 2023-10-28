@@ -7,15 +7,19 @@ This tool defines an unmaintained dependency X as one that satisfies the followi
 1. X relies on a version of a package Y that is incompatible with the Y's latest version.
 2. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-The purpose of the second condition is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
+As of 2023-10-23, the [RustSec Advisory Database] contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 42 of them (just under half). These results can be reproduced by running the `rustsec_advisory_comparison` binary within this repository.
 
-Note that the above conditions never consider a "leaf" package (i.e., a package with no dependencies) unmaintained.
+Notes
 
-This tool is meant be a complement to [`cargo-audit`], whose [RustSec Advisory Database] includes notifications for unmaintained packages. A key difference is that `cargo-unmaintained` tries to identify such packages automatically, instead of requiring a human to identify them manually.
+- The purpose of the second condition is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
 
-## Example
+- The above conditions never consider a "leaf" package (i.e., a package with no dependencies) unmaintained.
 
-The following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-10-20:
+## Output
+
+`cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause a package to be considered unmaintained.
+
+As an example, the following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-10-20:
 
 ```
 sized-chunks (https://github.com/bodil/sized-chunks updated 539 days ago)
