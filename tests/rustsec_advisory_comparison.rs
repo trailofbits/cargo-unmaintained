@@ -1,4 +1,10 @@
 use snapbox::{assert_matches_path, cmd::Command};
+use std::env::remove_var;
+
+#[ctor::ctor]
+fn initialize() {
+    remove_var("CARGO_TERM_COLOR");
+}
 
 #[test]
 fn rustsec_advisory_comparison() {
