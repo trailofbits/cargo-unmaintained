@@ -358,6 +358,12 @@ fn timestamp(pkg: &Package) -> Result<Option<(&str, u64)>> {
                 if opts::get().imprecise {
                     return Ok(timestamp.map(|timestamp| (url_cached, timestamp)));
                 }
+                // smoelius: If the timestamp is `None` then don't bother checking the repository
+                // cache. It could be that a previous attempt to clone the repository failed because
+                // of spurious network errors, for example.
+                if timestamp.is_none() {
+                    return Ok(None);
+                }
                 // smoelius: `pkg`'s repository could contain other packages that were already
                 // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
                 // But in that case, we still need to verify that `pkg` appears in its repository.
