@@ -11,3 +11,10 @@ updates:
       interval: weekly
     allow:
       - dependency-type: direct
+
+  - package-ecosystem: cargo
+    directory: /rustsec_advisory_comparison
+    schedule:
+      interval: weekly
+    allow:
+      - dependency-type: direct
