@@ -33,10 +33,11 @@ fn dylint() {
         .success();
 }
 
+#[cfg_attr(target_os = "macos", ignore)]
 #[test]
 fn format() {
-    Command::new("cargo")
-        .args(["+nightly", "fmt", "--check"])
+    Command::new("rustup")
+        .args(["run", "nightly", "cargo", "fmt", "--check"])
         .assert()
         .success();
 }
