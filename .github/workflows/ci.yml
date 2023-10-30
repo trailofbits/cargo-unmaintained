@@ -41,6 +41,7 @@ jobs:
         run: |
           rm -f "$HOME"/.cargo/bin/cargo-fmt
           rm -f "$HOME"/.cargo/bin/rustfmt
+          rustup update --no-self-update
           rustup install nightly
           rustup component add rustfmt --toolchain nightly
           cargo install cargo-dylint dylint-link || true
