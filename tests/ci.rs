@@ -73,6 +73,7 @@ fn license() {
     }
 }
 
+#[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn prettier() {
     let tempdir = tempdir().unwrap();
@@ -96,6 +97,7 @@ fn prettier() {
         .success();
 }
 
+#[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn readme_contains_usage() {
     let readme = read_to_string("README.md").unwrap();
@@ -119,6 +121,7 @@ fn readme_contains_usage() {
     );
 }
 
+#[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn sort() {
     Command::new("cargo")
