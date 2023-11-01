@@ -66,7 +66,13 @@ fn license() {
     .unwrap()
     .lines()
     {
-        if line == "Custom License File (1): ring" || line == "MPL-2.0 (1): uluru" {
+        if [
+            "AGPLv3 (1): cargo-unmaintained",
+            "Custom License File (1): ring",
+            "MPL-2.0 (1): uluru",
+        ]
+        .contains(&line)
+        {
             continue;
         }
         assert!(re.is_match(line), "{line:?} does not match");

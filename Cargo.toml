@@ -4,8 +4,8 @@ version = "0.1.0"
 authors = ["Samuel Moelius <sam@moeli.us>"]
 description = "Find unmaintained dependencies in Rust projects"
 edition = "2021"
-license = "MIT OR Apache-2.0"
-repository = "https://github.com/smoelius/cargo-unmaintained"
+license = "AGPLv3"
+repository = "https://github.com/trailofbits/cargo-unmaintained"
 
 [dependencies]
 anyhow = { version = "1.0", features = ["backtrace"] }
