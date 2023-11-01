@@ -7,7 +7,7 @@ This tool defines an unmaintained dependency X as one that satisfies the followi
 1. X relies on a version of a package Y that is incompatible with the Y's latest version.
 2. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-As of 2023-10-23, the [RustSec Advisory Database] contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 42 of them (just under half). These results can be reproduced by running the `rustsec_advisory_comparison` binary within this repository.
+As of 2023-10-23, the [RustSec Advisory Database] contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 42 of them (just under half). These results can be reproduced by running the `rustsec_comparison` binary within this repository.
 
 Notes
 
