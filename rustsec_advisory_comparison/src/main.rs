@@ -3,9 +3,10 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec::{advisory::Informational, Advisory, Database};
 use std::{
+    env::consts::EXE_SUFFIX,
     fs::OpenOptions,
     io::Write,
-    path::Path,
+    path::PathBuf,
     process::{Command, ExitStatus},
 };
 use strum::IntoEnumIterator;
@@ -21,6 +22,7 @@ enum Outcome {
 }
 
 #[allow(dead_code)]
+#[derive(Debug)]
 struct Output {
     status: ExitStatus,
     stdout: String,
@@ -34,7 +36,8 @@ fn main() -> Result<()> {
     let output = command_output(Command::new("cargo").arg("build").current_dir(".."))?;
     ensure!(output.status.success());
 
-    let cargo_unmaintained = Path::new("../target/debug/cargo-unmaintained").canonicalize()?;
+    let cargo_unmaintained =
+        PathBuf::from(format!("../target/debug/cargo-unmaintained{EXE_SUFFIX}")).canonicalize()?;
 
     let mut advisory_outcomes = Vec::new();
 
@@ -128,7 +131,7 @@ fn main() -> Result<()> {
                 println!("error:\n```\n{}\n```", output.stderr.trim_end());
                 advisory_outcomes.push((advisory, Outcome::Error));
             }
-            _ => panic!("exit code should be <= 2"),
+            _ => panic!("exit code should be <= 2: {output:#?}"),
         }
     }
 

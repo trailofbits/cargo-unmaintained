@@ -30,7 +30,7 @@ mod github;
 mod opts;
 mod verbose;
 
-#[cfg(all(unix, feature = "lock_index"))]
+#[cfg(feature = "lock_index")]
 mod flock;
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
@@ -274,8 +274,9 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
             continue;
         };
         let Ok(version_latest) = latest_version(&dep.name).map_err(|error| {
+            // smoelius: I don't understand why a package can fail to be in the index, but I have
+            // seen it happen.
             warn!("failed to get latest version of `{}`: {}", &dep.name, error);
-            debug_assert!(false);
         }) else {
             continue;
         };
@@ -502,7 +503,8 @@ fn clone_repository_uncached(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
                     url,
                     &tempdir.path().to_string_lossy(),
                 ])
-                .env_remove("GIT_ASKPASS")
+                .env("GCM_INTERACTIVE", "never")
+                .env("GIT_ASKPASS", "echo")
                 .env("GIT_TERMINAL_PROMPT", "0")
                 .stderr(Stdio::null());
             let status = command
@@ -627,14 +629,14 @@ static INDEX_PATH: Lazy<PathBuf> = Lazy::new(|| {
     cargo_home.join("registry/index")
 });
 
-#[cfg(all(unix, feature = "lock_index"))]
+#[cfg(feature = "lock_index")]
 fn lock_index() -> Result<File> {
-    flock::lock_path(&INDEX_PATH).with_context(|| format!("failed to lock {INDEX_PATH:?}"))
+    flock::lock_path(&INDEX_PATH).with_context(|| format!("failed to lock {:?}", &*INDEX_PATH))
 }
 
-#[cfg(not(all(unix, feature = "lock_index")))]
+#[cfg(not(feature = "lock_index"))]
 fn lock_index() -> Result<File> {
-    File::open(&*INDEX_PATH).with_context(|| format!("failed to open {INDEX_PATH:?}"))
+    File::open(&*INDEX_PATH).with_context(|| format!("failed to open {:?}", &*INDEX_PATH))
 }
 
 #[cfg(test)]

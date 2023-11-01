@@ -24,6 +24,7 @@ tempfile = "3.8"
 tokio = "1.33"
 toml = "0.8"
 walkdir = "2.4"
+windows-sys = "0.48"
 
 [dev-dependencies]
 assert_cmd = "2.0"
