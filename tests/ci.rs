@@ -4,6 +4,8 @@ use similar_asserts::SimpleDiff;
 use std::{env::remove_var, fs::read_to_string};
 use tempfile::tempdir;
 
+static DIRS: &[&str] = &[".", "rustsec_comparison"];
+
 #[ctor::ctor]
 fn initialize() {
     remove_var("CARGO_TERM_COLOR");
@@ -11,35 +13,44 @@ fn initialize() {
 
 #[test]
 fn clippy() {
-    Command::new("cargo")
-        .args([
-            "clippy",
-            "--all-features",
-            "--all-targets",
-            "--",
-            "--deny=warnings",
-            "--warn=clippy::pedantic",
-        ])
-        .assert()
-        .success();
+    for dir in DIRS {
+        Command::new("cargo")
+            .args([
+                "clippy",
+                "--all-features",
+                "--all-targets",
+                "--",
+                "--deny=warnings",
+                "--warn=clippy::pedantic",
+            ])
+            .current_dir(dir)
+            .assert()
+            .success();
+    }
 }
 
 #[test]
 fn dylint() {
-    Command::new("cargo")
-        .args(["dylint", "--all", "--", "--all-features", "--all-targets"])
-        .env("DYLINT_RUSTFLAGS", "--deny warnings")
-        .assert()
-        .success();
+    for dir in DIRS {
+        Command::new("cargo")
+            .args(["dylint", "--all", "--", "--all-features", "--all-targets"])
+            .env("DYLINT_RUSTFLAGS", "--deny warnings")
+            .current_dir(dir)
+            .assert()
+            .success();
+    }
 }
 
 #[cfg_attr(target_os = "macos", ignore)]
 #[test]
 fn format() {
-    Command::new("rustup")
-        .args(["run", "nightly", "cargo", "fmt", "--check"])
-        .assert()
-        .success();
+    for dir in DIRS {
+        Command::new("rustup")
+            .args(["run", "nightly", "cargo", "fmt", "--check"])
+            .current_dir(dir)
+            .assert()
+            .success();
+    }
 }
 
 #[test]
@@ -55,27 +66,31 @@ fn hack_feature_powerset() {
 fn license() {
     let re = Regex::new(r"^[^:]*\b(Apache-2.0|BSD-3-Clause|ISC|MIT)\b").unwrap();
 
-    for line in std::str::from_utf8(
-        &Command::new("cargo")
-            .arg("license")
-            .assert()
-            .success()
-            .get_output()
-            .stdout,
-    )
-    .unwrap()
-    .lines()
-    {
-        if [
-            "AGPLv3 (1): cargo-unmaintained",
-            "Custom License File (1): ring",
-            "MPL-2.0 (1): uluru",
-        ]
-        .contains(&line)
+    for dir in DIRS {
+        for line in std::str::from_utf8(
+            &Command::new("cargo")
+                .arg("license")
+                .current_dir(dir)
+                .assert()
+                .success()
+                .get_output()
+                .stdout,
+        )
+        .unwrap()
+        .lines()
         {
-            continue;
+            if [
+                "AGPLv3 (1): cargo-unmaintained",
+                "AGPLv3 (1): rustsec_comparison",
+                "Custom License File (1): ring",
+                "MPL-2.0 (1): uluru",
+            ]
+            .contains(&line)
+            {
+                continue;
+            }
+            assert!(re.is_match(line), "{line:?} does not match");
         }
-        assert!(re.is_match(line), "{line:?} does not match");
     }
 }
 
@@ -130,8 +145,11 @@ fn readme_contains_usage() {
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn sort() {
-    Command::new("cargo")
-        .args(["sort", "--check"])
-        .assert()
-        .success();
+    for dir in DIRS {
+        Command::new("cargo")
+            .args(["sort", "--check"])
+            .current_dir(dir)
+            .assert()
+            .success();
+    }
 }
