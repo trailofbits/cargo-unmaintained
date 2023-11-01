@@ -15,6 +15,8 @@ Notes
 
 - The above conditions never consider a "leaf" package (i.e., a package with no dependencies) unmaintained.
 
+- Of the 45 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`, 3 do not build, 13 are leaves, and 4 were updated within the past 365 days. The remaining 25 were not identified for other reasons.
+
 ## Output
 
 `cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause a package to be considered unmaintained.
