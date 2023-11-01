@@ -44,6 +44,7 @@ jobs:
           rustup update --no-self-update
           rustup install nightly
           rustup component add rustfmt --toolchain nightly
+          export CARGO_TARGET_DIR="$(mktemp -d)"
           cargo install cargo-dylint dylint-link || true
           cargo install cargo-hack               || true
           cargo install cargo-license            || true
