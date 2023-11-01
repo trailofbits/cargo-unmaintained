@@ -71,9 +71,9 @@ struct Opts {
 
     #[clap(
         long,
-        help = "Do not check whether package repository contains package; enables checking last \
-                commit timestamps using the GitHub API, which is faster, but can produce false \
-                negatives"
+        help = "Do not check whether a package's repository contains the package; enables \
+                checking last commit timestamps using the GitHub API, which is faster, but can \
+                produce false negatives"
     )]
     imprecise: bool,
 
