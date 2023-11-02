@@ -75,5 +75,5 @@ irrecoverable error occurred.
 `cargo-unmaintained` is licensed and distributed under the AGPLv3 license. [Contact us](mailto:opensource@trailofbits.com) if you're looking for an exception to the terms.
 
 [Cargo repository]: https://github.com/rust-lang/cargo
-[`cargo-audit`]: https://github.com/rustsec/rustsec
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
+[`cargo-audit`]: https://github.com/rustsec/rustsec

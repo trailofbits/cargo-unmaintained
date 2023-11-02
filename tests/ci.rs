@@ -142,6 +142,19 @@ fn readme_contains_usage() {
     );
 }
 
+#[test]
+fn readme_reference_links_are_sorted() {
+    let re = Regex::new(r"^\[[^\]]*\]:").unwrap();
+    let readme = read_to_string("README.md").unwrap();
+    let links = readme
+        .lines()
+        .filter(|line| re.is_match(line))
+        .collect::<Vec<_>>();
+    let mut links_sorted = links.clone();
+    links_sorted.sort_unstable();
+    assert_eq!(links_sorted, links);
+}
+
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn sort() {
