@@ -247,6 +247,16 @@ fn unmaintained() -> Result<bool> {
 
     let packages = maybe_filter_packages(&metadata)?;
 
+    eprintln!(
+        "Scanning {} packages and their dependencies{}",
+        packages.len(),
+        if opts::get().verbose {
+            ""
+        } else {
+            " (pass --verbose for more information)"
+        }
+    );
+
     for pkg in packages {
         let outdated_deps = outdated_deps(&metadata, pkg)?;
 
