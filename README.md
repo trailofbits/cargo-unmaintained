@@ -2,12 +2,14 @@
 
 **Find unmaintained dependencies in Rust projects**
 
-This tool defines an unmaintained dependency X as one that satisfies the following two conditions:
+`cargo-unmaintained` is similar to [`cargo-audit`]. However, rather than rely on users to find unmaintained packages and submit them to the [RustSec Advisory Database], `cargo-unmaintained` finds them automatically using a heuristic.
 
-1. X relies on a version of a package Y that is incompatible with the Y's latest version.
+`cargo-unmaintained` defines an unmaintained package X as one that satisfies the following two conditions:
+
+1. X depends on a version of a package Y that is incompatible with the Y's latest version.
 2. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-As of 2023-10-23, the [RustSec Advisory Database] contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 42 of them (just under half). These results can be reproduced by running the `rustsec_comparison` binary within this repository.
+As of 2023-10-23, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 42 of them (just under half). These results can be reproduced by running the `rustsec_comparison` binary within this repository.
 
 Notes
 
@@ -16,30 +18,6 @@ Notes
 - The above conditions never consider a "leaf" package (i.e., a package with no dependencies) unmaintained.
 
 - Of the 45 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`, 3 do not build, 13 are leaves, and 4 were updated within the past 365 days. The remaining 25 were not identified for other reasons.
-
-## Output
-
-`cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause a package to be considered unmaintained.
-
-As an example, the following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-10-20:
-
-```
-sized-chunks (https://github.com/bodil/sized-chunks updated 539 days ago)
-    bitmaps (requirement: ^2.1.0, version used: 2.1.0, latest: 3.2.0)
-im-rc (https://github.com/bodil/im-rs updated 539 days ago)
-    bitmaps (requirement: ^2, version used: 2.1.0, latest: 3.2.0)
-    sized-chunks (requirement: ^0.6.4, version used: 0.6.5, latest: 0.7.0)
-partial_ref_derive (https://github.com/jix/partial_ref updated 825 days ago)
-    syn (requirement: ^1.0.40, version used: 1.0.109, latest: 2.0.38)
-matchers (https://github.com/hawkw/matchers updated 967 days ago)
-    regex-automata (requirement: ^0.1, version used: 0.1.10, latest: 0.4.1)
-serde-value (https://github.com/arcnmx/serde-value updated 1191 days ago)
-    ordered-float (requirement: ^2.0.0, version used: 2.10.0, latest: 4.1.1)
-rusty-fork (https://github.com/altsysrq/rusty-fork updated 1241 days ago)
-    quick-error (requirement: ^1.2, version used: 1.2.3, latest: 2.0.1)
-anes (https://github.com/zrzka/anes-rs updated 1421 days ago)
-    bitflags (requirement: ^1.2, version used: 1.3.2, latest: 2.4.0)
-```
 
 ## Usage
 
@@ -70,10 +48,34 @@ no irrecoverable errors occurred, 1 if unmaintained dependencies were found, and
 irrecoverable error occurred.
 ```
 
+## Output
+
+`cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause a package to be considered unmaintained.
+
+As an example, the following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-10-20:
+
+```
+sized-chunks (https://github.com/bodil/sized-chunks updated 539 days ago)
+    bitmaps (requirement: ^2.1.0, version used: 2.1.0, latest: 3.2.0)
+im-rc (https://github.com/bodil/im-rs updated 539 days ago)
+    bitmaps (requirement: ^2, version used: 2.1.0, latest: 3.2.0)
+    sized-chunks (requirement: ^0.6.4, version used: 0.6.5, latest: 0.7.0)
+partial_ref_derive (https://github.com/jix/partial_ref updated 825 days ago)
+    syn (requirement: ^1.0.40, version used: 1.0.109, latest: 2.0.38)
+matchers (https://github.com/hawkw/matchers updated 967 days ago)
+    regex-automata (requirement: ^0.1, version used: 0.1.10, latest: 0.4.1)
+serde-value (https://github.com/arcnmx/serde-value updated 1191 days ago)
+    ordered-float (requirement: ^2.0.0, version used: 2.10.0, latest: 4.1.1)
+rusty-fork (https://github.com/altsysrq/rusty-fork updated 1241 days ago)
+    quick-error (requirement: ^1.2, version used: 1.2.3, latest: 2.0.1)
+anes (https://github.com/zrzka/anes-rs updated 1421 days ago)
+    bitflags (requirement: ^1.2, version used: 1.3.2, latest: 2.4.0)
+```
+
 ## License
 
 `cargo-unmaintained` is licensed and distributed under the AGPLv3 license. [Contact us](mailto:opensource@trailofbits.com) if you're looking for an exception to the terms.
 
 [Cargo repository]: https://github.com/rust-lang/cargo
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
-[`cargo-audit`]: https://github.com/rustsec/rustsec
+[`cargo-audit`]: https://github.com/RustSec/rustsec/tree/main/cargo-audit
