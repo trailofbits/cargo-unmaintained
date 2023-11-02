@@ -615,7 +615,7 @@ fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
 fn display_path(name: &str, version: &Version) -> Result<()> {
     let spec = format!("{name}@{version}");
     let mut command = Command::new("cargo");
-    command.args(["tree", "--workspace", "--invert", &spec]);
+    command.args(["tree", "--workspace", "--target=all", "--invert", &spec]);
     let status = command
         .status()
         .with_context(|| format!("failed to run command: {command:?}"))?;
