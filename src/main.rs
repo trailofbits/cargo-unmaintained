@@ -20,7 +20,7 @@ use std::{
     path::{Path, PathBuf},
     process::{exit, Command, Stdio},
     str::FromStr,
-    time::SystemTime,
+    time::{Duration, SystemTime},
 };
 use tempfile::tempdir;
 use toml::{Table, Value};
@@ -114,8 +114,59 @@ struct Opts {
 
 struct UnmaintainedPkg<'a> {
     pkg: &'a Package,
-    url_and_age: Option<(&'a str, u64)>,
+    repo_age: RepoStatus<'a, u64>,
     outdated_deps: Vec<OutdatedDep<'a>>,
+}
+
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum RepoStatus<'a, T> {
+    Uncloneable,
+    Nonexistent,
+    Success(&'a str, T),
+}
+
+impl<'a, T> RepoStatus<'a, T> {
+    fn as_success(&self) -> Option<(&'a str, &T)> {
+        match self {
+            Self::Uncloneable | Self::Nonexistent => None,
+            Self::Success(url, value) => Some((url, value)),
+        }
+    }
+}
+
+impl<'a> std::fmt::Display for RepoStatus<'a, u64> {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Self::Uncloneable => write!(f, "uncloneable"),
+            Self::Nonexistent => write!(f, "no repository"),
+            Self::Success(url, age) => write!(f, "{url} updated {} days ago", age / SECS_PER_DAY),
+        }
+    }
+}
+
+impl<'a, T: Ord> Ord for RepoStatus<'a, T> {
+    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
+        use std::cmp::Ordering;
+        #[allow(clippy::match_same_arms)]
+        match (self, other) {
+            // smoelius: Put uncloneable first, since that's "less bad" than no repository.
+            (Self::Uncloneable, Self::Uncloneable) => Ordering::Equal,
+            (Self::Uncloneable, Self::Nonexistent | Self::Success(_, _)) => Ordering::Less,
+            (Self::Nonexistent, Self::Uncloneable) => Ordering::Greater,
+            (Self::Nonexistent, Self::Nonexistent) => Ordering::Equal,
+            (Self::Nonexistent, Self::Success(_, _)) => Ordering::Less,
+            (Self::Success(_, _), Self::Nonexistent | Self::Uncloneable) => Ordering::Greater,
+            // smoelius: Swap the order of the arguments so that the "success" value takes
+            // precedence over the url.
+            (Self::Success(u, v), Self::Success(x, y)) => (v, u).cmp(&(y, x)),
+        }
+    }
+}
+
+impl<'a, T: Ord> PartialOrd for RepoStatus<'a, T> {
+    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
+        Some(self.cmp(other))
+    }
 }
 
 struct OutdatedDep<'a> {
@@ -151,7 +202,7 @@ thread_local! {
         GitIndex::new_cargo_default().unwrap()
     });
     static LATEST_VERSION_CACHE: RefCell<Option<HashMap<String, Version>>> = RefCell::new(None);
-    static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, Option<u64>>>> = RefCell::new(None);
+    static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, Option<SystemTime>>>> = RefCell::new(None);
     static REPOSITORY_CACHE: RefCell<Option<HashMap<String, Option<PathBuf>>>> = RefCell::new(None);
 }
 
@@ -203,18 +254,18 @@ fn unmaintained() -> Result<bool> {
             continue;
         }
 
-        let url_and_age = latest_commit_age(pkg)?;
+        let repo_age = latest_commit_age(pkg)?;
 
-        if url_and_age
-            .as_ref()
-            .map_or(false, |&(_, age)| age < opts::get().max_age * SECS_PER_DAY)
+        if repo_age
+            .as_success()
+            .map_or(false, |(_, &age)| age < opts::get().max_age * SECS_PER_DAY)
         {
             continue;
         }
 
         unnmaintained_pkgs.push(UnmaintainedPkg {
             pkg,
-            url_and_age,
+            repo_age,
             outdated_deps,
         });
 
@@ -223,8 +274,7 @@ fn unmaintained() -> Result<bool> {
         }
     }
 
-    unnmaintained_pkgs
-        .sort_by_key(|unmaintained| unmaintained.url_and_age.as_ref().map(|&(_, age)| age));
+    unnmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age);
 
     for unmaintained_pkg in &unnmaintained_pkgs {
         display_unmaintained_pkg(unmaintained_pkg)?;
@@ -339,31 +389,37 @@ fn published(pkg: &Package) -> bool {
         .map_or(true, |registries| !registries.is_empty())
 }
 
-fn latest_commit_age(pkg: &Package) -> Result<Option<(&str, u64)>> {
-    let Some((url, timestamp)) = timestamp(pkg)? else {
-        return Ok(None);
+fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
+    let (url, timestamp) = match timestamp(pkg)? {
+        RepoStatus::Uncloneable => {
+            return Ok(RepoStatus::Uncloneable);
+        }
+        RepoStatus::Nonexistent => {
+            return Ok(RepoStatus::Nonexistent);
+        }
+        RepoStatus::Success(url, timestamp) => (url, timestamp),
     };
 
-    let duration = SystemTime::now().duration_since(SystemTime::UNIX_EPOCH)?;
+    let duration = SystemTime::now().duration_since(timestamp)?;
 
-    Ok(Some((url, duration.as_secs() - timestamp)))
+    Ok(RepoStatus::Success(url, duration.as_secs()))
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-fn timestamp(pkg: &Package) -> Result<Option<(&str, u64)>> {
+fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
         let timestamp_cache = timestamp_cache.get_or_insert_with(HashMap::new);
         // smoelius: Check both the regular and the shortened url.
         for url_cached in urls(pkg) {
-            if let Some(timestamp) = timestamp_cache.get(url_cached) {
-                if opts::get().imprecise {
-                    return Ok(timestamp.map(|timestamp| (url_cached, timestamp)));
-                }
+            if let Some(&timestamp) = timestamp_cache.get(url_cached) {
                 // smoelius: If the timestamp is `None` then don't bother checking the repository
                 // cache. It could be that a previous attempt to clone the repository failed because
                 // of spurious network errors, for example.
-                if timestamp.is_none() {
-                    return Ok(None);
+                let Some(timestamp) = timestamp else {
+                    return Ok(RepoStatus::Nonexistent);
+                };
+                if opts::get().imprecise {
+                    return Ok(RepoStatus::Success(url_cached, timestamp));
                 }
                 // smoelius: `pkg`'s repository could contain other packages that were already
                 // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
@@ -375,22 +431,23 @@ fn timestamp(pkg: &Package) -> Result<Option<(&str, u64)>> {
                 };
                 assert_eq!(url_cached, url_cloned);
                 if verify_membership(pkg, &repo_dir)? {
-                    return Ok(timestamp.map(|timestamp| (url_cached, timestamp)));
+                    return Ok(RepoStatus::Success(url_cached, timestamp));
                 }
             }
         }
         verbose::wrap!(
             || {
-                if let Some((url, timestamp)) = timestamp_uncached(pkg)? {
+                let repo_status = timestamp_uncached(pkg)?;
+                if let RepoStatus::Success(url, timestamp) = repo_status {
                     timestamp_cache.insert(url.to_owned(), Some(timestamp));
-                    return Ok(Some((url, timestamp)));
+                } else {
+                    // smoelius: In the event of failure, set all urls associated with the
+                    // repository to `None`.
+                    for url in urls(pkg) {
+                        timestamp_cache.insert(url.to_owned(), None);
+                    }
                 }
-                // smoelius: In the event of failure, set all urls associated with the repository to
-                // `None`.
-                for url in urls(pkg) {
-                    timestamp_cache.insert(url.to_owned(), None);
-                }
-                Ok(None)
+                Ok(repo_status)
             },
             "timestamp of `{}`",
             pkg.name
@@ -398,9 +455,9 @@ fn timestamp(pkg: &Package) -> Result<Option<(&str, u64)>> {
     })
 }
 
-fn timestamp_uncached(pkg: &Package) -> Result<Option<(&str, u64)>> {
+fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     let Some(url) = &pkg.repository else {
-        return Ok(None);
+        return Ok(RepoStatus::Nonexistent);
     };
 
     if opts::get().imprecise && url.starts_with("https://github.com/") {
@@ -408,7 +465,7 @@ fn timestamp_uncached(pkg: &Package) -> Result<Option<(&str, u64)>> {
 
         match github::timestamp(url) {
             Ok((url, timestamp)) => {
-                return Ok(Some((url, timestamp)));
+                return Ok(RepoStatus::Success(url, timestamp));
             }
             Err(error) => {
                 if var("GITHUB_TOKEN").is_err() {
@@ -437,13 +494,13 @@ fn first_line(s: &str) -> &str {
     s.lines().next().unwrap_or(s)
 }
 
-fn timestamp_from_clone(pkg: &Package) -> Result<Option<(&str, u64)>> {
+fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     let Some((url, repo_dir)) = clone_repository(pkg)? else {
-        return Ok(None);
+        return Ok(RepoStatus::Uncloneable);
     };
 
     if !opts::get().imprecise && !verify_membership(pkg, &repo_dir)? {
-        return Ok(None);
+        return Ok(RepoStatus::Nonexistent);
     }
 
     let mut command = Command::new("git");
@@ -456,9 +513,10 @@ fn timestamp_from_clone(pkg: &Package) -> Result<Option<(&str, u64)>> {
     ensure!(output.status.success(), "command failed: {command:?}");
 
     let stdout = std::str::from_utf8(&output.stdout)?;
-    let timestamp = u64::from_str(stdout.trim_end())?;
+    let secs = u64::from_str(stdout.trim_end())?;
+    let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
 
-    Ok(Some((url, timestamp)))
+    Ok(RepoStatus::Success(url, timestamp))
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
@@ -585,15 +643,10 @@ fn verify_membership(pkg: &Package, repo_dir: &Path) -> Result<bool> {
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
     let UnmaintainedPkg {
         pkg,
-        url_and_age,
+        repo_age,
         outdated_deps,
     } = unmaintained_pkg;
-    let url_and_age_msg = if let Some((url, age)) = url_and_age {
-        format!("{url} updated {} days ago", age / SECS_PER_DAY)
-    } else {
-        String::from("no repository")
-    };
-    println!("{} ({})", pkg.name, url_and_age_msg);
+    println!("{} ({})", pkg.name, repo_age);
     for OutdatedDep {
         dep,
         version_used,
@@ -671,5 +724,12 @@ mod tests {
                 "cargo-unmaintained {}\n",
                 env!("CARGO_PKG_VERSION")
             ));
+    }
+
+    #[test]
+    fn repo_status_ord() {
+        assert!(RepoStatus::Uncloneable::<u64> < RepoStatus::Nonexistent);
+        assert!(RepoStatus::Nonexistent < RepoStatus::Success("b", 0));
+        assert!(RepoStatus::Success("b", 0) < RepoStatus::Success("a", 1));
     }
 }

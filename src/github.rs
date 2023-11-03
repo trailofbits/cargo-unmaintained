@@ -1,7 +1,10 @@
 use anyhow::{anyhow, bail, Context, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
-use std::fs::read_to_string;
+use std::{
+    fs::read_to_string,
+    time::{Duration, SystemTime},
+};
 use tokio::runtime;
 
 #[allow(clippy::unwrap_used)]
@@ -27,7 +30,7 @@ pub(crate) fn load_token(path: &str) -> Result<()> {
     })
 }
 
-pub(crate) fn timestamp(url: &str) -> Result<(&str, u64)> {
+pub(crate) fn timestamp(url: &str) -> Result<(&str, SystemTime)> {
     let (url, owner, repo) = {
         #[allow(clippy::unwrap_used)]
         if let Some(captures) = RE.captures(url) {
@@ -78,7 +81,8 @@ pub(crate) fn timestamp(url: &str) -> Result<(&str, u64)> {
         Result::<_>::Ok(date)
     })?;
 
-    let timestamp = datetime.timestamp().try_into()?;
+    let secs = datetime.timestamp().try_into()?;
+    let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
 
     Ok((url, timestamp))
 }
