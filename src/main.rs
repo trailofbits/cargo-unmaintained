@@ -16,7 +16,7 @@ use std::{
     collections::HashMap,
     env::{args, var},
     ffi::OsStr,
-    fs::{read_to_string, File},
+    fs::{read_to_string, remove_dir_all, File},
     path::{Path, PathBuf},
     process::{exit, Command, Stdio},
     str::FromStr,
@@ -289,7 +289,25 @@ fn main() -> Result<()> {
     }
 }
 
+struct DeleteClonedRepositories;
+
+impl Drop for DeleteClonedRepositories {
+    fn drop(&mut self) {
+        REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
+            if let Some(repository_cache) = repository_cache {
+                for (_, repo_dir) in repository_cache.drain() {
+                    if let Some(repo_dir) = repo_dir {
+                        remove_dir_all(repo_dir).unwrap_or_default();
+                    }
+                }
+            }
+        });
+    }
+}
+
 fn unmaintained() -> Result<bool> {
+    let _delete_cloned_repositories = DeleteClonedRepositories;
+
     let mut unnmaintained_pkgs = Vec::new();
 
     let metadata = MetadataCommand::new().exec()?;
