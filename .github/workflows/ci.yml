@@ -54,3 +54,11 @@ jobs:
         run: cargo test
         env:
           RUST_BACKTRACE: 1
+
+  all-checks:
+    needs: [test]
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - run: true
