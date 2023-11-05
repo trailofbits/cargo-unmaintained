@@ -23,6 +23,7 @@ use std::{
     time::{Duration, SystemTime},
 };
 use tempfile::tempdir;
+use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 use toml::{Table, Value};
 use walkdir::WalkDir;
 
@@ -62,6 +63,14 @@ and no irrecoverable errors occurred, 1 if unmaintained dependencies were found,
 irrecoverable error occurred."
 )]
 struct Opts {
+    #[clap(
+        long,
+        help = "When to use color: always, auto, or never",
+        default_value = "auto",
+        value_name = "WHEN"
+    )]
+    color: ColorChoice,
+
     #[clap(
         long,
         help = "Exit as soon as an unmaintained dependency is found",
@@ -134,12 +143,52 @@ impl<'a, T> RepoStatus<'a, T> {
     }
 }
 
-impl<'a> std::fmt::Display for RepoStatus<'a, u64> {
-    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+/// Multiples of `max_age` that cause the color to go completely from yellow to red.
+const SATURATION_MULTIPLIER: u64 = 3;
+
+impl<'a> RepoStatus<'a, u64> {
+    fn color(&self) -> Option<Color> {
+        let &Self::Success(_, age) = self else {
+            // smoelius: `Uncloneable` and `Nonexistent` default to yellow.
+            return Some(Color::Rgb(u8::MAX, u8::MAX, 0));
+        };
+        let age_in_days = age / SECS_PER_DAY;
+        let Some(max_age_excess) = age_in_days.checked_sub(opts::get().max_age) else {
+            // smoelius: `age_in_days` should be at least `max_age`. Otherwise, why are we here?
+            debug_assert!(false);
+            return None;
+        };
+        let subtrahend_u64 = if opts::get().max_age == 0 {
+            u64::MAX
+        } else {
+            (max_age_excess * u64::from(u8::MAX)) / (SATURATION_MULTIPLIER * opts::get().max_age)
+        };
+        Some(Color::Rgb(
+            u8::MAX,
+            u8::MAX.saturating_sub(u8::try_from(subtrahend_u64).unwrap_or(u8::MAX)),
+            0,
+        ))
+    }
+
+    #[cfg_attr(
+        dylint_lib = "general",
+        allow(non_local_effect_before_error_return, try_io_result)
+    )]
+    fn write(&self, stream: &mut (impl std::io::Write + WriteColor)) -> std::io::Result<()> {
         match self {
-            Self::Uncloneable => write!(f, "uncloneable"),
-            Self::Nonexistent => write!(f, "no repository"),
-            Self::Success(url, age) => write!(f, "{url} updated {} days ago", age / SECS_PER_DAY),
+            Self::Uncloneable => write!(stream, "uncloneable"),
+            Self::Nonexistent => write!(stream, "no repository"),
+            Self::Success(url, age) => {
+                stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;
+                write!(stream, "{url}")?;
+                stream.set_color(ColorSpec::new().set_fg(None))?;
+                write!(stream, " updated ")?;
+                stream.set_color(ColorSpec::new().set_fg(self.color()))?;
+                write!(stream, "{}", age / SECS_PER_DAY)?;
+                stream.set_color(ColorSpec::new().set_fg(None))?;
+                write!(stream, " days ago")?;
+                Ok(())
+            }
         }
     }
 }
@@ -650,13 +699,24 @@ fn verify_membership(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     Ok(false)
 }
 
+#[cfg_attr(
+    dylint_lib = "general",
+    allow(non_local_effect_before_error_return, try_io_result)
+)]
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
+    use std::io::Write;
+    let mut stdout = StandardStream::stdout(opts::get().color);
     let UnmaintainedPkg {
         pkg,
         repo_age,
         outdated_deps,
     } = unmaintained_pkg;
-    println!("{} ({})", pkg.name, repo_age);
+    stdout.set_color(ColorSpec::new().set_fg(repo_age.color()))?;
+    write!(stdout, "{}", pkg.name)?;
+    stdout.set_color(ColorSpec::new().set_fg(None))?;
+    write!(stdout, " (")?;
+    repo_age.write(&mut stdout)?;
+    writeln!(stdout, ")")?;
     for OutdatedDep {
         dep,
         version_used,

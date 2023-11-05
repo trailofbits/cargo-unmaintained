@@ -25,6 +25,7 @@ Notes
 Usage: cargo unmaintained [OPTIONS]
 
 Options:
+      --color <WHEN>    When to use color: always, auto, or never [default: auto]
       --fail-fast       Exit as soon as an unmaintained dependency is found
       --imprecise       Do not check whether a package's repository contains the package; enables
                         checking last commit timestamps using the GitHub API, which is faster, but
@@ -50,36 +51,11 @@ irrecoverable error occurred.
 
 ## Output
 
-`cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause a package to be considered unmaintained.
+`cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause the package to be considered unmaintained.
 
-As an example, the following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-11-03:
+For example, the following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-11-04:
 
-```
-varisat (https://github.com/jix/varisat updated 365 days ago)
-    itoa (requirement: ^0.4.4, version used: 0.4.8, latest: 1.0.9)
-    ordered-float (requirement: ^2.0.0, version used: 2.10.0, latest: 4.1.1)
-    vec_mut_scan (requirement: ^0.3.0, version used: 0.3.0, latest: 0.5.0)
-varisat-dimacs (https://github.com/jix/varisat updated 365 days ago)
-    itoa (requirement: ^0.4.4, version used: 0.4.8, latest: 1.0.9)
-varisat-internal-macros (https://github.com/jix/varisat updated 365 days ago)
-    syn (requirement: ^1.0.40, version used: 1.0.109, latest: 2.0.38)
-    synstructure (requirement: ^0.12.4, version used: 0.12.6, latest: 0.13.0)
-sized-chunks (https://github.com/bodil/sized-chunks updated 552 days ago)
-    bitmaps (requirement: ^2.1.0, version used: 2.1.0, latest: 3.2.0)
-im-rc (https://github.com/bodil/im-rs updated 552 days ago)
-    bitmaps (requirement: ^2, version used: 2.1.0, latest: 3.2.0)
-    sized-chunks (requirement: ^0.6.4, version used: 0.6.5, latest: 0.7.0)
-partial_ref_derive (https://github.com/jix/partial_ref updated 839 days ago)
-    syn (requirement: ^1.0.40, version used: 1.0.109, latest: 2.0.38)
-matchers (https://github.com/hawkw/matchers updated 980 days ago)
-    regex-automata (requirement: ^0.1, version used: 0.1.10, latest: 0.4.3)
-serde-value (https://github.com/arcnmx/serde-value updated 1205 days ago)
-    ordered-float (requirement: ^2.0.0, version used: 2.10.0, latest: 4.1.1)
-rusty-fork (https://github.com/altsysrq/rusty-fork updated 1255 days ago)
-    quick-error (requirement: ^1.2, version used: 1.2.3, latest: 2.0.1)
-anes (https://github.com/zrzka/anes-rs updated 1434 days ago)
-    bitflags (requirement: ^1.2, version used: 1.3.2, latest: 2.4.1)
-```
+<img src="etc/output.png" width=656>
 
 ## License
 

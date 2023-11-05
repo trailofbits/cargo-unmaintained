@@ -272,6 +272,7 @@ dependencies = [
  "similar-asserts",
  "snapbox",
  "tempfile",
+ "termcolor",
  "tokio",
  "toml",
  "walkdir",
