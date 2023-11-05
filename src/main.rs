@@ -606,27 +606,29 @@ fn clone_repository(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
                 return Ok(repo_dir.clone().map(|repo_dir| (url, repo_dir)));
             }
         }
-        if let Some((url, repo_dir)) = clone_repository_uncached(pkg)? {
+        let url_and_dir = clone_repository_uncached(pkg)?;
+        if let Some((url, ref repo_dir)) = url_and_dir {
             repository_cache.insert(url.to_owned(), Some(repo_dir.clone()));
-            return Ok(Some((url, repo_dir)));
+        } else {
+            if let Some(url) = &pkg.repository {
+                warn!("failed to clone `{}`", url);
+            }
+            // smoelius: In the event of failure, set all urls associated with the repository to
+            // `None`.
+            for url in urls(pkg) {
+                repository_cache.insert(url.to_owned(), None);
+            }
         }
-        if let Some(url) = &pkg.repository {
-            warn!("failed to clone `{}`", url);
-        }
-        // smoelius: In the event of failure, set all urls associated with the repository to `None`.
-        for url in urls(pkg) {
-            repository_cache.insert(url.to_owned(), None);
-        }
-        Ok(None)
+        Ok(url_and_dir)
     })
 }
 
 fn clone_repository_uncached(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
     urls(pkg).into_iter().try_fold(
         None,
-        |successful_url_and_path, url| -> Result<Option<(&str, PathBuf)>> {
-            if successful_url_and_path.is_some() {
-                return Ok(successful_url_and_path);
+        |successful_url_and_dir, url| -> Result<Option<(&str, PathBuf)>> {
+            if successful_url_and_dir.is_some() {
+                return Ok(successful_url_and_dir);
             }
             let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
             let mut command = Command::new("git");
