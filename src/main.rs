@@ -250,9 +250,9 @@ thread_local! {
         let _lock = lock_index().unwrap();
         GitIndex::new_cargo_default().unwrap()
     });
-    static LATEST_VERSION_CACHE: RefCell<Option<HashMap<String, Version>>> = RefCell::new(None);
-    static TIMESTAMP_CACHE: RefCell<Option<HashMap<String, Option<SystemTime>>>> = RefCell::new(None);
-    static REPOSITORY_CACHE: RefCell<Option<HashMap<String, Option<PathBuf>>>> = RefCell::new(None);
+    static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
+    static TIMESTAMP_CACHE: RefCell<HashMap<String, Option<SystemTime>>> = RefCell::new(HashMap::new());
+    static REPOSITORY_CACHE: RefCell<HashMap<String, Option<PathBuf>>> = RefCell::new(HashMap::new());
 }
 
 macro_rules! warn {
@@ -294,11 +294,9 @@ struct DeleteClonedRepositories;
 impl Drop for DeleteClonedRepositories {
     fn drop(&mut self) {
         REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
-            if let Some(repository_cache) = repository_cache {
-                for (_, repo_dir) in repository_cache.drain() {
-                    if let Some(repo_dir) = repo_dir {
-                        remove_dir_all(repo_dir).unwrap_or_default();
-                    }
+            for (_, repo_dir) in repository_cache.drain() {
+                if let Some(repo_dir) = repo_dir {
+                    remove_dir_all(repo_dir).unwrap_or_default();
                 }
             }
         });
@@ -434,7 +432,6 @@ fn find_packages<'a>(
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn latest_version(name: &str) -> Result<Version> {
     LATEST_VERSION_CACHE.with_borrow_mut(|latest_version_cache| {
-        let latest_version_cache = latest_version_cache.get_or_insert_with(HashMap::new);
         if let Some(version) = latest_version_cache.get(name) {
             return Ok(version.clone());
         }
@@ -485,7 +482,6 @@ fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
-        let timestamp_cache = timestamp_cache.get_or_insert_with(HashMap::new);
         // smoelius: Check both the regular and the shortened url.
         for url_cached in urls(pkg) {
             if let Some(&timestamp) = timestamp_cache.get(url_cached) {
@@ -599,7 +595,6 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn clone_repository(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
     REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
-        let repository_cache = repository_cache.get_or_insert_with(HashMap::new);
         // smoelius: Check all urls associated with the package.
         for url in urls(pkg) {
             if let Some(repo_dir) = repository_cache.get(url) {
