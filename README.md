@@ -35,7 +35,7 @@ Options:
                         though ages are still reported [default: 365]
       --no-exit-code    Do not set exit status when unmaintained dependencies are found
       --no-warnings     Do not show warnings
-  -p, --package <SPEC>  Check only whether package SPEC is unmaintained
+  -p, --package <NAME>  Check only whether package NAME is unmaintained
       --tree            Show paths to unmaintained dependencies
       --verbose         Show information about what cargo-unmaintained is doing
   -h, --help            Print help

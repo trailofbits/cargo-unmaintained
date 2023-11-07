@@ -109,8 +109,8 @@ struct Opts {
     #[clap(
         long,
         short,
-        help = "Check only whether package SPEC is unmaintained",
-        value_name = "SPEC"
+        help = "Check only whether package NAME is unmaintained",
+        value_name = "NAME"
     )]
     package: Option<String>,
 
@@ -230,8 +230,13 @@ struct DepReq<'a> {
 }
 
 impl<'a> DepReq<'a> {
+    #[allow(dead_code)]
     fn new(name: &'a str, req: VersionReq) -> Self {
         Self { name, req }
+    }
+
+    fn matches(&self, pkg: &Package) -> bool {
+        self.name == pkg.name && self.req.matches(&pkg.version)
     }
 }
 
@@ -310,7 +315,7 @@ fn unmaintained() -> Result<bool> {
 
     let metadata = MetadataCommand::new().exec()?;
 
-    let packages = maybe_filter_packages(&metadata)?;
+    let packages = filter_packages(&metadata)?;
 
     eprintln!(
         "Scanning {} packages and their dependencies{}",
@@ -358,29 +363,63 @@ fn unmaintained() -> Result<bool> {
     Ok(!opts::get().no_exit_code && !unnmaintained_pkgs.is_empty())
 }
 
-fn maybe_filter_packages(metadata: &Metadata) -> Result<Vec<&Package>> {
-    let Some(spec) = &opts::get().package else {
-        return Ok(metadata.packages.iter().collect());
-    };
+fn filter_packages(metadata: &Metadata) -> Result<Vec<&Package>> {
+    let mut packages = Vec::new();
 
-    let dep_req = if let Some((name, req)) = spec.split_once('@') {
-        let req = VersionReq::from_str(req)?;
-        DepReq::new(name, req)
-    } else {
-        DepReq::new(spec, VersionReq::STAR)
-    };
+    // smoelius: If a project relies on multiple versions of a package, check only the latest one.
+    let metadata_latest_version_map = build_metadata_latest_version_map(metadata);
 
-    let packages = find_packages(metadata, dep_req).collect::<Vec<_>>();
+    for pkg in &metadata.packages {
+        #[allow(clippy::panic)]
+        let version = metadata_latest_version_map
+            .get(&pkg.name)
+            .unwrap_or_else(|| {
+                panic!(
+                    "`metadata_latest_version_map` does not contain {}",
+                    pkg.name
+                )
+            });
 
-    if packages.len() >= 2 {
-        bail!("found multiple packages matching `{spec}`: {:#?}", packages);
+        if pkg.version != *version {
+            continue;
+        }
+
+        if let Some(name) = &opts::get().package {
+            if pkg.name != *name {
+                continue;
+            }
+        }
+
+        packages.push(pkg);
     }
 
-    if packages.is_empty() {
-        bail!("found no packages matching `{spec}`");
+    if let Some(name) = &opts::get().package {
+        if packages.len() >= 2 {
+            bail!("found multiple packages matching `{name}`: {:#?}", packages);
+        }
+
+        if packages.is_empty() {
+            bail!("found no packages matching `{name}`");
+        }
     }
 
     Ok(packages)
+}
+
+fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Version> {
+    let mut map: HashMap<String, Version> = HashMap::new();
+
+    for pkg in &metadata.packages {
+        if let Some(version) = map.get_mut(&pkg.name) {
+            if *version < pkg.version {
+                *version = pkg.version.clone();
+            }
+        } else {
+            map.insert(pkg.name.clone(), pkg.version.clone());
+        }
+    }
+
+    map
 }
 
 #[allow(clippy::unnecessary_wraps)]
@@ -426,7 +465,7 @@ fn find_packages<'a>(
     metadata
         .packages
         .iter()
-        .filter(move |pkg| dep_req.name == pkg.name && dep_req.req.matches(&pkg.version))
+        .filter(move |pkg| dep_req.matches(pkg))
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
