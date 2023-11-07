@@ -14,8 +14,14 @@ required by package `block-cipher-trait-test-package v0.1.0 ([..])`
 stb_truetype...not found
 bigint...found
 failure...not found
-block-cipher...leaf
-stream-cipher...leaf
+block-cipher...error:
+```
+Error: found no packages matching `block-cipher`
+```
+stream-cipher...error:
+```
+Error: found no packages matching `stream-cipher`
+```
 safe-nd...found
 ffi_utils...found
 fake_clock...leaf
@@ -62,7 +68,10 @@ anymap...leaf
 spirv_headers...found
 cosmos_sdk...leaf
 serde_cbor...found
-cargo-download...leaf
+cargo-download...error:
+```
+Error: found no packages matching `cargo-download`
+```
 rental...not found
 sass-rs...not found
 sodiumoxide...found
@@ -109,14 +118,15 @@ tui...recently updated
 multipart...found
 dlopen_derive...found
 fehler...not found
-not found - error (3)
+not found - error (6)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
-    safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
-    miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
-not found - leaf (13)
-    boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
     stream-cipher        https://rustsec.org/advisories/RUSTSEC-2020-0058.html
+    safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
+    miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
+    cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
+not found - leaf (10)
+    boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     fake_clock           https://rustsec.org/advisories/RUSTSEC-2020-0065.html
     aesni                https://rustsec.org/advisories/RUSTSEC-2021-0059.html
     aes-soft             https://rustsec.org/advisories/RUSTSEC-2021-0060.html
@@ -124,7 +134,6 @@ not found - leaf (13)
     cpuid-bool           https://rustsec.org/advisories/RUSTSEC-2021-0064.html
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     cosmos_sdk           https://rustsec.org/advisories/RUSTSEC-2021-0099.html
-    cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
 not found - recently-updated (4)

@@ -119,17 +119,17 @@ fn main() -> Result<()> {
             output.stderr
         );
 
-        if is_leaf(advisory.metadata.package.as_str(), tempdir.path())? {
-            println!("leaf");
-            advisory_outcomes.push((advisory, Outcome::NotFound(Reason::Leaf)));
-            continue;
-        }
-
         let output = command_output(&mut cargo_unmaintained(
             advisory.metadata.package.as_str(),
             tempdir.path(),
         ))?;
         if output.status.code() == Some(0) {
+            if is_leaf(advisory.metadata.package.as_str(), tempdir.path())? {
+                println!("leaf");
+                advisory_outcomes.push((advisory, Outcome::NotFound(Reason::Leaf)));
+                continue;
+            }
+
             let mut command =
                 cargo_unmaintained(advisory.metadata.package.as_str(), tempdir.path());
             let output = command_output(command.arg("--max-age=0"))?;
