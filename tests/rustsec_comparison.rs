@@ -11,6 +11,7 @@ fn rustsec_comparison() {
     let assert = Command::new("cargo")
         .arg("run")
         .current_dir("rustsec_comparison")
+        .env("RUST_BACKTRACE", "0")
         .assert();
 
     let stdout_actual = std::str::from_utf8(&assert.get_output().stdout).unwrap();
