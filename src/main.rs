@@ -283,7 +283,7 @@ fn main() -> Result<()> {
         Ok(false) => exit(0),
         Ok(true) => exit(1),
         Err(error) => {
-            eprintln!("Error: {error}");
+            eprintln!("Error: {error:?}");
             exit(2);
         }
     }
