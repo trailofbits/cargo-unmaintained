@@ -356,8 +356,20 @@ fn unmaintained() -> Result<bool> {
 
     unnmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age);
 
+    let mut pkgs_needing_warning = Vec::new();
     for unmaintained_pkg in &unnmaintained_pkgs {
-        display_unmaintained_pkg(unmaintained_pkg)?;
+        if display_unmaintained_pkg(unmaintained_pkg)? {
+            pkgs_needing_warning.push(&unmaintained_pkg.pkg);
+        }
+    }
+    if !pkgs_needing_warning.is_empty() {
+        warn!(
+            "the following packages' paths could not be printed:{}",
+            pkgs_needing_warning
+                .into_iter()
+                .map(|pkg| format!("\n    {}@{}", pkg.name, pkg.version))
+                .collect::<String>()
+        );
     }
 
     Ok(!opts::get().no_exit_code && !unnmaintained_pkgs.is_empty())
@@ -750,7 +762,7 @@ fn verify_membership(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     dylint_lib = "general",
     allow(non_local_effect_before_error_return, try_io_result)
 )]
-fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
+fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> {
     use std::io::Write;
     let mut stdout = StandardStream::stdout(opts::get().color);
     let UnmaintainedPkg {
@@ -776,21 +788,31 @@ fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<()> {
         );
     }
     if opts::get().tree {
-        display_path(&pkg.name, &pkg.version)?;
+        let need_warning = display_path(&pkg.name, &pkg.version)?;
         println!();
+        Ok(need_warning)
+    } else {
+        Ok(false)
     }
-    Ok(())
 }
 
-fn display_path(name: &str, version: &Version) -> Result<()> {
+fn display_path(name: &str, version: &Version) -> Result<bool> {
     let spec = format!("{name}@{version}");
     let mut command = Command::new("cargo");
     command.args(["tree", "--workspace", "--target=all", "--invert", &spec]);
-    let status = command
-        .status()
+    let output = command
+        .output()
         .with_context(|| format!("failed to run command: {command:?}"))?;
-    ensure!(status.success(), "command failed: {command:?}");
-    Ok(())
+    // smoelius: Hack. It appears that `cargo tree` does not print proc-macros used by proc-macros.
+    // For now, check whether stdout begins as expected. If not, ignore it and ultimately emit a
+    // warning.
+    let stdout = String::from_utf8(output.stdout)?;
+    if stdout.starts_with(&format!("{name} v{version}\n")) {
+        print!("{stdout}");
+        Ok(false)
+    } else {
+        Ok(true)
+    }
 }
 
 static INDEX_PATH: Lazy<PathBuf> = Lazy::new(|| {
