@@ -658,37 +658,30 @@ fn clone_repository(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
 }
 
 fn clone_repository_uncached(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
-    urls(pkg).into_iter().try_fold(
-        None,
-        |successful_url_and_dir, url| -> Result<Option<(&str, PathBuf)>> {
-            if successful_url_and_dir.is_some() {
-                return Ok(successful_url_and_dir);
-            }
-            let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
-            let mut command = Command::new("git");
-            command
-                .args([
-                    "clone",
-                    "--depth=1",
-                    "--quiet",
-                    url,
-                    &tempdir.path().to_string_lossy(),
-                ])
-                .env("GCM_INTERACTIVE", "never")
-                .env("GIT_ASKPASS", "echo")
-                .env("GIT_TERMINAL_PROMPT", "0")
-                .stderr(Stdio::null());
-            let status = command
-                .status()
-                .with_context(|| format!("failed to run command: {command:?}"))?;
-            if status.success() {
-                // smoelius: Leak temporary directory.
-                Ok(Some((url, tempdir.into_path())))
-            } else {
-                Ok(None)
-            }
-        },
-    )
+    for url in urls(pkg) {
+        let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
+        let mut command = Command::new("git");
+        command
+            .args([
+                "clone",
+                "--depth=1",
+                "--quiet",
+                url,
+                &tempdir.path().to_string_lossy(),
+            ])
+            .env("GCM_INTERACTIVE", "never")
+            .env("GIT_ASKPASS", "echo")
+            .env("GIT_TERMINAL_PROMPT", "0")
+            .stderr(Stdio::null());
+        let status = command
+            .status()
+            .with_context(|| format!("failed to run command: {command:?}"))?;
+        if status.success() {
+            // smoelius: Leak temporary directory.
+            return Ok(Some((url, tempdir.into_path())));
+        }
+    }
+    Ok(None)
 }
 
 fn urls(pkg: &Package) -> impl IntoIterator<Item = &str> {
