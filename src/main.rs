@@ -55,7 +55,7 @@ enum CargoSubCommand {
     version = crate_version!(),
     about = "Find unmaintained dependencies in Rust projects",
     after_help = "\
-The `GITHUB_TOKEN` environment variable can be set to the path of a file containing a personal \
+The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file containing a personal \
 access token, which will be used to authenticate to GitHub.
 
 Unless --no-exit-code is passed, the exit status is 0 if no unmaintained dependencies were found \
@@ -274,7 +274,7 @@ macro_rules! warn {
 fn main() -> Result<()> {
     env_logger::init();
 
-    if let Ok(path) = var("GITHUB_TOKEN") {
+    if let Ok(path) = var("GITHUB_TOKEN_PATH") {
         github::load_token(&path)?;
     }
 
@@ -592,7 +592,7 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
                 return Ok(RepoStatus::Success(url, timestamp));
             }
             Err(error) => {
-                if var("GITHUB_TOKEN").is_err() {
+                if var("GITHUB_TOKEN_PATH").is_err() {
                     debug!(
                         "failed to get timestamp for {} using GitHub API: {}",
                         url, error
