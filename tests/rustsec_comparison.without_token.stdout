@@ -1,0 +1,212 @@
+87 advisories for unmaintained packages
+lz4-compress...found
+tempdir...found
+typemap...not found
+boxfnonce...leaf
+net2...recently updated
+block-cipher-trait...error:
+```
+    Updating crates.io index
+error: no matching package named `block-cipher-trait` found
+location searched: registry `crates-io`
+required by package `block-cipher-trait-test-package v0.1.0 ([..])`
+```
+stb_truetype...not found
+bigint...found
+failure...not found
+block-cipher...error:
+```
+Error: found no packages matching `block-cipher`
+```
+stream-cipher...error:
+```
+Error: found no packages matching `stream-cipher`
+```
+safe-nd...found
+ffi_utils...found
+fake_clock...leaf
+safe_bindgen...found
+quic-p2p...found
+routing...found
+safe_app...found
+safe_authenticator...found
+safe_vault...found
+safe_core...found
+stderr...found
+rulinalg...found
+slice-deque...not found
+tokio-proto...found
+term_size...not found
+mach...not found
+interfaces2...found
+safe-api...error:
+```
+    Updating crates.io index
+error: failed to select a version for the requirement `quinn = "~0.3.0"`
+candidate versions found which didn't match: 0.10.2, 0.10.1, 0.10.0, ...
+location searched: crates.io index
+required by package `quic-p2p v0.2.1`
+    ... which satisfies dependency `quic-p2p = "~0.2.1"` of package `safe_core v0.33.0`
+    ... which satisfies dependency `safe_core = "~0.33.0"` of package `safe-api v0.4.0`
+    ... which satisfies dependency `safe-api = "*"` of package `safe-api-test-package v0.1.0 ([..])`
+perhaps a crate was updated and forgotten to be re-vendored?
+```
+jsonrpc-quic...found
+office...found
+aesni...leaf
+aes-soft...leaf
+aes-ctr...leaf
+miscreant...error:
+```
+    Updating crates.io index
+error: no matching package named `miscreant` found
+location searched: registry `crates-io`
+required by package `miscreant-test-package v0.1.0 ([..])`
+```
+cpuid-bool...leaf
+anymap...leaf
+spirv_headers...found
+cosmos_sdk...leaf
+serde_cbor...found
+cargo-download...error:
+```
+Error: found no packages matching `cargo-download`
+```
+rental...not found
+sass-rs...not found
+sodiumoxide...found
+ansi_term...not found
+rusttype...recently updated
+dotenv...not found
+dotenv_codegen...not found
+traitobject...leaf
+twoway...not found
+nphysics3d...found
+nphysics2d...found
+ncollide3d...found
+ncollide2d...found
+encoding...not found
+lmdb...found
+ftd2xx-embedded-hal...found
+pty...found
+static_type_map...not found
+double-checked-cell...not found
+r2d2_odbc...found
+odbc...found
+markdown...not found
+interledger-packet...found
+mapr...not found
+wee_alloc...found
+clipboard...found
+badge...found
+orbtk...found
+parity-wasm...not found
+rusoto_credential...not found
+alloc-cortex-m...not found
+claim...found
+parity-util-mem...found
+json...leaf
+kuchiki...recently updated
+git-hash...not found
+git-path...not found
+buf_redux...found
+tree_magic...found
+xsalsa20poly1305...not found
+users...not found
+ftp...found
+tui...recently updated
+multipart...found
+dlopen_derive...found
+fehler...not found
+not found - error (6)
+    block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
+    block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
+    stream-cipher        https://rustsec.org/advisories/RUSTSEC-2020-0058.html
+    safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
+    miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
+    cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
+not found - leaf (10)
+    boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
+    fake_clock           https://rustsec.org/advisories/RUSTSEC-2020-0065.html
+    aesni                https://rustsec.org/advisories/RUSTSEC-2021-0059.html
+    aes-soft             https://rustsec.org/advisories/RUSTSEC-2021-0060.html
+    aes-ctr              https://rustsec.org/advisories/RUSTSEC-2021-0061.html
+    cpuid-bool           https://rustsec.org/advisories/RUSTSEC-2021-0064.html
+    anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
+    cosmos_sdk           https://rustsec.org/advisories/RUSTSEC-2021-0099.html
+    traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
+    json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
+not found - recently-updated (4)
+    net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
+    rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
+    kuchiki              https://rustsec.org/advisories/RUSTSEC-2023-0019.html
+    tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
+not found - other (25)
+    typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
+    stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
+    failure              https://rustsec.org/advisories/RUSTSEC-2020-0036.html
+    slice-deque          https://rustsec.org/advisories/RUSTSEC-2020-0158.html
+    term_size            https://rustsec.org/advisories/RUSTSEC-2020-0163.html
+    mach                 https://rustsec.org/advisories/RUSTSEC-2020-0168.html
+    rental               https://rustsec.org/advisories/RUSTSEC-2021-0134.html
+    sass-rs              https://rustsec.org/advisories/RUSTSEC-2021-0136.html
+    ansi_term            https://rustsec.org/advisories/RUSTSEC-2021-0139.html
+    dotenv               https://rustsec.org/advisories/RUSTSEC-2021-0141.html
+    dotenv_codegen       https://rustsec.org/advisories/RUSTSEC-2021-0142.html
+    twoway               https://rustsec.org/advisories/RUSTSEC-2021-0146.html
+    encoding             https://rustsec.org/advisories/RUSTSEC-2021-0153.html
+    static_type_map      https://rustsec.org/advisories/RUSTSEC-2022-0023.html
+    double-checked-cell  https://rustsec.org/advisories/RUSTSEC-2022-0024.html
+    markdown             https://rustsec.org/advisories/RUSTSEC-2022-0044.html
+    mapr                 https://rustsec.org/advisories/RUSTSEC-2022-0053.html
+    parity-wasm          https://rustsec.org/advisories/RUSTSEC-2022-0061.html
+    rusoto_credential    https://rustsec.org/advisories/RUSTSEC-2022-0071.html
+    alloc-cortex-m       https://rustsec.org/advisories/RUSTSEC-2022-0073.html
+    git-hash             https://rustsec.org/advisories/RUSTSEC-2023-0025.html
+    git-path             https://rustsec.org/advisories/RUSTSEC-2023-0026.html
+    xsalsa20poly1305     https://rustsec.org/advisories/RUSTSEC-2023-0037.html
+    users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
+    fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
+found (42)
+    lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
+    tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
+    bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
+    safe-nd              https://rustsec.org/advisories/RUSTSEC-2020-0063.html
+    ffi_utils            https://rustsec.org/advisories/RUSTSEC-2020-0064.html
+    safe_bindgen         https://rustsec.org/advisories/RUSTSEC-2020-0066.html
+    quic-p2p             https://rustsec.org/advisories/RUSTSEC-2020-0067.html
+    routing              https://rustsec.org/advisories/RUSTSEC-2020-0076.html
+    safe_app             https://rustsec.org/advisories/RUSTSEC-2020-0083.html
+    safe_authenticator   https://rustsec.org/advisories/RUSTSEC-2020-0084.html
+    safe_vault           https://rustsec.org/advisories/RUSTSEC-2020-0085.html
+    safe_core            https://rustsec.org/advisories/RUSTSEC-2020-0086.html
+    stderr               https://rustsec.org/advisories/RUSTSEC-2020-0109.html
+    rulinalg             https://rustsec.org/advisories/RUSTSEC-2020-0147.html
+    tokio-proto          https://rustsec.org/advisories/RUSTSEC-2020-0162.html
+    interfaces2          https://rustsec.org/advisories/RUSTSEC-2021-0002.html
+    jsonrpc-quic         https://rustsec.org/advisories/RUSTSEC-2021-0025.html
+    office               https://rustsec.org/advisories/RUSTSEC-2021-0034.html
+    spirv_headers        https://rustsec.org/advisories/RUSTSEC-2021-0096.html
+    serde_cbor           https://rustsec.org/advisories/RUSTSEC-2021-0127.html
+    sodiumoxide          https://rustsec.org/advisories/RUSTSEC-2021-0137.html
+    nphysics3d           https://rustsec.org/advisories/RUSTSEC-2021-0148.html
+    nphysics2d           https://rustsec.org/advisories/RUSTSEC-2021-0149.html
+    ncollide3d           https://rustsec.org/advisories/RUSTSEC-2021-0150.html
+    ncollide2d           https://rustsec.org/advisories/RUSTSEC-2021-0151.html
+    lmdb                 https://rustsec.org/advisories/RUSTSEC-2022-0001.html
+    ftd2xx-embedded-hal  https://rustsec.org/advisories/RUSTSEC-2022-0005.html
+    pty                  https://rustsec.org/advisories/RUSTSEC-2022-0015.html
+    r2d2_odbc            https://rustsec.org/advisories/RUSTSEC-2022-0036.html
+    odbc                 https://rustsec.org/advisories/RUSTSEC-2022-0039.html
+    interledger-packet   https://rustsec.org/advisories/RUSTSEC-2022-0050.html
+    wee_alloc            https://rustsec.org/advisories/RUSTSEC-2022-0054.html
+    clipboard            https://rustsec.org/advisories/RUSTSEC-2022-0056.html
+    badge                https://rustsec.org/advisories/RUSTSEC-2022-0057.html
+    orbtk                https://rustsec.org/advisories/RUSTSEC-2022-0060.html
+    claim                https://rustsec.org/advisories/RUSTSEC-2022-0077.html
+    parity-util-mem      https://rustsec.org/advisories/RUSTSEC-2022-0080.html
+    buf_redux            https://rustsec.org/advisories/RUSTSEC-2023-0028.html
+    tree_magic           https://rustsec.org/advisories/RUSTSEC-2023-0036.html
+    ftp                  https://rustsec.org/advisories/RUSTSEC-2023-0043.html
+    multipart            https://rustsec.org/advisories/RUSTSEC-2023-0050.html
+    dlopen_derive        https://rustsec.org/advisories/RUSTSEC-2023-0051.html

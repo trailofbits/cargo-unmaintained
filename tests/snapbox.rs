@@ -11,6 +11,7 @@ use snapbox::{
     cmd::{cargo_bin, Command},
 };
 use std::{
+    env::var,
     ffi::OsStr,
     fs::{read_dir, read_to_string},
 };
@@ -44,8 +45,8 @@ fn snapbox() -> Result<()> {
         .into_par_iter()
         .panic_fuse()
         .try_for_each(|input_path| {
-            let stderr_path = input_path.with_extension("stderr");
-            let stdout_path = input_path.with_extension("stdout");
+            let stderr_path = input_path.with_extension(format!("{}.stderr", token_modifier()));
+            let stdout_path = input_path.with_extension(format!("{}.stdout", token_modifier()));
 
             let raw = read_to_string(input_path)?;
 
@@ -82,6 +83,14 @@ fn snapbox() -> Result<()> {
 
             Ok(())
         })
+}
+
+fn token_modifier() -> &'static str {
+    if var("GITHUB_TOKEN_PATH").is_ok() {
+        "with_token"
+    } else {
+        "without_token"
+    }
 }
 
 static RES: Lazy<[Regex; 2]> = Lazy::new(|| {

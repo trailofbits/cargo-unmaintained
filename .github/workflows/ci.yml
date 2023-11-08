@@ -27,6 +27,9 @@ jobs:
       run:
         shell: bash
 
+    env:
+      RUST_BACKTRACE: 1
+
     steps:
       - name: Log github refs
         run: |
@@ -61,8 +64,14 @@ jobs:
 
       - name: Test
         run: cargo test
-        env:
-          RUST_BACKTRACE: 1
+
+      - name: Test with token
+        run: |
+          export GITHUB_TOKEN_PATH="$(mktemp)"
+          echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
+          cargo test \
+            --test rustsec_comparison \
+            --test snapbox
 
   all-checks:
     needs: [test]
