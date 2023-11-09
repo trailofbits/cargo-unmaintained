@@ -1,7 +1,7 @@
 use assert_cmd::Command;
 use regex::Regex;
 use similar_asserts::SimpleDiff;
-use std::{env::remove_var, fs::read_to_string};
+use std::{env::remove_var, fs::read_to_string, path::Path};
 use tempfile::tempdir;
 
 static DIRS: &[&str] = &[".", "rustsec_comparison"];
@@ -93,6 +93,26 @@ fn license() {
             assert!(re.is_match(line), "{line:?} does not match");
         }
     }
+}
+
+#[cfg_attr(target_os = "windows", ignore)]
+#[test]
+fn markdown_link_check() {
+    let tempdir = tempdir().unwrap();
+
+    Command::new("npm")
+        .args(["install", "markdown-link-check"])
+        .current_dir(&tempdir)
+        .assert()
+        .success();
+
+    let readme_md = Path::new(env!("CARGO_MANIFEST_DIR")).join("README.md");
+
+    Command::new("npx")
+        .args(["markdown-link-check", &readme_md.to_string_lossy()])
+        .current_dir(&tempdir)
+        .assert()
+        .success();
 }
 
 #[cfg_attr(target_os = "windows", ignore)]
