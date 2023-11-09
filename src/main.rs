@@ -452,7 +452,7 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
         let Ok(version_latest) = latest_version(&dep.name).map_err(|error| {
             // smoelius: I don't understand why a package can fail to be in the index, but I have
             // seen it happen.
-            warn!("failed to get latest version of `{}`: {}", &dep.name, error);
+            warn!("failed to get latest version of `{}`: {}", dep.name, error);
         }) else {
             continue;
         };
