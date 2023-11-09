@@ -55,8 +55,9 @@ enum CargoSubCommand {
     version = crate_version!(),
     about = "Find unmaintained dependencies in Rust projects",
     after_help = "\
-The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file containing a personal \
-access token, which will be used to authenticate to GitHub.
+The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file containing a \
+personal access token. If set, cargo-unmaintained will use this token to authenticate to GitHub \
+and check whether packages' repositories have been archived.
 
 Unless --no-exit-code is passed, the exit status is 0 if no unmaintained dependencies were found \
 and no irrecoverable errors occurred, 1 if unmaintained dependencies were found, and 2 if an \

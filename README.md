@@ -4,20 +4,27 @@
 
 `cargo-unmaintained` is similar to [`cargo-audit`]. However, rather than rely on users to find unmaintained packages and submit them to the [RustSec Advisory Database], `cargo-unmaintained` finds them automatically using a heuristic.
 
-`cargo-unmaintained` defines an unmaintained package X as one that satisfies the following two conditions:
+`cargo-unmaintained` defines an unmaintained package X as one that satisfies either 1 or 2 below:
 
-1. X depends on a version of a package Y that is incompatible with the Y's latest version.
-2. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
+1. X's repository is archived (see [Notes] below).
 
-As of 2023-10-23, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 42 of them (just under half). These results can be reproduced by running the `rustsec_comparison` binary within this repository.
+2. Both a and b below.
+
+   a. X depends on a version of a package Y that is incompatible with the Y's latest version.
+
+   b. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
+
+As of 2023-11-09, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 51 of them (more than half). These results can be reproduced by running the `rustsec_comparison` binary within this repository.
 
 Notes
 
-- The purpose of the second condition is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
+- To check whether packages' repositories have been archived, set the `GITHUB_TOKEN_PATH` environment variable to the path of a file containing a [personal access token]. If unset, this check will be skipped.
 
-- The above conditions never consider a "leaf" package (i.e., a package with no dependencies) unmaintained.
+- The above conditions consider a "leaf" package (i.e., a package with no dependencies) unmaintained only if the package's repository has been archived.
 
-- Of the 45 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`, 6 do not build, 10 are leaves, and 4 were updated within the past 365 days. The remaining 25 were not identified for other reasons.
+- The purpose of condition 2(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
+
+- Of the 36 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`, 6 do not build, 9 are unarchived leaves, and 2 were updated within the past 365 days. The remaining 19 were not identified for other reasons.
 
 ## Usage
 
@@ -42,7 +49,8 @@ Options:
   -V, --version         Print version
 
 The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file containing a personal
-access token, which will be used to authenticate to GitHub.
+access token. If set, cargo-unmaintained will use this token to authenticate to GitHub and check
+whether packages' repositories have been archived.
 
 Unless --no-exit-code is passed, the exit status is 0 if no unmaintained dependencies were found and
 no irrecoverable errors occurred, 1 if unmaintained dependencies were found, and 2 if an
