@@ -127,17 +127,19 @@ struct UnmaintainedPkg<'a> {
     outdated_deps: Vec<OutdatedDep<'a>>,
 }
 
-#[derive(Clone, Copy, Eq, PartialEq)]
+// smoelius: Order `RepoStatus` variants by how bad they are.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum RepoStatus<'a, T> {
     Uncloneable,
     Nonexistent,
     Success(&'a str, T),
+    Archived(&'a str),
 }
 
 impl<'a, T> RepoStatus<'a, T> {
     fn as_success(&self) -> Option<(&'a str, &T)> {
         match self {
-            Self::Uncloneable | Self::Nonexistent => None,
+            Self::Uncloneable | Self::Nonexistent | Self::Archived(_) => None,
             Self::Success(url, value) => Some((url, value)),
         }
     }
@@ -148,9 +150,16 @@ const SATURATION_MULTIPLIER: u64 = 3;
 
 impl<'a> RepoStatus<'a, u64> {
     fn color(&self) -> Option<Color> {
-        let &Self::Success(_, age) = self else {
+        let age = match self {
             // smoelius: `Uncloneable` and `Nonexistent` default to yellow.
-            return Some(Color::Rgb(u8::MAX, u8::MAX, 0));
+            Self::Uncloneable | Self::Nonexistent => {
+                return Some(Color::Rgb(u8::MAX, u8::MAX, 0));
+            }
+            Self::Success(_, age) => age,
+            // smoelius: `Archived` defaults to red.
+            Self::Archived(_) => {
+                return Some(Color::Rgb(u8::MAX, 0, 0));
+            }
         };
         let age_in_days = age / SECS_PER_DAY;
         let Some(max_age_excess) = age_in_days.checked_sub(opts::get().max_age) else {
@@ -189,6 +198,13 @@ impl<'a> RepoStatus<'a, u64> {
                 write!(stream, " days ago")?;
                 Ok(())
             }
+            Self::Archived(url) => {
+                stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;
+                write!(stream, "{url}")?;
+                stream.set_color(ColorSpec::new().set_fg(None))?;
+                write!(stream, " archived")?;
+                Ok(())
+            }
         }
     }
 }
@@ -200,14 +216,25 @@ impl<'a, T: Ord> Ord for RepoStatus<'a, T> {
         match (self, other) {
             // smoelius: Put uncloneable first, since that's "less bad" than no repository.
             (Self::Uncloneable, Self::Uncloneable) => Ordering::Equal,
-            (Self::Uncloneable, Self::Nonexistent | Self::Success(_, _)) => Ordering::Less,
+            (Self::Uncloneable, Self::Nonexistent | Self::Success(_, _) | Self::Archived(_)) => {
+                Ordering::Less
+            }
+
             (Self::Nonexistent, Self::Uncloneable) => Ordering::Greater,
             (Self::Nonexistent, Self::Nonexistent) => Ordering::Equal,
-            (Self::Nonexistent, Self::Success(_, _)) => Ordering::Less,
-            (Self::Success(_, _), Self::Nonexistent | Self::Uncloneable) => Ordering::Greater,
-            // smoelius: Swap the order of the arguments so that the "success" value takes
-            // precedence over the url.
-            (Self::Success(u, v), Self::Success(x, y)) => (v, u).cmp(&(y, x)),
+            (Self::Nonexistent, Self::Success(_, _) | Self::Archived(_)) => Ordering::Less,
+
+            (Self::Success(_, _), Self::Uncloneable | Self::Nonexistent) => Ordering::Greater,
+            // smoelius: Don't consider urls when ordering.
+            (Self::Success(_, lhs), Self::Success(_, rhs)) => lhs.cmp(rhs),
+            (Self::Success(_, _), Self::Archived(_)) => Ordering::Less,
+
+            // smoelius: Put archived last since that's the worst.
+            (Self::Archived(_), Self::Uncloneable | Self::Nonexistent | Self::Success(_, _)) => {
+                Ordering::Greater
+            }
+            // smoelius: Don't consider urls when ordering.
+            (Self::Archived(_), Self::Archived(_)) => Ordering::Equal,
         }
     }
 }
@@ -328,6 +355,16 @@ fn unmaintained() -> Result<bool> {
     );
 
     for pkg in packages {
+        if var("GITHUB_TOKEN_PATH").is_ok() {
+            if let Some((url, true)) = archival_status(pkg)? {
+                unnmaintained_pkgs.push(UnmaintainedPkg {
+                    pkg,
+                    repo_age: RepoStatus::Archived(url),
+                    outdated_deps: Vec::new(),
+                });
+            }
+        }
+
         let outdated_deps = outdated_deps(&metadata, pkg)?;
 
         if outdated_deps.is_empty() {
@@ -434,6 +471,28 @@ fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Ver
     map
 }
 
+fn archival_status(pkg: &Package) -> Result<Option<(&str, bool)>> {
+    let Some(url) = &pkg.repository else {
+        return Ok(None);
+    };
+
+    if !url.starts_with("https://github.com/") {
+        return Ok(None);
+    }
+
+    verbose::wrap!(
+        || github::archival_status(url).or_else(|error| {
+            warn!(
+                "failed to determine `{}` archival status: {}",
+                pkg.name, error
+            );
+            Ok(None)
+        }),
+        "archival status of `{}` using GitHub API",
+        pkg.name
+    )
+}
+
 #[allow(clippy::unnecessary_wraps)]
 fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
@@ -523,6 +582,10 @@ fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
             return Ok(RepoStatus::Nonexistent);
         }
         RepoStatus::Success(url, timestamp) => (url, timestamp),
+        RepoStatus::Archived(_) => {
+            // smoelius: We should not be cloning archived repos.
+            unreachable!();
+        }
     };
 
     let duration = SystemTime::now().duration_since(timestamp)?;
@@ -588,8 +651,14 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
         verbose::update!("using GitHub API");
 
         match github::timestamp(url) {
-            Ok((url, timestamp)) => {
+            Ok(Some((url, timestamp))) => {
                 return Ok(RepoStatus::Success(url, timestamp));
+            }
+            Ok(None) => {
+                // smoelius: If `github::timestamp` returns `Ok(None)`, it means a previous attempt
+                // to clone the repository failed. But, in that case, the timestamp cache should map
+                // this url to `None`.
+                unreachable!();
             }
             Err(error) => {
                 if var("GITHUB_TOKEN_PATH").is_err() {
@@ -867,8 +936,15 @@ mod tests {
 
     #[test]
     fn repo_status_ord() {
-        assert!(RepoStatus::Uncloneable::<u64> < RepoStatus::Nonexistent);
-        assert!(RepoStatus::Nonexistent < RepoStatus::Success("b", 0));
-        assert!(RepoStatus::Success("b", 0) < RepoStatus::Success("a", 1));
+        let ys = vec![
+            RepoStatus::Uncloneable,
+            RepoStatus::Nonexistent,
+            RepoStatus::Success("c", 0),
+            RepoStatus::Success("b", 1),
+            RepoStatus::Archived("a"),
+        ];
+        let mut xs = ys.clone();
+        xs.sort();
+        assert_eq!(xs, ys);
     }
 }
