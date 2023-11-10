@@ -2,7 +2,7 @@
 name = "rustsec_comparison"
 version = "0.1.0"
 edition = "2021"
-license = "AGPLv3"
+license = "AGPL-3.0"
 publish = false
 
 [dependencies]

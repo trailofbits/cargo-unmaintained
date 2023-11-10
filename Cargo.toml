@@ -4,7 +4,7 @@ version = "0.1.0"
 authors = ["Samuel Moelius <sam@moeli.us>"]
 description = "Find unmaintained dependencies in Rust projects"
 edition = "2021"
-license = "AGPLv3"
+license = "AGPL-3.0"
 repository = "https://github.com/trailofbits/cargo-unmaintained"
 
 [dependencies]
