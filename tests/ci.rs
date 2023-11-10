@@ -23,6 +23,8 @@ fn clippy() {
                 "--deny=warnings",
                 "--warn=clippy::pedantic",
                 "--allow=clippy::format-collect",
+                "--allow=clippy::missing-errors-doc",
+                "--allow=clippy::missing-panics-doc",
             ])
             .current_dir(dir)
             .assert()

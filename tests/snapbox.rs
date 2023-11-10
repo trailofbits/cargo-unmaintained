@@ -8,14 +8,17 @@ use regex::Regex;
 use serde::Deserialize;
 use snapbox::{
     assert_matches_path,
-    cmd::{cargo_bin, Command},
+    cmd::{cargo_bin, Command as SnapboxCommand},
 };
 use std::{
-    env::var,
     ffi::OsStr,
     fs::{read_dir, read_to_string},
+    process::Command,
 };
 use tempfile::tempdir;
+
+mod util;
+use util::{enabled, tee, token_modifier, Tee};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -54,43 +57,53 @@ fn snapbox() -> Result<()> {
 
             let tempdir = tempdir()?;
 
-            let mut command =
-                Command::new("git").args(["clone", &test.url, &tempdir.path().to_string_lossy()]);
+            let mut command = SnapboxCommand::new("git").args([
+                "clone",
+                &test.url,
+                &tempdir.path().to_string_lossy(),
+            ]);
             if test.rev.is_none() {
                 command = command.arg("--depth=1");
             }
             command.assert().success();
 
             if let Some(rev) = &test.rev {
-                Command::new("git")
+                SnapboxCommand::new("git")
                     .args(["checkout", rev])
                     .current_dir(&tempdir)
                     .assert()
                     .success();
             }
 
-            let output = Command::new(cargo_bin("cargo-unmaintained"))
+            let mut command = Command::new(cargo_bin("cargo-unmaintained"));
+            command
                 .args(["unmaintained", "--color=never", "--imprecise"])
-                .current_dir(&tempdir)
-                .output()?;
+                .current_dir(&tempdir);
 
-            let stderr_actual = String::from_utf8(output.stderr)?;
-            let stdout_actual = String::from_utf8(output.stdout)?;
+            if enabled("VERBOSE") {
+                // smoelius If `VERBOSE` is enabled, don't bother comparing stderr, because it won't
+                // match.
+                command.arg("--verbose");
 
-            // smoelius: Compare stderr before stdout so that you can see any errors that occurred.
-            assert_matches_path(stderr_path, stderr_actual);
-            assert_matches_path(stdout_path, stdout_actual);
+                let output = tee(command, Tee::Stdout)?;
+
+                let stdout_actual = String::from_utf8(output.captured)?;
+
+                assert_matches_path(stdout_path, stdout_actual);
+            } else {
+                let output = command.output()?;
+
+                let stderr_actual = String::from_utf8(output.stderr)?;
+                let stdout_actual = String::from_utf8(output.stdout)?;
+
+                // smoelius: Compare stderr before stdout so that you can see any errors that
+                // occurred.
+                assert_matches_path(stderr_path, stderr_actual);
+                assert_matches_path(stdout_path, stdout_actual);
+            }
 
             Ok(())
         })
-}
-
-fn token_modifier() -> &'static str {
-    if var("GITHUB_TOKEN_PATH").is_ok() {
-        "with_token"
-    } else {
-        "without_token"
-    }
 }
 
 static RES: Lazy<[Regex; 2]> = Lazy::new(|| {
