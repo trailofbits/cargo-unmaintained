@@ -106,10 +106,18 @@ fn markdown_link_check() {
         .assert()
         .success();
 
+    // smoelius: https://github.com/rust-lang/crates.io/issues/788
+    let config = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/markdown_link_check.json");
+
     let readme_md = Path::new(env!("CARGO_MANIFEST_DIR")).join("README.md");
 
     Command::new("npx")
-        .args(["markdown-link-check", &readme_md.to_string_lossy()])
+        .args([
+            "markdown-link-check",
+            "--config",
+            &config.to_string_lossy(),
+            &readme_md.to_string_lossy(),
+        ])
         .current_dir(&tempdir)
         .assert()
         .success();
