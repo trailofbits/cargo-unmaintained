@@ -26,6 +26,14 @@ Notes
 
 - Of the 36 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`, 6 do not build, 9 are unarchived leaves, and 2 were updated within the past 365 days. The remaining 19 were not identified for other reasons.
 
+## Output
+
+`cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause the package to be considered unmaintained.
+
+For example, the following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-11-04:
+
+<img src="etc/output.png" width=656>
+
 ## Usage
 
 ```
@@ -56,14 +64,6 @@ Unless --no-exit-code is passed, the exit status is 0 if no unmaintained package
 irrecoverable errors occurred, 1 if unmaintained packages were found, and 2 if an irrecoverable
 error occurred.
 ```
-
-## Output
-
-`cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause the package to be considered unmaintained.
-
-For example, the following is the output produced by running `cargo-unmaintained` on the head of the [Cargo repository] on 2023-11-04:
-
-<img src="etc/output.png" width=656>
 
 ## License
 
