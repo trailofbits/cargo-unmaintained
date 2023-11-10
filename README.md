@@ -1,6 +1,6 @@
 # cargo-unmaintained
 
-**Find unmaintained dependencies in Rust projects**
+**Find unmaintained packages in Rust projects**
 
 `cargo-unmaintained` is similar to [`cargo-audit`]. However, rather than rely on users to find unmaintained packages and submit them to the [RustSec Advisory Database], `cargo-unmaintained` finds them automatically using a heuristic.
 
@@ -33,17 +33,17 @@ Usage: cargo unmaintained [OPTIONS]
 
 Options:
       --color <WHEN>    When to use color: always, auto, or never [default: auto]
-      --fail-fast       Exit as soon as an unmaintained dependency is found
+      --fail-fast       Exit as soon as an unmaintained package is found
       --imprecise       Do not check whether a package's repository contains the package; enables
                         checking last commit timestamps using the GitHub API, which is faster, but
                         can produce false negatives
       --max-age <DAYS>  Age in days that a repository's last commit must not exceed for the
                         repository to be considered current; 0 effectively disables this check,
                         though ages are still reported [default: 365]
-      --no-exit-code    Do not set exit status when unmaintained dependencies are found
+      --no-exit-code    Do not set exit status when unmaintained packages are found
       --no-warnings     Do not show warnings
   -p, --package <NAME>  Check only whether package NAME is unmaintained
-      --tree            Show paths to unmaintained dependencies
+      --tree            Show paths to unmaintained packages
       --verbose         Show information about what cargo-unmaintained is doing
   -h, --help            Print help
   -V, --version         Print version
@@ -52,9 +52,9 @@ The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file co
 access token. If set, cargo-unmaintained will use this token to authenticate to GitHub and check
 whether packages' repositories have been archived.
 
-Unless --no-exit-code is passed, the exit status is 0 if no unmaintained dependencies were found and
-no irrecoverable errors occurred, 1 if unmaintained dependencies were found, and 2 if an
-irrecoverable error occurred.
+Unless --no-exit-code is passed, the exit status is 0 if no unmaintained packages were found and no
+irrecoverable errors occurred, 1 if unmaintained packages were found, and 2 if an irrecoverable
+error occurred.
 ```
 
 ## Output

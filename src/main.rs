@@ -53,15 +53,15 @@ enum CargoSubCommand {
 #[remain::sorted]
 #[clap(
     version = crate_version!(),
-    about = "Find unmaintained dependencies in Rust projects",
+    about = "Find unmaintained packages in Rust projects",
     after_help = "\
 The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file containing a \
 personal access token. If set, cargo-unmaintained will use this token to authenticate to GitHub \
 and check whether packages' repositories have been archived.
 
-Unless --no-exit-code is passed, the exit status is 0 if no unmaintained dependencies were found \
-and no irrecoverable errors occurred, 1 if unmaintained dependencies were found, and 2 if an \
-irrecoverable error occurred."
+Unless --no-exit-code is passed, the exit status is 0 if no unmaintained packages were found and \
+no irrecoverable errors occurred, 1 if unmaintained packages were found, and 2 if an irrecoverable \
+error occurred."
 )]
 struct Opts {
     #[clap(
@@ -74,7 +74,7 @@ struct Opts {
 
     #[clap(
         long,
-        help = "Exit as soon as an unmaintained dependency is found",
+        help = "Exit as soon as an unmaintained package is found",
         conflicts_with = "no_exit_code"
     )]
     fail_fast: bool,
@@ -99,7 +99,7 @@ struct Opts {
 
     #[clap(
         long,
-        help = "Do not set exit status when unmaintained dependencies are found",
+        help = "Do not set exit status when unmaintained packages are found",
         conflicts_with = "fail_fast"
     )]
     no_exit_code: bool,
@@ -115,7 +115,7 @@ struct Opts {
     )]
     package: Option<String>,
 
-    #[clap(long, help = "Show paths to unmaintained dependencies")]
+    #[clap(long, help = "Show paths to unmaintained packages")]
     tree: bool,
 
     #[clap(long, help = "Show information about what cargo-unmaintained is doing")]
