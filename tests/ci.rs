@@ -81,8 +81,8 @@ fn license() {
         .lines()
         {
             if [
-                "AGPLv3 (1): cargo-unmaintained",
-                "AGPLv3 (1): rustsec_comparison",
+                "AGPL-3.0 (1): cargo-unmaintained",
+                "AGPL-3.0 (1): rustsec_comparison",
                 "Custom License File (1): ring",
                 "MPL-2.0 (1): uluru",
             ]
