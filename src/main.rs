@@ -355,6 +355,10 @@ fn unmaintained() -> Result<bool> {
         }
     );
 
+    if var("GITHUB_TOKEN_PATH").is_err() {
+        warn!("`GITHUB_TOKEN_PATH` is unset; archive checks are disabled",);
+    }
+
     for pkg in packages {
         if var("GITHUB_TOKEN_PATH").is_ok() {
             if let Some((url, true)) = archival_status(pkg)? {

@@ -1,2 +1,3 @@
 Scanning 342 packages and their dependencies (pass --verbose for more information)
+warning: `GITHUB_TOKEN_PATH` is unset; archive checks are disabled
 warning: failed to clone `https://hg.mozilla.org/mozilla-central/file/tip/testing/mozbase/rust/mozrunner`
