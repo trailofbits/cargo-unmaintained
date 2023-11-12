@@ -70,6 +70,7 @@ jobs:
           export GITHUB_TOKEN_PATH="$(mktemp)"
           echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
           cargo test \
+            --test dogfood \
             --test rustsec_comparison \
             --test snapbox
 
