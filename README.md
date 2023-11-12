@@ -30,13 +30,13 @@ As of 2023-11-09, the RustSec Advisory Database contains 87 active advisories fo
 
 `cargo-unmaintained`'s output includes the number of days since a package's repository was last updated, along with the dependencies that cause the package to be considered unmaintained.
 
-For example, the following is the output produced by running `cargo-unmaintained` on [Cargo 0.74.0] on 2023-11-09:
+For example, the following is the output produced by running `cargo-unmaintained` on [Cargo 0.74.0] on 2023-11-11:
 
 <!--
 `Scanning 357 packages and their dependencies (pass --verbose for more information)`
 -->
 
-<img src="etc/output.png" width=690>
+<img src="etc/output.png" width=725>
 
 ## Usage
 
