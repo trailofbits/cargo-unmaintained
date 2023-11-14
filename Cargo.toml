@@ -14,7 +14,6 @@ clap = { version = "4.4", features = ["cargo", "derive", "wrap_help"] }
 crates-index = { version = "2.3", features = ["git-https"] }
 env_logger = "0.10"
 home = "0.5"
-libc = { version = "0.2", optional = true }
 log = "0.4"
 octocrab = "0.32"
 once_cell = "1.18"
@@ -25,7 +24,12 @@ termcolor = "1.3"
 tokio = "1.34"
 toml = "0.8"
 walkdir = "2.4"
-windows-sys = "0.48"
+
+[target.'cfg(unix)'.dependencies]
+libc = { version = "0.2", optional = true }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.48", optional = true }
 
 [dev-dependencies]
 assert_cmd = "2.0"
@@ -38,7 +42,7 @@ snapbox = "0.4"
 
 [features]
 default = ["lock_index"]
-lock_index = ["libc"]
+lock_index = ["libc", "windows-sys"]
 
 [workspace.metadata.dylint]
 libraries = [
