@@ -57,10 +57,17 @@ fn format() {
 }
 
 #[test]
-fn hack_feature_powerset() {
-    Command::new("cargo")
+fn hack_feature_powerset_udeps() {
+    Command::new("rustup")
         .env("RUSTFLAGS", "-D warnings")
-        .args(["hack", "--feature-powerset", "check"])
+        .args([
+            "run",
+            "nightly",
+            "cargo",
+            "hack",
+            "--feature-powerset",
+            "udeps",
+        ])
         .assert()
         .success();
 }

@@ -61,6 +61,7 @@ jobs:
           cargo install cargo-hack               || true
           cargo install cargo-license            || true
           cargo install cargo-sort               || true
+          cargo install cargo-udeps              || true
 
       - name: Test
         run: cargo test
