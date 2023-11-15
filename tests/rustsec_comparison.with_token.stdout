@@ -101,7 +101,7 @@ clipboard...found
 badge...found
 orbtk...found
 parity-wasm...found
-rusoto_credential...not found
+rusoto_credential...found
 alloc-cortex-m...not found
 claim...found
 parity-util-mem...found
@@ -138,7 +138,7 @@ not found - leaf (9)
 not found - recently-updated (2)
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
-not found - other (19)
+not found - other (18)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
     slice-deque          https://rustsec.org/advisories/RUSTSEC-2020-0158.html
@@ -151,14 +151,13 @@ not found - other (19)
     static_type_map      https://rustsec.org/advisories/RUSTSEC-2022-0023.html
     double-checked-cell  https://rustsec.org/advisories/RUSTSEC-2022-0024.html
     markdown             https://rustsec.org/advisories/RUSTSEC-2022-0044.html
-    rusoto_credential    https://rustsec.org/advisories/RUSTSEC-2022-0071.html
     alloc-cortex-m       https://rustsec.org/advisories/RUSTSEC-2022-0073.html
     git-hash             https://rustsec.org/advisories/RUSTSEC-2023-0025.html
     git-path             https://rustsec.org/advisories/RUSTSEC-2023-0026.html
     xsalsa20poly1305     https://rustsec.org/advisories/RUSTSEC-2023-0037.html
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
-found (51)
+found (52)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -201,6 +200,7 @@ found (51)
     badge                https://rustsec.org/advisories/RUSTSEC-2022-0057.html
     orbtk                https://rustsec.org/advisories/RUSTSEC-2022-0060.html
     parity-wasm          https://rustsec.org/advisories/RUSTSEC-2022-0061.html
+    rusoto_credential    https://rustsec.org/advisories/RUSTSEC-2022-0071.html
     claim                https://rustsec.org/advisories/RUSTSEC-2022-0077.html
     parity-util-mem      https://rustsec.org/advisories/RUSTSEC-2022-0080.html
     kuchiki              https://rustsec.org/advisories/RUSTSEC-2023-0019.html

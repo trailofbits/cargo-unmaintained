@@ -14,7 +14,7 @@
 
    b. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-As of 2023-11-09, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 51 of them (more than half). These results can be reproduced by running the [`rustsec_comparison`] binary within this repository.
+As of 2023-11-15, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 52 of them (more than half). These results can be reproduced by running the [`rustsec_comparison`] binary within this repository.
 
 ### Notes
 
@@ -24,7 +24,7 @@ As of 2023-11-09, the RustSec Advisory Database contains 87 active advisories fo
 
 - The purpose of condition 2(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
 
-- Of the 36 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`, 6 do not build, 9 are unarchived leaves, and 2 were updated within the past 365 days. The remaining 19 were not identified for other reasons.
+- Of the 35 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`, 6 do not build, 9 are unarchived leaves, and 2 were updated within the past 365 days. The remaining 18 were not identified for other reasons.
 
 ## Output
 
