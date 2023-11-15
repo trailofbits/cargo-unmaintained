@@ -63,6 +63,10 @@ jobs:
           cargo install cargo-sort               || true
           cargo install cargo-udeps              || true
 
+      - name: Enable verbose logging
+        if: ${{ runner.debug == 1 }}
+        run: echo 'VERBOSE=1' >> "$GITHUB_ENV"
+
       - name: Test
         run: cargo test
 
