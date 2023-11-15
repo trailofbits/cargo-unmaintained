@@ -1,6 +1,6 @@
 [package]
 name = "cargo-unmaintained"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Samuel Moelius <sam@moeli.us>"]
 description = "Find unmaintained packages in Rust projects"
 edition = "2021"
