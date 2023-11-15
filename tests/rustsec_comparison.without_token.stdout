@@ -101,7 +101,7 @@ clipboard...found
 badge...found
 orbtk...found
 parity-wasm...not found
-rusoto_credential...not found
+rusoto_credential...found
 alloc-cortex-m...not found
 claim...found
 parity-util-mem...found
@@ -141,7 +141,7 @@ not found - recently-updated (4)
     rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
     kuchiki              https://rustsec.org/advisories/RUSTSEC-2023-0019.html
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
-not found - other (25)
+not found - other (24)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
     failure              https://rustsec.org/advisories/RUSTSEC-2020-0036.html
@@ -160,14 +160,13 @@ not found - other (25)
     markdown             https://rustsec.org/advisories/RUSTSEC-2022-0044.html
     mapr                 https://rustsec.org/advisories/RUSTSEC-2022-0053.html
     parity-wasm          https://rustsec.org/advisories/RUSTSEC-2022-0061.html
-    rusoto_credential    https://rustsec.org/advisories/RUSTSEC-2022-0071.html
     alloc-cortex-m       https://rustsec.org/advisories/RUSTSEC-2022-0073.html
     git-hash             https://rustsec.org/advisories/RUSTSEC-2023-0025.html
     git-path             https://rustsec.org/advisories/RUSTSEC-2023-0026.html
     xsalsa20poly1305     https://rustsec.org/advisories/RUSTSEC-2023-0037.html
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
-found (42)
+found (43)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
@@ -203,6 +202,7 @@ found (42)
     clipboard            https://rustsec.org/advisories/RUSTSEC-2022-0056.html
     badge                https://rustsec.org/advisories/RUSTSEC-2022-0057.html
     orbtk                https://rustsec.org/advisories/RUSTSEC-2022-0060.html
+    rusoto_credential    https://rustsec.org/advisories/RUSTSEC-2022-0071.html
     claim                https://rustsec.org/advisories/RUSTSEC-2022-0077.html
     parity-util-mem      https://rustsec.org/advisories/RUSTSEC-2022-0080.html
     buf_redux            https://rustsec.org/advisories/RUSTSEC-2023-0028.html
