@@ -13,7 +13,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
     cell::RefCell,
-    collections::HashMap,
+    collections::{HashMap, HashSet},
     env::{args, var},
     ffi::OsStr,
     fs::{read_to_string, remove_dir_all, File},
@@ -417,10 +417,16 @@ fn unmaintained() -> Result<bool> {
 fn filter_packages(metadata: &Metadata) -> Result<Vec<&Package>> {
     let mut packages = Vec::new();
 
+    let ignored_packages = ignored_packages(metadata)?;
+
     // smoelius: If a project relies on multiple versions of a package, check only the latest one.
     let metadata_latest_version_map = build_metadata_latest_version_map(metadata);
 
     for pkg in &metadata.packages {
+        if ignored_packages.contains(&pkg.name) {
+            continue;
+        }
+
         #[allow(clippy::panic)]
         let version = metadata_latest_version_map
             .get(&pkg.name)
@@ -455,6 +461,22 @@ fn filter_packages(metadata: &Metadata) -> Result<Vec<&Package>> {
     }
 
     Ok(packages)
+}
+
+#[derive(serde::Deserialize)]
+struct UnmaintainedMetadata {
+    ignored: Option<Vec<String>>,
+}
+
+pub fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
+    let serde_json::Value::Object(object) = &metadata.workspace_metadata else {
+        return Ok(HashSet::default());
+    };
+    let Some(value) = object.get("unmaintained") else {
+        return Ok(HashSet::default());
+    };
+    let metadata = serde_json::value::from_value::<UnmaintainedMetadata>(value.clone())?;
+    Ok(metadata.ignored.unwrap_or_default().into_iter().collect())
 }
 
 fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Version> {

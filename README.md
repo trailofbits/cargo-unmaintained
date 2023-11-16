@@ -69,6 +69,15 @@ irrecoverable errors occurred, 1 if unmaintained packages were found, and 2 if a
 error occurred.
 ```
 
+## Ignoring packages
+
+If a workspace's `Cargo.toml` file includes a `workspace.metadata.unmaintained.ignore` array, all packages named therein will be ignored. Example:
+
+```toml
+[package.metadata.unmaintained]
+ignore = ["proc-macro-error"]
+```
+
 ## Known problems
 
 Repositories whose urls change across versions may be incorrectly reported as unmaintained.
