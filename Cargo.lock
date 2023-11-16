@@ -257,6 +257,7 @@ dependencies = [
  "regex",
  "remain",
  "serde",
+ "serde_json",
  "similar-asserts",
  "snapbox",
  "tempfile",
