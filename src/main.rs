@@ -363,6 +363,7 @@ fn unmaintained() -> Result<bool> {
                     repo_age: RepoStatus::Archived(url),
                     outdated_deps: Vec::new(),
                 });
+                continue;
             }
         }
 
