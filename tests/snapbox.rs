@@ -75,6 +75,8 @@ fn snapbox() -> Result<()> {
                     .success();
             }
 
+            assert!(tempdir.path().join("Cargo.lock").exists());
+
             let mut command = Command::new(cargo_bin("cargo-unmaintained"));
             command
                 .args(["unmaintained", "--color=never", "--imprecise"])
