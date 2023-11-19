@@ -61,7 +61,7 @@ jobs:
           cargo install cargo-hack               || true
           cargo install cargo-license            || true
           cargo install cargo-sort               || true
-          cargo install cargo-udeps              || true
+          cargo install cargo-udeps --locked     || true
 
       - name: Enable verbose logging
         if: ${{ runner.debug == 1 }}
