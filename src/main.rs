@@ -900,7 +900,8 @@ fn display_path(name: &str, version: &Version) -> Result<bool> {
     // For now, check whether stdout begins as expected. If not, ignore it and ultimately emit a
     // warning.
     let stdout = String::from_utf8(output.stdout)?;
-    if stdout.starts_with(&format!("{name} v{version}\n")) {
+    if stdout.split_ascii_whitespace().take(2).collect::<Vec<_>>() == [name, &format!("v{version}")]
+    {
         print!("{stdout}");
         Ok(false)
     } else {
