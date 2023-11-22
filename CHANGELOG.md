@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.2.1
+
+- Fix a bug causing --tree to fail ([#29](https://github.com/trailofbits/cargo-unmaintained/pull/29))
+
 ## 0.2.0
 
 - Do not check for outdated dependencies in archived packages ([#22](https://github.com/trailofbits/cargo-unmaintained/pull/22))
