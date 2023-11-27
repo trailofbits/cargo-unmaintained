@@ -1,9 +1,11 @@
+use super::RepoStatus;
 use anyhow::{anyhow, bail, Context, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
     cell::RefCell,
     collections::HashMap,
+    convert::Infallible,
     fs::read_to_string,
     rc::Rc,
     time::{Duration, SystemTime},
@@ -38,14 +40,18 @@ pub(crate) fn load_token(path: &str) -> Result<()> {
     })
 }
 
-pub(crate) fn archival_status(url: &str) -> Result<Option<(&str, bool)>> {
+pub(crate) fn archival_status(url: &str) -> Result<Option<RepoStatus<Infallible>>> {
     let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
 
     let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
-        return Ok(None);
+        return Ok(Some(RepoStatus::Nonexistent));
     };
 
-    Ok(Some((url, repository.archived.unwrap_or_default())))
+    if repository.archived.unwrap_or_default() {
+        Ok(Some(RepoStatus::Archived(url)))
+    } else {
+        Ok(None)
+    }
 }
 
 pub(crate) fn timestamp(url: &str) -> Result<Option<(&str, SystemTime)>> {
@@ -112,20 +118,27 @@ fn repository(
                 .clone()),
             Err(error) => {
                 repository_cache.insert(owner_slash_repo.to_owned(), None);
-                Err(error)
+                if let octocrab::Error::GitHub { source, .. } = &error {
+                    if source.message == "Not Found" {
+                        Ok(None)
+                    } else {
+                        Err(error.into())
+                    }
+                } else {
+                    Err(error.into())
+                }
             }
         }
     })
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-fn repository_uncached(owner: &str, repo: &str) -> Result<octocrab::models::Repository> {
+fn repository_uncached(owner: &str, repo: &str) -> octocrab::Result<octocrab::models::Repository> {
     RT.block_on(async {
         let octocrab = octocrab::instance();
 
         octocrab.repos(owner, repo).get().await
     })
-    .map_err(Into::into)
 }
 
 fn match_github_url(url: &str) -> Result<(&str, &str, &str, &str)> {

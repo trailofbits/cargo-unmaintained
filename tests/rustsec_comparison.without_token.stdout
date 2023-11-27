@@ -24,7 +24,7 @@ Error: found no packages matching `stream-cipher`
 ```
 safe-nd...found
 ffi_utils...found
-fake_clock...leaf
+fake_clock...found
 safe_bindgen...found
 quic-p2p...found
 routing...found
@@ -125,9 +125,8 @@ not found - error (6)
     safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
     miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
-not found - leaf (10)
+not found - leaf (9)
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
-    fake_clock           https://rustsec.org/advisories/RUSTSEC-2020-0065.html
     aesni                https://rustsec.org/advisories/RUSTSEC-2021-0059.html
     aes-soft             https://rustsec.org/advisories/RUSTSEC-2021-0060.html
     aes-ctr              https://rustsec.org/advisories/RUSTSEC-2021-0061.html
@@ -166,12 +165,13 @@ not found - other (24)
     xsalsa20poly1305     https://rustsec.org/advisories/RUSTSEC-2023-0037.html
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
-found (43)
+found (44)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
     safe-nd              https://rustsec.org/advisories/RUSTSEC-2020-0063.html
     ffi_utils            https://rustsec.org/advisories/RUSTSEC-2020-0064.html
+    fake_clock           https://rustsec.org/advisories/RUSTSEC-2020-0065.html
     safe_bindgen         https://rustsec.org/advisories/RUSTSEC-2020-0066.html
     quic-p2p             https://rustsec.org/advisories/RUSTSEC-2020-0067.html
     routing              https://rustsec.org/advisories/RUSTSEC-2020-0076.html

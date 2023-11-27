@@ -1,3 +1,4 @@
+fuchsia-cprng (no repository)
 rdrand (https://github.com/nagisa/rust_rdrand updated [..] days ago)
     rand_core (requirement: ^0.3, version used: 0.3.1, latest: [..])
 atty (https://github.com/softprops/atty updated [..] days ago)
