@@ -14,6 +14,7 @@ use regex::Regex;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
+    convert::Infallible,
     env::{args, var},
     ffi::OsStr,
     fs::{read_to_string, remove_dir_all, File},
@@ -27,6 +28,7 @@ use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 use toml::{Table, Value};
 use walkdir::WalkDir;
 
+mod curl;
 mod github;
 mod opts;
 mod verbose;
@@ -142,6 +144,17 @@ impl<'a, T> RepoStatus<'a, T> {
         match self {
             Self::Uncloneable | Self::Nonexistent | Self::Archived(_) => None,
             Self::Success(url, value) => Some((url, value)),
+        }
+    }
+}
+
+impl<'a> RepoStatus<'a, Infallible> {
+    fn lift<T>(&self) -> RepoStatus<'a, T> {
+        match self {
+            Self::Uncloneable => RepoStatus::Uncloneable,
+            Self::Nonexistent => RepoStatus::Nonexistent,
+            Self::Success(_, _) => unreachable!(),
+            Self::Archived(url) => RepoStatus::Archived(url),
         }
     }
 }
@@ -356,11 +369,20 @@ fn unmaintained() -> Result<bool> {
     );
 
     for pkg in packages {
-        if var("GITHUB_TOKEN_PATH").is_ok() {
-            if let Some((url, true)) = archival_status(pkg)? {
+        if let Some(url) = &pkg.repository {
+            if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
+                if let Some(repo_status) = archival_status(&pkg.name, url)? {
+                    unnmaintained_pkgs.push(UnmaintainedPkg {
+                        pkg,
+                        repo_age: repo_status.lift(),
+                        outdated_deps: Vec::new(),
+                    });
+                    continue;
+                }
+            } else if let Some(false) = existence(&pkg.name, url)? {
                 unnmaintained_pkgs.push(UnmaintainedPkg {
                     pkg,
-                    repo_age: RepoStatus::Archived(url),
+                    repo_age: RepoStatus::Nonexistent,
                     outdated_deps: Vec::new(),
                 });
                 continue;
@@ -495,25 +517,25 @@ fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Ver
     map
 }
 
-fn archival_status(pkg: &Package) -> Result<Option<(&str, bool)>> {
-    let Some(url) = &pkg.repository else {
-        return Ok(None);
-    };
-
-    if !url.starts_with("https://github.com/") {
-        return Ok(None);
-    }
-
+fn archival_status<'a>(name: &str, url: &'a str) -> Result<Option<RepoStatus<'a, Infallible>>> {
     verbose::wrap!(
         || github::archival_status(url).or_else(|error| {
-            warn!(
-                "failed to determine `{}` archival status: {}",
-                pkg.name, error
-            );
+            warn!("failed to determine `{}` archival status: {}", name, error);
             Ok(None)
         }),
         "archival status of `{}` using GitHub API",
-        pkg.name
+        name
+    )
+}
+
+fn existence(name: &str, url: &str) -> Result<Option<bool>> {
+    verbose::wrap!(
+        || curl::existence(url).or_else(|error| {
+            warn!("failed to determine `{}` existence: {}", name, error);
+            Ok(None)
+        }),
+        "existence of `{}` using HTTP request",
+        name
     )
 }
 
