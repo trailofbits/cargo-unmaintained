@@ -387,6 +387,17 @@ fn unmaintained() -> Result<bool> {
                 });
                 continue;
             }
+
+            if !opts::get().imprecise {
+                if let Some(repo_status) = membership(pkg)? {
+                    unnmaintained_pkgs.push(UnmaintainedPkg {
+                        pkg,
+                        repo_age: repo_status.lift(),
+                        outdated_deps: Vec::new(),
+                    });
+                    continue;
+                }
+            }
         }
 
         let outdated_deps = outdated_deps(&metadata, pkg)?;
@@ -539,6 +550,23 @@ fn existence(name: &str, url: &str) -> Result<Option<bool>> {
     )
 }
 
+fn membership(pkg: &Package) -> Result<Option<RepoStatus<'_, Infallible>>> {
+    verbose::wrap!(
+        || {
+            let Some((_, repo_dir)) = clone_repository(pkg)? else {
+                return Ok(Some(RepoStatus::Uncloneable));
+            };
+            if membership_in_clone(pkg, &repo_dir)? {
+                Ok(None)
+            } else {
+                Ok(Some(RepoStatus::Nonexistent))
+            }
+        },
+        "membership of `{}` using shallow clone",
+        pkg.name
+    )
+}
+
 #[allow(clippy::unnecessary_wraps)]
 fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
@@ -663,7 +691,7 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
                     panic!("url in timestamp cache is uncloneable: {url_cached}");
                 };
                 assert_eq!(url_cached, url_cloned);
-                if verify_membership(pkg, &repo_dir)? {
+                if membership_in_clone(pkg, &repo_dir)? {
                     return Ok(RepoStatus::Success(url_cached, timestamp));
                 }
             }
@@ -738,7 +766,7 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
         return Ok(RepoStatus::Uncloneable);
     };
 
-    if !opts::get().imprecise && !verify_membership(pkg, &repo_dir)? {
+    if !opts::get().imprecise && !membership_in_clone(pkg, &repo_dir)? {
         return Ok(RepoStatus::Nonexistent);
     }
 
@@ -842,7 +870,7 @@ fn shorten_url(url: &str) -> Option<&str> {
         .map(|captures| captures.get(0).unwrap().as_str())
 }
 
-fn verify_membership(pkg: &Package, repo_dir: &Path) -> Result<bool> {
+fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     for entry in WalkDir::new(repo_dir) {
         let entry = entry?;
         let path = entry.path();
