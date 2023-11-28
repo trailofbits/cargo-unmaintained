@@ -4,19 +4,21 @@
 
 `cargo-unmaintained` is similar to [`cargo-audit`]. However, `cargo-unmaintained` finds unmaintained packages automatically using heuristics, rather than rely on users to manually submit them to the [RustSec Advisory Database].
 
-`cargo-unmaintained` defines an unmaintained package X as one that satisfies one of 1 through 3 below:
+`cargo-unmaintained` defines an unmaintained package X as one that satisfies one of 1 through 4 below:
 
 1. X's repository does not exist.
 
 2. X's repository is archived (see [Notes] below).
 
-3. Both a and b below.
+3. X is not a member of its associated repository.
+
+4. Both a and b below.
 
    a. X depends on a version of a package Y that is incompatible with the Y's latest version.
 
    b. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-As of 2023-11-28, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 52 of them (more than half). These results can be reproduced by running the [`rustsec_comparison`] binary within this repository.
+As of 2023-11-29, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 63 of them (more than two thirds). These results can be reproduced by running the [`rustsec_comparison`] binary within this repository.
 
 ### Notes
 
@@ -24,13 +26,13 @@ As of 2023-11-28, the RustSec Advisory Database contains 87 active advisories fo
 
 - The above conditions consider a "leaf" package (i.e., a package with no dependencies) unmaintained only if the package's repository has been archived.
 
-- The purpose of condition 3(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
+- The purpose of condition 4(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
 
 - Of the 34 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 6 do not build
-  - 8 are existent, unarchived leaves
+  - 3 are existent, unarchived leaves
   - 2 were updated within the past 365 days
-  - 17 were not identified for other reasons
+  - 13 were not identified for other reasons
 
 ## Output
 
@@ -86,11 +88,7 @@ ignore = ["proc-macro-error"]
 
 ## Known problems
 
-Repositories whose urls change across versions may be incorrectly reported as unmaintained.
-
-`cargo-unmaintained` treats the metadata of the latest version of a package referred to by a project as "ground truth." However, this can cause false positives. For example, if the latest version of [`regex-automata`] that your project relies on is [0.2.0], `cargo-unmaintained` will report the package is unmaintained, though it is not.
-
-We are evaluating ways of dealing with this problem.
+**Repositories whose urls change across versions may be incorrectly reported as unmaintained.** `cargo-unmaintained` treats the metadata of the latest version of a package referred to by a project as "ground truth." However, this can cause false positives. For example, if the latest version of [`regex-automata`] that your project relies on is [0.2.0], `cargo-unmaintained` will report the package is unmaintained, though it is not.
 
 ## License
 

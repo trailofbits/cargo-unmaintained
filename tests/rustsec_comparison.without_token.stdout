@@ -53,9 +53,9 @@ perhaps a crate was updated and forgotten to be re-vendored?
 ```
 jsonrpc-quic...found
 office...found
-aesni...leaf
-aes-soft...leaf
-aes-ctr...leaf
+aesni...found
+aes-soft...found
+aes-ctr...found
 miscreant...error:
 ```
     Updating crates.io index
@@ -63,10 +63,10 @@ error: no matching package named `miscreant` found
 location searched: registry `crates-io`
 required by package `miscreant-test-package v0.1.0 ([..])`
 ```
-cpuid-bool...leaf
+cpuid-bool...found
 anymap...leaf
 spirv_headers...found
-cosmos_sdk...leaf
+cosmos_sdk...found
 serde_cbor...found
 cargo-download...error:
 ```
@@ -89,7 +89,7 @@ encoding...not found
 lmdb...found
 ftd2xx-embedded-hal...found
 pty...found
-static_type_map...not found
+static_type_map...found
 double-checked-cell...not found
 r2d2_odbc...found
 odbc...found
@@ -102,16 +102,16 @@ badge...found
 orbtk...found
 parity-wasm...not found
 rusoto_credential...found
-alloc-cortex-m...not found
+alloc-cortex-m...found
 claim...found
 parity-util-mem...found
 json...leaf
 kuchiki...recently updated
-git-hash...not found
-git-path...not found
+git-hash...found
+git-path...found
 buf_redux...found
 tree_magic...found
-xsalsa20poly1305...not found
+xsalsa20poly1305...found
 users...not found
 ftp...found
 tui...recently updated
@@ -125,14 +125,9 @@ not found - error (6)
     safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
     miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
-not found - leaf (9)
+not found - leaf (4)
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
-    aesni                https://rustsec.org/advisories/RUSTSEC-2021-0059.html
-    aes-soft             https://rustsec.org/advisories/RUSTSEC-2021-0060.html
-    aes-ctr              https://rustsec.org/advisories/RUSTSEC-2021-0061.html
-    cpuid-bool           https://rustsec.org/advisories/RUSTSEC-2021-0064.html
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
-    cosmos_sdk           https://rustsec.org/advisories/RUSTSEC-2021-0099.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
 not found - recently-updated (4)
@@ -140,7 +135,7 @@ not found - recently-updated (4)
     rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
     kuchiki              https://rustsec.org/advisories/RUSTSEC-2023-0019.html
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
-not found - other (24)
+not found - other (19)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
     failure              https://rustsec.org/advisories/RUSTSEC-2020-0036.html
@@ -154,18 +149,13 @@ not found - other (24)
     dotenv_codegen       https://rustsec.org/advisories/RUSTSEC-2021-0142.html
     twoway               https://rustsec.org/advisories/RUSTSEC-2021-0146.html
     encoding             https://rustsec.org/advisories/RUSTSEC-2021-0153.html
-    static_type_map      https://rustsec.org/advisories/RUSTSEC-2022-0023.html
     double-checked-cell  https://rustsec.org/advisories/RUSTSEC-2022-0024.html
     markdown             https://rustsec.org/advisories/RUSTSEC-2022-0044.html
     mapr                 https://rustsec.org/advisories/RUSTSEC-2022-0053.html
     parity-wasm          https://rustsec.org/advisories/RUSTSEC-2022-0061.html
-    alloc-cortex-m       https://rustsec.org/advisories/RUSTSEC-2022-0073.html
-    git-hash             https://rustsec.org/advisories/RUSTSEC-2023-0025.html
-    git-path             https://rustsec.org/advisories/RUSTSEC-2023-0026.html
-    xsalsa20poly1305     https://rustsec.org/advisories/RUSTSEC-2023-0037.html
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
-found (44)
+found (54)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
@@ -185,7 +175,12 @@ found (44)
     interfaces2          https://rustsec.org/advisories/RUSTSEC-2021-0002.html
     jsonrpc-quic         https://rustsec.org/advisories/RUSTSEC-2021-0025.html
     office               https://rustsec.org/advisories/RUSTSEC-2021-0034.html
+    aesni                https://rustsec.org/advisories/RUSTSEC-2021-0059.html
+    aes-soft             https://rustsec.org/advisories/RUSTSEC-2021-0060.html
+    aes-ctr              https://rustsec.org/advisories/RUSTSEC-2021-0061.html
+    cpuid-bool           https://rustsec.org/advisories/RUSTSEC-2021-0064.html
     spirv_headers        https://rustsec.org/advisories/RUSTSEC-2021-0096.html
+    cosmos_sdk           https://rustsec.org/advisories/RUSTSEC-2021-0099.html
     serde_cbor           https://rustsec.org/advisories/RUSTSEC-2021-0127.html
     sodiumoxide          https://rustsec.org/advisories/RUSTSEC-2021-0137.html
     nphysics3d           https://rustsec.org/advisories/RUSTSEC-2021-0148.html
@@ -195,6 +190,7 @@ found (44)
     lmdb                 https://rustsec.org/advisories/RUSTSEC-2022-0001.html
     ftd2xx-embedded-hal  https://rustsec.org/advisories/RUSTSEC-2022-0005.html
     pty                  https://rustsec.org/advisories/RUSTSEC-2022-0015.html
+    static_type_map      https://rustsec.org/advisories/RUSTSEC-2022-0023.html
     r2d2_odbc            https://rustsec.org/advisories/RUSTSEC-2022-0036.html
     odbc                 https://rustsec.org/advisories/RUSTSEC-2022-0039.html
     interledger-packet   https://rustsec.org/advisories/RUSTSEC-2022-0050.html
@@ -203,10 +199,14 @@ found (44)
     badge                https://rustsec.org/advisories/RUSTSEC-2022-0057.html
     orbtk                https://rustsec.org/advisories/RUSTSEC-2022-0060.html
     rusoto_credential    https://rustsec.org/advisories/RUSTSEC-2022-0071.html
+    alloc-cortex-m       https://rustsec.org/advisories/RUSTSEC-2022-0073.html
     claim                https://rustsec.org/advisories/RUSTSEC-2022-0077.html
     parity-util-mem      https://rustsec.org/advisories/RUSTSEC-2022-0080.html
+    git-hash             https://rustsec.org/advisories/RUSTSEC-2023-0025.html
+    git-path             https://rustsec.org/advisories/RUSTSEC-2023-0026.html
     buf_redux            https://rustsec.org/advisories/RUSTSEC-2023-0028.html
     tree_magic           https://rustsec.org/advisories/RUSTSEC-2023-0036.html
+    xsalsa20poly1305     https://rustsec.org/advisories/RUSTSEC-2023-0037.html
     ftp                  https://rustsec.org/advisories/RUSTSEC-2023-0043.html
     multipart            https://rustsec.org/advisories/RUSTSEC-2023-0050.html
     dlopen_derive        https://rustsec.org/advisories/RUSTSEC-2023-0051.html
