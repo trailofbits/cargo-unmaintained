@@ -76,7 +76,7 @@ jobs:
           echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
           cargo test \
             --test dogfood \
-            --test rustsec_comparison \
+            --test rustsec_advisories \
             --test snapbox
 
   all-checks:
