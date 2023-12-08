@@ -10,11 +10,11 @@ fn initialize() {
 }
 
 #[test]
-fn rustsec_comparison() {
+fn rustsec_advisories() {
     let mut command = Command::new("cargo");
     command
-        .arg("run")
-        .current_dir("rustsec_comparison")
+        .args(["run", "--bin=rustsec_advisories"])
+        .current_dir("rustsec_util")
         .env("RUST_BACKTRACE", "0");
 
     let output = tee(command, Tee::Stdout).unwrap();
@@ -22,7 +22,7 @@ fn rustsec_comparison() {
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
     assert_matches_path(
-        format!("tests/rustsec_comparison.{}.stdout", token_modifier()),
+        format!("tests/rustsec_advisories.{}.stdout", token_modifier()),
         stdout_actual,
     );
 }

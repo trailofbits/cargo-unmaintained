@@ -4,7 +4,7 @@ use similar_asserts::SimpleDiff;
 use std::{env::remove_var, fs::read_to_string, path::Path};
 use tempfile::tempdir;
 
-static DIRS: &[&str] = &[".", "rustsec_comparison"];
+static DIRS: &[&str] = &[".", "rustsec_util"];
 
 #[ctor::ctor]
 fn initialize() {
@@ -91,7 +91,7 @@ fn license() {
         {
             if [
                 "AGPL-3.0 (1): cargo-unmaintained",
-                "AGPL-3.0 (1): rustsec_comparison",
+                "AGPL-3.0 (1): rustsec_util",
                 "Custom License File (1): ring",
                 "MPL-2.0 (1): uluru",
             ]

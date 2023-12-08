@@ -13,7 +13,7 @@ updates:
       - dependency-type: direct
 
   - package-ecosystem: cargo
-    directory: /rustsec_comparison
+    directory: /rustsec_util
     schedule:
       interval: weekly
     allow:

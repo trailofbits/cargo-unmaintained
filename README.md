@@ -18,7 +18,7 @@
 
    b. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-As of 2023-11-29, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 63 of them (more than two thirds). These results can be reproduced by running the [`rustsec_comparison`] binary within this repository.
+As of 2023-11-29, the RustSec Advisory Database contains 87 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 63 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
 
 ### Notes
 
@@ -100,5 +100,5 @@ ignore = ["proc-macro-error"]
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
 [`cargo-audit`]: https://github.com/RustSec/rustsec/tree/main/cargo-audit
 [`regex-automata`]: https://crates.io/crates/regex-automata
-[`rustsec_comparison`]: ./rustsec_comparison
+[`rustsec_advisories`]: ./rustsec_util/src/bin/rustsec_advisories.rs
 [personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
