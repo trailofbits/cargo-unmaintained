@@ -193,10 +193,8 @@ impl<'a> RepoStatus<'a, u64> {
         ))
     }
 
-    #[cfg_attr(
-        dylint_lib = "general",
-        allow(non_local_effect_before_error_return, try_io_result)
-    )]
+    #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+    #[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
     fn write(&self, stream: &mut (impl std::io::Write + WriteColor)) -> std::io::Result<()> {
         match self {
             Self::Uncloneable => write!(stream, "uncloneable"),
@@ -901,10 +899,8 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     Ok(false)
 }
 
-#[cfg_attr(
-    dylint_lib = "general",
-    allow(non_local_effect_before_error_return, try_io_result)
-)]
+#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+#[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> {
     use std::io::Write;
     let mut stdout = StandardStream::stdout(opts::get().color);
