@@ -1,4 +1,4 @@
-use anyhow::{ensure, Result};
+use anyhow::{ensure, Context, Result};
 use once_cell::sync::Lazy;
 use std::{
     env::consts::EXE_SUFFIX,
@@ -82,7 +82,7 @@ pub fn display_advisory_outcomes<T: MaybeToString + PartialEq + strum::IntoEnumI
 }
 
 pub fn test_package(package: &str) -> Result<TempDir> {
-    let tempdir = tempdir()?;
+    let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
 
     let output = command_output(
         Command::new("cargo")
@@ -91,10 +91,13 @@ pub fn test_package(package: &str) -> Result<TempDir> {
     )?;
     ensure!(output.status.success());
 
+    let path = tempdir.path().join("Cargo.toml");
     let mut manifest = OpenOptions::new()
         .append(true)
-        .open(tempdir.path().join("Cargo.toml"))?;
-    writeln!(manifest, r#"{package} = "*""#)?;
+        .open(&path)
+        .with_context(|| format!("failed to open {path:?}"))?;
+    writeln!(manifest, r#"{package} = "*""#)
+        .with_context(|| format!("failed to write to {path:?}"))?;
 
     Ok(tempdir)
 }
@@ -119,7 +122,9 @@ pub fn cargo_unmaintained(name: &str, dir: &Path) -> Command {
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 pub fn command_output(command: &mut Command) -> Result<Output> {
-    let output = command.output()?;
+    let output = command
+        .output()
+        .with_context(|| format!("failed to execute command: {command:?}"))?;
     let status = output.status;
     let stdout = String::from_utf8(output.stdout)?;
     let stderr = String::from_utf8(output.stderr)?;

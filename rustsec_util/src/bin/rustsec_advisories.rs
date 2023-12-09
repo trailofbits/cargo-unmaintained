@@ -1,4 +1,4 @@
-use anyhow::{ensure, Result};
+use anyhow::{ensure, Context, Result};
 use cargo_metadata::MetadataCommand;
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -44,7 +44,9 @@ fn main() -> Result<()> {
 
     for advisory in advisories {
         print!("{}...", advisory.metadata.package);
-        std::io::stdout().flush()?;
+        std::io::stdout()
+            .flush()
+            .with_context(|| "failed to flush stdout")?;
 
         let tempdir = test_package(advisory.metadata.package.as_str())?;
 

@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use log::debug;
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -66,7 +66,9 @@ fn main() -> Result<()> {
                 }
                 checked.insert(name);
                 print!("{name}...");
-                std::io::stdout().flush()?;
+                std::io::stdout()
+                    .flush()
+                    .with_context(|| "failed to flush stdout")?;
                 if is_unmaintained(name)? {
                     println!("found");
                     advisory_outcomes.push((name, advisory_url.clone(), Outcome::Found));
