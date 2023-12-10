@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.3.0
+
+- FEATURE: Check for repository existence, and verify that a package appears in its repository ([#32](https://github.com/trailofbits/cargo-unmaintained/pull/32) and [#37](https://github.com/trailofbits/cargo-unmaintained/pull/37))
+
 ## 0.2.1
 
 - Fix a bug causing --tree to fail ([#29](https://github.com/trailofbits/cargo-unmaintained/pull/29))
