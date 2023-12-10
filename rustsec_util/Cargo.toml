@@ -16,7 +16,7 @@ rustsec = "0.28"
 strum = "0.25"
 strum_macros = "0.25"
 tempfile = "3.8"
-tokio = "1.34"
+tokio = "1.35"
 
 [workspace]
 
