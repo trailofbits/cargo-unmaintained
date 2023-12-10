@@ -24,7 +24,7 @@ As of 2023-11-29, the RustSec Advisory Database contains 87 active advisories fo
 
 - To check whether packages' repositories have been archived, set the `GITHUB_TOKEN_PATH` environment variable to the path of a file containing a [personal access token]. If unset, this check will be skipped.
 
-- The above conditions consider a "leaf" package (i.e., a package with no dependencies) unmaintained only if the package's repository has been archived.
+- The above conditions consider a "leaf" package (i.e., a package with no dependencies) unmaintained only if one of conditions 1 through 3 applies.
 
 - The purpose of condition 4(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
 
