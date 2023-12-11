@@ -69,6 +69,8 @@ jobs:
 
       - name: Test
         run: cargo test
+        env:
+          GIT_LFS_SKIP_SMUDGE: 1
 
       - name: Test with token
         run: |
@@ -78,6 +80,8 @@ jobs:
             --test dogfood \
             --test rustsec_advisories \
             --test snapbox
+        env:
+          GIT_LFS_SKIP_SMUDGE: 1
 
   all-checks:
     needs: [test]
