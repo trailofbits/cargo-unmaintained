@@ -294,6 +294,7 @@ thread_local! {
         let _lock = lock_index().unwrap();
         GitIndex::new_cargo_default().unwrap()
     });
+    static EXISTENCE_CACHE: RefCell<HashMap<String, Option<bool>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
     static TIMESTAMP_CACHE: RefCell<HashMap<String, Option<SystemTime>>> = RefCell::new(HashMap::new());
     static REPOSITORY_CACHE: RefCell<HashMap<String, Option<PathBuf>>> = RefCell::new(HashMap::new());
@@ -538,14 +539,23 @@ fn archival_status<'a>(name: &str, url: &'a str) -> Result<Option<RepoStatus<'a,
 }
 
 fn existence(name: &str, url: &str) -> Result<Option<bool>> {
-    verbose::wrap!(
-        || curl::existence(url).or_else(|error| {
-            warn!("failed to determine `{}` existence: {}", name, error);
-            Ok(None)
-        }),
-        "existence of `{}` using HTTP request",
-        name
-    )
+    EXISTENCE_CACHE.with_borrow_mut(|existence_cache| {
+        if let Some(&value) = existence_cache.get(url) {
+            return Ok(value);
+        }
+        verbose::wrap!(
+            || {
+                let value = curl::existence(url).unwrap_or_else(|error| {
+                    warn!("failed to determine `{}` existence: {}", name, error);
+                    None
+                });
+                existence_cache.insert(url.to_owned(), value);
+                Ok(value)
+            },
+            "existence of `{}` using HTTP request",
+            name
+        )
+    })
 }
 
 fn membership(pkg: &Package) -> Result<Option<RepoStatus<'_, Infallible>>> {
