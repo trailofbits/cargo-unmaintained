@@ -803,24 +803,29 @@ fn clone_repository(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
                 return Ok(repo_dir.clone().map(|repo_dir| (url, repo_dir)));
             }
         }
-        let url_and_dir = clone_repository_uncached(pkg)?;
-        if let Some((url, ref repo_dir)) = url_and_dir {
-            repository_cache.insert(url.to_owned(), Some(repo_dir.clone()));
-        } else {
-            if let Some(url) = &pkg.repository {
-                warn!("failed to clone `{}`", url);
+        let url_and_dir = clone_repository_uncached(pkg);
+        match url_and_dir {
+            Ok((url, ref repo_dir)) => {
+                repository_cache.insert(url.to_owned(), Some(repo_dir.clone()));
+                Ok(url_and_dir.ok())
             }
-            // smoelius: In the event of failure, set all urls associated with the repository to
-            // `None`.
-            for url in urls(pkg) {
-                repository_cache.insert(url.to_owned(), None);
+            Err(error) => {
+                if let Some(url) = &pkg.repository {
+                    warn!("failed to clone `{}`: {}", url, error);
+                }
+                // smoelius: In the event of failure, set all urls associated with the repository to
+                // `None`.
+                for url in urls(pkg) {
+                    repository_cache.insert(url.to_owned(), None);
+                }
+                Ok(None)
             }
         }
-        Ok(url_and_dir)
     })
 }
 
-fn clone_repository_uncached(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
+fn clone_repository_uncached(pkg: &Package) -> Result<(&str, PathBuf)> {
+    let mut errors = Vec::new();
     for url in urls(pkg) {
         let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
         let mut command = Command::new("git");
@@ -835,16 +840,18 @@ fn clone_repository_uncached(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
             .env("GCM_INTERACTIVE", "never")
             .env("GIT_ASKPASS", "echo")
             .env("GIT_TERMINAL_PROMPT", "0")
-            .stderr(Stdio::null());
-        let status = command
-            .status()
+            .stderr(Stdio::piped());
+        let output = command
+            .output()
             .with_context(|| format!("failed to run command: {command:?}"))?;
-        if status.success() {
+        if output.status.success() {
             // smoelius: Leak temporary directory.
-            return Ok(Some((url, tempdir.into_path())));
+            return Ok((url, tempdir.into_path()));
         }
+        let error = String::from_utf8(output.stderr)?;
+        errors.push(error);
     }
-    Ok(None)
+    Err(anyhow!("{:#?}", errors))
 }
 
 fn urls(pkg: &Package) -> impl IntoIterator<Item = &str> {
