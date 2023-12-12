@@ -6,7 +6,7 @@ use rustsec_util::{
     cargo_unmaintained, command_output, display_advisory_outcomes, maybe_to_string, test_package,
     Outcome,
 };
-use std::{collections::HashSet, io::Write};
+use std::{collections::HashSet, env::var, fs::read_to_string, io::Write};
 use tokio::runtime;
 
 static RT: Lazy<runtime::Runtime> = Lazy::new(|| {
@@ -19,6 +19,10 @@ static RT: Lazy<runtime::Runtime> = Lazy::new(|| {
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn main() -> Result<()> {
+    if let Ok(path) = var("GITHUB_TOKEN_PATH") {
+        load_token(&path)?;
+    }
+
     let page = RT.block_on(async {
         let octocrab = octocrab::instance();
         octocrab
@@ -89,6 +93,19 @@ fn main() -> Result<()> {
     display_advisory_outcomes(&advisory_outcomes);
 
     Ok(())
+}
+
+// smoelius: Copied from github.rs within this repository. (I need to find a better way to share
+// this.)
+fn load_token(path: &str) -> Result<()> {
+    let token = read_to_string(path).with_context(|| format!("failed to read {path:?}"))?;
+    RT.block_on(async {
+        let octocrab = octocrab::Octocrab::builder()
+            .personal_token(token.trim_end().to_owned())
+            .build()?;
+        let _octocrab = octocrab::initialise(octocrab);
+        Ok(())
+    })
 }
 
 static URL_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\bhttps://[^\s()<>]*").unwrap());
