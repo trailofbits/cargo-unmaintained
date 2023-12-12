@@ -68,7 +68,7 @@ jobs:
         run: echo 'VERBOSE=1' >> "$GITHUB_ENV"
 
       - name: Test
-        run: cargo test
+        run: cargo test -- --nocapture
         env:
           GIT_LFS_SKIP_SMUDGE: 1
           RUST_BACKTRACE: 1
@@ -81,7 +81,8 @@ jobs:
             --test dogfood \
             --test rustsec_advisories \
             --test rustsec_issues \
-            --test snapbox
+            --test snapbox \
+            -- --nocapture
         env:
           GIT_LFS_SKIP_SMUDGE: 1
           RUST_BACKTRACE: 1
