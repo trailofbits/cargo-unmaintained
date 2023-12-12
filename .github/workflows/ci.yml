@@ -80,6 +80,7 @@ jobs:
           cargo test \
             --test dogfood \
             --test rustsec_advisories \
+            --test rustsec_issues \
             --test snapbox
         env:
           GIT_LFS_SKIP_SMUDGE: 1
