@@ -1,43 +1,25 @@
 use super::RepoStatus;
-use anyhow::{anyhow, bail, Context, Result};
+use anyhow::{anyhow, bail, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
     cell::RefCell,
     collections::HashMap,
     convert::Infallible,
-    fs::read_to_string,
     rc::Rc,
     time::{Duration, SystemTime},
 };
-use tokio::runtime;
+
+mod util;
+pub(crate) use util::load_token;
+use util::RT;
 
 #[allow(clippy::unwrap_used)]
 static RE: Lazy<Regex> =
     Lazy::new(|| Regex::new(r"^https://github\.com/(([^/]*)/([^/]*))").unwrap());
 
-#[allow(clippy::unwrap_used)]
-static RT: Lazy<runtime::Runtime> = Lazy::new(|| {
-    runtime::Builder::new_current_thread()
-        .enable_io()
-        .enable_time()
-        .build()
-        .unwrap()
-});
-
 thread_local! {
     static REPOSITORY_CACHE: RefCell<HashMap<String, Option<Rc<octocrab::models::Repository>>>> = RefCell::new(HashMap::new());
-}
-
-pub(crate) fn load_token(path: &str) -> Result<()> {
-    let token = read_to_string(path).with_context(|| format!("failed to read {path:?}"))?;
-    RT.block_on(async {
-        let octocrab = octocrab::Octocrab::builder()
-            .personal_token(token.trim_end().to_owned())
-            .build()?;
-        let _octocrab = octocrab::initialise(octocrab);
-        Ok(())
-    })
 }
 
 pub(crate) fn archival_status(url: &str) -> Result<Option<RepoStatus<Infallible>>> {
