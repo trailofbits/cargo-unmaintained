@@ -18,6 +18,26 @@ strum_macros = "0.25"
 tempfile = "3.8"
 tokio = "1.35"
 
+# smoelius: Putting this package in the same workspace as `cargo-unmaintained` produces the
+# following error:
+#
+#   error[E0428]: the name `Impl` is defined multiple times
+#      --> .../gix-transport-0.38.0/src/client/blocking_io/http/mod.rs:193:1
+#       |
+#   190 | pub type Impl = curl::Curl;
+#       | --------------------------- previous definition of the type `Impl` here
+#   ...
+#   193 | pub type Impl = reqwest::Remote;
+#       | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ `Impl` redefined here
+#       |
+#       = note: `Impl` must be defined only once in the type namespace of this module
+#   
+#   error: Cannot set both 'http-client-reqwest' and 'http-client-curl' features as they are mutually exclusive
+#     --> .../gix-transport-0.38.0/src/client/blocking_io/http/mod.rs:26:1
+#      |
+#   26 | compile_error!("Cannot set both 'http-client-reqwest' and 'http-client-curl' features as they are mutually exclusive");
+#      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
 [workspace]
 
 [workspace.metadata.dylint]
