@@ -198,7 +198,7 @@ fn readme_reference_links_are_sorted() {
 fn sort() {
     for dir in DIRS {
         Command::new("cargo")
-            .args(["sort", "--check"])
+            .args(["sort", "--check", "--no-format"])
             .current_dir(dir)
             .assert()
             .success();
