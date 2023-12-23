@@ -82,7 +82,7 @@ error occurred.
 If a workspace's `Cargo.toml` file includes a `workspace.metadata.unmaintained.ignore` array, all packages named therein will be ignored. Example:
 
 ```toml
-[package.metadata.unmaintained]
+[workspace.metadata.unmaintained]
 ignore = ["proc-macro-error"]
 ```
 
