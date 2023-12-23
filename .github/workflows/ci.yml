@@ -57,7 +57,8 @@ jobs:
           rustup install nightly
           rustup component add rustfmt --toolchain nightly
           export CARGO_TARGET_DIR="$(mktemp -d)"
-          cargo install cargo-dylint dylint-link || true
+          cargo install cargo-dylint --git=https://github.com/trailofbits/dylint --no-default-features --features=metadata-cli || true
+          cargo install dylint-link              || true
           cargo install cargo-hack               || true
           cargo install cargo-license            || true
           cargo install cargo-sort               || true
