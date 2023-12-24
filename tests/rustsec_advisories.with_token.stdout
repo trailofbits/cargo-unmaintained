@@ -1,4 +1,4 @@
-87 advisories for unmaintained packages
+88 advisories for unmaintained packages
 lz4-compress...found
 tempdir...found
 typemap...not found
@@ -118,6 +118,7 @@ tui...found
 multipart...found
 dlopen_derive...found
 fehler...not found
+cpython...not found
 not found - error (6)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -132,7 +133,7 @@ not found - leaf (3)
 not found - recently-updated (2)
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
-not found - other (13)
+not found - other (14)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
     slice-deque          https://rustsec.org/advisories/RUSTSEC-2020-0158.html
@@ -146,6 +147,7 @@ not found - other (13)
     markdown             https://rustsec.org/advisories/RUSTSEC-2022-0044.html
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
+    cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
 found (63)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
