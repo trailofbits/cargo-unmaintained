@@ -497,7 +497,7 @@ fn filter_packages(metadata: &Metadata) -> Result<Vec<&Package>> {
 
 #[derive(serde::Deserialize)]
 struct UnmaintainedMetadata {
-    ignored: Option<Vec<String>>,
+    ignore: Option<Vec<String>>,
 }
 
 pub fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
@@ -508,7 +508,7 @@ pub fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
         return Ok(HashSet::default());
     };
     let metadata = serde_json::value::from_value::<UnmaintainedMetadata>(value.clone())?;
-    Ok(metadata.ignored.unwrap_or_default().into_iter().collect())
+    Ok(metadata.ignore.unwrap_or_default().into_iter().collect())
 }
 
 fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Version> {
