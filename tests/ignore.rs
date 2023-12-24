@@ -28,7 +28,7 @@ fn ignored() -> Result<()> {
         manifest,
         r#"
 [workspace.metadata.unmaintained]
-ignored = ["lz4-compress"]
+ignore = ["lz4-compress"]
 "#
     )?;
 
