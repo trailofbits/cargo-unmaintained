@@ -134,6 +134,7 @@ struct UnmaintainedPkg<'a> {
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 enum RepoStatus<'a, T> {
     Uncloneable,
+    Unassociated(&'a str),
     Nonexistent,
     Success(&'a str, T),
     Archived(&'a str),
@@ -142,7 +143,9 @@ enum RepoStatus<'a, T> {
 impl<'a, T> RepoStatus<'a, T> {
     fn as_success(&self) -> Option<(&'a str, &T)> {
         match self {
-            Self::Uncloneable | Self::Nonexistent | Self::Archived(_) => None,
+            Self::Uncloneable | Self::Unassociated(_) | Self::Nonexistent | Self::Archived(_) => {
+                None
+            }
             Self::Success(url, value) => Some((url, value)),
         }
     }
@@ -152,6 +155,7 @@ impl<'a> RepoStatus<'a, Infallible> {
     fn lift<T>(&self) -> RepoStatus<'a, T> {
         match self {
             Self::Uncloneable => RepoStatus::Uncloneable,
+            Self::Unassociated(url) => RepoStatus::Unassociated(url),
             Self::Nonexistent => RepoStatus::Nonexistent,
             Self::Success(_, _) => unreachable!(),
             Self::Archived(url) => RepoStatus::Archived(url),
@@ -165,8 +169,8 @@ const SATURATION_MULTIPLIER: u64 = 3;
 impl<'a> RepoStatus<'a, u64> {
     fn color(&self) -> Option<Color> {
         let age = match self {
-            // smoelius: `Uncloneable` and `Nonexistent` default to yellow.
-            Self::Uncloneable | Self::Nonexistent => {
+            // smoelius: `Uncloneable`, `Unassociated`, and `Nonexistent` default to yellow.
+            Self::Uncloneable | Self::Unassociated(_) | Self::Nonexistent => {
                 return Some(Color::Rgb(u8::MAX, u8::MAX, 0));
             }
             Self::Success(_, age) => age,
@@ -198,6 +202,7 @@ impl<'a> RepoStatus<'a, u64> {
     fn write(&self, stream: &mut (impl std::io::Write + WriteColor)) -> std::io::Result<()> {
         match self {
             Self::Uncloneable => write!(stream, "uncloneable"),
+            Self::Unassociated(url) => write!(stream, "not in `{url}`"),
             Self::Nonexistent => write!(stream, "no repository"),
             Self::Success(url, age) => {
                 stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;
@@ -228,23 +233,35 @@ impl<'a, T: Ord> Ord for RepoStatus<'a, T> {
         match (self, other) {
             // smoelius: Put uncloneable first, since that's "less bad" than no repository.
             (Self::Uncloneable, Self::Uncloneable) => Ordering::Equal,
-            (Self::Uncloneable, Self::Nonexistent | Self::Success(_, _) | Self::Archived(_)) => {
-                Ordering::Less
-            }
+            (
+                Self::Uncloneable,
+                Self::Unassociated(_) | Self::Nonexistent | Self::Success(_, _) | Self::Archived(_),
+            ) => Ordering::Less,
 
-            (Self::Nonexistent, Self::Uncloneable) => Ordering::Greater,
+            (Self::Unassociated(_), Self::Uncloneable) => Ordering::Greater,
+            (Self::Unassociated(_), Self::Unassociated(_)) => Ordering::Equal,
+            (
+                Self::Unassociated(_),
+                Self::Nonexistent | Self::Success(_, _) | Self::Archived(_),
+            ) => Ordering::Less,
+
+            (Self::Nonexistent, Self::Uncloneable | Self::Unassociated(_)) => Ordering::Greater,
             (Self::Nonexistent, Self::Nonexistent) => Ordering::Equal,
             (Self::Nonexistent, Self::Success(_, _) | Self::Archived(_)) => Ordering::Less,
 
-            (Self::Success(_, _), Self::Uncloneable | Self::Nonexistent) => Ordering::Greater,
+            (
+                Self::Success(_, _),
+                Self::Uncloneable | Self::Unassociated(_) | Self::Nonexistent,
+            ) => Ordering::Greater,
             // smoelius: Don't consider urls when ordering.
             (Self::Success(_, lhs), Self::Success(_, rhs)) => lhs.cmp(rhs),
             (Self::Success(_, _), Self::Archived(_)) => Ordering::Less,
 
             // smoelius: Put archived last since that's the worst.
-            (Self::Archived(_), Self::Uncloneable | Self::Nonexistent | Self::Success(_, _)) => {
-                Ordering::Greater
-            }
+            (
+                Self::Archived(_),
+                Self::Uncloneable | Self::Unassociated(_) | Self::Nonexistent | Self::Success(_, _),
+            ) => Ordering::Greater,
             // smoelius: Don't consider urls when ordering.
             (Self::Archived(_), Self::Archived(_)) => Ordering::Equal,
         }
@@ -561,13 +578,13 @@ fn existence(name: &str, url: &str) -> Result<Option<bool>> {
 fn membership(pkg: &Package) -> Result<Option<RepoStatus<'_, Infallible>>> {
     verbose::wrap!(
         || {
-            let Some((_, repo_dir)) = clone_repository(pkg)? else {
+            let Some((url, repo_dir)) = clone_repository(pkg)? else {
                 return Ok(Some(RepoStatus::Uncloneable));
             };
             if membership_in_clone(pkg, &repo_dir)? {
                 Ok(None)
             } else {
-                Ok(Some(RepoStatus::Nonexistent))
+                Ok(Some(RepoStatus::Unassociated(url)))
             }
         },
         "membership of `{}` using shallow clone",
@@ -659,6 +676,9 @@ fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
     let (url, timestamp) = match timestamp(pkg)? {
         RepoStatus::Uncloneable => {
             return Ok(RepoStatus::Uncloneable);
+        }
+        RepoStatus::Unassociated(url) => {
+            return Ok(RepoStatus::Unassociated(url));
         }
         RepoStatus::Nonexistent => {
             return Ok(RepoStatus::Nonexistent);
@@ -775,7 +795,7 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     };
 
     if !opts::get().imprecise && !membership_in_clone(pkg, &repo_dir)? {
-        return Ok(RepoStatus::Nonexistent);
+        return Ok(RepoStatus::Unassociated(url));
     }
 
     let mut command = Command::new("git");
