@@ -457,6 +457,22 @@ fn unmaintained() -> Result<bool> {
     Ok(!opts::get().no_exit_code && !unnmaintained_pkgs.is_empty())
 }
 
+#[derive(serde::Deserialize)]
+struct UnmaintainedMetadata {
+    ignore: Option<Vec<String>>,
+}
+
+pub fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
+    let serde_json::Value::Object(object) = &metadata.workspace_metadata else {
+        return Ok(HashSet::default());
+    };
+    let Some(value) = object.get("unmaintained") else {
+        return Ok(HashSet::default());
+    };
+    let metadata = serde_json::value::from_value::<UnmaintainedMetadata>(value.clone())?;
+    Ok(metadata.ignore.unwrap_or_default().into_iter().collect())
+}
+
 fn filter_packages<'a>(
     metadata: &'a Metadata,
     ignored_packages: &HashSet<String>,
@@ -505,22 +521,6 @@ fn filter_packages<'a>(
     }
 
     Ok(packages)
-}
-
-#[derive(serde::Deserialize)]
-struct UnmaintainedMetadata {
-    ignore: Option<Vec<String>>,
-}
-
-pub fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
-    let serde_json::Value::Object(object) = &metadata.workspace_metadata else {
-        return Ok(HashSet::default());
-    };
-    let Some(value) = object.get("unmaintained") else {
-        return Ok(HashSet::default());
-    };
-    let metadata = serde_json::value::from_value::<UnmaintainedMetadata>(value.clone())?;
-    Ok(metadata.ignore.unwrap_or_default().into_iter().collect())
 }
 
 fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Version> {
