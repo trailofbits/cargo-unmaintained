@@ -391,7 +391,18 @@ fn unmaintained() -> Result<bool> {
 
     let metadata = MetadataCommand::new().exec()?;
 
-    let packages = filter_packages(&metadata)?;
+    let ignored_packages = ignored_packages(&metadata)?;
+
+    for name in &ignored_packages {
+        if !metadata.packages.iter().any(|pkg| pkg.name == *name) {
+            warn!(
+                "workspace metadata says to ignore `{}`, but workspace does not depend upon `{}`",
+                name, name
+            );
+        }
+    }
+
+    let packages = filter_packages(&metadata, &ignored_packages)?;
 
     eprintln!(
         "Scanning {} packages and their dependencies{}",
@@ -484,10 +495,11 @@ fn unmaintained() -> Result<bool> {
     Ok(!opts::get().no_exit_code && !unnmaintained_pkgs.is_empty())
 }
 
-fn filter_packages(metadata: &Metadata) -> Result<Vec<&Package>> {
+fn filter_packages<'a>(
+    metadata: &'a Metadata,
+    ignored_packages: &HashSet<String>,
+) -> Result<Vec<&'a Package>> {
     let mut packages = Vec::new();
-
-    let ignored_packages = ignored_packages(metadata)?;
 
     // smoelius: If a project relies on multiple versions of a package, check only the latest one.
     let metadata_latest_version_map = build_metadata_latest_version_map(metadata);
