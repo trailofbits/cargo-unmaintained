@@ -4,10 +4,49 @@
 use anyhow::{ensure, Result};
 use snapbox::cmd::cargo_bin;
 use std::{fs::OpenOptions, io::Write, path::Path, process::Command};
-use tempfile::tempdir;
+use tempfile::{tempdir, TempDir};
+
+const NAME: &str = "lz4-compress";
 
 #[test]
-fn ignored() -> Result<()> {
+fn ignore() -> Result<()> {
+    let tempdir = create_test_package()?;
+
+    add_dependency(tempdir.path(), NAME)?;
+
+    let status = cargo_unmaintained(tempdir.path()).status()?;
+    ensure!(!status.success());
+
+    ignore_package(tempdir.path(), NAME)?;
+
+    let status = cargo_unmaintained(tempdir.path()).status()?;
+    ensure!(status.success());
+
+    Ok(())
+}
+
+#[test]
+fn warn_not_depended_upon() -> Result<()> {
+    let tempdir = create_test_package()?;
+
+    ignore_package(tempdir.path(), NAME)?;
+
+    let output = cargo_unmaintained(tempdir.path()).output()?;
+    ensure!(output.status.success());
+
+    let stderr = String::from_utf8(output.stderr).unwrap();
+    assert!(
+        stderr.starts_with(&format!(
+            "warning: workspace metadata says to ignore `{NAME}`, but workspace does not depend \
+             upon `{NAME}`\n"
+        )),
+        "{stderr}"
+    );
+
+    Ok(())
+}
+
+fn create_test_package() -> Result<TempDir> {
     let tempdir = tempdir()?;
 
     let status = Command::new("cargo")
@@ -16,25 +55,28 @@ fn ignored() -> Result<()> {
         .status()?;
     ensure!(status.success());
 
+    Ok(tempdir)
+}
+
+fn add_dependency(dir: &Path, name: &str) -> Result<()> {
     let mut manifest = OpenOptions::new()
         .append(true)
-        .open(tempdir.path().join("Cargo.toml"))?;
-    writeln!(manifest, r#"lz4-compress = "*""#)?;
+        .open(dir.join("Cargo.toml"))?;
+    writeln!(manifest, r#"{name} = "*""#)?;
+    Ok(())
+}
 
-    let status = cargo_unmaintained(tempdir.path()).status()?;
-    ensure!(!status.success());
-
+fn ignore_package(dir: &Path, name: &str) -> Result<()> {
+    let mut manifest = OpenOptions::new()
+        .append(true)
+        .open(dir.join("Cargo.toml"))?;
     writeln!(
         manifest,
         r#"
 [workspace.metadata.unmaintained]
-ignore = ["lz4-compress"]
+ignore = ["{name}"]
 "#
     )?;
-
-    let status = cargo_unmaintained(tempdir.path()).status()?;
-    ensure!(status.success());
-
     Ok(())
 }
 
