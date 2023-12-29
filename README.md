@@ -10,7 +10,7 @@
 
 2. X's repository is archived (see [Notes] below).
 
-3. X is not a member of its associated repository.
+3. X is not a member of its named repository.
 
 4. Both a and b below.
 

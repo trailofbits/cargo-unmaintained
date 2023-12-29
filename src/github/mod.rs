@@ -5,7 +5,6 @@ use regex::Regex;
 use std::{
     cell::RefCell,
     collections::HashMap,
-    convert::Infallible,
     rc::Rc,
     time::{Duration, SystemTime},
 };
@@ -22,17 +21,17 @@ thread_local! {
     static REPOSITORY_CACHE: RefCell<HashMap<String, Option<Rc<octocrab::models::Repository>>>> = RefCell::new(HashMap::new());
 }
 
-pub(crate) fn archival_status(url: &str) -> Result<Option<RepoStatus<Infallible>>> {
+pub(crate) fn archival_status(url: &str) -> Result<RepoStatus<()>> {
     let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
 
     let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
-        return Ok(Some(RepoStatus::Nonexistent));
+        return Ok(RepoStatus::Nonexistent(url));
     };
 
     if repository.archived.unwrap_or_default() {
-        Ok(Some(RepoStatus::Archived(url)))
+        Ok(RepoStatus::Archived(url))
     } else {
-        Ok(None)
+        Ok(RepoStatus::Success(url, ()))
     }
 }
 
