@@ -14,7 +14,6 @@ use regex::Regex;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
-    convert::Infallible,
     env::{args, var},
     ffi::OsStr,
     fs::{read_to_string, remove_dir_all, File},
@@ -130,31 +129,85 @@ struct UnmaintainedPkg<'a> {
     outdated_deps: Vec<OutdatedDep<'a>>,
 }
 
-// smoelius: Order `RepoStatus` variants by how bad they are.
-#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+/// Repository statuses with the variants ordered by how "bad" they are.
+///
+/// A `RepoStatus` has a url only if it's not `Unnamed`. A `RepoStatus` has a value only if
+/// it is `Success`.
+#[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum RepoStatus<'a, T> {
-    Uncloneable,
-    Nonexistent,
+    Uncloneable(&'a str),
+    Unnamed,
     Success(&'a str, T),
+    Unassociated(&'a str),
+    Nonexistent(&'a str),
     Archived(&'a str),
 }
 
 impl<'a, T> RepoStatus<'a, T> {
     fn as_success(&self) -> Option<(&'a str, &T)> {
         match self {
-            Self::Uncloneable | Self::Nonexistent | Self::Archived(_) => None,
+            Self::Uncloneable(_)
+            | Self::Unnamed
+            | Self::Unassociated(_)
+            | Self::Nonexistent(_)
+            | Self::Archived(_) => None,
             Self::Success(url, value) => Some((url, value)),
         }
     }
+
+    fn erase_url(self) -> RepoStatus<'static, T> {
+        match self {
+            Self::Uncloneable(_) => RepoStatus::Uncloneable(""),
+            Self::Unnamed => RepoStatus::Unnamed,
+            Self::Success(_, value) => RepoStatus::Success("", value),
+            Self::Unassociated(_) => RepoStatus::Unassociated(""),
+            Self::Nonexistent(_) => RepoStatus::Nonexistent(""),
+            Self::Archived(_) => RepoStatus::Archived(""),
+        }
+    }
+
+    // smoelius: This isn't as bad as it looks. `leak_url` is used only when a `RepoStatus` needs to
+    // be inserted into a global data structure. In such a case, the `RepoStatus`'s drop handler
+    // would be called either never or when the program terminates. So the effect of leaking the url
+    // is rather insignificant.
+    fn leak_url(self) -> RepoStatus<'static, T> {
+        match self {
+            Self::Uncloneable(url) => RepoStatus::Uncloneable(url.to_owned().leak()),
+            Self::Unnamed => RepoStatus::Unnamed,
+            Self::Success(url, value) => RepoStatus::Success(url.to_owned().leak(), value),
+            Self::Unassociated(url) => RepoStatus::Unassociated(url.to_owned().leak()),
+            Self::Nonexistent(url) => RepoStatus::Nonexistent(url.to_owned().leak()),
+            Self::Archived(url) => RepoStatus::Archived(url.to_owned().leak()),
+        }
+    }
+
+    fn map<U>(self, f: impl Fn(T) -> U) -> RepoStatus<'a, U> {
+        match self {
+            Self::Uncloneable(url) => RepoStatus::Uncloneable(url),
+            Self::Unnamed => RepoStatus::Unnamed,
+            Self::Success(url, value) => RepoStatus::Success(url, f(value)),
+            Self::Unassociated(url) => RepoStatus::Unassociated(url),
+            Self::Nonexistent(url) => RepoStatus::Nonexistent(url),
+            Self::Archived(url) => RepoStatus::Archived(url),
+        }
+    }
+
+    #[allow(clippy::panic)]
+    fn map_failure<U>(self) -> RepoStatus<'a, U> {
+        self.map(|_| panic!("unexpected `RepoStatus::Success`"))
+    }
 }
 
-impl<'a> RepoStatus<'a, Infallible> {
-    fn lift<T>(&self) -> RepoStatus<'a, T> {
+impl<'a, T, E> RepoStatus<'a, Result<T, E>> {
+    fn transpose(self) -> Result<RepoStatus<'a, T>, E> {
         match self {
-            Self::Uncloneable => RepoStatus::Uncloneable,
-            Self::Nonexistent => RepoStatus::Nonexistent,
-            Self::Success(_, _) => unreachable!(),
-            Self::Archived(url) => RepoStatus::Archived(url),
+            Self::Uncloneable(url) => Ok(RepoStatus::Uncloneable(url)),
+            Self::Unnamed => Ok(RepoStatus::Unnamed),
+            Self::Success(url, Ok(value)) => Ok(RepoStatus::Success(url, value)),
+            Self::Success(_, Err(error)) => Err(error),
+            Self::Unassociated(url) => Ok(RepoStatus::Unassociated(url)),
+            Self::Nonexistent(url) => Ok(RepoStatus::Nonexistent(url)),
+            Self::Archived(url) => Ok(RepoStatus::Archived(url)),
         }
     }
 }
@@ -165,13 +218,13 @@ const SATURATION_MULTIPLIER: u64 = 3;
 impl<'a> RepoStatus<'a, u64> {
     fn color(&self) -> Option<Color> {
         let age = match self {
-            // smoelius: `Uncloneable` and `Nonexistent` default to yellow.
-            Self::Uncloneable | Self::Nonexistent => {
+            // smoelius: `Uncloneable` and `Unnamed` default to yellow.
+            Self::Uncloneable(_) | Self::Unnamed => {
                 return Some(Color::Rgb(u8::MAX, u8::MAX, 0));
             }
             Self::Success(_, age) => age,
-            // smoelius: `Archived` defaults to red.
-            Self::Archived(_) => {
+            // smoelius: `Unassociated`, `Nonexistent`, and `Archived` default to red.
+            Self::Unassociated(_) | Self::Nonexistent(_) | Self::Archived(_) => {
                 return Some(Color::Rgb(u8::MAX, 0, 0));
             }
         };
@@ -197,12 +250,14 @@ impl<'a> RepoStatus<'a, u64> {
     #[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
     fn write(&self, stream: &mut (impl std::io::Write + WriteColor)) -> std::io::Result<()> {
         match self {
-            Self::Uncloneable => write!(stream, "uncloneable"),
-            Self::Nonexistent => write!(stream, "no repository"),
+            Self::Uncloneable(url) => {
+                write_url(stream, url)?;
+                write!(stream, " is uncloneable")?;
+                Ok(())
+            }
+            Self::Unnamed => write!(stream, "no repository"),
             Self::Success(url, age) => {
-                stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;
-                write!(stream, "{url}")?;
-                stream.set_color(ColorSpec::new().set_fg(None))?;
+                write_url(stream, url)?;
                 write!(stream, " updated ")?;
                 stream.set_color(ColorSpec::new().set_fg(self.color()))?;
                 write!(stream, "{}", age / SECS_PER_DAY)?;
@@ -210,10 +265,18 @@ impl<'a> RepoStatus<'a, u64> {
                 write!(stream, " days ago")?;
                 Ok(())
             }
+            Self::Unassociated(url) => {
+                write!(stream, "not in ")?;
+                write_url(stream, url)?;
+                Ok(())
+            }
+            Self::Nonexistent(url) => {
+                write_url(stream, url)?;
+                write!(stream, " does not exist")?;
+                Ok(())
+            }
             Self::Archived(url) => {
-                stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;
-                write!(stream, "{url}")?;
-                stream.set_color(ColorSpec::new().set_fg(None))?;
+                write_url(stream, url)?;
                 write!(stream, " archived")?;
                 Ok(())
             }
@@ -221,40 +284,13 @@ impl<'a> RepoStatus<'a, u64> {
     }
 }
 
-impl<'a, T: Ord> Ord for RepoStatus<'a, T> {
-    fn cmp(&self, other: &Self) -> std::cmp::Ordering {
-        use std::cmp::Ordering;
-        #[allow(clippy::match_same_arms)]
-        match (self, other) {
-            // smoelius: Put uncloneable first, since that's "less bad" than no repository.
-            (Self::Uncloneable, Self::Uncloneable) => Ordering::Equal,
-            (Self::Uncloneable, Self::Nonexistent | Self::Success(_, _) | Self::Archived(_)) => {
-                Ordering::Less
-            }
-
-            (Self::Nonexistent, Self::Uncloneable) => Ordering::Greater,
-            (Self::Nonexistent, Self::Nonexistent) => Ordering::Equal,
-            (Self::Nonexistent, Self::Success(_, _) | Self::Archived(_)) => Ordering::Less,
-
-            (Self::Success(_, _), Self::Uncloneable | Self::Nonexistent) => Ordering::Greater,
-            // smoelius: Don't consider urls when ordering.
-            (Self::Success(_, lhs), Self::Success(_, rhs)) => lhs.cmp(rhs),
-            (Self::Success(_, _), Self::Archived(_)) => Ordering::Less,
-
-            // smoelius: Put archived last since that's the worst.
-            (Self::Archived(_), Self::Uncloneable | Self::Nonexistent | Self::Success(_, _)) => {
-                Ordering::Greater
-            }
-            // smoelius: Don't consider urls when ordering.
-            (Self::Archived(_), Self::Archived(_)) => Ordering::Equal,
-        }
-    }
-}
-
-impl<'a, T: Ord> PartialOrd for RepoStatus<'a, T> {
-    fn partial_cmp(&self, other: &Self) -> Option<std::cmp::Ordering> {
-        Some(self.cmp(other))
-    }
+#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+#[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
+fn write_url(stream: &mut (impl std::io::Write + WriteColor), url: &str) -> std::io::Result<()> {
+    stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;
+    write!(stream, "{url}")?;
+    stream.set_color(ColorSpec::new().set_fg(None))?;
+    Ok(())
 }
 
 struct OutdatedDep<'a> {
@@ -296,8 +332,8 @@ thread_local! {
     });
     static EXISTENCE_CACHE: RefCell<HashMap<String, Option<bool>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
-    static TIMESTAMP_CACHE: RefCell<HashMap<String, Option<SystemTime>>> = RefCell::new(HashMap::new());
-    static REPOSITORY_CACHE: RefCell<HashMap<String, Option<PathBuf>>> = RefCell::new(HashMap::new());
+    static TIMESTAMP_CACHE: RefCell<HashMap<String, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
+    static REPOSITORY_CACHE: RefCell<HashMap<String, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
 }
 
 macro_rules! warn {
@@ -339,8 +375,8 @@ struct DeleteClonedRepositories;
 impl Drop for DeleteClonedRepositories {
     fn drop(&mut self) {
         REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
-            for (_, repo_dir) in repository_cache.drain() {
-                if let Some(repo_dir) = repo_dir {
+            for (_, repo_status) in repository_cache.drain() {
+                if let Some((_, repo_dir)) = repo_status.as_success() {
                     remove_dir_all(repo_dir).unwrap_or_default();
                 }
             }
@@ -370,10 +406,11 @@ fn unmaintained() -> Result<bool> {
     for pkg in packages {
         if let Some(url) = &pkg.repository {
             if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
-                if let Some(repo_status) = archival_status(&pkg.name, url)? {
+                let repo_status = archival_status(&pkg.name, url)?;
+                if repo_status.as_success().is_none() {
                     unnmaintained_pkgs.push(UnmaintainedPkg {
                         pkg,
-                        repo_age: repo_status.lift(),
+                        repo_age: repo_status.map_failure(),
                         outdated_deps: Vec::new(),
                     });
                     continue;
@@ -381,17 +418,18 @@ fn unmaintained() -> Result<bool> {
             } else if let Some(false) = existence(&pkg.name, url)? {
                 unnmaintained_pkgs.push(UnmaintainedPkg {
                     pkg,
-                    repo_age: RepoStatus::Nonexistent,
+                    repo_age: RepoStatus::Nonexistent(url),
                     outdated_deps: Vec::new(),
                 });
                 continue;
             }
 
             if !opts::get().imprecise {
-                if let Some(repo_status) = membership(pkg)? {
+                let repo_status = membership(pkg)?;
+                if repo_status.as_success().is_none() {
                     unnmaintained_pkgs.push(UnmaintainedPkg {
                         pkg,
-                        repo_age: repo_status.lift(),
+                        repo_age: repo_status.map_failure(),
                         outdated_deps: Vec::new(),
                     });
                     continue;
@@ -425,7 +463,7 @@ fn unmaintained() -> Result<bool> {
         }
     }
 
-    unnmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age);
+    unnmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age.erase_url());
 
     let mut pkgs_needing_warning = Vec::new();
     for unmaintained_pkg in &unnmaintained_pkgs {
@@ -527,11 +565,11 @@ fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Ver
     map
 }
 
-fn archival_status<'a>(name: &str, url: &'a str) -> Result<Option<RepoStatus<'a, Infallible>>> {
+fn archival_status<'a>(name: &str, url: &'a str) -> Result<RepoStatus<'a, ()>> {
     verbose::wrap!(
         || github::archival_status(url).or_else(|error| {
             warn!("failed to determine `{}` archival status: {}", name, error);
-            Ok(None)
+            Ok(RepoStatus::Success(url, ()))
         }),
         "archival status of `{}` using GitHub API",
         name
@@ -558,16 +596,17 @@ fn existence(name: &str, url: &str) -> Result<Option<bool>> {
     })
 }
 
-fn membership(pkg: &Package) -> Result<Option<RepoStatus<'_, Infallible>>> {
+fn membership(pkg: &Package) -> Result<RepoStatus<'_, ()>> {
     verbose::wrap!(
         || {
-            let Some((_, repo_dir)) = clone_repository(pkg)? else {
-                return Ok(Some(RepoStatus::Uncloneable));
+            let repo_status = clone_repository(pkg)?;
+            let Some((url, repo_dir)) = repo_status.as_success() else {
+                return Ok(repo_status.map_failure());
             };
-            if membership_in_clone(pkg, &repo_dir)? {
-                Ok(None)
+            if membership_in_clone(pkg, repo_dir)? {
+                Ok(RepoStatus::Success(url, ()))
             } else {
-                Ok(Some(RepoStatus::Nonexistent))
+                Ok(RepoStatus::Unassociated(url))
             }
         },
         "membership of `{}` using shallow clone",
@@ -656,64 +695,56 @@ fn published(pkg: &Package) -> bool {
 }
 
 fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
-    let (url, timestamp) = match timestamp(pkg)? {
-        RepoStatus::Uncloneable => {
-            return Ok(RepoStatus::Uncloneable);
-        }
-        RepoStatus::Nonexistent => {
-            return Ok(RepoStatus::Nonexistent);
-        }
-        RepoStatus::Success(url, timestamp) => (url, timestamp),
-        RepoStatus::Archived(_) => {
-            // smoelius: We should not be cloning archived repos.
-            unreachable!();
-        }
-    };
+    let repo_status = timestamp(pkg)?;
 
-    let duration = SystemTime::now().duration_since(timestamp)?;
+    repo_status
+        .map(|timestamp| {
+            let duration = SystemTime::now().duration_since(timestamp)?;
 
-    Ok(RepoStatus::Success(url, duration.as_secs()))
+            Ok(duration.as_secs())
+        })
+        .transpose()
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
         // smoelius: Check both the regular and the shortened url.
-        for url_cached in urls(pkg) {
-            if let Some(&timestamp) = timestamp_cache.get(url_cached) {
-                // smoelius: If the timestamp is `None` then don't bother checking the repository
-                // cache. It could be that a previous attempt to clone the repository failed because
-                // of spurious network errors, for example.
-                let Some(timestamp) = timestamp else {
-                    return Ok(RepoStatus::Nonexistent);
+        for url in urls(pkg) {
+            if let Some(&repo_status) = timestamp_cache.get(url) {
+                // smoelius: If a previous attempt to timestamp the repository failed (e.g., because
+                // of spurious network errors), then don't bother checking the repository cache.
+                let Some((url_timestamped, &timestamp)) = repo_status.as_success() else {
+                    return Ok(repo_status);
                 };
+                assert_eq!(url, url_timestamped);
                 if opts::get().imprecise {
-                    return Ok(RepoStatus::Success(url_cached, timestamp));
+                    return Ok(RepoStatus::Success(url, timestamp));
                 }
                 // smoelius: `pkg`'s repository could contain other packages that were already
                 // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
                 // But in that case, we still need to verify that `pkg` appears in its repository.
+                let repo_status = clone_repository(pkg)?;
                 #[allow(clippy::panic)]
-                let Some((url_cloned, repo_dir)) = clone_repository(pkg)?
-                else {
-                    panic!("url in timestamp cache is uncloneable: {url_cached}");
+                let Some((url_cloned, repo_dir)) = repo_status.as_success() else {
+                    panic!("url in timestamp cache is uncloneable: {url}");
                 };
-                assert_eq!(url_cached, url_cloned);
-                if membership_in_clone(pkg, &repo_dir)? {
-                    return Ok(RepoStatus::Success(url_cached, timestamp));
+                assert_eq!(url, url_cloned);
+                if membership_in_clone(pkg, repo_dir)? {
+                    return Ok(RepoStatus::Success(url, timestamp));
                 }
             }
         }
         verbose::wrap!(
             || {
                 let repo_status = timestamp_uncached(pkg)?;
-                if let RepoStatus::Success(url, timestamp) = repo_status {
-                    timestamp_cache.insert(url.to_owned(), Some(timestamp));
+                if let Some((url, _)) = repo_status.as_success() {
+                    timestamp_cache.insert(url.to_owned(), repo_status.leak_url());
                 } else {
                     // smoelius: In the event of failure, set all urls associated with the
-                    // repository to `None`.
+                    // repository.
                     for url in urls(pkg) {
-                        timestamp_cache.insert(url.to_owned(), None);
+                        timestamp_cache.insert(url.to_owned(), repo_status.leak_url());
                     }
                 }
                 Ok(repo_status)
@@ -726,7 +757,7 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 
 fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     let Some(url) = &pkg.repository else {
-        return Ok(RepoStatus::Nonexistent);
+        return Ok(RepoStatus::Unnamed);
     };
 
     if opts::get().imprecise && url.starts_with("https://github.com/") {
@@ -738,8 +769,8 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
             }
             Ok(None) => {
                 // smoelius: If `github::timestamp` returns `Ok(None)`, it means a previous attempt
-                // to clone the repository failed. But, in that case, the timestamp cache should map
-                // this url to `None`.
+                // to clone the repository failed. But, in that case, `timestamp_uncached` should
+                // not have been called.
                 unreachable!();
             }
             Err(error) => {
@@ -770,12 +801,16 @@ fn first_line(s: &str) -> &str {
 }
 
 fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    let Some((url, repo_dir)) = clone_repository(pkg)? else {
-        return Ok(RepoStatus::Uncloneable);
+    let repo_status = clone_repository(pkg)?;
+
+    // smoelius: `RepoStatus::map` cannot be used here. If `membership_in_clone` returns `false`,
+    // the `ReposStatus::Success` will need to be turned into a `RepoStatus::Unassociated`.
+    let Some((url, repo_dir)) = repo_status.as_success() else {
+        return Ok(repo_status.map_failure());
     };
 
-    if !opts::get().imprecise && !membership_in_clone(pkg, &repo_dir)? {
-        return Ok(RepoStatus::Nonexistent);
+    if !opts::get().imprecise && !membership_in_clone(pkg, repo_dir)? {
+        return Ok(RepoStatus::Unassociated(url));
     }
 
     let mut command = Command::new("git");
@@ -795,30 +830,35 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-fn clone_repository(pkg: &Package) -> Result<Option<(&str, PathBuf)>> {
+fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
     REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
         // smoelius: Check all urls associated with the package.
         for url in urls(pkg) {
-            if let Some(repo_dir) = repository_cache.get(url) {
-                return Ok(repo_dir.clone().map(|repo_dir| (url, repo_dir)));
+            if let Some(repo_status) = repository_cache.get(url) {
+                return Ok(repo_status.clone());
             }
         }
         let url_and_dir = clone_repository_uncached(pkg);
         match url_and_dir {
-            Ok((url, ref repo_dir)) => {
-                repository_cache.insert(url.to_owned(), Some(repo_dir.clone()));
-                Ok(url_and_dir.ok())
+            Ok((url, repo_dir)) => {
+                repository_cache.insert(
+                    url.to_owned(),
+                    RepoStatus::Success(url, repo_dir.clone()).leak_url(),
+                );
+                Ok(RepoStatus::Success(url, repo_dir))
             }
             Err(error) => {
-                if let Some(url) = &pkg.repository {
+                let repo_status = if let Some(url) = &pkg.repository {
                     warn!("failed to clone `{}`: {}", url, error);
-                }
-                // smoelius: In the event of failure, set all urls associated with the repository to
-                // `None`.
+                    RepoStatus::Uncloneable(url)
+                } else {
+                    RepoStatus::Unnamed
+                };
+                // smoelius: In the event of failure, set all urls associated with the repository.
                 for url in urls(pkg) {
-                    repository_cache.insert(url.to_owned(), None);
+                    repository_cache.insert(url.to_owned(), repo_status.clone().leak_url());
                 }
-                Ok(None)
+                Ok(repo_status)
             }
         }
     })
@@ -1025,14 +1065,16 @@ mod tests {
     #[test]
     fn repo_status_ord() {
         let ys = vec![
-            RepoStatus::Uncloneable,
-            RepoStatus::Nonexistent,
-            RepoStatus::Success("c", 0),
-            RepoStatus::Success("b", 1),
+            RepoStatus::Uncloneable("f"),
+            RepoStatus::Unnamed,
+            RepoStatus::Success("e", 0),
+            RepoStatus::Success("d", 1),
+            RepoStatus::Unassociated("c"),
+            RepoStatus::Nonexistent("b"),
             RepoStatus::Archived("a"),
         ];
         let mut xs = ys.clone();
-        xs.sort();
+        xs.sort_by_key(|repo_status| repo_status.erase_url());
         assert_eq!(xs, ys);
     }
 }
