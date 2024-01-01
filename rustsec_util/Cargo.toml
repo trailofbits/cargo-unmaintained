@@ -15,7 +15,7 @@ regex = "1.10"
 rustsec = "0.28"
 strum = "0.25"
 strum_macros = "0.25"
-tempfile = "3.8"
+tempfile = "3.9"
 tokio = "1.35"
 
 # smoelius: Putting this package in the same workspace as `cargo-unmaintained` produces the
