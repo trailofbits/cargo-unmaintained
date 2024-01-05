@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.2
+
+- Distinguish more cases in unmaintained messages ([#66](https://github.com/trailofbits/cargo-unmaintained/pull/66))
+- Warn when an ignored package is not depended upon ([#64](https://github.com/trailofbits/cargo-unmaintained/pull/64))
+
 ## 0.3.1
 
 - Fix a bug causing ignore feature to not work ([#57](https://github.com/trailofbits/cargo-unmaintained/pull/57))
