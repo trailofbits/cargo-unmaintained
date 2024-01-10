@@ -83,7 +83,7 @@ If a workspace's `Cargo.toml` file includes a `workspace.metadata.unmaintained.i
 
 ```toml
 [workspace.metadata.unmaintained]
-ignore = ["proc-macro-error"]
+ignore = ["matchers"]
 ```
 
 ## Known problems
