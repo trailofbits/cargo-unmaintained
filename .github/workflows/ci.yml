@@ -72,7 +72,6 @@ jobs:
         run: cargo test -- --nocapture
         env:
           GIT_LFS_SKIP_SMUDGE: 1
-          RUST_BACKTRACE: 1
 
       - name: Test with token
         run: |
@@ -86,7 +85,6 @@ jobs:
             -- --nocapture
         env:
           GIT_LFS_SKIP_SMUDGE: 1
-          RUST_BACKTRACE: 1
 
   all-checks:
     needs: [test]
