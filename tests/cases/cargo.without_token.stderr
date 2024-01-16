@@ -1,2 +1,1 @@
 Scanning 357 packages and their dependencies (pass --verbose for more information)
-warning: failed to determine `oorandom` existence: [28] Timeout was reached (Failed to connect to sr.ht port 443 after [..] ms: [..])
