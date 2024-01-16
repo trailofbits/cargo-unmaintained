@@ -415,62 +415,12 @@ fn unmaintained() -> Result<bool> {
     );
 
     for pkg in packages {
-        if let Some(url) = &pkg.repository {
-            if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
-                let repo_status = archival_status(&pkg.name, url)?;
-                if repo_status.as_success().is_none() {
-                    unnmaintained_pkgs.push(UnmaintainedPkg {
-                        pkg,
-                        repo_age: repo_status.map_failure(),
-                        outdated_deps: Vec::new(),
-                    });
-                    continue;
-                }
-            } else if let Some(false) = existence(&pkg.name, url)? {
-                unnmaintained_pkgs.push(UnmaintainedPkg {
-                    pkg,
-                    repo_age: RepoStatus::Nonexistent(url),
-                    outdated_deps: Vec::new(),
-                });
-                continue;
+        if let Some(unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
+            unnmaintained_pkgs.push(unmaintained_pkg);
+
+            if opts::get().fail_fast {
+                break;
             }
-
-            if !opts::get().imprecise {
-                let repo_status = membership(pkg)?;
-                if repo_status.as_success().is_none() {
-                    unnmaintained_pkgs.push(UnmaintainedPkg {
-                        pkg,
-                        repo_age: repo_status.map_failure(),
-                        outdated_deps: Vec::new(),
-                    });
-                    continue;
-                }
-            }
-        }
-
-        let outdated_deps = outdated_deps(&metadata, pkg)?;
-
-        if outdated_deps.is_empty() {
-            continue;
-        }
-
-        let repo_age = latest_commit_age(pkg)?;
-
-        if repo_age
-            .as_success()
-            .map_or(false, |(_, &age)| age < opts::get().max_age * SECS_PER_DAY)
-        {
-            continue;
-        }
-
-        unnmaintained_pkgs.push(UnmaintainedPkg {
-            pkg,
-            repo_age,
-            outdated_deps,
-        });
-
-        if opts::get().fail_fast {
-            break;
         }
     }
 
@@ -575,6 +525,62 @@ fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Ver
     }
 
     map
+}
+
+fn is_unmaintained_package<'a>(
+    metadata: &'a Metadata,
+    pkg: &'a Package,
+) -> Result<Option<UnmaintainedPkg<'a>>> {
+    if let Some(url) = &pkg.repository {
+        if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
+            let repo_status = archival_status(&pkg.name, url)?;
+            if repo_status.as_success().is_none() {
+                return Ok(Some(UnmaintainedPkg {
+                    pkg,
+                    repo_age: repo_status.map_failure(),
+                    outdated_deps: Vec::new(),
+                }));
+            }
+        } else if let Some(false) = existence(&pkg.name, url)? {
+            return Ok(Some(UnmaintainedPkg {
+                pkg,
+                repo_age: RepoStatus::Nonexistent(url),
+                outdated_deps: Vec::new(),
+            }));
+        }
+
+        if !opts::get().imprecise {
+            let repo_status = membership(pkg)?;
+            if repo_status.as_success().is_none() {
+                return Ok(Some(UnmaintainedPkg {
+                    pkg,
+                    repo_age: repo_status.map_failure(),
+                    outdated_deps: Vec::new(),
+                }));
+            }
+        }
+    }
+
+    let outdated_deps = outdated_deps(metadata, pkg)?;
+
+    if outdated_deps.is_empty() {
+        return Ok(None);
+    }
+
+    let repo_age = latest_commit_age(pkg)?;
+
+    if repo_age
+        .as_success()
+        .map_or(false, |(_, &age)| age < opts::get().max_age * SECS_PER_DAY)
+    {
+        return Ok(None);
+    }
+
+    Ok(Some(UnmaintainedPkg {
+        pkg,
+        repo_age,
+        outdated_deps,
+    }))
 }
 
 fn archival_status<'a>(name: &str, url: &'a str) -> Result<RepoStatus<'a, ()>> {
