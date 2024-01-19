@@ -330,7 +330,7 @@ thread_local! {
         let _lock = lock_index().unwrap();
         GitIndex::new_cargo_default().unwrap()
     });
-    static EXISTENCE_CACHE: RefCell<HashMap<String, Option<bool>>> = RefCell::new(HashMap::new());
+    static EXISTENCE_CACHE: RefCell<HashMap<String, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
     static TIMESTAMP_CACHE: RefCell<HashMap<String, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
     static REPOSITORY_CACHE: RefCell<HashMap<String, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
@@ -532,19 +532,16 @@ fn is_unmaintained_package<'a>(
     pkg: &'a Package,
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
     if let Some(url) = &pkg.repository {
-        if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
-            let repo_status = archival_status(&pkg.name, url)?;
-            if repo_status.as_success().is_none() {
-                return Ok(Some(UnmaintainedPkg {
-                    pkg,
-                    repo_age: repo_status.map_failure(),
-                    outdated_deps: Vec::new(),
-                }));
-            }
-        } else if let Some(false) = existence(&pkg.name, url)? {
+        let repo_status =
+            if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
+                archival_status(&pkg.name, url)?
+            } else {
+                existence(&pkg.name, url)?
+            };
+        if repo_status.as_success().is_none() {
             return Ok(Some(UnmaintainedPkg {
                 pkg,
-                repo_age: RepoStatus::Nonexistent(url),
+                repo_age: repo_status.map_failure(),
                 outdated_deps: Vec::new(),
             }));
         }
@@ -594,19 +591,21 @@ fn archival_status<'a>(name: &str, url: &'a str) -> Result<RepoStatus<'a, ()>> {
     )
 }
 
-fn existence(name: &str, url: &str) -> Result<Option<bool>> {
+fn existence(name: &str, url: &str) -> Result<RepoStatus<'static, ()>> {
     EXISTENCE_CACHE.with_borrow_mut(|existence_cache| {
         if let Some(&value) = existence_cache.get(url) {
             return Ok(value);
         }
         verbose::wrap!(
             || {
-                let value = curl::existence(url).unwrap_or_else(|error| {
-                    warn!("failed to determine `{}` existence: {}", name, error);
-                    None
-                });
-                existence_cache.insert(url.to_owned(), value);
-                Ok(value)
+                let repo_status = curl::existence(url)
+                    .unwrap_or_else(|error| {
+                        warn!("failed to determine `{}` existence: {}", name, error);
+                        RepoStatus::Success(url, ())
+                    })
+                    .leak_url();
+                existence_cache.insert(url.to_owned(), repo_status);
+                Ok(repo_status)
             },
             "existence of `{}` using HTTP request",
             name
