@@ -5,6 +5,7 @@ use curl::easy::Easy;
 pub(crate) fn existence(url: &str) -> Result<RepoStatus<()>> {
     let mut handle = Easy::new();
     handle.url(url)?;
+    handle.follow_location(true)?;
     handle.transfer().perform()?;
     let response_code = handle.response_code()?;
     match response_code {
