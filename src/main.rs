@@ -330,7 +330,7 @@ thread_local! {
         let _lock = lock_index().unwrap();
         GitIndex::new_cargo_default().unwrap()
     });
-    static EXISTENCE_CACHE: RefCell<HashMap<String, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
+    static GENERAL_STATUS_CACHE: RefCell<HashMap<String, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
     static TIMESTAMP_CACHE: RefCell<HashMap<String, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
     static REPOSITORY_CACHE: RefCell<HashMap<String, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
@@ -532,12 +532,7 @@ fn is_unmaintained_package<'a>(
     pkg: &'a Package,
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
     if let Some(url) = &pkg.repository {
-        let repo_status =
-            if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
-                archival_status(&pkg.name, url)?
-            } else {
-                existence(&pkg.name, url)?
-            };
+        let repo_status = general_status(&pkg.name, url)?;
         if repo_status.as_success().is_none() {
             return Ok(Some(UnmaintainedPkg {
                 pkg,
@@ -580,35 +575,36 @@ fn is_unmaintained_package<'a>(
     }))
 }
 
-fn archival_status<'a>(name: &str, url: &'a str) -> Result<RepoStatus<'a, ()>> {
-    verbose::wrap!(
-        || github::archival_status(url).or_else(|error| {
-            warn!("failed to determine `{}` archival status: {}", name, error);
-            Ok(RepoStatus::Success(url, ()))
-        }),
-        "archival status of `{}` using GitHub API",
-        name
-    )
-}
-
-fn existence(name: &str, url: &str) -> Result<RepoStatus<'static, ()>> {
-    EXISTENCE_CACHE.with_borrow_mut(|existence_cache| {
-        if let Some(&value) = existence_cache.get(url) {
+fn general_status(name: &str, url: &str) -> Result<RepoStatus<'static, ()>> {
+    GENERAL_STATUS_CACHE.with_borrow_mut(|general_status_cache| {
+        if let Some(&value) = general_status_cache.get(url) {
             return Ok(value);
         }
+        let (use_github_api, what, how) =
+            if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
+                (true, "archival status", "GitHub API")
+            } else {
+                (false, "existence", "HTTP request")
+            };
         verbose::wrap!(
             || {
-                let repo_status = curl::existence(url)
-                    .unwrap_or_else(|error| {
-                        warn!("failed to determine `{}` existence: {}", name, error);
-                        RepoStatus::Success(url, ())
-                    })
-                    .leak_url();
-                existence_cache.insert(url.to_owned(), repo_status);
+                let repo_status = if use_github_api {
+                    github::archival_status(url)
+                } else {
+                    curl::existence(url)
+                }
+                .unwrap_or_else(|error| {
+                    warn!("failed to determine `{}` {}: {}", name, what, error);
+                    RepoStatus::Success(url, ())
+                })
+                .leak_url();
+                general_status_cache.insert(url.to_owned(), repo_status);
                 Ok(repo_status)
             },
-            "existence of `{}` using HTTP request",
-            name
+            "{} of `{}` using {}",
+            what,
+            name,
+            how
         )
     })
 }
