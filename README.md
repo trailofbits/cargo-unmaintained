@@ -28,7 +28,7 @@ As of 2023-12-23, the RustSec Advisory Database contains 88 active advisories fo
 
 - The purpose of condition 4(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
 
-- Of the 34 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 25 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 6 do not build
   - 3 are existent, unarchived leaves
   - 2 were updated within the past 365 days
