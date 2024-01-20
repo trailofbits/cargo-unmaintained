@@ -155,6 +155,10 @@ impl<'a, T> RepoStatus<'a, T> {
         }
     }
 
+    fn is_success(&self) -> bool {
+        self.as_success().is_some()
+    }
+
     fn erase_url(self) -> RepoStatus<'static, T> {
         match self {
             Self::Uncloneable(_) => RepoStatus::Uncloneable(""),
@@ -533,7 +537,7 @@ fn is_unmaintained_package<'a>(
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
     if let Some(url) = &pkg.repository {
         let repo_status = general_status(&pkg.name, url)?;
-        if repo_status.as_success().is_none() {
+        if !repo_status.is_success() {
             return Ok(Some(UnmaintainedPkg {
                 pkg,
                 repo_age: repo_status.map_failure(),
@@ -543,7 +547,7 @@ fn is_unmaintained_package<'a>(
 
         if !opts::get().imprecise {
             let repo_status = membership(pkg)?;
-            if repo_status.as_success().is_none() {
+            if !repo_status.is_success() {
                 return Ok(Some(UnmaintainedPkg {
                     pkg,
                     repo_age: repo_status.map_failure(),
