@@ -11,11 +11,12 @@ use snapbox::{
     cmd::{cargo_bin, Command as SnapboxCommand},
 };
 use std::{
+    env::var,
     ffi::OsStr,
     fs::{read_dir, read_to_string},
+    path::{Path, PathBuf},
     process::Command,
 };
-use tempfile::tempdir;
 
 mod util;
 use util::{enabled, tee, token_modifier, Tee};
@@ -23,8 +24,11 @@ use util::{enabled, tee, token_modifier, Tee};
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Test {
-    /// Repo url
-    url: String,
+    /// Repo path (cannot be used in conjunction with `url`)
+    path: Option<String>,
+
+    /// Repo url (cannot be used in conjunction with `path`)
+    url: Option<String>,
 
     /// Repo revision; `None` (the default) means the head of the default branch
     #[serde(default)]
@@ -33,16 +37,22 @@ struct Test {
 
 #[test]
 fn snapbox() -> Result<()> {
-    let mut read_dir = read_dir("tests/cases")?;
+    let test_cases = Path::new("tests/cases");
 
-    let test_paths = read_dir.try_fold(Vec::new(), |mut url_paths, entry| {
-        let entry = entry?;
-        let path = entry.path();
-        if path.extension() == Some(OsStr::new("toml")) {
-            url_paths.push(path);
-        }
-        Result::<_>::Ok(url_paths)
-    })?;
+    let test_paths = if let Ok(testcase) = var("TESTCASE") {
+        vec![test_cases.join(testcase).with_extension("toml")]
+    } else {
+        let mut read_dir = read_dir(test_cases)?;
+
+        read_dir.try_fold(Vec::new(), |mut url_paths, entry| {
+            let entry = entry?;
+            let path = entry.path();
+            if path.extension() == Some(OsStr::new("toml")) {
+                url_paths.push(path);
+            }
+            Result::<_>::Ok(url_paths)
+        })?
+    };
 
     test_paths
         .into_par_iter()
@@ -55,32 +65,43 @@ fn snapbox() -> Result<()> {
 
             let test: Test = toml::from_str(&raw).unwrap();
 
-            let tempdir = tempdir()?;
+            let tempdir;
+            let dir = match (test.path, test.url) {
+                (Some(path), None) => PathBuf::from(path),
+                (None, Some(url)) => {
+                    tempdir = tempfile::tempdir()?;
 
-            let mut command = SnapboxCommand::new("git").args([
-                "clone",
-                &test.url,
-                &tempdir.path().to_string_lossy(),
-            ]);
-            if test.rev.is_none() {
-                command = command.arg("--depth=1");
-            }
-            command.assert().success();
+                    let mut command = SnapboxCommand::new("git").args([
+                        "clone",
+                        &url,
+                        &tempdir.path().to_string_lossy(),
+                    ]);
+                    if test.rev.is_none() {
+                        command = command.arg("--depth=1");
+                    }
+                    command.assert().success();
 
-            if let Some(rev) = &test.rev {
-                SnapboxCommand::new("git")
-                    .args(["checkout", rev])
-                    .current_dir(&tempdir)
-                    .assert()
-                    .success();
-            }
+                    if let Some(rev) = &test.rev {
+                        SnapboxCommand::new("git")
+                            .args(["checkout", rev])
+                            .current_dir(&tempdir)
+                            .assert()
+                            .success();
+                    }
+                    tempdir.path().to_owned()
+                }
+                (_, _) => {
+                    panic!("exactly one of `path` and `url` must be set");
+                }
+            };
 
-            assert!(tempdir.path().join("Cargo.lock").exists());
+            let path = dir.join("Cargo.lock");
+            assert!(path.exists(), "{path:?} does not exist");
 
             let mut command = Command::new(cargo_bin("cargo-unmaintained"));
             command
                 .args(["unmaintained", "--color=never", "--imprecise"])
-                .current_dir(&tempdir);
+                .current_dir(dir);
 
             if enabled("VERBOSE") {
                 // smoelius If `VERBOSE` is enabled, don't bother comparing stderr, because it won't
