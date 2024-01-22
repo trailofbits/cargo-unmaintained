@@ -1,4 +1,4 @@
-88 advisories for unmaintained packages
+89 advisories for unmaintained packages
 lz4-compress...found
 tempdir...found
 typemap...not found
@@ -106,7 +106,7 @@ alloc-cortex-m...found
 claim...found
 parity-util-mem...found
 json...leaf
-kuchiki...recently updated
+kuchiki...found
 git-hash...found
 git-path...found
 buf_redux...found
@@ -119,22 +119,29 @@ multipart...found
 dlopen_derive...found
 fehler...not found
 cpython...not found
-not found - error (6)
+cosmwasm...error:
+```
+    Updating crates.io index
+error: no matching package named `cosmwasm` found
+location searched: registry `crates-io`
+required by package `cosmwasm-test-package v0.1.0 ([..])`
+```
+not found - error (7)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
     stream-cipher        https://rustsec.org/advisories/RUSTSEC-2020-0058.html
     safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
     miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
+    cosmwasm             https://rustsec.org/advisories/RUSTSEC-2024-0004.html
 not found - leaf (4)
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
-not found - recently-updated (4)
+not found - recently-updated (3)
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
-    kuchiki              https://rustsec.org/advisories/RUSTSEC-2023-0019.html
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
 not found - other (20)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
@@ -157,7 +164,7 @@ not found - other (20)
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
-found (54)
+found (55)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
@@ -204,6 +211,7 @@ found (54)
     alloc-cortex-m       https://rustsec.org/advisories/RUSTSEC-2022-0073.html
     claim                https://rustsec.org/advisories/RUSTSEC-2022-0077.html
     parity-util-mem      https://rustsec.org/advisories/RUSTSEC-2022-0080.html
+    kuchiki              https://rustsec.org/advisories/RUSTSEC-2023-0019.html
     git-hash             https://rustsec.org/advisories/RUSTSEC-2023-0025.html
     git-path             https://rustsec.org/advisories/RUSTSEC-2023-0026.html
     buf_redux            https://rustsec.org/advisories/RUSTSEC-2023-0028.html
