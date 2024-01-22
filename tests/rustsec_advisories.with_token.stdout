@@ -1,4 +1,4 @@
-88 advisories for unmaintained packages
+89 advisories for unmaintained packages
 lz4-compress...found
 tempdir...found
 typemap...not found
@@ -119,13 +119,21 @@ multipart...found
 dlopen_derive...found
 fehler...not found
 cpython...not found
-not found - error (6)
+cosmwasm...error:
+```
+    Updating crates.io index
+error: no matching package named `cosmwasm` found
+location searched: registry `crates-io`
+required by package `cosmwasm-test-package v0.1.0 ([..])`
+```
+not found - error (7)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
     stream-cipher        https://rustsec.org/advisories/RUSTSEC-2020-0058.html
     safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
     miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
+    cosmwasm             https://rustsec.org/advisories/RUSTSEC-2024-0004.html
 not found - leaf (3)
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
