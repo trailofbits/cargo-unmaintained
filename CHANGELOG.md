@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.3.3
+
+- When checking repository existence, treat a timeout as nonexistence ([#98](https://github.com/trailofbits/cargo-unmaintained/pull/98))
+- Upgrade `env_logger` to version 0.11.0 ([dae4c37](https://github.com/trailofbits/cargo-unmaintained/commit/dae4c373b71ee73a8b9fe37f0c95fc617267c0f9))
+
 ## 0.3.2
 
 - Distinguish more cases in unmaintained messages ([#66](https://github.com/trailofbits/cargo-unmaintained/pull/66))
