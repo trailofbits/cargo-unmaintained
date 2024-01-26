@@ -65,6 +65,8 @@ fn snapbox() -> Result<()> {
 
             let test: Test = toml::from_str(&raw).unwrap();
 
+            // smoelius: I learned this conditional initialization trick from Solana's source code:
+            // https://github.com/solana-labs/rbpf/blob/f52bfa0f4912d5f6eaa364de7c42b6ee6be50a88/src/elf.rs#L401
             let tempdir;
             let dir = match (test.path, test.url) {
                 (Some(path), None) => PathBuf::from(path),
