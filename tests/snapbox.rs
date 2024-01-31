@@ -39,8 +39,8 @@ struct Test {
 fn snapbox() -> Result<()> {
     let test_cases = Path::new("tests/cases");
 
-    let test_paths = if let Ok(testcase) = var("TESTCASE") {
-        vec![test_cases.join(testcase).with_extension("toml")]
+    let test_paths = if let Ok(testname) = var("TESTNAME") {
+        vec![test_cases.join(testname).with_extension("toml")]
     } else {
         let mut read_dir = read_dir(test_cases)?;
 
