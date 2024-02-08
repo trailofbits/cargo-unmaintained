@@ -6,7 +6,7 @@ use snapbox::cmd::cargo_bin;
 use std::{fs::OpenOptions, io::Write, path::Path, process::Command};
 use tempfile::{tempdir, TempDir};
 
-const NAME: &str = "lz4-compress";
+const NAME: &str = "bigint";
 
 #[test]
 fn ignore() -> Result<()> {
