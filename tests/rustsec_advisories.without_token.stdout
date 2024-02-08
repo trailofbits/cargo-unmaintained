@@ -1,5 +1,5 @@
 89 advisories for unmaintained packages
-lz4-compress...found
+lz4-compress...recently updated
 tempdir...found
 typemap...not found
 boxfnonce...leaf
@@ -139,7 +139,8 @@ not found - leaf (4)
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
-not found - recently-updated (3)
+not found - recently-updated (4)
+    lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
@@ -164,8 +165,7 @@ not found - other (20)
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
-found (55)
-    lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
+found (54)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
     safe-nd              https://rustsec.org/advisories/RUSTSEC-2020-0063.html
