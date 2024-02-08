@@ -391,7 +391,7 @@ impl Drop for DeleteClonedRepositories {
 fn unmaintained() -> Result<bool> {
     let _delete_cloned_repositories = DeleteClonedRepositories;
 
-    let mut unnmaintained_pkgs = Vec::new();
+    let mut unmaintained_pkgs = Vec::new();
 
     let metadata = MetadataCommand::new().exec()?;
 
@@ -420,7 +420,7 @@ fn unmaintained() -> Result<bool> {
 
     for pkg in packages {
         if let Some(unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
-            unnmaintained_pkgs.push(unmaintained_pkg);
+            unmaintained_pkgs.push(unmaintained_pkg);
 
             if opts::get().fail_fast {
                 break;
@@ -428,10 +428,10 @@ fn unmaintained() -> Result<bool> {
         }
     }
 
-    unnmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age.erase_url());
+    unmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age.erase_url());
 
     let mut pkgs_needing_warning = Vec::new();
-    for unmaintained_pkg in &unnmaintained_pkgs {
+    for unmaintained_pkg in &unmaintained_pkgs {
         if display_unmaintained_pkg(unmaintained_pkg)? {
             pkgs_needing_warning.push(&unmaintained_pkg.pkg);
         }
@@ -446,7 +446,7 @@ fn unmaintained() -> Result<bool> {
         );
     }
 
-    Ok(!opts::get().no_exit_code && !unnmaintained_pkgs.is_empty())
+    Ok(!opts::get().no_exit_code && !unmaintained_pkgs.is_empty())
 }
 
 #[derive(serde::Deserialize)]
