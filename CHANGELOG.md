@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.4.0
+
+- A package passed to `-p` is no longer required to be a dependency. Passing any `NAME` in `cargo unmaintained -p NAME` will cause the package to be downloaded from `crates.io` and checked. ([#136](https://github.com/trailofbits/cargo-unmaintained/pull/136))
+
 ## 0.3.3
 
 - When checking repository existence, treat a timeout as nonexistence ([#98](https://github.com/trailofbits/cargo-unmaintained/pull/98))
