@@ -9,7 +9,7 @@ block-cipher-trait...error:
     Updating crates.io index
 error: no matching package named `block-cipher-trait` found
 location searched: registry `crates-io`
-required by package `block-cipher-trait-test-package v0.1.0 ([..])`
+required by package `block-cipher-trait-temp-package v0.1.0 ([..])`
 ```
 stb_truetype...not found
 bigint...found
@@ -48,7 +48,7 @@ location searched: crates.io index
 required by package `quic-p2p v0.2.1`
     ... which satisfies dependency `quic-p2p = "~0.2.1"` of package `safe_core v0.33.0`
     ... which satisfies dependency `safe_core = "~0.33.0"` of package `safe-api v0.4.0`
-    ... which satisfies dependency `safe-api = "*"` of package `safe-api-test-package v0.1.0 ([..])`
+    ... which satisfies dependency `safe-api = "*"` of package `safe-api-temp-package v0.1.0 ([..])`
 perhaps a crate was updated and forgotten to be re-vendored?
 ```
 jsonrpc-quic...found
@@ -61,7 +61,7 @@ miscreant...error:
     Updating crates.io index
 error: no matching package named `miscreant` found
 location searched: registry `crates-io`
-required by package `miscreant-test-package v0.1.0 ([..])`
+required by package `miscreant-temp-package v0.1.0 ([..])`
 ```
 cpuid-bool...found
 anymap...leaf
@@ -124,7 +124,7 @@ cosmwasm...error:
     Updating crates.io index
 error: no matching package named `cosmwasm` found
 location searched: registry `crates-io`
-required by package `cosmwasm-test-package v0.1.0 ([..])`
+required by package `cosmwasm-temp-package v0.1.0 ([..])`
 ```
 not found - error (7)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
