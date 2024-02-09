@@ -395,18 +395,7 @@ fn unmaintained() -> Result<bool> {
 
     let metadata = MetadataCommand::new().exec()?;
 
-    let ignored_packages = ignored_packages(&metadata)?;
-
-    for name in &ignored_packages {
-        if !metadata.packages.iter().any(|pkg| pkg.name == *name) {
-            warn!(
-                "workspace metadata says to ignore `{}`, but workspace does not depend upon `{}`",
-                name, name
-            );
-        }
-    }
-
-    let packages = filter_packages(&metadata, &ignored_packages)?;
+    let packages = packages(&metadata)?;
 
     eprintln!(
         "Scanning {} packages and their dependencies{}",
@@ -447,6 +436,21 @@ fn unmaintained() -> Result<bool> {
     }
 
     Ok(!opts::get().no_exit_code && !unmaintained_pkgs.is_empty())
+}
+
+fn packages(metadata: &Metadata) -> Result<Vec<&Package>> {
+    let ignored_packages = ignored_packages(metadata)?;
+
+    for name in &ignored_packages {
+        if !metadata.packages.iter().any(|pkg| pkg.name == *name) {
+            warn!(
+                "workspace metadata says to ignore `{}`, but workspace does not depend upon `{}`",
+                name, name
+            );
+        }
+    }
+
+    filter_packages(metadata, &ignored_packages)
 }
 
 #[derive(serde::Deserialize)]
