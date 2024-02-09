@@ -419,21 +419,7 @@ fn unmaintained() -> Result<bool> {
 
     unmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age.erase_url());
 
-    let mut pkgs_needing_warning = Vec::new();
-    for unmaintained_pkg in &unmaintained_pkgs {
-        if display_unmaintained_pkg(unmaintained_pkg)? {
-            pkgs_needing_warning.push(&unmaintained_pkg.pkg);
-        }
-    }
-    if !pkgs_needing_warning.is_empty() {
-        warn!(
-            "the following packages' paths could not be printed:{}",
-            pkgs_needing_warning
-                .into_iter()
-                .map(|pkg| format!("\n    {}@{}", pkg.name, pkg.version))
-                .collect::<String>()
-        );
-    }
+    display_unmaintained_pkgs(&unmaintained_pkgs)?;
 
     Ok(!opts::get().no_exit_code && !unmaintained_pkgs.is_empty())
 }
@@ -975,6 +961,25 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     }
 
     Ok(false)
+}
+
+fn display_unmaintained_pkgs(unmaintained_pkgs: &[UnmaintainedPkg]) -> Result<()> {
+    let mut pkgs_needing_warning = Vec::new();
+    for unmaintained_pkg in unmaintained_pkgs {
+        if display_unmaintained_pkg(unmaintained_pkg)? {
+            pkgs_needing_warning.push(&unmaintained_pkg.pkg);
+        }
+    }
+    if !pkgs_needing_warning.is_empty() {
+        warn!(
+            "the following packages' paths could not be printed:{}",
+            pkgs_needing_warning
+                .into_iter()
+                .map(|pkg| format!("\n    {}@{}", pkg.name, pkg.version))
+                .collect::<String>()
+        );
+    }
+    Ok(())
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
