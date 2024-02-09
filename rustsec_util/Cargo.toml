@@ -9,13 +9,13 @@ publish = false
 anyhow = { version = "1.0", features = ["backtrace"] }
 cargo_metadata = "0.18"
 log = "0.4"
-octocrab = "0.33"
+octocrab = "0.34"
 once_cell = "1.19"
 regex = "1.10"
 rustsec = "0.28"
 strum = "0.26"
 strum_macros = "0.26"
-tempfile = "3.9"
+tempfile = "3.10"
 tokio = "1.36"
 
 # smoelius: Putting this package in the same workspace as `cargo-unmaintained` produces the
