@@ -3,13 +3,12 @@ use log::debug;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec_util::{
-    cargo_unmaintained, command_output, display_advisory_outcomes, maybe_to_string, test_package,
-    Outcome,
+    cargo_unmaintained, command_output, display_advisory_outcomes, maybe_to_string, Outcome,
 };
 use std::{collections::HashSet, env::var, io::Write};
 
-// smoelius: "../../../" :grimacing: I don't love this but I think it's the current least of all
-// evils.
+// smoelius: "../../../" is not ideal, but I am trying to avoid turning `cargo-unmaintained` into a
+// multi-package project. For now, this seems like the best option.
 #[path = "../../../src/github/util.rs"]
 mod github_util;
 use github_util::{load_token, RT};
@@ -120,9 +119,7 @@ fn extract_package_name(url: &str) -> Option<&str> {
 }
 
 fn is_unmaintained(name: &str) -> Result<bool> {
-    let tempdir = test_package(name)?;
-
-    let output = command_output(&mut cargo_unmaintained(name, tempdir.path()))?;
+    let output = command_output(&mut cargo_unmaintained(name))?;
 
     match output.status.code() {
         Some(0) => Ok(false),

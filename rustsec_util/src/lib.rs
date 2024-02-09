@@ -1,13 +1,10 @@
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result};
 use once_cell::sync::Lazy;
 use std::{
     env::consts::EXE_SUFFIX,
-    fs::OpenOptions,
-    io::Write,
-    path::{Path, PathBuf},
+    path::PathBuf,
     process::{Command, ExitStatus},
 };
-use tempfile::{tempdir, TempDir};
 
 pub mod maybe_to_string;
 use maybe_to_string::MaybeToString;
@@ -81,27 +78,6 @@ pub fn display_advisory_outcomes<T: MaybeToString + PartialEq + strum::IntoEnumI
     }
 }
 
-pub fn test_package(package: &str) -> Result<TempDir> {
-    let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
-
-    let output = command_output(
-        Command::new("cargo")
-            .args(["init", &format!("--name={package}-test-package")])
-            .current_dir(&tempdir),
-    )?;
-    ensure!(output.status.success());
-
-    let path = tempdir.path().join("Cargo.toml");
-    let mut manifest = OpenOptions::new()
-        .append(true)
-        .open(&path)
-        .with_context(|| format!("failed to open {path:?}"))?;
-    writeln!(manifest, r#"{package} = "*""#)
-        .with_context(|| format!("failed to write to {path:?}"))?;
-
-    Ok(tempdir)
-}
-
 static CARGO_UNMAINTAINED: Lazy<PathBuf> = Lazy::new(|| {
     let output = command_output(Command::new("cargo").arg("build").current_dir("..")).unwrap();
     assert!(output.status.success());
@@ -112,11 +88,9 @@ static CARGO_UNMAINTAINED: Lazy<PathBuf> = Lazy::new(|| {
 });
 
 #[must_use]
-pub fn cargo_unmaintained(name: &str, dir: &Path) -> Command {
+pub fn cargo_unmaintained(name: &str) -> Command {
     let mut command = Command::new(&*CARGO_UNMAINTAINED);
-    command
-        .args(["unmaintained", "--fail-fast", "-p", name])
-        .current_dir(dir);
+    command.args(["unmaintained", "--fail-fast", "-p", name]);
     command
 }
 

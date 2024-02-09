@@ -3,11 +3,14 @@ use cargo_metadata::MetadataCommand;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec::{advisory::Informational, Advisory, Database};
-use rustsec_util::{
-    cargo_unmaintained, command_output, display_advisory_outcomes, test_package, Outcome,
-};
+use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes, Outcome};
 use std::{io::Write, path::Path, process::Command};
 use strum_macros::{Display, EnumIter};
+
+// smoelius: See comment in rustsec_issues.rs regarding "../../../".
+#[path = "../../../src/packaging.rs"]
+mod packaging;
+use packaging::temp_package;
 
 #[derive(Display, EnumIter, Eq, PartialEq)]
 #[strum(serialize_all = "kebab_case")]
@@ -48,7 +51,7 @@ fn main() -> Result<()> {
             .flush()
             .with_context(|| "failed to flush stdout")?;
 
-        let tempdir = test_package(advisory.metadata.package.as_str())?;
+        let tempdir = temp_package(advisory.metadata.package.as_str())?;
 
         let output = command_output(
             Command::new("cargo")
@@ -78,10 +81,7 @@ fn main() -> Result<()> {
             output.stderr
         );
 
-        let output = command_output(&mut cargo_unmaintained(
-            advisory.metadata.package.as_str(),
-            tempdir.path(),
-        ))?;
+        let output = command_output(&mut cargo_unmaintained(advisory.metadata.package.as_str()))?;
         if output.status.code() == Some(0) {
             if is_leaf(advisory.metadata.package.as_str(), tempdir.path())? {
                 println!("leaf");
@@ -89,8 +89,7 @@ fn main() -> Result<()> {
                 continue;
             }
 
-            let mut command =
-                cargo_unmaintained(advisory.metadata.package.as_str(), tempdir.path());
+            let mut command = cargo_unmaintained(advisory.metadata.package.as_str());
             let output = command_output(command.arg("--max-age=0"))?;
             if output.status.code() == Some(1) {
                 println!("recently updated");
@@ -137,7 +136,7 @@ fn advisory_url(advisory: &Advisory) -> String {
 fn is_leaf(name: &str, path: &Path) -> Result<bool> {
     let metadata = MetadataCommand::new().current_dir(path).exec()?;
     Ok(metadata.packages.iter().all(|pkg| {
-        pkg.name == format!("{name}-test-package")
+        pkg.name == format!("{name}-temp-package")
             || pkg.dependencies.iter().all(|dep| dep.path.is_some())
     }))
 }

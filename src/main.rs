@@ -30,6 +30,7 @@ use walkdir::WalkDir;
 mod curl;
 mod github;
 mod opts;
+mod packaging;
 mod verbose;
 
 #[cfg(feature = "lock_index")]
@@ -393,7 +394,7 @@ fn unmaintained() -> Result<bool> {
 
     let mut unmaintained_pkgs = Vec::new();
 
-    let metadata = MetadataCommand::new().exec()?;
+    let metadata = metadata()?;
 
     let packages = packages(&metadata)?;
 
@@ -424,6 +425,20 @@ fn unmaintained() -> Result<bool> {
     Ok(!opts::get().no_exit_code && !unmaintained_pkgs.is_empty())
 }
 
+fn metadata() -> Result<Metadata> {
+    let mut command = MetadataCommand::new();
+
+    // smoelius: See tests/snapbox.rs for another use of this conditional initialization trick.
+    let tempdir;
+
+    if let Some(name) = &opts::get().package {
+        tempdir = packaging::temp_package(name)?;
+        command.current_dir(tempdir.path());
+    }
+
+    command.exec().map_err(Into::into)
+}
+
 fn packages(metadata: &Metadata) -> Result<Vec<&Package>> {
     let ignored_packages = ignored_packages(metadata)?;
 
@@ -444,7 +459,7 @@ struct UnmaintainedMetadata {
     ignore: Option<Vec<String>>,
 }
 
-pub fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
+fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
     let serde_json::Value::Object(object) = &metadata.workspace_metadata else {
         return Ok(HashSet::default());
     };
