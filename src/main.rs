@@ -10,7 +10,6 @@ use crates_index::GitIndex;
 use home::cargo_home;
 use log::debug;
 use once_cell::sync::Lazy;
-use regex::Regex;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
@@ -31,10 +30,13 @@ mod curl;
 mod github;
 mod opts;
 mod packaging;
+mod url;
 mod verbose;
 
 #[cfg(feature = "lock_index")]
 mod flock;
+
+use url::Url;
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
@@ -136,23 +138,23 @@ struct UnmaintainedPkg<'a> {
 /// it is `Success`.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
 enum RepoStatus<'a, T> {
-    Uncloneable(&'a str),
+    Uncloneable(Url<'a>),
     Unnamed,
-    Success(&'a str, T),
-    Unassociated(&'a str),
-    Nonexistent(&'a str),
-    Archived(&'a str),
+    Success(Url<'a>, T),
+    Unassociated(Url<'a>),
+    Nonexistent(Url<'a>),
+    Archived(Url<'a>),
 }
 
 impl<'a, T> RepoStatus<'a, T> {
-    fn as_success(&self) -> Option<(&'a str, &T)> {
+    fn as_success(&self) -> Option<(Url<'a>, &T)> {
         match self {
             Self::Uncloneable(_)
             | Self::Unnamed
             | Self::Unassociated(_)
             | Self::Nonexistent(_)
             | Self::Archived(_) => None,
-            Self::Success(url, value) => Some((url, value)),
+            Self::Success(url, value) => Some((*url, value)),
         }
     }
 
@@ -162,12 +164,12 @@ impl<'a, T> RepoStatus<'a, T> {
 
     fn erase_url(self) -> RepoStatus<'static, T> {
         match self {
-            Self::Uncloneable(_) => RepoStatus::Uncloneable(""),
+            Self::Uncloneable(_) => RepoStatus::Uncloneable(Url::default()),
             Self::Unnamed => RepoStatus::Unnamed,
-            Self::Success(_, value) => RepoStatus::Success("", value),
-            Self::Unassociated(_) => RepoStatus::Unassociated(""),
-            Self::Nonexistent(_) => RepoStatus::Nonexistent(""),
-            Self::Archived(_) => RepoStatus::Archived(""),
+            Self::Success(_, value) => RepoStatus::Success(Url::default(), value),
+            Self::Unassociated(_) => RepoStatus::Unassociated(Url::default()),
+            Self::Nonexistent(_) => RepoStatus::Nonexistent(Url::default()),
+            Self::Archived(_) => RepoStatus::Archived(Url::default()),
         }
     }
 
@@ -177,12 +179,12 @@ impl<'a, T> RepoStatus<'a, T> {
     // is rather insignificant.
     fn leak_url(self) -> RepoStatus<'static, T> {
         match self {
-            Self::Uncloneable(url) => RepoStatus::Uncloneable(url.to_owned().leak()),
+            Self::Uncloneable(url) => RepoStatus::Uncloneable(url.leak()),
             Self::Unnamed => RepoStatus::Unnamed,
-            Self::Success(url, value) => RepoStatus::Success(url.to_owned().leak(), value),
-            Self::Unassociated(url) => RepoStatus::Unassociated(url.to_owned().leak()),
-            Self::Nonexistent(url) => RepoStatus::Nonexistent(url.to_owned().leak()),
-            Self::Archived(url) => RepoStatus::Archived(url.to_owned().leak()),
+            Self::Success(url, value) => RepoStatus::Success(url.leak(), value),
+            Self::Unassociated(url) => RepoStatus::Unassociated(url.leak()),
+            Self::Nonexistent(url) => RepoStatus::Nonexistent(url.leak()),
+            Self::Archived(url) => RepoStatus::Archived(url.leak()),
         }
     }
 
@@ -256,13 +258,13 @@ impl<'a> RepoStatus<'a, u64> {
     fn write(&self, stream: &mut (impl std::io::Write + WriteColor)) -> std::io::Result<()> {
         match self {
             Self::Uncloneable(url) => {
-                write_url(stream, url)?;
+                write_url(stream, *url)?;
                 write!(stream, " is uncloneable")?;
                 Ok(())
             }
             Self::Unnamed => write!(stream, "no repository"),
             Self::Success(url, age) => {
-                write_url(stream, url)?;
+                write_url(stream, *url)?;
                 write!(stream, " updated ")?;
                 stream.set_color(ColorSpec::new().set_fg(self.color()))?;
                 write!(stream, "{}", age / SECS_PER_DAY)?;
@@ -272,16 +274,16 @@ impl<'a> RepoStatus<'a, u64> {
             }
             Self::Unassociated(url) => {
                 write!(stream, "not in ")?;
-                write_url(stream, url)?;
+                write_url(stream, *url)?;
                 Ok(())
             }
             Self::Nonexistent(url) => {
-                write_url(stream, url)?;
+                write_url(stream, *url)?;
                 write!(stream, " does not exist")?;
                 Ok(())
             }
             Self::Archived(url) => {
-                write_url(stream, url)?;
+                write_url(stream, *url)?;
                 write!(stream, " archived")?;
                 Ok(())
             }
@@ -291,7 +293,7 @@ impl<'a> RepoStatus<'a, u64> {
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 #[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
-fn write_url(stream: &mut (impl std::io::Write + WriteColor), url: &str) -> std::io::Result<()> {
+fn write_url(stream: &mut (impl std::io::Write + WriteColor), url: Url) -> std::io::Result<()> {
     stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;
     write!(stream, "{url}")?;
     stream.set_color(ColorSpec::new().set_fg(None))?;
@@ -335,10 +337,10 @@ thread_local! {
         let _lock = lock_index().unwrap();
         GitIndex::new_cargo_default().unwrap()
     });
-    static GENERAL_STATUS_CACHE: RefCell<HashMap<String, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
+    static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
-    static TIMESTAMP_CACHE: RefCell<HashMap<String, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
-    static REPOSITORY_CACHE: RefCell<HashMap<String, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
+    static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
+    static REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
 }
 
 macro_rules! warn {
@@ -540,8 +542,8 @@ fn is_unmaintained_package<'a>(
     metadata: &'a Metadata,
     pkg: &'a Package,
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
-    if let Some(url) = &pkg.repository {
-        let repo_status = general_status(&pkg.name, url)?;
+    if let Some(url_str) = &pkg.repository {
+        let repo_status = general_status(&pkg.name, url_str.into())?;
         if !repo_status.is_success() {
             return Ok(Some(UnmaintainedPkg {
                 pkg,
@@ -584,17 +586,18 @@ fn is_unmaintained_package<'a>(
     }))
 }
 
-fn general_status(name: &str, url: &str) -> Result<RepoStatus<'static, ()>> {
+fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
     GENERAL_STATUS_CACHE.with_borrow_mut(|general_status_cache| {
-        if let Some(&value) = general_status_cache.get(url) {
+        if let Some(&value) = general_status_cache.get(&url) {
             return Ok(value);
         }
-        let (use_github_api, what, how) =
-            if var("GITHUB_TOKEN_PATH").is_ok() && url.starts_with("https://github.com/") {
-                (true, "archival status", "GitHub API")
-            } else {
-                (false, "existence", "HTTP request")
-            };
+        let (use_github_api, what, how) = if var("GITHUB_TOKEN_PATH").is_ok()
+            && url.as_str().starts_with("https://github.com/")
+        {
+            (true, "archival status", "GitHub API")
+        } else {
+            (false, "existence", "HTTP request")
+        };
         verbose::wrap!(
             || {
                 let repo_status = if use_github_api {
@@ -607,7 +610,7 @@ fn general_status(name: &str, url: &str) -> Result<RepoStatus<'static, ()>> {
                     RepoStatus::Success(url, ())
                 })
                 .leak_url();
-                general_status_cache.insert(url.to_owned(), repo_status);
+                general_status_cache.insert(url.leak(), repo_status);
                 Ok(repo_status)
             },
             "{} of `{}` using {}",
@@ -733,7 +736,7 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
         // smoelius: Check both the regular and the shortened url.
         for url in urls(pkg) {
-            if let Some(&repo_status) = timestamp_cache.get(url) {
+            if let Some(&repo_status) = timestamp_cache.get(&url) {
                 // smoelius: If a previous attempt to timestamp the repository failed (e.g., because
                 // of spurious network errors), then don't bother checking the repository cache.
                 let Some((url_timestamped, &timestamp)) = repo_status.as_success() else {
@@ -761,12 +764,12 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
             || {
                 let repo_status = timestamp_uncached(pkg)?;
                 if let Some((url, _)) = repo_status.as_success() {
-                    timestamp_cache.insert(url.to_owned(), repo_status.leak_url());
+                    timestamp_cache.insert(url.leak(), repo_status.leak_url());
                 } else {
                     // smoelius: In the event of failure, set all urls associated with the
                     // repository.
                     for url in urls(pkg) {
-                        timestamp_cache.insert(url.to_owned(), repo_status.leak_url());
+                        timestamp_cache.insert(url.leak(), repo_status.leak_url());
                     }
                 }
                 Ok(repo_status)
@@ -778,14 +781,14 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 }
 
 fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    let Some(url) = &pkg.repository else {
+    let Some(url_str) = &pkg.repository else {
         return Ok(RepoStatus::Unnamed);
     };
 
-    if opts::get().imprecise && url.starts_with("https://github.com/") {
+    if opts::get().imprecise && url_str.starts_with("https://github.com/") {
         verbose::update!("using GitHub API");
 
-        match github::timestamp(url) {
+        match github::timestamp(url_str.into()) {
             Ok(Some((url, timestamp))) => {
                 return Ok(RepoStatus::Success(url, timestamp));
             }
@@ -799,12 +802,12 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
                 if var("GITHUB_TOKEN_PATH").is_err() {
                     debug!(
                         "failed to get timestamp for {} using GitHub API: {}",
-                        url, error
+                        url_str, error
                     );
                 } else {
                     warn!(
                         "failed to get timestamp for {} using GitHub API: {}",
-                        url,
+                        url_str,
                         first_line(&error.to_string())
                     );
                 }
@@ -856,7 +859,7 @@ fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
     REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
         // smoelius: Check all urls associated with the package.
         for url in urls(pkg) {
-            if let Some(repo_status) = repository_cache.get(url) {
+            if let Some(repo_status) = repository_cache.get(&url) {
                 return Ok(repo_status.clone());
             }
         }
@@ -864,21 +867,21 @@ fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
         match url_and_dir {
             Ok((url, repo_dir)) => {
                 repository_cache.insert(
-                    url.to_owned(),
+                    url.leak(),
                     RepoStatus::Success(url, repo_dir.clone()).leak_url(),
                 );
                 Ok(RepoStatus::Success(url, repo_dir))
             }
             Err(error) => {
-                let repo_status = if let Some(url) = &pkg.repository {
-                    warn!("failed to clone `{}`: {}", url, error);
-                    RepoStatus::Uncloneable(url)
+                let repo_status = if let Some(url_str) = &pkg.repository {
+                    warn!("failed to clone `{}`: {}", url_str, error);
+                    RepoStatus::Uncloneable(url_str.into())
                 } else {
                     RepoStatus::Unnamed
                 };
                 // smoelius: In the event of failure, set all urls associated with the repository.
                 for url in urls(pkg) {
-                    repository_cache.insert(url.to_owned(), repo_status.clone().leak_url());
+                    repository_cache.insert(url.leak(), repo_status.clone().leak_url());
                 }
                 Ok(repo_status)
             }
@@ -886,7 +889,7 @@ fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
     })
 }
 
-fn clone_repository_uncached(pkg: &Package) -> Result<(&str, PathBuf)> {
+fn clone_repository_uncached(pkg: &Package) -> Result<(Url, PathBuf)> {
     let mut errors = Vec::new();
     for url in urls(pkg) {
         let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
@@ -896,7 +899,7 @@ fn clone_repository_uncached(pkg: &Package) -> Result<(&str, PathBuf)> {
                 "clone",
                 "--depth=1",
                 "--quiet",
-                url,
+                url.as_str(),
                 &tempdir.path().to_string_lossy(),
             ])
             .env("GCM_INTERACTIVE", "never")
@@ -916,35 +919,22 @@ fn clone_repository_uncached(pkg: &Package) -> Result<(&str, PathBuf)> {
     Err(anyhow!("{:#?}", errors))
 }
 
-fn urls(pkg: &Package) -> impl IntoIterator<Item = &str> {
+fn urls(pkg: &Package) -> impl IntoIterator<Item = Url> {
     let mut urls = Vec::new();
 
-    if let Some(url) = &pkg.repository {
+    if let Some(url_str) = &pkg.repository {
         // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained via
         // the GitHub API or a shallow clone would be distinguishable.
-        let url = trim_trailing_slash(url);
+        let url = Url::from(url_str).trim_trailing_slash();
 
         urls.push(url);
 
-        if let Some(shortened_url) = shorten_url(url) {
+        if let Some(shortened_url) = url.shorten() {
             urls.push(shortened_url);
         }
     }
 
     urls
-}
-
-fn trim_trailing_slash(url: &str) -> &str {
-    url.strip_suffix('/').unwrap_or(url)
-}
-
-#[allow(clippy::unwrap_used)]
-static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").unwrap());
-
-#[allow(clippy::unwrap_used)]
-fn shorten_url(url: &str) -> Option<&str> {
-    RE.captures(url)
-        .map(|captures| captures.get(0).unwrap().as_str())
 }
 
 fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
@@ -1106,13 +1096,13 @@ mod tests {
     #[test]
     fn repo_status_ord() {
         let ys = vec![
-            RepoStatus::Uncloneable("f"),
+            RepoStatus::Uncloneable("f".into()),
             RepoStatus::Unnamed,
-            RepoStatus::Success("e", 0),
-            RepoStatus::Success("d", 1),
-            RepoStatus::Unassociated("c"),
-            RepoStatus::Nonexistent("b"),
-            RepoStatus::Archived("a"),
+            RepoStatus::Success("e".into(), 0),
+            RepoStatus::Success("d".into(), 1),
+            RepoStatus::Unassociated("c".into()),
+            RepoStatus::Nonexistent("b".into()),
+            RepoStatus::Archived("a".into()),
         ];
         let mut xs = ys.clone();
         xs.sort_by_key(|repo_status| repo_status.erase_url());

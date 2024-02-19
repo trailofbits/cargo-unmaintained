@@ -1,4 +1,4 @@
-use super::RepoStatus;
+use super::{RepoStatus, Url};
 use anyhow::{anyhow, bail, Result};
 use once_cell::sync::Lazy;
 use regex::Regex;
@@ -21,7 +21,7 @@ thread_local! {
     static REPOSITORY_CACHE: RefCell<HashMap<String, Option<Rc<octocrab::models::Repository>>>> = RefCell::new(HashMap::new());
 }
 
-pub(crate) fn archival_status(url: &str) -> Result<RepoStatus<()>> {
+pub(crate) fn archival_status(url: Url) -> Result<RepoStatus<()>> {
     let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
 
     let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
@@ -35,7 +35,7 @@ pub(crate) fn archival_status(url: &str) -> Result<RepoStatus<()>> {
     }
 }
 
-pub(crate) fn timestamp(url: &str) -> Result<Option<(&str, SystemTime)>> {
+pub(crate) fn timestamp(url: Url) -> Result<Option<(Url, SystemTime)>> {
     let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
 
     let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
@@ -122,10 +122,10 @@ fn repository_uncached(owner: &str, repo: &str) -> octocrab::Result<octocrab::mo
     })
 }
 
-fn match_github_url(url: &str) -> Result<(&str, &str, &str, &str)> {
-    let (url, owner_slash_repo, owner, repo) = {
+fn match_github_url(url: Url) -> Result<(Url, &str, &str, &str)> {
+    let (url_str, owner_slash_repo, owner, repo) = {
         #[allow(clippy::unwrap_used)]
-        if let Some(captures) = RE.captures(url) {
+        if let Some(captures) = RE.captures(url.as_str()) {
             assert_eq!(4, captures.len());
             (
                 captures.get(0).unwrap().as_str(),
@@ -140,5 +140,5 @@ fn match_github_url(url: &str) -> Result<(&str, &str, &str, &str)> {
 
     let repo = repo.strip_suffix(".git").unwrap_or(repo);
 
-    Ok((url, owner_slash_repo, owner, repo))
+    Ok((url_str.into(), owner_slash_repo, owner, repo))
 }
