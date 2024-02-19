@@ -17,17 +17,13 @@ hpack-patched...not found
 ignoring `https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html`
 loopdev-erikh...found
 loopdev...not found
-smartstring...not found
-filesystem-rs...not found
 conrod...found
-not found (7)
+not found (5)
     futures-intrusive  https://github.com/rustsec/advisory-db/issues/1175
     maligned           https://github.com/rustsec/advisory-db/issues/1209
     malloc_buf         https://github.com/rustsec/advisory-db/issues/1635
     hpack-patched      https://github.com/rustsec/advisory-db/issues/1784
     loopdev            https://github.com/rustsec/advisory-db/issues/1821
-    smartstring        https://github.com/rustsec/advisory-db/issues/1854
-    filesystem-rs      https://github.com/rustsec/advisory-db/issues/1870
 found (9)
     wither             https://github.com/rustsec/advisory-db/issues/1630
     mbox               https://github.com/rustsec/advisory-db/issues/1631

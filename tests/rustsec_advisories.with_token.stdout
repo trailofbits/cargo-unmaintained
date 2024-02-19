@@ -1,4 +1,4 @@
-89 advisories for unmaintained packages
+91 advisories for unmaintained packages
 lz4-compress...recently updated
 tempdir...found
 typemap...not found
@@ -126,6 +126,8 @@ error: no matching package named `cosmwasm` found
 location searched: registry `crates-io`
 required by package `cosmwasm-temp-package v0.1.0 ([..])`
 ```
+generational-arena...found
+filesystem...found
 not found - error (7)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -157,7 +159,7 @@ not found - other (14)
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
-found (62)
+found (64)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
@@ -220,3 +222,5 @@ found (62)
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
     multipart            https://rustsec.org/advisories/RUSTSEC-2023-0050.html
     dlopen_derive        https://rustsec.org/advisories/RUSTSEC-2023-0051.html
+    generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
+    filesystem           https://rustsec.org/advisories/RUSTSEC-2024-0015.html
