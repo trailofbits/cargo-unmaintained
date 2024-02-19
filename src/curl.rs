@@ -1,13 +1,13 @@
-use super::RepoStatus;
+use super::{RepoStatus, Url};
 use anyhow::{anyhow, Result};
 use curl::easy::Easy;
 use std::time::Duration;
 
 const TIMEOUT: u64 = 10; // seconds
 
-pub(crate) fn existence(url: &str) -> Result<RepoStatus<()>> {
+pub(crate) fn existence(url: Url) -> Result<RepoStatus<()>> {
     let mut handle = Easy::new();
-    handle.url(url)?;
+    handle.url(url.as_str())?;
     handle.follow_location(true)?;
     handle.timeout(Duration::from_secs(TIMEOUT))?;
     let result = handle.transfer().perform();
