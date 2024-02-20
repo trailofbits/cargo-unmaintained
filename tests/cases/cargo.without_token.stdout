@@ -1,5 +1,3 @@
-arc-swap (https://github.com/vorner/arc-swap updated [..] days ago)
-    itertools (requirement: ^0.10, version used: 0.10.5, latest: [..])
 varisat (https://github.com/jix/varisat updated [..] days ago)
     itoa (requirement: ^0.4.4, version used: 0.4.8, latest: [..])
     ordered-float (requirement: ^2.0.0, version used: 2.10.0, latest: [..])
