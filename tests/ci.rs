@@ -35,12 +35,13 @@ fn clippy() {
 #[test]
 fn dylint() {
     for dir in DIRS {
-        Command::new("cargo")
+        let assert = Command::new("cargo")
             .args(["dylint", "--all", "--", "--all-features", "--all-targets"])
             .env("DYLINT_RUSTFLAGS", "--deny warnings")
             .current_dir(dir)
-            .assert()
-            .success();
+            .assert();
+        let stderr = String::from_utf8(assert.get_output().stderr.clone()).unwrap();
+        assert!(assert.try_success().is_ok(), "{}", stderr);
     }
 }
 
