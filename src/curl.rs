@@ -3,7 +3,7 @@ use anyhow::{anyhow, Result};
 use curl::easy::Easy;
 use std::time::Duration;
 
-const TIMEOUT: u64 = 10; // seconds
+const TIMEOUT: u64 = 60; // seconds
 
 pub(crate) fn existence(url: Url) -> Result<RepoStatus<()>> {
     let mut handle = Easy::new();
