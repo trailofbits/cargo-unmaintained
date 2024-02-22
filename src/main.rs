@@ -553,7 +553,7 @@ fn is_unmaintained_package<'a>(
         }
 
         if !opts::get().imprecise {
-            let repo_status = membership(pkg)?;
+            let repo_status = clone_repository(pkg, Purpose::Membership)?;
             if !repo_status.is_success() {
                 return Ok(Some(UnmaintainedPkg {
                     pkg,
@@ -619,24 +619,6 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
             how
         )
     })
-}
-
-fn membership(pkg: &Package) -> Result<RepoStatus<'_, ()>> {
-    verbose::wrap!(
-        || {
-            let repo_status = clone_repository(pkg)?;
-            let Some((url, repo_dir)) = repo_status.as_success() else {
-                return Ok(repo_status.map_failure());
-            };
-            if membership_in_clone(pkg, repo_dir)? {
-                Ok(RepoStatus::Success(url, ()))
-            } else {
-                Ok(RepoStatus::Unassociated(url))
-            }
-        },
-        "membership of `{}` using shallow clone",
-        pkg.name
-    )
 }
 
 #[allow(clippy::unnecessary_wraps)]
@@ -749,34 +731,25 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
                 // smoelius: `pkg`'s repository could contain other packages that were already
                 // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
                 // But in that case, we still need to verify that `pkg` appears in its repository.
-                let repo_status = clone_repository(pkg)?;
-                #[allow(clippy::panic)]
-                let Some((url_cloned, repo_dir)) = repo_status.as_success() else {
-                    panic!("url in timestamp cache is uncloneable: {url}");
+                let repo_status = clone_repository(pkg, Purpose::Membership)?;
+                let Some((url_cloned, _)) = repo_status.as_success() else {
+                    return Ok(repo_status.map_failure());
                 };
                 assert_eq!(url, url_cloned);
-                if membership_in_clone(pkg, repo_dir)? {
-                    return Ok(RepoStatus::Success(url, timestamp));
-                }
+                return Ok(RepoStatus::Success(url, timestamp));
             }
         }
-        verbose::wrap!(
-            || {
-                let repo_status = timestamp_uncached(pkg)?;
-                if let Some((url, _)) = repo_status.as_success() {
-                    timestamp_cache.insert(url.leak(), repo_status.leak_url());
-                } else {
-                    // smoelius: In the event of failure, set all urls associated with the
-                    // repository.
-                    for url in urls(pkg) {
-                        timestamp_cache.insert(url.leak(), repo_status.leak_url());
-                    }
-                }
-                Ok(repo_status)
-            },
-            "timestamp of `{}`",
-            pkg.name
-        )
+        let repo_status = timestamp_uncached(pkg)?;
+        if let Some((url, _)) = repo_status.as_success() {
+            timestamp_cache.insert(url.leak(), repo_status.leak_url());
+        } else {
+            // smoelius: In the event of failure, set all urls associated with the
+            // repository.
+            for url in urls(pkg) {
+                timestamp_cache.insert(url.leak(), repo_status.leak_url());
+            }
+        }
+        Ok(repo_status)
     })
 }
 
@@ -786,36 +759,40 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     };
 
     if opts::get().imprecise && url_str.starts_with("https://github.com/") {
-        verbose::update!("using GitHub API");
-
-        match github::timestamp(url_str.into()) {
-            Ok(Some((url, timestamp))) => {
-                return Ok(RepoStatus::Success(url, timestamp));
-            }
-            Ok(None) => {
-                // smoelius: If `github::timestamp` returns `Ok(None)`, it means a previous attempt
-                // to clone the repository failed. But, in that case, `timestamp_uncached` should
-                // not have been called.
-                unreachable!();
-            }
-            Err(error) => {
-                if var("GITHUB_TOKEN_PATH").is_err() {
-                    debug!(
-                        "failed to get timestamp for {} using GitHub API: {}",
-                        url_str, error
-                    );
-                } else {
-                    warn!(
-                        "failed to get timestamp for {} using GitHub API: {}",
-                        url_str,
-                        first_line(&error.to_string())
-                    );
+        let result = verbose::wrap!(
+            || {
+                match github::timestamp(url_str.into()) {
+                    Ok(Some((url, timestamp))) => Ok(RepoStatus::Success(url, timestamp)),
+                    Ok(None) => {
+                        // smoelius: If `github::timestamp` returns `Ok(None)`, it means a previous
+                        // attempt to query the repository failed. But, in that case,
+                        // `timestamp_uncached` should not have been called.
+                        unreachable!();
+                    }
+                    Err(error) => {
+                        if var("GITHUB_TOKEN_PATH").is_err() {
+                            debug!(
+                                "failed to get timestamp for {} using GitHub API: {}",
+                                url_str, error
+                            );
+                        } else {
+                            warn!(
+                                "failed to get timestamp for {} using GitHub API: {}",
+                                url_str,
+                                first_line(&error.to_string())
+                            );
+                        }
+                        verbose::update!("falling back to shallow clone");
+                        Err(error)
+                    }
                 }
-                verbose::update!("falling back to shallow clone");
-            }
+            },
+            "timestamp of `{}` using GitHub API",
+            pkg.name
+        );
+        if result.is_ok() {
+            return result;
         }
-    } else {
-        verbose::update!("using shallow clone");
     }
 
     timestamp_from_clone(pkg)
@@ -826,17 +803,11 @@ fn first_line(s: &str) -> &str {
 }
 
 fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    let repo_status = clone_repository(pkg)?;
+    let repo_status = clone_repository(pkg, Purpose::Timestamp)?;
 
-    // smoelius: `RepoStatus::map` cannot be used here. If `membership_in_clone` returns `false`,
-    // the `ReposStatus::Success` will need to be turned into a `RepoStatus::Unassociated`.
     let Some((url, repo_dir)) = repo_status.as_success() else {
         return Ok(repo_status.map_failure());
     };
-
-    if !opts::get().imprecise && !membership_in_clone(pkg, repo_dir)? {
-        return Ok(RepoStatus::Unassociated(url));
-    }
 
     let mut command = Command::new("git");
     command
@@ -854,39 +825,79 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     Ok(RepoStatus::Success(url, timestamp))
 }
 
+#[derive(Clone, Copy)]
+enum Purpose {
+    /// Verify a package is a member of the repository
+    Membership,
+    /// Determine the repository's timestamp
+    Timestamp,
+}
+
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
-    REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
+fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBuf>> {
+    // smoelius: If --imprecise was passed, then the only reason we should be here is to determine
+    // the repository's timestamp (and only then because we could not do so using the GitHub API).
+    assert!(!opts::get().imprecise || matches!(purpose, Purpose::Timestamp));
+
+    let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
         // smoelius: Check all urls associated with the package.
         for url in urls(pkg) {
             if let Some(repo_status) = repository_cache.get(&url) {
                 return Ok(repo_status.clone());
             }
         }
-        let url_and_dir = clone_repository_uncached(pkg);
-        match url_and_dir {
-            Ok((url, repo_dir)) => {
-                repository_cache.insert(
-                    url.leak(),
-                    RepoStatus::Success(url, repo_dir.clone()).leak_url(),
-                );
-                Ok(RepoStatus::Success(url, repo_dir))
-            }
-            Err(error) => {
-                let repo_status = if let Some(url_str) = &pkg.repository {
-                    warn!("failed to clone `{}`: {}", url_str, error);
-                    RepoStatus::Uncloneable(url_str.into())
-                } else {
-                    RepoStatus::Unnamed
-                };
-                // smoelius: In the event of failure, set all urls associated with the repository.
-                for url in urls(pkg) {
-                    repository_cache.insert(url.leak(), repo_status.clone().leak_url());
+        let what = match purpose {
+            Purpose::Membership => "membership",
+            Purpose::Timestamp => "timestamp",
+        };
+        verbose::wrap!(
+            || {
+                let url_and_dir = clone_repository_uncached(pkg);
+                match url_and_dir {
+                    Ok((url, repo_dir)) => {
+                        repository_cache.insert(
+                            url.leak(),
+                            RepoStatus::Success(url, repo_dir.clone()).leak_url(),
+                        );
+                        Ok(RepoStatus::Success(url, repo_dir))
+                    }
+                    Err(error) => {
+                        let repo_status = if let Some(url_str) = &pkg.repository {
+                            warn!("failed to clone `{}`: {}", url_str, error);
+                            RepoStatus::Uncloneable(url_str.into())
+                        } else {
+                            RepoStatus::Unnamed
+                        };
+                        // smoelius: In the event of failure, set all urls associated with the
+                        // repository.
+                        for url in urls(pkg) {
+                            repository_cache.insert(url.leak(), repo_status.clone().leak_url());
+                        }
+                        Ok(repo_status)
+                    }
                 }
-                Ok(repo_status)
-            }
-        }
-    })
+            },
+            "{} of `{}` using shallow clone",
+            what,
+            pkg.name
+        )
+    })?;
+
+    if opts::get().imprecise {
+        return Ok(repo_status);
+    }
+
+    let Some((url, repo_dir)) = repo_status.as_success() else {
+        return Ok(repo_status);
+    };
+
+    // smoelius: Even if `purpose` is `Purpose::Timestamp`, verify that `pkg` is a member of the
+    // repository.
+    if membership_in_clone(pkg, repo_dir)? {
+        Ok(repo_status)
+    } else {
+        Ok(RepoStatus::Unassociated(url))
+    }
 }
 
 fn clone_repository_uncached(pkg: &Package) -> Result<(Url, PathBuf)> {
