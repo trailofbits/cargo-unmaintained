@@ -1,4 +1,4 @@
-91 advisories for unmaintained packages
+92 advisories for unmaintained packages
 lz4-compress...recently updated
 tempdir...found
 typemap...not found
@@ -119,6 +119,7 @@ multipart...found
 dlopen_derive...found
 fehler...not found
 cpython...not found
+safemem...leaf
 cosmwasm...error:
 ```
     Updating crates.io index
@@ -136,11 +137,12 @@ not found - error (7)
     miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
     cosmwasm             https://rustsec.org/advisories/RUSTSEC-2024-0004.html
-not found - leaf (4)
+not found - leaf (5)
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
+    safemem              https://rustsec.org/advisories/RUSTSEC-2023-0081.html
 not found - recently-updated (4)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html

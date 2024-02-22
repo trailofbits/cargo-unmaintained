@@ -2,8 +2,6 @@ futures-intrusive...not found
 ignoring `https://doc.rust-lang.org/std/vec/struct.Vec.html#method.from_raw_parts`
 maligned...not found
 ignoring `https://github.com/rust-lang/rust/issues/39155`
-ignoring `https://github.com/rustsec/advisory-db/issues/1438`
-ignoring `https://github.com/rustsec/advisory-db/issues/1602`
 wither...found
 mbox...found
 crypto-hash...found
