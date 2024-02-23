@@ -1,6 +1,7 @@
-use snapbox::assert_matches_path;
+use snapbox::{assert_matches, Data};
 use std::{
     env::{remove_var, var},
+    path::PathBuf,
     process::Command,
 };
 
@@ -29,8 +30,11 @@ fn rustsec_issues() {
 
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
-    assert_matches_path(
-        format!("tests/rustsec_issues.{}.stdout", token_modifier()),
+    assert_matches(
+        Data::read_from(
+            &PathBuf::from(format!("tests/rustsec_issues.{}.stdout", token_modifier())),
+            None,
+        ),
         stdout_actual,
     );
 }
