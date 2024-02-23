@@ -16,7 +16,7 @@ pub struct Output {
     pub stderr: String,
 }
 
-#[derive(Eq, PartialEq)]
+#[derive(Clone, Copy, Eq, PartialEq)]
 pub enum Outcome<T> {
     NotFound(T),
     Found,

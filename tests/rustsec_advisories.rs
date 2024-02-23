@@ -1,8 +1,8 @@
-use snapbox::{assert_matches, Data};
-use std::{env::remove_var, path::PathBuf, process::Command};
+use snapbox::assert_matches;
+use std::{env::remove_var, fs::read_to_string, process::Command};
 
 mod util;
-use util::{tee, token_modifier, Tee};
+use util::{split_at_cut_line, tee, token_modifier, Tee};
 
 #[ctor::ctor]
 fn initialize() {
@@ -19,16 +19,19 @@ fn rustsec_advisories() {
 
     let output = tee(command, Tee::Stdout).unwrap();
 
+    let stdout_expected = read_to_string(format!(
+        "tests/rustsec_advisories.{}.stdout",
+        token_modifier()
+    ))
+    .unwrap();
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
     assert_matches(
-        Data::read_from(
-            &PathBuf::from(format!(
-                "tests/rustsec_advisories.{}.stdout",
-                token_modifier()
-            )),
-            None,
-        ),
-        stdout_actual,
+        above_cut_line(&stdout_expected),
+        above_cut_line(stdout_actual),
     );
+}
+
+fn above_cut_line(s: &str) -> &str {
+    split_at_cut_line(s).map_or(s, |(above, _)| above)
 }

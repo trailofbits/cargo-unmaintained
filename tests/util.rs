@@ -71,3 +71,11 @@ pub fn token_modifier() -> &'static str {
 pub fn enabled(key: &str) -> bool {
     var(key).map_or(false, |value| value != "0")
 }
+
+#[must_use]
+pub fn split_at_cut_line(s: &str) -> Option<(&str, &str)> {
+    const CUT_LINE: &str = "\n---\n";
+    // smoelius: Preserve initial newline.
+    s.find(CUT_LINE)
+        .map(|i| (&s[..=i], &s[i + CUT_LINE.len()..]))
+}

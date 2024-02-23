@@ -226,3 +226,10 @@ found (65)
     safemem              https://rustsec.org/advisories/RUSTSEC-2023-0081.html
     generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     filesystem           https://rustsec.org/advisories/RUSTSEC-2024-0015.html
+---
+As of 2024-02-22, the RustSec Advisory Database contains 92 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 65 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+- Of the 27 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+  - 7 do not build
+  - 3 are existent, unarchived leaves
+  - 3 were updated within the past 365 days
+  - 14 were not identified for other reasons
