@@ -1,10 +1,11 @@
 use anyhow::{ensure, Context, Result};
 use cargo_metadata::MetadataCommand;
+use chrono::Utc;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec::{advisory::Informational, Advisory, Database};
 use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes, Outcome};
-use std::{io::Write, path::Path, process::Command};
+use std::{env::var, io::Write, path::Path, process::Command};
 use strum_macros::{Display, EnumIter};
 
 // smoelius: See comment in rustsec_issues.rs regarding "../../../".
@@ -12,7 +13,7 @@ use strum_macros::{Display, EnumIter};
 mod packaging;
 use packaging::temp_package;
 
-#[derive(Display, EnumIter, Eq, PartialEq)]
+#[derive(Clone, Copy, Display, EnumIter, Eq, PartialEq)]
 #[strum(serialize_all = "kebab_case")]
 enum Reason {
     Error,
@@ -118,15 +119,60 @@ fn main() -> Result<()> {
 
     display_advisory_outcomes(
         &advisory_outcomes
-            .into_iter()
+            .iter()
             .map(|(advisory, outcome)| {
-                let url = advisory_url(&advisory);
-                (advisory.metadata.package, url, outcome)
+                let url = advisory_url(advisory);
+                (&advisory.metadata.package, url, *outcome)
             })
             .collect::<Vec<_>>(),
     );
 
+    if var("GITHUB_TOKEN_PATH").is_ok() {
+        println!("---");
+        display_expected_readme_contents(
+            &advisory_outcomes
+                .iter()
+                .map(|&(_, outcome)| outcome)
+                .collect::<Vec<_>>(),
+        );
+    }
+
     Ok(())
+}
+
+macro_rules! count {
+    ($outcomes:expr, $pat:pat) => {
+        $outcomes
+            .iter()
+            .filter(|outcome| matches!(outcome, $pat))
+            .count()
+    };
+}
+
+fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
+    let today = Utc::now().date_naive();
+    let count = outcomes.len();
+    let found = count!(outcomes, Outcome::Found);
+    let not_found = count!(outcomes, Outcome::NotFound(_));
+    let error = count!(outcomes, Outcome::NotFound(Reason::Error));
+    let leaf = count!(outcomes, Outcome::NotFound(Reason::Leaf));
+    let recently_updated = count!(outcomes, Outcome::NotFound(Reason::RecentlyUpdated));
+    let other = count!(outcomes, Outcome::NotFound(Reason::Other));
+    assert!(found * 3 > count * 2);
+    println!(
+        "As of {today}, the RustSec Advisory Database contains {count} active advisories for \
+         unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically \
+         identifies {found} of them (more than two thirds). These results can be reproduced by \
+         running the [`rustsec_advisories`] binary within this repository.",
+    );
+    println!(
+        "- Of the {not_found} packages in the RustSec Advisory Database _not_ identified by \
+         `cargo-unmaintained`:"
+    );
+    println!("  - {error} do not build");
+    println!("  - {leaf} are existent, unarchived leaves");
+    println!("  - {recently_updated} were updated within the past 365 days");
+    println!("  - {other} were not identified for other reasons",);
 }
 
 fn advisory_url(advisory: &Advisory) -> String {
