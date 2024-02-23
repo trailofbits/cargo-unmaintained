@@ -7,8 +7,9 @@ use rayon::prelude::*;
 use regex::Regex;
 use serde::Deserialize;
 use snapbox::{
-    assert_matches_path,
+    assert_matches,
     cmd::{cargo_bin, Command as SnapboxCommand},
+    Data,
 };
 use std::{
     env::var,
@@ -114,7 +115,7 @@ fn snapbox() -> Result<()> {
 
                 let stdout_actual = String::from_utf8(output.captured)?;
 
-                assert_matches_path(stdout_path, stdout_actual);
+                assert_matches(Data::read_from(&stdout_path, None), stdout_actual);
             } else {
                 let output = command.output()?;
 
@@ -123,8 +124,8 @@ fn snapbox() -> Result<()> {
 
                 // smoelius: Compare stderr before stdout so that you can see any errors that
                 // occurred.
-                assert_matches_path(stderr_path, stderr_actual);
-                assert_matches_path(stdout_path, stdout_actual);
+                assert_matches(Data::read_from(&stderr_path, None), stderr_actual);
+                assert_matches(Data::read_from(&stdout_path, None), stdout_actual);
             }
 
             Ok(())
