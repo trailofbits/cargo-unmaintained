@@ -1,4 +1,4 @@
-92 advisories for unmaintained packages
+93 advisories for unmaintained packages
 lz4-compress...recently updated
 tempdir...found
 typemap...not found
@@ -76,7 +76,7 @@ rental...found
 sass-rs...found
 sodiumoxide...found
 ansi_term...not found
-rusttype...recently updated
+rusttype...found
 dotenv...not found
 dotenv_codegen...not found
 traitobject...leaf
@@ -120,6 +120,7 @@ dlopen_derive...found
 fehler...not found
 cpython...not found
 safemem...found
+hpack...found
 cosmwasm...error:
 ```
     Updating crates.io index
@@ -141,10 +142,9 @@ not found - leaf (3)
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
-not found - recently-updated (3)
+not found - recently-updated (2)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
-    rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
 not found - other (14)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -160,7 +160,7 @@ not found - other (14)
     users                https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
-found (65)
+found (67)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
@@ -192,6 +192,7 @@ found (65)
     rental               https://rustsec.org/advisories/RUSTSEC-2021-0134.html
     sass-rs              https://rustsec.org/advisories/RUSTSEC-2021-0136.html
     sodiumoxide          https://rustsec.org/advisories/RUSTSEC-2021-0137.html
+    rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
     nphysics3d           https://rustsec.org/advisories/RUSTSEC-2021-0148.html
     nphysics2d           https://rustsec.org/advisories/RUSTSEC-2021-0149.html
     ncollide3d           https://rustsec.org/advisories/RUSTSEC-2021-0150.html
@@ -224,12 +225,13 @@ found (65)
     multipart            https://rustsec.org/advisories/RUSTSEC-2023-0050.html
     dlopen_derive        https://rustsec.org/advisories/RUSTSEC-2023-0051.html
     safemem              https://rustsec.org/advisories/RUSTSEC-2023-0081.html
+    hpack                https://rustsec.org/advisories/RUSTSEC-2023-0084.html
     generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     filesystem           https://rustsec.org/advisories/RUSTSEC-2024-0015.html
 ---
-As of 2024-02-22, the RustSec Advisory Database contains 92 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 65 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
-- Of the 27 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+As of 2024-03-12, the RustSec Advisory Database contains 93 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 67 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+- Of the 26 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 7 do not build
   - 3 are existent, unarchived leaves
-  - 3 were updated within the past 365 days
+  - 2 were updated within the past 365 days
   - 14 were not identified for other reasons

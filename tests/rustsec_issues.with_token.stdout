@@ -3,32 +3,27 @@ ignoring `https://doc.rust-lang.org/std/vec/struct.Vec.html#method.from_raw_part
 maligned...not found
 ignoring `https://github.com/rust-lang/rust/issues/39155`
 wither...found
-mbox...found
+mbox...not found
 crypto-hash...found
 ignoring `https://github.com/rust-lang/cargo/pull/11795`
 malloc_buf...not found
 io_ext...found
 cloud-storage...found
 cloud-storage-rs...found
-hpack...found
-hpack-patched...not found
-ignoring `https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html`
 loopdev-erikh...found
 loopdev...not found
 conrod...found
 not found (5)
     futures-intrusive  https://github.com/rustsec/advisory-db/issues/1175
     maligned           https://github.com/rustsec/advisory-db/issues/1209
-    malloc_buf         https://github.com/rustsec/advisory-db/issues/1635
-    hpack-patched      https://github.com/rustsec/advisory-db/issues/1784
-    loopdev            https://github.com/rustsec/advisory-db/issues/1821
-found (9)
-    wither             https://github.com/rustsec/advisory-db/issues/1630
     mbox               https://github.com/rustsec/advisory-db/issues/1631
+    malloc_buf         https://github.com/rustsec/advisory-db/issues/1635
+    loopdev            https://github.com/rustsec/advisory-db/issues/1821
+found (7)
+    wither             https://github.com/rustsec/advisory-db/issues/1630
     crypto-hash        https://github.com/rustsec/advisory-db/issues/1633
     io_ext             https://github.com/rustsec/advisory-db/issues/1706
     cloud-storage      https://github.com/rustsec/advisory-db/issues/1715
     cloud-storage-rs   https://github.com/rustsec/advisory-db/issues/1715
-    hpack              https://github.com/rustsec/advisory-db/issues/1784
     loopdev-erikh      https://github.com/rustsec/advisory-db/issues/1821
     conrod             https://github.com/rustsec/advisory-db/issues/1871

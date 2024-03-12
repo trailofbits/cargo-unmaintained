@@ -1,4 +1,4 @@
-92 advisories for unmaintained packages
+93 advisories for unmaintained packages
 lz4-compress...recently updated
 tempdir...found
 typemap...not found
@@ -76,7 +76,7 @@ rental...not found
 sass-rs...not found
 sodiumoxide...found
 ansi_term...not found
-rusttype...recently updated
+rusttype...found
 dotenv...not found
 dotenv_codegen...not found
 traitobject...leaf
@@ -120,6 +120,7 @@ dlopen_derive...found
 fehler...not found
 cpython...not found
 safemem...leaf
+hpack...found
 cosmwasm...error:
 ```
     Updating crates.io index
@@ -143,10 +144,9 @@ not found - leaf (5)
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
     safemem              https://rustsec.org/advisories/RUSTSEC-2023-0081.html
-not found - recently-updated (4)
+not found - recently-updated (3)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
-    rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
 not found - other (21)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
@@ -170,7 +170,7 @@ not found - other (21)
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
-found (55)
+found (57)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
     safe-nd              https://rustsec.org/advisories/RUSTSEC-2020-0063.html
@@ -197,6 +197,7 @@ found (55)
     cosmos_sdk           https://rustsec.org/advisories/RUSTSEC-2021-0099.html
     serde_cbor           https://rustsec.org/advisories/RUSTSEC-2021-0127.html
     sodiumoxide          https://rustsec.org/advisories/RUSTSEC-2021-0137.html
+    rusttype             https://rustsec.org/advisories/RUSTSEC-2021-0140.html
     nphysics3d           https://rustsec.org/advisories/RUSTSEC-2021-0148.html
     nphysics2d           https://rustsec.org/advisories/RUSTSEC-2021-0149.html
     ncollide3d           https://rustsec.org/advisories/RUSTSEC-2021-0150.html
@@ -225,4 +226,5 @@ found (55)
     ftp                  https://rustsec.org/advisories/RUSTSEC-2023-0043.html
     multipart            https://rustsec.org/advisories/RUSTSEC-2023-0050.html
     dlopen_derive        https://rustsec.org/advisories/RUSTSEC-2023-0051.html
+    hpack                https://rustsec.org/advisories/RUSTSEC-2023-0084.html
     filesystem           https://rustsec.org/advisories/RUSTSEC-2024-0015.html
