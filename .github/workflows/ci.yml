@@ -79,8 +79,6 @@ jobs:
 
       - name: Install tools
         run: |
-          rm -f "$HOME"/.cargo/bin/cargo-fmt
-          rm -f "$HOME"/.cargo/bin/rustfmt
           rustup update          --no-self-update
           rustup install nightly --no-self-update
           rustup component add rustfmt --toolchain nightly
