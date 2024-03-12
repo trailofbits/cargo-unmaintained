@@ -81,8 +81,8 @@ jobs:
         run: |
           rm -f "$HOME"/.cargo/bin/cargo-fmt
           rm -f "$HOME"/.cargo/bin/rustfmt
-          rustup update --no-self-update
-          rustup install nightly
+          rustup update          --no-self-update
+          rustup install nightly --no-self-update
           rustup component add rustfmt --toolchain nightly
           export CARGO_TARGET_DIR="$(mktemp -d)"
           cargo install cargo-dylint --git=https://github.com/trailofbits/dylint --no-default-features --features=cargo-cli || true
