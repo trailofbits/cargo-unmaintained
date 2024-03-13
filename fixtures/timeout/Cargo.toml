@@ -4,6 +4,10 @@ version = "0.1.0"
 edition = "2021"
 
 # smoelius: https://stackoverflow.com/a/56459603
-repository = "https://httpstat.us/200?sleep=300000" # 5 minutes
+# repository = "https://httpstat.us/200?sleep=300000" # 5 minutes
+
+# smoelius: httpstat.us is returning 503s.
+# smoelius: https://stackoverflow.com/a/100859
+repository = "https://www.google.com:81"
 
 [workspace]
