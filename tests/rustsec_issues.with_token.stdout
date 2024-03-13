@@ -13,12 +13,14 @@ cloud-storage-rs...found
 loopdev-erikh...found
 loopdev...not found
 conrod...found
-not found (5)
+yaml-rust...not found
+not found (6)
     futures-intrusive  https://github.com/rustsec/advisory-db/issues/1175
     maligned           https://github.com/rustsec/advisory-db/issues/1209
     mbox               https://github.com/rustsec/advisory-db/issues/1631
     malloc_buf         https://github.com/rustsec/advisory-db/issues/1635
     loopdev            https://github.com/rustsec/advisory-db/issues/1821
+    yaml-rust          https://github.com/rustsec/advisory-db/issues/1921
 found (7)
     wither             https://github.com/rustsec/advisory-db/issues/1630
     crypto-hash        https://github.com/rustsec/advisory-db/issues/1633
