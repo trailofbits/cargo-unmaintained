@@ -19,19 +19,26 @@ fn main() -> Result<()> {
         load_token(&path)?;
     }
 
-    let page = RT.block_on(async {
-        let octocrab = octocrab::instance();
-        octocrab
-            .issues("rustsec", "advisory-db")
-            .list()
-            .state(octocrab::params::State::Open)
-            .per_page(100)
-            .send()
-            .await
-    })?;
+    let mut issues = Vec::new();
+    for i in 1_u32.. {
+        let page = RT.block_on(async {
+            let octocrab = octocrab::instance();
+            octocrab
+                .issues("rustsec", "advisory-db")
+                .list()
+                .state(octocrab::params::State::All)
+                .per_page(100)
+                .page(i)
+                .send()
+                .await
+        })?;
+        if page.items.is_empty() {
+            break;
+        }
+        issues.extend(page.items);
+    }
 
-    let mut issue_urls = page
-        .items
+    let mut issue_urls = issues
         .iter()
         .filter_map(|issue| {
             if !issue.title.contains("unmaintained")
@@ -80,8 +87,6 @@ fn main() -> Result<()> {
                         Outcome::NotFound(maybe_to_string::Unit::Unit),
                     ));
                 }
-            } else {
-                println!("ignoring `{url}`");
             }
         }
     }
@@ -111,11 +116,18 @@ static NAME_RES: Lazy<Vec<Regex>> = Lazy::new(|| {
 });
 
 fn extract_package_name(url: &str) -> Option<&str> {
-    NAME_RES
-        .iter()
-        .find_map(|re| re.captures(url))
-        .map(|captures| captures.name("name").unwrap().as_str())
-        .filter(|name| !["advisory-db", "cargo", "rust"].contains(name))
+    if let Some(captures) = NAME_RES.iter().find_map(|re| re.captures(url)) {
+        // smoelius: Don't print "ignoring" messages for explicitly ignored packages.
+        let name = captures.name("name").unwrap().as_str();
+        if ["advisory-db", "cargo", "rust"].contains(&name) {
+            None
+        } else {
+            Some(name)
+        }
+    } else {
+        println!("ignoring `{url}`");
+        None
+    }
 }
 
 fn is_unmaintained(name: &str) -> Result<bool> {
