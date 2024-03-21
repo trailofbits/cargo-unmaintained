@@ -23,6 +23,7 @@ fn open_lockable_file(path: &Path) -> Result<File> {
     if cfg!(windows) {
         OpenOptions::new()
             .create(true)
+            .truncate(true)
             .write(true)
             .open(path.join("CARGO_UNMAINTAINED_LOCK"))
     } else {
