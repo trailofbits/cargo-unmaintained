@@ -6,10 +6,7 @@ use std::time::Duration;
 const TIMEOUT: u64 = 60; // seconds
 
 pub(crate) fn existence(url: Url) -> Result<RepoStatus<()>> {
-    let mut handle = Easy::new();
-    handle.url(url.as_str())?;
-    handle.follow_location(true)?;
-    handle.timeout(Duration::from_secs(TIMEOUT))?;
+    let mut handle = handle(url)?;
     let result = handle.transfer().perform();
     match result.and_then(|()| handle.response_code()) {
         Ok(200) => Ok(RepoStatus::Success(url, ())),
@@ -18,4 +15,12 @@ pub(crate) fn existence(url: Url) -> Result<RepoStatus<()>> {
         Ok(response_code) => Err(anyhow!("unexpected response code: {response_code}")),
         Err(err) => Err(err.into()),
     }
+}
+
+pub(crate) fn handle(url: Url) -> Result<Easy> {
+    let mut handle = Easy::new();
+    handle.url(url.as_str())?;
+    handle.follow_location(true)?;
+    handle.timeout(Duration::from_secs(TIMEOUT))?;
+    Ok(handle)
 }
