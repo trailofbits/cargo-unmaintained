@@ -7,9 +7,6 @@ use rustsec_util::{
 };
 use std::{collections::HashSet, env::var, io::Write};
 
-// smoelius: "../../../" is not ideal, but I am trying to avoid turning `cargo-unmaintained` into a
-// multi-package project. For now, this seems like the best option.
-#[path = "../../../src/github/util.rs"]
 mod github_util;
 use github_util::{load_token, RT};
 
@@ -20,23 +17,28 @@ fn main() -> Result<()> {
     }
 
     let mut issues = Vec::new();
-    for i in 1_u32.. {
-        let page = RT.block_on(async {
-            let octocrab = octocrab::instance();
-            octocrab
-                .issues("rustsec", "advisory-db")
-                .list()
-                .state(octocrab::params::State::All)
-                .per_page(100)
-                .page(i)
-                .send()
-                .await
-        })?;
-        if page.items.is_empty() {
-            break;
+    RT.block_on(async {
+        // smoelius: Based on: https://github.com/XAMPPRocky/octocrab/issues/507
+        let octocrab = octocrab::instance();
+        let mut page = octocrab
+            .issues("rustsec", "advisory-db")
+            .list()
+            .state(octocrab::params::State::All)
+            .per_page(100)
+            .send()
+            .await?;
+        loop {
+            issues.extend(page.items);
+            page = match octocrab
+                .get_page::<octocrab::models::issues::Issue>(&page.next)
+                .await?
+            {
+                Some(next_page) => next_page,
+                None => break,
+            }
         }
-        issues.extend(page.items);
-    }
+        Result::<_>::Ok(())
+    })?;
 
     let mut issue_urls = issues
         .iter()

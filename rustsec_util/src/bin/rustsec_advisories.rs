@@ -8,7 +8,8 @@ use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes
 use std::{env::var, io::Write, path::Path, process::Command};
 use strum_macros::{Display, EnumIter};
 
-// smoelius: See comment in rustsec_issues.rs regarding "../../../".
+// smoelius: "../../../" is not ideal, but I am trying to avoid turning `cargo-unmaintained` into a
+// multi-package project. For now, this seems like the best option.
 #[path = "../../../src/packaging.rs"]
 mod packaging;
 use packaging::temp_package;
