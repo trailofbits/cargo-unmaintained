@@ -94,6 +94,13 @@ jobs:
           cargo install cargo-license            || true
           cargo install group-runner             || true
 
+      - name: Enable externally influenced tests
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+        run: |
+          echo 'ENABLE_EI_TESTS=--features=ei' >> "$GITHUB_ENV"
+          echo 'EI_TESTS_0=--test rustsec_advisories' >> "$GITHUB_ENV"
+          echo 'EI_TESTS_1=--test rustsec_issues' >> "$GITHUB_ENV"
+
       - name: Enable verbose logging
         if: ${{ runner.debug == 1 }}
         run: echo 'VERBOSE=1' >> "$GITHUB_ENV"
@@ -107,20 +114,20 @@ jobs:
           echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
           case '${{ matrix.test }}' in
             without-token)
-              cargo test --config "$GROUP_RUNNER" -- --nocapture
+              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS $EI_TESTS_0 $EI_TESTS_1 -- --nocapture
               ;;
             with-token-0)
               export GITHUB_TOKEN_PATH
-              cargo test --config "$GROUP_RUNNER" \
+              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS \
                 --test dogfood \
-                --test rustsec_advisories \
+                $EI_TESTS_0 \
                 -- --nocapture
               ;;
             with-token-1)
               export GITHUB_TOKEN_PATH
-              cargo test --config "$GROUP_RUNNER" \
-                --test rustsec_issues \
+              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS \
                 --test snapbox \
+                $EI_TESTS_1 \
                 -- --nocapture
               ;;
             *)

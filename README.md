@@ -82,6 +82,14 @@ If a workspace's `Cargo.toml` file includes a `workspace.metadata.unmaintained.i
 ignore = ["matchers"]
 ```
 
+## Testing
+
+Some tests are not run by default because they are "externally influenced," i.e., they rely on data from external sources. To enable these additional tests, enable feature `ei`, e.g.:
+
+```sh
+cargo test --features=ei
+```
+
 ## Known problems
 
 **Repositories whose urls change across versions may be incorrectly reported as unmaintained.** `cargo-unmaintained` treats the metadata of the latest version of a package referred to by a project as "ground truth." However, this can cause false positives. For example, if the latest version of [`regex-automata`] that your project relies on is [0.2.0], `cargo-unmaintained` will report the package is unmaintained, though it is not.
