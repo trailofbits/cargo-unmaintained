@@ -7,6 +7,14 @@ edition = "2021"
 license = "AGPL-3.0"
 repository = "https://github.com/trailofbits/cargo-unmaintained"
 
+[[test]]
+name = "rustsec_advisories"
+required-features = ["ei"]
+
+[[test]]
+name = "rustsec_issues"
+required-features = ["ei"]
+
 [dependencies]
 anyhow = { version = "1.0", features = ["backtrace"] }
 cargo_metadata = "0.18"
@@ -51,6 +59,7 @@ snapbox = "0.5"
 [features]
 default = ["cache-repositories", "lock-index"]
 cache-repositories = ["xdg"]
+ei = []                                        # ei = "externally influenced"
 lock-index = ["libc", "windows-sys"]
 
 [lints.clippy]
