@@ -20,6 +20,8 @@ fn main() -> Result<()> {
     RT.block_on(async {
         // smoelius: Based on: https://github.com/XAMPPRocky/octocrab/issues/507
         let octocrab = octocrab::instance();
+        let rate_limit = octocrab.ratelimit().get().await?;
+        dbg!(rate_limit.rate);
         let mut page = octocrab
             .issues("rustsec", "advisory-db")
             .list()
@@ -29,6 +31,8 @@ fn main() -> Result<()> {
             .await?;
         loop {
             issues.extend(page.items);
+            let rate_limit = octocrab.ratelimit().get().await?;
+            dbg!(rate_limit.rate);
             page = match octocrab
                 .get_page::<octocrab::models::issues::Issue>(&page.next)
                 .await?
