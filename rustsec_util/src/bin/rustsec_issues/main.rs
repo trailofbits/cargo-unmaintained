@@ -5,7 +5,13 @@ use regex::Regex;
 use rustsec_util::{
     cargo_unmaintained, command_output, display_advisory_outcomes, maybe_to_string, Outcome,
 };
-use std::{collections::HashSet, env::var, io::Write};
+use std::{
+    collections::HashSet,
+    env::var,
+    future::Future,
+    io::Write,
+    time::{Duration, SystemTime, UNIX_EPOCH},
+};
 
 mod github_util;
 use github_util::{load_token, RT};
@@ -20,17 +26,18 @@ fn main() -> Result<()> {
     RT.block_on(async {
         // smoelius: Based on: https://github.com/XAMPPRocky/octocrab/issues/507
         let octocrab = octocrab::instance();
-        let mut page = octocrab
-            .issues("rustsec", "advisory-db")
-            .list()
-            .state(octocrab::params::State::All)
-            .per_page(100)
-            .send()
-            .await?;
+        let issue_handler = octocrab.issues("rustsec", "advisory-db");
+        let mut page = retry(|| {
+            issue_handler
+                .list()
+                .state(octocrab::params::State::All)
+                .per_page(100)
+                .send()
+        })
+        .await?;
         loop {
             issues.extend(page.items);
-            page = match octocrab
-                .get_page::<octocrab::models::issues::Issue>(&page.next)
+            page = match retry(|| octocrab.get_page::<octocrab::models::issues::Issue>(&page.next))
                 .await?
             {
                 Some(next_page) => next_page,
@@ -96,6 +103,39 @@ fn main() -> Result<()> {
     display_advisory_outcomes(&advisory_outcomes);
 
     Ok(())
+}
+
+async fn retry<T, F: Future<Output = octocrab::Result<T>>, G: Fn() -> F>(f: G) -> Result<T> {
+    let octocrab = octocrab::instance();
+
+    let rate_limit = octocrab.ratelimit().get().await?;
+    dbg!(&rate_limit.rate);
+
+    match f().await {
+        Ok(value) => {
+            return Ok(value);
+        }
+        Err(error @ octocrab::Error::GitHub { .. }) => {
+            dbg!(error);
+            // smoelius: Fallthrough.
+        }
+        Err(error) => {
+            return Err(error.into());
+        }
+    }
+
+    let duration_since_unix_epoch = SystemTime::now().duration_since(UNIX_EPOCH)?;
+    let reset = u64::try_from(rate_limit.rate.reset)?;
+    eprintln!(
+        "Sleeping for {} secs.",
+        reset - duration_since_unix_epoch.as_secs()
+    );
+    tokio::time::sleep_until(
+        tokio::time::Instant::now() + (Duration::from_secs(reset) - duration_since_unix_epoch),
+    )
+    .await;
+
+    f().await.map_err(Into::into)
 }
 
 static URL_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\bhttps://[^\s()<>]*").unwrap());

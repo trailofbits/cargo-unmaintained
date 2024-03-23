@@ -1,9 +1,5 @@
 use snapbox::{assert_matches, Data};
-use std::{
-    env::{remove_var, var},
-    path::PathBuf,
-    process::Command,
-};
+use std::{env::remove_var, path::PathBuf, process::Command};
 
 mod util;
 use util::{tee, token_modifier, Tee};
@@ -15,12 +11,6 @@ fn initialize() {
 
 #[test]
 fn rustsec_issues() {
-    // smoelius: If we are running on GitHub (i.e., `CI` is set), run only if `GITHUB_TOKEN_PATH` is
-    // also set. This is to avoid hitting API rate limits.
-    if var("CI").is_ok() && var("GITHUB_TOKEN_PATH").is_err() {
-        return;
-    }
-
     let mut command = Command::new("cargo");
     command
         .args(["run", "--bin=rustsec_issues"])
