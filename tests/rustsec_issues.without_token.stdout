@@ -143,7 +143,8 @@ filesystem-rs...not found
 conrod...found
 generational-arena...not found
 yaml-rust...not found
-not found (92)
+serde-yaml...not found
+not found (93)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -236,6 +237,7 @@ not found (92)
     filesystem-rs            https://github.com/rustsec/advisory-db/issues/1870
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     yaml-rust                https://github.com/rustsec/advisory-db/issues/1921
+    serde-yaml               https://github.com/rustsec/advisory-db/issues/1925
 found (36)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
