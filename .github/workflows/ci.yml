@@ -91,6 +91,10 @@ jobs:
           cargo install cargo-udeps --locked     || true
           cargo install group-runner             || true
 
+      - name: Enable externally influenced tests
+        if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
+        run: echo 'ENABLE_EI_TESTS=--features=ei' >> "$GITHUB_ENV"
+
       - name: Enable verbose logging
         if: ${{ runner.debug == 1 }}
         run: echo 'VERBOSE=1' >> "$GITHUB_ENV"
@@ -99,7 +103,7 @@ jobs:
         run: cargo test --no-run
 
       - name: Test
-        run: cargo test --config "$GROUP_RUNNER" -- --nocapture
+        run: cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS -- --nocapture
         env:
           GIT_LFS_SKIP_SMUDGE: 1
 
@@ -107,7 +111,7 @@ jobs:
         run: |
           export GITHUB_TOKEN_PATH="$(mktemp)"
           echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
-          cargo test --config "$GROUP_RUNNER" \
+          cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS \
             --test dogfood \
             --test rustsec_advisories \
             --test rustsec_issues \
