@@ -60,6 +60,7 @@ Options:
       --max-age <DAYS>  Age in days that a repository's last commit must not exceed for the
                         repository to be considered current; 0 effectively disables this check,
                         though ages are still reported [default: 365]
+      --no-cache        Do not save cloned repositories on disk for future runs
       --no-exit-code    Do not set exit status when unmaintained packages are found
       --no-warnings     Do not show warnings
   -p, --package <NAME>  Check only whether package NAME is unmaintained

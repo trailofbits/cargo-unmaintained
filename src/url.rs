@@ -1,3 +1,4 @@
+use cargo_metadata::Package;
 use once_cell::sync::Lazy;
 use regex::Regex;
 
@@ -39,8 +40,20 @@ impl<'a> From<&'a str> for Url<'a> {
     }
 }
 
-impl<'a> From<&'a String> for Url<'a> {
-    fn from(value: &'a String) -> Self {
-        Self(value)
+pub fn urls(pkg: &Package) -> impl IntoIterator<Item = Url> {
+    let mut urls = Vec::new();
+
+    if let Some(url_str) = &pkg.repository {
+        // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained
+        // via the GitHub API or a shallow clone would be distinguishable.
+        let url = Url::from(url_str.as_str()).trim_trailing_slash();
+
+        urls.push(url);
+
+        if let Some(shortened_url) = url.shorten() {
+            urls.push(shortened_url);
+        }
     }
+
+    urls
 }

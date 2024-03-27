@@ -248,6 +248,7 @@ dependencies = [
  "remain",
  "serde",
  "serde_json",
+ "sha1_smol",
  "similar-asserts",
  "snapbox",
  "tempfile",
@@ -255,6 +256,7 @@ dependencies = [
  "toml",
  "walkdir",
  "windows-sys 0.52.0",
+ "xdg",
 ]
 
 [[package]]
@@ -2497,3 +2499,9 @@ checksum = "dffa400e67ed5a4dd237983829e66475f0a4a26938c4b04c21baede6262215b8"
 dependencies = [
  "memchr",
 ]
+
+[[package]]
+name = "xdg"
+version = "2.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "213b7324336b53d2414b2db8537e56544d981803139155afa84f76eeebb7a546"
