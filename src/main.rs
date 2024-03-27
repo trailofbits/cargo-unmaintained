@@ -543,8 +543,8 @@ fn is_unmaintained_package<'a>(
     metadata: &'a Metadata,
     pkg: &'a Package,
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
-    if let Some(url_str) = &pkg.repository {
-        let repo_status = general_status(&pkg.name, url_str.into())?;
+    if let Some(url_string) = &pkg.repository {
+        let repo_status = general_status(&pkg.name, url_string.into())?;
         if !repo_status.is_success() {
             return Ok(Some(UnmaintainedPkg {
                 pkg,
@@ -755,14 +755,14 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 }
 
 fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    let Some(url_str) = &pkg.repository else {
+    let Some(url_string) = &pkg.repository else {
         return Ok(RepoStatus::Unnamed);
     };
 
-    if opts::get().imprecise && url_str.starts_with("https://github.com/") {
+    if opts::get().imprecise && url_string.starts_with("https://github.com/") {
         let result = verbose::wrap!(
             || {
-                match github::timestamp(url_str.into()) {
+                match github::timestamp(url_string.into()) {
                     Ok(Some((url, timestamp))) => Ok(RepoStatus::Success(url, timestamp)),
                     Ok(None) => {
                         // smoelius: If `github::timestamp` returns `Ok(None)`, it means a previous
@@ -774,12 +774,12 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
                         if var("GITHUB_TOKEN_PATH").is_err() {
                             debug!(
                                 "failed to get timestamp for {} using GitHub API: {}",
-                                url_str, error
+                                url_string, error
                             );
                         } else {
                             warn!(
                                 "failed to get timestamp for {} using GitHub API: {}",
-                                url_str,
+                                url_string,
                                 first_line(&error.to_string())
                             );
                         }
@@ -863,9 +863,9 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
                         Ok(RepoStatus::Success(url, repo_dir))
                     }
                     Err(error) => {
-                        let repo_status = if let Some(url_str) = &pkg.repository {
-                            warn!("failed to clone `{}`: {}", url_str, error);
-                            RepoStatus::Uncloneable(url_str.into())
+                        let repo_status = if let Some(url_string) = &pkg.repository {
+                            warn!("failed to clone `{}`: {}", url_string, error);
+                            RepoStatus::Uncloneable(url_string.into())
                         } else {
                             RepoStatus::Unnamed
                         };
@@ -934,10 +934,10 @@ fn clone_repository_uncached(pkg: &Package) -> Result<(Url, PathBuf)> {
 fn urls(pkg: &Package) -> impl IntoIterator<Item = Url> {
     let mut urls = Vec::new();
 
-    if let Some(url_str) = &pkg.repository {
+    if let Some(url_string) = &pkg.repository {
         // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained via
         // the GitHub API or a shallow clone would be distinguishable.
-        let url = Url::from(url_str).trim_trailing_slash();
+        let url = Url::from(url_string).trim_trailing_slash();
 
         urls.push(url);
 
