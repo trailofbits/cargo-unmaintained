@@ -175,6 +175,7 @@ fn below_cut_line(s: &str) -> Option<&str> {
     split_at_cut_line(s).map(|(_, below)| below)
 }
 
+#[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn readme_contains_usage() {
     let readme = read_to_string("README.md").unwrap();

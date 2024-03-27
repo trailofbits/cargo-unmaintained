@@ -9,19 +9,19 @@ use clap::{crate_version, Parser};
 use crates_index::GitIndex;
 use home::cargo_home;
 use log::debug;
-use once_cell::sync::Lazy;
+use once_cell::{sync::Lazy, unsync::OnceCell};
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
     env::{args, var},
     ffi::OsStr,
-    fs::{read_to_string, remove_dir_all, File},
+    fs::{read_to_string, File},
     path::{Path, PathBuf},
-    process::{exit, Command, Stdio},
+    process::{exit, Command},
     str::FromStr,
     time::{Duration, SystemTime},
 };
-use tempfile::{tempdir, TempDir};
+use tempfile::TempDir;
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 use toml::{Table, Value};
 use walkdir::WalkDir;
@@ -31,6 +31,7 @@ mod flush;
 mod github;
 mod opts;
 mod packaging;
+mod repository_cache;
 mod url;
 mod verbose;
 
@@ -40,6 +41,8 @@ mod flock;
 use url::{urls, Url};
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
+
+const DEFAULT_REFRESH_AGE: u64 = 30; // days
 
 #[derive(Debug, Parser)]
 #[clap(bin_name = "cargo", display_name = "cargo")]
@@ -101,6 +104,10 @@ struct Opts {
         default_value = "365"
     )]
     max_age: u64,
+
+    #[cfg(all(feature = "cache-repositories", not(windows)))]
+    #[clap(long, help = "Do not save cloned repositories on disk for future runs")]
+    no_cache: bool,
 
     #[clap(
         long,
@@ -338,10 +345,14 @@ thread_local! {
         let _lock = lock_index().unwrap();
         GitIndex::new_cargo_default().unwrap()
     });
+    // smoelius: The next four statics are "in-memory" caches.
     static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
     static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
-    static REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
+    static IN_MEMORY_REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
+    // smoelius: The next static is an "on-disk" cache that resides at
+    // `$HOME/.cache/cargo-unmaintained/v1`.
+    static ON_DISK_REPOSITORY_CACHE_ONCE_CELL: RefCell<OnceCell<repository_cache::Cache>> = const { RefCell::new(OnceCell::new()) };
 }
 
 macro_rules! warn {
@@ -378,22 +389,18 @@ fn main() -> Result<()> {
     }
 }
 
-struct DeleteClonedRepositories;
+struct FinalizeOnDiskRepositoryCache;
 
-impl Drop for DeleteClonedRepositories {
+impl Drop for FinalizeOnDiskRepositoryCache {
     fn drop(&mut self) {
-        REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
-            for (_, repo_status) in repository_cache.drain() {
-                if let Some((_, repo_dir)) = repo_status.as_success() {
-                    remove_dir_all(repo_dir).unwrap_or_default();
-                }
-            }
+        ON_DISK_REPOSITORY_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| {
+            on_disk_repository_cache(once_cell).finalize();
         });
     }
 }
 
 fn unmaintained() -> Result<bool> {
-    let _delete_cloned_repositories = DeleteClonedRepositories;
+    let _finalize_on_disk_repository_cache = FinalizeOnDiskRepositoryCache;
 
     let mut unmaintained_pkgs = Vec::new();
 
@@ -840,49 +847,56 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
     // the repository's timestamp (and only then because we could not do so using the GitHub API).
     assert!(!opts::get().imprecise || matches!(purpose, Purpose::Timestamp));
 
-    let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
-        // smoelius: Check all urls associated with the package.
-        for url in urls(pkg) {
-            if let Some(repo_status) = repository_cache.get(&url) {
-                return Ok(repo_status.clone());
-            }
-        }
-        let what = match purpose {
-            Purpose::Membership => "membership",
-            Purpose::Timestamp => "timestamp",
-        };
-        verbose::wrap!(
-            || {
-                let url_and_dir = clone_repository_uncached(pkg);
-                match url_and_dir {
-                    Ok((url, repo_dir)) => {
-                        repository_cache.insert(
-                            url.leak(),
-                            RepoStatus::Success(url, repo_dir.clone()).leak_url(),
-                        );
-                        Ok(RepoStatus::Success(url, repo_dir))
-                    }
-                    Err(error) => {
-                        let repo_status = if let Some(url_string) = &pkg.repository {
-                            warn!("failed to clone `{}`: {}", url_string, error);
-                            RepoStatus::Uncloneable(url_string.as_str().into())
-                        } else {
-                            RepoStatus::Unnamed
-                        };
-                        // smoelius: In the event of failure, set all urls associated with the
-                        // repository.
-                        for url in urls(pkg) {
-                            repository_cache.insert(url.leak(), repo_status.clone().leak_url());
-                        }
-                        Ok(repo_status)
+    let repo_status =
+        IN_MEMORY_REPOSITORY_CACHE.with_borrow_mut(|in_memory_repository_cache| -> Result<_> {
+            ON_DISK_REPOSITORY_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| -> Result<_> {
+                // smoelius: Check all urls associated with the package.
+                for url in urls(pkg) {
+                    if let Some(repo_status) = in_memory_repository_cache.get(&url) {
+                        return Ok(repo_status.clone());
                     }
                 }
-            },
-            "{} of `{}` using shallow clone",
-            what,
-            pkg.name
-        )
-    })?;
+                let what = match purpose {
+                    Purpose::Membership => "membership",
+                    Purpose::Timestamp => "timestamp",
+                };
+                verbose::wrap!(
+                    || {
+                        let url_and_dir = on_disk_repository_cache(once_cell).clone_repository(pkg);
+                        match url_and_dir {
+                            Ok((url_string, repo_dir)) => {
+                                // smoelius: Note the use of `leak` in the next line. But the url is
+                                // acting as a key in a global map, so it is not so bad.
+                                let url = Url::from(url_string.as_str()).leak();
+                                in_memory_repository_cache.insert(
+                                    url,
+                                    RepoStatus::Success(url, repo_dir.clone()).leak_url(),
+                                );
+                                Ok(RepoStatus::Success(url, repo_dir))
+                            }
+                            Err(error) => {
+                                let repo_status = if let Some(url_string) = &pkg.repository {
+                                    warn!("failed to clone `{}`: {}", url_string, error);
+                                    RepoStatus::Uncloneable(url_string.as_str().into())
+                                } else {
+                                    RepoStatus::Unnamed
+                                };
+                                // smoelius: In the event of failure, set all urls associated with
+                                // the repository.
+                                for url in urls(pkg) {
+                                    in_memory_repository_cache
+                                        .insert(url.leak(), repo_status.clone().leak_url());
+                                }
+                                Ok(repo_status)
+                            }
+                        }
+                    },
+                    "{} of `{}` using shallow clone",
+                    what,
+                    pkg.name
+                )
+            })
+        })?;
 
     if opts::get().imprecise {
         return Ok(repo_status);
@@ -901,34 +915,26 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
     }
 }
 
-fn clone_repository_uncached(pkg: &Package) -> Result<(Url, PathBuf)> {
-    let mut errors = Vec::new();
-    for url in urls(pkg) {
-        let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
-        let mut command = Command::new("git");
-        command
-            .args([
-                "clone",
-                "--depth=1",
-                "--quiet",
-                url.as_str(),
-                &tempdir.path().to_string_lossy(),
-            ])
-            .env("GCM_INTERACTIVE", "never")
-            .env("GIT_ASKPASS", "echo")
-            .env("GIT_TERMINAL_PROMPT", "0")
-            .stderr(Stdio::piped());
-        let output = command
-            .output()
-            .with_context(|| format!("failed to run command: {command:?}"))?;
-        if output.status.success() {
-            // smoelius: Leak temporary directory.
-            return Ok((url, tempdir.into_path()));
-        }
-        let error = String::from_utf8(output.stderr)?;
-        errors.push(error);
-    }
-    Err(anyhow!("{:#?}", errors))
+fn on_disk_repository_cache(
+    once_cell: &mut OnceCell<repository_cache::Cache>,
+) -> &mut repository_cache::Cache {
+    let _: &repository_cache::Cache = once_cell.get_or_init(|| {
+        #[cfg(all(feature = "cache-repositories", not(windows)))]
+        let temporary = opts::get().no_cache;
+
+        #[cfg(any(not(feature = "cache-repositories"), windows))]
+        let temporary = true;
+
+        #[allow(clippy::panic)]
+        repository_cache::Cache::new(
+            temporary,
+            std::cmp::min(DEFAULT_REFRESH_AGE, opts::get().max_age),
+        )
+        .unwrap_or_else(|error| panic!("failed to create on-disk repository cache: {error}"))
+    });
+
+    #[allow(clippy::unwrap_used)]
+    once_cell.get_mut().unwrap()
 }
 
 fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
