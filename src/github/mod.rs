@@ -143,7 +143,7 @@ fn call_api(
     endpoint: Option<&str>,
     mut data: &[u8],
 ) -> Result<serde_json::Value> {
-    let url = format!(
+    let url_string = format!(
         "https://api.github.com/repos/{owner}/{repo}{}",
         endpoint
             .map(|endpoint| String::from("/") + endpoint)
@@ -156,7 +156,7 @@ fn call_api(
         list.append(&format!("Authorization: Bearer {token}"))?;
     }
 
-    let mut handle = curl::handle((&url).as_str().into())?;
+    let mut handle = curl::handle(url_string.as_str().into())?;
     handle.http_headers(list)?;
     let mut response = Vec::new();
     {

@@ -38,6 +38,9 @@ struct Test {
 
 #[test]
 fn snapbox() -> Result<()> {
+    #[cfg(not(feature = "lock_index"))]
+    panic!("the `snapbox` test requires the `lock_index` feature");
+
     let test_cases = Path::new("tests/cases");
 
     let test_paths = if let Ok(testname) = var("TESTNAME") {
