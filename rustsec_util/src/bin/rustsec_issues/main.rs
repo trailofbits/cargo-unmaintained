@@ -124,18 +124,24 @@ async fn retry<T, F: Future<Output = octocrab::Result<T>>, G: Fn() -> F>(f: G) -
         }
     }
 
-    let duration_since_unix_epoch = SystemTime::now().duration_since(UNIX_EPOCH)?;
-    let reset = u64::try_from(rate_limit.rate.reset)?;
-    eprintln!(
-        "Sleeping for {} secs.",
-        reset - duration_since_unix_epoch.as_secs()
-    );
-    tokio::time::sleep_until(
-        tokio::time::Instant::now() + (Duration::from_secs(reset) - duration_since_unix_epoch),
-    )
-    .await;
+    let secs = u64::try_from(rate_limit.rate.reset)?;
+    // smoelius: Add one extra second in the interest of caution.
+    let reset = UNIX_EPOCH + Duration::from_secs(secs + 1);
+    let duration = reset.duration_since(SystemTime::now())?;
+    eprintln!("Sleeping for {} secs.", duration.as_secs());
+    tokio::time::sleep_until(tokio::time::Instant::now() + duration).await;
 
-    f().await.map_err(Into::into)
+    let result = f().await;
+
+    if let Err(error) = &result {
+        let _: Result<_, _> = dbg!(SystemTime::now().duration_since(reset));
+        if let Ok(rate_limit) = octocrab.ratelimit().get().await {
+            dbg!(&rate_limit.rate);
+        }
+        dbg!(error);
+    }
+
+    result.map_err(Into::into)
 }
 
 static URL_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\bhttps://[^\s()<>]*").unwrap());
