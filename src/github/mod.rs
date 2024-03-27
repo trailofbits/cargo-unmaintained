@@ -117,7 +117,7 @@ fn repository_uncached(owner: &str, repo: &str) -> Result<serde_json::Value> {
 }
 
 fn match_github_url(url: Url) -> Result<(Url, &str, &str, &str)> {
-    let (url_str, owner_slash_repo, owner, repo) = {
+    let (url_string, owner_slash_repo, owner, repo) = {
         #[allow(clippy::unwrap_used)]
         if let Some(captures) = RE.captures(url.as_str()) {
             assert_eq!(4, captures.len());
@@ -134,7 +134,7 @@ fn match_github_url(url: Url) -> Result<(Url, &str, &str, &str)> {
 
     let repo = repo.strip_suffix(".git").unwrap_or(repo);
 
-    Ok((url_str.into(), owner_slash_repo, owner, repo))
+    Ok((url_string.into(), owner_slash_repo, owner, repo))
 }
 
 fn call_api(
