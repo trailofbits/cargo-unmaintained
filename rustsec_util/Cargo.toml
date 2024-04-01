@@ -17,7 +17,7 @@ rustsec = "0.29"
 strum = "0.26"
 strum_macros = "0.26"
 tempfile = "3.10"
-tokio = "1.36"
+tokio = "1.37"
 
 # smoelius: Putting this package in the same workspace as `cargo-unmaintained` produces the
 # following error:
