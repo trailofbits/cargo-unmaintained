@@ -144,7 +144,8 @@ conrod...found
 generational-arena...not found
 yaml-rust...not found
 serde-yaml...not found
-not found (93)
+toolbox...not found
+not found (94)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -238,6 +239,7 @@ not found (93)
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     yaml-rust                https://github.com/rustsec/advisory-db/issues/1921
     serde-yaml               https://github.com/rustsec/advisory-db/issues/1925
+    toolbox                  https://github.com/rustsec/advisory-db/issues/1927
 found (36)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
