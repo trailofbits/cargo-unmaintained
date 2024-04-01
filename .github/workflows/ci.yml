@@ -54,6 +54,7 @@ jobs:
       fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
         environment: [ubuntu-latest, macos-latest, macos-13, windows-latest]
+        test: [without-token, with-token-0, with-token-1]
 
     runs-on: ${{ matrix.environment }}
 
@@ -100,20 +101,31 @@ jobs:
         run: cargo test --no-run
 
       - name: Test
-        run: cargo test --config "$GROUP_RUNNER" -- --nocapture
-        env:
-          GIT_LFS_SKIP_SMUDGE: 1
-
-      - name: Test with token
         run: |
-          export GITHUB_TOKEN_PATH="$(mktemp)"
+          GITHUB_TOKEN_PATH="$(mktemp)"
           echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
-          cargo test --config "$GROUP_RUNNER" \
-            --test dogfood \
-            --test rustsec_advisories \
-            --test rustsec_issues \
-            --test snapbox \
-            -- --nocapture
+          case '${{ matrix.test }}' in
+            without-token)
+              cargo test --config "$GROUP_RUNNER" -- --nocapture
+              ;;
+            with-token-0)
+              export GITHUB_TOKEN_PATH
+              cargo test --config "$GROUP_RUNNER" \
+                --test dogfood \
+                --test rustsec_advisories \
+                -- --nocapture
+              ;;
+            with-token-1)
+              export GITHUB_TOKEN_PATH
+              cargo test --config "$GROUP_RUNNER" \
+                --test rustsec_issues \
+                --test snapbox \
+                -- --nocapture
+              ;;
+            *)
+              exit 1
+              ;;
+          esac
         env:
           GIT_LFS_SKIP_SMUDGE: 1
 
