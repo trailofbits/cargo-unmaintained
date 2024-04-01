@@ -1,4 +1,4 @@
-94 advisories for unmaintained packages
+95 advisories for unmaintained packages
 lz4-compress...recently updated
 tempdir...found
 typemap...not found
@@ -131,7 +131,11 @@ required by package `cosmwasm-temp-package v0.1.0 ([..])`
 generational-arena...not found
 filesystem...found
 yaml-rust...not found
-not found - error (7)
+puccinier...error:
+```
+Error: found no packages matching `puccinier`
+```
+not found - error (8)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
     stream-cipher        https://rustsec.org/advisories/RUSTSEC-2020-0058.html
@@ -139,6 +143,7 @@ not found - error (7)
     miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
     cosmwasm             https://rustsec.org/advisories/RUSTSEC-2024-0004.html
+    puccinier            https://rustsec.org/advisories/RUSTSEC-2024-0331.html
 not found - leaf (5)
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
