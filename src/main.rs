@@ -27,6 +27,7 @@ use toml::{Table, Value};
 use walkdir::WalkDir;
 
 mod curl;
+mod flush;
 mod github;
 mod opts;
 mod packaging;

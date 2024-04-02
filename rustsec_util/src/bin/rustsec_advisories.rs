@@ -5,11 +5,15 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec::{advisory::Informational, Advisory, Database};
 use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes, Outcome};
-use std::{env::var, io::Write, path::Path, process::Command};
+use std::{env::var, path::Path, process::Command};
 use strum_macros::{Display, EnumIter};
 
 // smoelius: "../../../" is not ideal, but I am trying to avoid turning `cargo-unmaintained` into a
 // multi-package project. For now, this seems like the best option.
+#[path = "../../../src/flush.rs"]
+mod flush;
+use flush::Flush;
+
 #[path = "../../../src/packaging.rs"]
 mod packaging;
 use packaging::temp_package;
@@ -49,9 +53,7 @@ fn main() -> Result<()> {
 
     for advisory in advisories {
         print!("{}...", advisory.metadata.package);
-        std::io::stdout()
-            .flush()
-            .with_context(|| "failed to flush stdout")?;
+        <_ as Flush>::flush(&mut std::io::stdout()).with_context(|| "failed to flush stdout")?;
 
         let tempdir = temp_package(advisory.metadata.package.as_str())?;
 

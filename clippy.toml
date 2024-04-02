@@ -1,1 +1,2 @@
 allow-unwrap-in-tests = true
+disallowed-methods = ["std::io::Write::flush"]

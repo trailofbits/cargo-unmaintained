@@ -9,12 +9,16 @@ use std::{
     collections::HashSet,
     env::var,
     future::Future,
-    io::Write,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
 mod github_util;
 use github_util::{load_token, RT};
+
+// smoelius: See comment in rustsec_advisories.rs regarding "../../../".
+#[path = "../../../../src/flush.rs"]
+mod flush;
+use flush::Flush;
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn main() -> Result<()> {
@@ -82,8 +86,7 @@ fn main() -> Result<()> {
                 }
                 checked.insert(name);
                 print!("{name}...");
-                std::io::stdout()
-                    .flush()
+                <_ as Flush>::flush(&mut std::io::stdout())
                     .with_context(|| "failed to flush stdout")?;
                 if is_unmaintained(name)? {
                     println!("found");
