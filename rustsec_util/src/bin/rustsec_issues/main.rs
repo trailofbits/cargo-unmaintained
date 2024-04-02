@@ -124,9 +124,8 @@ async fn retry<T, F: Future<Output = octocrab::Result<T>>, G: Fn() -> F>(f: G) -
         }
     }
 
-    let secs = u64::try_from(rate_limit.rate.reset)?;
     // smoelius: Add one extra second in the interest of caution.
-    let reset = UNIX_EPOCH + Duration::from_secs(secs + 1);
+    let reset = UNIX_EPOCH + Duration::from_secs(rate_limit.rate.reset + 1);
     let duration = reset.duration_since(SystemTime::now())?;
     eprintln!("Sleeping for {} secs.", duration.as_secs());
     tokio::time::sleep_until(tokio::time::Instant::now() + duration).await;
