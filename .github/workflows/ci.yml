@@ -78,19 +78,19 @@ jobs:
             ~/.cargo/git/db/
           key: ${{ runner.os }}-cargo-${{ hashFiles('.github/workflows/ci.yml', 'tests/ci.rs') }}
 
+      - uses: taiki-e/install-action@v2
+        with:
+          tool: cargo-audit, cargo-hack, cargo-sort, cargo-udeps
+
       - name: Install tools
         run: |
           rustup update          --no-self-update
           rustup install nightly --no-self-update
           rustup component add rustfmt --toolchain nightly
           export CARGO_TARGET_DIR="$(mktemp -d)"
-          cargo install cargo-audit              || true
           cargo install cargo-dylint --git=https://github.com/trailofbits/dylint --no-default-features --features=cargo-cli || true
           cargo install dylint-link              || true
-          cargo install cargo-hack               || true
           cargo install cargo-license            || true
-          cargo install cargo-sort               || true
-          cargo install cargo-udeps --locked     || true
           cargo install group-runner             || true
 
       - name: Enable verbose logging
