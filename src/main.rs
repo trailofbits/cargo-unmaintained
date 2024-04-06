@@ -21,7 +21,7 @@ use std::{
     str::FromStr,
     time::{Duration, SystemTime},
 };
-use tempfile::tempdir;
+use tempfile::{tempdir, TempDir};
 use termcolor::{Color, ColorChoice, ColorSpec, StandardStream, WriteColor};
 use toml::{Table, Value};
 use walkdir::WalkDir;
@@ -432,7 +432,7 @@ fn metadata() -> Result<Metadata> {
     let mut command = MetadataCommand::new();
 
     // smoelius: See tests/snapbox.rs for another use of this conditional initialization trick.
-    let tempdir;
+    let tempdir: TempDir;
 
     if let Some(name) = &opts::get().package {
         tempdir = packaging::temp_package(name)?;
