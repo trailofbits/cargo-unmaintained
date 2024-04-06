@@ -44,3 +44,21 @@ impl<'a> From<&'a String> for Url<'a> {
         Self(value)
     }
 }
+
+pub(crate) fn urls(pkg: &cargo_metadata::Package) -> impl IntoIterator<Item = Url> {
+    let mut urls = Vec::new();
+
+    if let Some(url_string) = &pkg.repository {
+        // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained via
+        // the GitHub API or a shallow clone would be distinguishable.
+        let url = Url::from(url_string).trim_trailing_slash();
+
+        urls.push(url);
+
+        if let Some(shortened_url) = url.shorten() {
+            urls.push(shortened_url);
+        }
+    }
+
+    urls
+}

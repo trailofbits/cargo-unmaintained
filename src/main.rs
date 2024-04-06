@@ -37,7 +37,7 @@ mod verbose;
 #[cfg(feature = "lock_index")]
 mod flock;
 
-use url::Url;
+use url::{urls, Url};
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
@@ -929,24 +929,6 @@ fn clone_repository_uncached(pkg: &Package) -> Result<(Url, PathBuf)> {
         errors.push(error);
     }
     Err(anyhow!("{:#?}", errors))
-}
-
-fn urls(pkg: &Package) -> impl IntoIterator<Item = Url> {
-    let mut urls = Vec::new();
-
-    if let Some(url_string) = &pkg.repository {
-        // smoelius: Without the use of `trim_trailing_slash`, whether a timestamp was obtained via
-        // the GitHub API or a shallow clone would be distinguishable.
-        let url = Url::from(url_string).trim_trailing_slash();
-
-        urls.push(url);
-
-        if let Some(shortened_url) = url.shorten() {
-            urls.push(shortened_url);
-        }
-    }
-
-    urls
 }
 
 fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
