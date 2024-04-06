@@ -544,7 +544,7 @@ fn is_unmaintained_package<'a>(
     pkg: &'a Package,
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
     if let Some(url_string) = &pkg.repository {
-        let repo_status = general_status(&pkg.name, url_string.into())?;
+        let repo_status = general_status(&pkg.name, url_string.as_str().into())?;
         if !repo_status.is_success() {
             return Ok(Some(UnmaintainedPkg {
                 pkg,
@@ -762,7 +762,7 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     if opts::get().imprecise && url_string.starts_with("https://github.com/") {
         let result = verbose::wrap!(
             || {
-                match github::timestamp(url_string.into()) {
+                match github::timestamp(url_string.as_str().into()) {
                     Ok(Some((url, timestamp))) => Ok(RepoStatus::Success(url, timestamp)),
                     Ok(None) => {
                         // smoelius: If `github::timestamp` returns `Ok(None)`, it means a previous
@@ -865,7 +865,7 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
                     Err(error) => {
                         let repo_status = if let Some(url_string) = &pkg.repository {
                             warn!("failed to clone `{}`: {}", url_string, error);
-                            RepoStatus::Uncloneable(url_string.into())
+                            RepoStatus::Uncloneable(url_string.as_str().into())
                         } else {
                             RepoStatus::Unnamed
                         };

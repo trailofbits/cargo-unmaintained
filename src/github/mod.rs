@@ -156,7 +156,7 @@ fn call_api(
         list.append(&format!("Authorization: Bearer {token}"))?;
     }
 
-    let mut handle = curl::handle((&url).into())?;
+    let mut handle = curl::handle((&url).as_str().into())?;
     handle.http_headers(list)?;
     let mut response = Vec::new();
     {
