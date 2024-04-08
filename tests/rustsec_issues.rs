@@ -1,5 +1,10 @@
 use snapbox::{assert_matches, Data};
-use std::{env::remove_var, path::PathBuf, process::Command};
+use std::{
+    env::{remove_var, var},
+    fs::write,
+    path::PathBuf,
+    process::Command,
+};
 
 mod util;
 use util::{tee, token_modifier, Tee};
@@ -11,6 +16,8 @@ fn initialize() {
 
 #[test]
 fn rustsec_issues() {
+    let path_stdout = format!("tests/rustsec_issues.{}.stdout", token_modifier());
+
     let mut command = Command::new("cargo");
     command
         .args(["run", "--bin=rustsec_issues"])
@@ -20,11 +27,12 @@ fn rustsec_issues() {
 
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
-    assert_matches(
-        Data::read_from(
-            &PathBuf::from(format!("tests/rustsec_issues.{}.stdout", token_modifier())),
-            None,
-        ),
-        stdout_actual,
-    );
+    if var("BLESS").is_ok() {
+        write(path_stdout, stdout_actual).unwrap();
+    } else {
+        assert_matches(
+            Data::read_from(&PathBuf::from(path_stdout), None),
+            stdout_actual,
+        );
+    }
 }
