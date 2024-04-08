@@ -80,7 +80,7 @@ fn main() -> Result<()> {
         let advisory_url = format!("https://github.com/rustsec/advisory-db/issues/{number}");
         let mut checked = HashSet::new();
         for url in urls {
-            if let Some(name) = extract_package_name(url) {
+            if let Some(name) = extract_package_name(url, &advisory_url) {
                 if checked.contains(name) {
                     continue;
                 }
@@ -165,7 +165,7 @@ static NAME_RES: Lazy<Vec<Regex>> = Lazy::new(|| {
     .collect()
 });
 
-fn extract_package_name(url: &str) -> Option<&str> {
+fn extract_package_name<'a>(url: &'a str, advisory_url: &str) -> Option<&'a str> {
     if let Some(captures) = NAME_RES.iter().find_map(|re| re.captures(url)) {
         // smoelius: Don't print "ignoring" messages for explicitly ignored packages.
         let name = captures.name("name").unwrap().as_str();
@@ -175,7 +175,7 @@ fn extract_package_name(url: &str) -> Option<&str> {
             Some(name)
         }
     } else {
-        println!("ignoring `{url}`");
+        println!("ignoring `{url}` from `{advisory_url}`");
         None
     }
 }
