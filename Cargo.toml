@@ -12,7 +12,7 @@ anyhow = { version = "1.0", features = ["backtrace"] }
 cargo_metadata = "0.18"
 chrono = "0.4"
 clap = { version = "4.5", features = ["cargo", "derive", "wrap_help"] }
-crates-index = { version = "2.5", features = ["git-https"] }
+crates-index = { version = "2.7", features = ["git-https"] }
 curl = "0.4"
 env_logger = "0.11"
 home = "0.5"
