@@ -1,17 +1,17 @@
 term...not found
-ignoring `https://twitter.com/NaolDuga/status/1166705826192678914`
-ignoring `https://twitter.com/bascule/status/1166567763411947520`
+ignoring `https://twitter.com/NaolDuga/status/1166705826192678914` from `https://github.com/rustsec/advisory-db/issues/134`
+ignoring `https://twitter.com/bascule/status/1166567763411947520` from `https://github.com/rustsec/advisory-db/issues/134`
 chan...found
 termcolor...not found
 rust-crypto...found
-ignoring `https://github.com/RustCrypto`
+ignoring `https://github.com/RustCrypto` from `https://github.com/rustsec/advisory-db/issues/173`
 term...not found
 rusb...not found
 ring...not found
 crossbeam...not found
 libusb-rs...not found
 sodiumoxide...found
-ignoring `https://internals.rust-lang.org/t/tracking-unmaintained-crates-using-rustsec/10884`
+ignoring `https://internals.rust-lang.org/t/tracking-unmaintained-crates-using-rustsec/10884` from `https://github.com/rustsec/advisory-db/issues/173`
 chan...found
 rusb...not found
 libusb-rs...not found
@@ -25,11 +25,11 @@ home...not found
 directories-rs...not found
 dirs-rs...not found
 dirs-sys-rs...not found
-ignoring `https://www.reddit.com/r/rust/comments/ga7f56/why_dirs_and_directories_repositories_have_been/`
-ignoring `https://www.reddit.com/r/rust/comments/ga7f56/why_dirs_and_directories_repositories_have_been/foyqipp/`
+ignoring `https://www.reddit.com/r/rust/comments/ga7f56/why_dirs_and_directories_repositories_have_been/` from `https://github.com/rustsec/advisory-db/issues/282`
+ignoring `https://www.reddit.com/r/rust/comments/ga7f56/why_dirs_and_directories_repositories_have_been/foyqipp/` from `https://github.com/rustsec/advisory-db/issues/282`
 traits...not found
 failure...not found
-ignoring `https://internals.rust-lang.org/t/failure-crate-maintenance/12087`
+ignoring `https://internals.rust-lang.org/t/failure-crate-maintenance/12087` from `https://github.com/rustsec/advisory-db/issues/368`
 stderr...found
 rust-xcb...not found
 office...found
@@ -37,7 +37,7 @@ crate...not found
 calamine...not found
 rulinalg...found
 ab-glyph...not found
-ignoring `https://gitlab.redox-os.org/redox-os/rusttype/-/issues/148`
+ignoring `https://gitlab.redox-os.org/redox-os/rusttype/-/issues/148` from `https://github.com/rustsec/advisory-db/issues/867`
 block-ciphers...found
 block-ciphers...found
 block-ciphers...found
@@ -51,24 +51,24 @@ AEADs...not found
 nacl-compat...found
 libsodium-sys-stable...not found
 sodiumoxide...found
-ignoring `https://speakerdeck.com/tarcieri/thoughts-on-rust-cryptography?slide=84`
+ignoring `https://speakerdeck.com/tarcieri/thoughts-on-rust-cryptography?slide=84` from `https://github.com/rustsec/advisory-db/issues/1090`
 rust-ansi-term...not found
 windows-rs...not found
 serde_cbor...found
 cbor...found
 xml-rs...not found
 cargo-download...not found
-ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-cee9-4101-972b-f8e4b9f511e9.png`
-ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-cee9-4101-972b-f8e4b9f511e9.png`
+ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-cee9-4101-972b-f8e4b9f511e9.png` from `https://github.com/rustsec/advisory-db/issues/1138`
+ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-cee9-4101-972b-f8e4b9f511e9.png` from `https://github.com/rustsec/advisory-db/issues/1139`
 lmdb-rkv...found
 lmdb-rs...found
 prettytable-rs...not found
 owning-ref-unsoundness...not found
 futures-intrusive...not found
 users...not found
-ignoring `https://github.com/dtolnay?tab=repositories&type=archived,`
+ignoring `https://github.com/dtolnay?tab=repositories&type=archived,` from `https://github.com/rustsec/advisory-db/issues/1180`
 markdown...not found
-ignoring `https://doc.rust-lang.org/std/vec/struct.Vec.html#method.from_raw_parts`
+ignoring `https://doc.rust-lang.org/std/vec/struct.Vec.html#method.from_raw_parts` from `https://github.com/rustsec/advisory-db/issues/1209`
 maligned...not found
 chrono...not found
 toml-rs...not found
@@ -80,13 +80,13 @@ erased_set...not found
 double-checked-cell...not found
 dotenv...not found
 anymap...not found
-ignoring `https://rustsec.org/advisories/RUSTSEC-2021-0065`
+ignoring `https://rustsec.org/advisories/RUSTSEC-2021-0065` from `https://github.com/rustsec/advisory-db/issues/1281`
 interledger-rs...not found
 serde-xml-rs...not found
 interledger-rs...not found
 anymap...not found
 wee_alloc...found
-ignoring `https://www.reddit.com/r/rust/comments/x1cle0/dont_use_wee_alloc_in_production_code_targeting/`
+ignoring `https://www.reddit.com/r/rust/comments/x1cle0/dont_use_wee_alloc_in_production_code_targeting/` from `https://github.com/rustsec/advisory-db/issues/1394`
 badge...found
 docs...not found
 num-format...not found
@@ -131,10 +131,10 @@ dlopen2...not found
 quote...not found
 syn...not found
 teams...not found
-ignoring `https://github.com/rust-bus`
+ignoring `https://github.com/rust-bus` from `https://github.com/rustsec/advisory-db/issues/1756`
 hpack...found
 hpack-patched...not found
-ignoring `https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html`
+ignoring `https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html` from `https://github.com/rustsec/advisory-db/issues/1784`
 loopdev-erikh...not found
 loopdev...not found
 rust-cpython...not found
@@ -145,6 +145,7 @@ generational-arena...not found
 yaml-rust...not found
 serde-yaml...not found
 toolbox...not found
+ignoring `https://arxiv.org/pdf/2108.04600.pdf` from `https://github.com/rustsec/advisory-db/issues/1933`
 not found (94)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
