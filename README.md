@@ -6,13 +6,11 @@
 
 `cargo-unmaintained` defines an unmaintained package X as one that satisfies one of 1 through 4 below:
 
-1. X's repository does not exist.
+1. X's repository is archived (see [Notes] below).
 
-2. X's repository is archived (see [Notes] below).
+2. X is not a member of its named repository.
 
-3. X is not a member of its named repository.
-
-4. Both a and b below.
+3. Both a and b below.
 
    a. X depends on a version of a package Y that is incompatible with the Y's latest version.
 
@@ -24,9 +22,9 @@ As of 2024-04-02, the RustSec Advisory Database contains 95 active advisories fo
 
 - To check whether packages' repositories have been archived, set the `GITHUB_TOKEN_PATH` environment variable to the path of a file containing a [personal access token]. If unset, this check will be skipped.
 
-- The above conditions consider a "leaf" package (i.e., a package with no dependencies) unmaintained only if one of conditions 1 through 3 applies.
+- The above conditions consider a "leaf" package (i.e., a package with no dependencies) unmaintained only if conditions 1 or 2 apply.
 
-- The purpose of condition 4(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
+- The purpose of condition 3(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
 
 - Of the 28 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 8 do not build
