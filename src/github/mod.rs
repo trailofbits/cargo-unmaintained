@@ -44,6 +44,8 @@ pub(crate) fn archival_status(url: Url) -> Result<RepoStatus<()>> {
     }
 }
 
+// smoelius: Since --imprecise was removed, timestamps are no longer checked using the GitHub API.
+#[allow(dead_code)]
 pub(crate) fn timestamp(url: Url) -> Result<Option<(Url, SystemTime)>> {
     let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
 

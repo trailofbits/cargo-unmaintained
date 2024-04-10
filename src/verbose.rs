@@ -62,6 +62,7 @@ macro_rules! wrap {
     }};
 }
 
+#[allow(unused_macros)]
 macro_rules! update {
     ($fmt:expr) => {
         if crate::opts::get().verbose {
@@ -76,4 +77,4 @@ macro_rules! update {
 }
 
 // smoelius: "The trick": https://stackoverflow.com/a/31749071
-pub(crate) use {__print, __println, newline, update, wrap};
+pub(crate) use {__print, __println, newline, wrap};

@@ -89,14 +89,6 @@ struct Opts {
 
     #[clap(
         long,
-        help = "Do not check whether a package's repository contains the package; enables \
-                checking last commit timestamps using the GitHub API, which is faster, but can \
-                produce false negatives"
-    )]
-    imprecise: bool,
-
-    #[clap(
-        long,
         help = "Age in days that a repository's last commit must not exceed for the repository to \
                 be considered current; 0 effectively disables this check, though ages are still \
                 reported",
@@ -563,10 +555,7 @@ fn is_unmaintained_package<'a>(
         let can_use_github_api =
             var("GITHUB_TOKEN_PATH").is_ok() && url_string.starts_with("https://github.com/");
 
-        // smoelius: If the GitHub API is unavailable, we cannot not check the repository's archival
-        // status. And if --imprecise was passed, we do not attempt to clone the repository (see the
-        // next `if` statement). So in the latter case, at least verify the repository exists.
-        if can_use_github_api || opts::get().imprecise {
+        if can_use_github_api {
             let repo_status = general_status(&pkg.name, url_string.as_str().into())?;
             if repo_status.is_failure() {
                 return Ok(Some(UnmaintainedPkg {
@@ -577,15 +566,13 @@ fn is_unmaintained_package<'a>(
             }
         }
 
-        if !opts::get().imprecise {
-            let repo_status = clone_repository(pkg, Purpose::Membership)?;
-            if repo_status.is_failure() {
-                return Ok(Some(UnmaintainedPkg {
-                    pkg,
-                    repo_age: repo_status.map_failure(),
-                    outdated_deps: Vec::new(),
-                }));
-            }
+        let repo_status = clone_repository(pkg, Purpose::Membership)?;
+        if repo_status.is_failure() {
+            return Ok(Some(UnmaintainedPkg {
+                pkg,
+                repo_age: repo_status.map_failure(),
+                outdated_deps: Vec::new(),
+            }));
         }
     }
 
@@ -750,9 +737,6 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
                     return Ok(repo_status);
                 };
                 assert_eq!(url, url_timestamped);
-                if opts::get().imprecise {
-                    return Ok(RepoStatus::Success(url, timestamp));
-                }
                 // smoelius: `pkg`'s repository could contain other packages that were already
                 // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
                 // But in that case, we still need to verify that `pkg` appears in its repository.
@@ -779,52 +763,11 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 }
 
 fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    let Some(url_string) = &pkg.repository else {
+    if pkg.repository.is_none() {
         return Ok(RepoStatus::Unnamed);
     };
 
-    if opts::get().imprecise && url_string.starts_with("https://github.com/") {
-        let result = verbose::wrap!(
-            || {
-                match github::timestamp(url_string.as_str().into()) {
-                    Ok(Some((url, timestamp))) => Ok(RepoStatus::Success(url, timestamp)),
-                    Ok(None) => {
-                        // smoelius: If `github::timestamp` returns `Ok(None)`, it means a previous
-                        // attempt to query the repository failed. But, in that case,
-                        // `timestamp_uncached` should not have been called.
-                        unreachable!();
-                    }
-                    Err(error) => {
-                        if var("GITHUB_TOKEN_PATH").is_err() {
-                            debug!(
-                                "failed to get timestamp for {} using GitHub API: {}",
-                                url_string, error
-                            );
-                        } else {
-                            warn!(
-                                "failed to get timestamp for {} using GitHub API: {}",
-                                url_string,
-                                first_line(&error.to_string())
-                            );
-                        }
-                        verbose::update!("falling back to shallow clone");
-                        Err(error)
-                    }
-                }
-            },
-            "timestamp of `{}` using GitHub API",
-            pkg.name
-        );
-        if result.is_ok() {
-            return result;
-        }
-    }
-
     timestamp_from_clone(pkg)
-}
-
-fn first_line(s: &str) -> &str {
-    s.lines().next().unwrap_or(s)
 }
 
 fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
@@ -860,10 +803,6 @@ enum Purpose {
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBuf>> {
-    // smoelius: If --imprecise was passed, then the only reason we should be here is to determine
-    // the repository's timestamp (and only then because we could not do so using the GitHub API).
-    assert!(!opts::get().imprecise || matches!(purpose, Purpose::Timestamp));
-
     let repo_status =
         IN_MEMORY_REPOSITORY_CACHE.with_borrow_mut(|in_memory_repository_cache| -> Result<_> {
             ON_DISK_REPOSITORY_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| -> Result<_> {
@@ -923,10 +862,6 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
                 )
             })
         })?;
-
-    if opts::get().imprecise {
-        return Ok(repo_status);
-    }
 
     let Some((url, repo_dir)) = repo_status.as_success() else {
         return Ok(repo_status);
