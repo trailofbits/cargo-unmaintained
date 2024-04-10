@@ -429,11 +429,16 @@ fn unmaintained() -> Result<bool> {
         }
     }
 
+    if unmaintained_pkgs.is_empty() {
+        eprintln!("No unmaintained packages found");
+        return Ok(false);
+    }
+
     unmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age.erase_url());
 
     display_unmaintained_pkgs(&unmaintained_pkgs)?;
 
-    Ok(!opts::get().no_exit_code && !unmaintained_pkgs.is_empty())
+    Ok(!opts::get().no_exit_code)
 }
 
 fn metadata() -> Result<Metadata> {
