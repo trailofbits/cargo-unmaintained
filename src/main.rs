@@ -344,6 +344,17 @@ impl<'a> From<&'a Dependency> for DepReq<'a> {
     }
 }
 
+macro_rules! warn {
+    ($fmt:expr, $($arg:tt)*) => {
+        if crate::opts::get().no_warnings {
+            debug!($fmt, $($arg)*);
+        } else {
+            verbose::newline!();
+            eprintln!(concat!("warning: ", $fmt), $($arg)*);
+        }
+    };
+}
+
 thread_local! {
     #[allow(clippy::unwrap_used)]
     static INDEX: Lazy<GitIndex> = Lazy::new(|| {
@@ -358,17 +369,6 @@ thread_local! {
     // smoelius: The next static is an "on-disk" cache that resides at
     // `$HOME/.cache/cargo-unmaintained/v1`.
     static ON_DISK_REPOSITORY_CACHE_ONCE_CELL: RefCell<OnceCell<repository_cache::Cache>> = const { RefCell::new(OnceCell::new()) };
-}
-
-macro_rules! warn {
-    ($fmt:expr, $($arg:tt)*) => {
-        if crate::opts::get().no_warnings {
-            debug!($fmt, $($arg)*);
-        } else {
-            verbose::newline!();
-            eprintln!(concat!("warning: ", $fmt), $($arg)*);
-        }
-    };
 }
 
 fn main() -> Result<()> {
