@@ -359,7 +359,11 @@ thread_local! {
     #[allow(clippy::unwrap_used)]
     static INDEX: Lazy<GitIndex> = Lazy::new(|| {
         let _lock = lock_index().unwrap();
-        GitIndex::new_cargo_default().unwrap()
+        let mut index = GitIndex::new_cargo_default().unwrap();
+        if let Err(error) = index.update() {
+            warn!("failed to update index: {}", error);
+        }
+        index
     });
     // smoelius: The next four statics are "in-memory" caches.
     static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
