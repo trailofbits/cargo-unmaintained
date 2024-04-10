@@ -560,13 +560,21 @@ fn is_unmaintained_package<'a>(
     pkg: &'a Package,
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
     if let Some(url_string) = &pkg.repository {
-        let repo_status = general_status(&pkg.name, url_string.as_str().into())?;
-        if repo_status.is_failure() {
-            return Ok(Some(UnmaintainedPkg {
-                pkg,
-                repo_age: repo_status.map_failure(),
-                outdated_deps: Vec::new(),
-            }));
+        let can_use_github_api =
+            var("GITHUB_TOKEN_PATH").is_ok() && url_string.starts_with("https://github.com/");
+
+        // smoelius: If the GitHub API is unavailable, we cannot not check the repository's archival
+        // status. And if --imprecise was passed, we do not attempt to clone the repository (see the
+        // next `if` statement). So in the latter case, at least verify the repository exists.
+        if can_use_github_api || opts::get().imprecise {
+            let repo_status = general_status(&pkg.name, url_string.as_str().into())?;
+            if repo_status.is_failure() {
+                return Ok(Some(UnmaintainedPkg {
+                    pkg,
+                    repo_age: repo_status.map_failure(),
+                    outdated_deps: Vec::new(),
+                }));
+            }
         }
 
         if !opts::get().imprecise {
@@ -885,8 +893,17 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
                             }
                             Err(error) => {
                                 let repo_status = if let Some(url_string) = &pkg.repository {
+                                    let url = url_string.as_str().into();
+                                    // smoelius: If cloning failed because the repository does not
+                                    // exist, adjust the repo status.
+                                    let existence = general_status(&pkg.name, url)?;
+                                    let repo_status = if existence.is_failure() {
+                                        existence.map_failure()
+                                    } else {
+                                        RepoStatus::Uncloneable(url)
+                                    };
                                     warn!("failed to clone `{}`: {}", url_string, error);
-                                    RepoStatus::Uncloneable(url_string.as_str().into())
+                                    repo_status
                                 } else {
                                     RepoStatus::Unnamed
                                 };
