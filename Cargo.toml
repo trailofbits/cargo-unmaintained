@@ -49,9 +49,9 @@ similar-asserts = "1.5"
 snapbox = "0.5"
 
 [features]
-default = ["cache-repositories", "lock_index"]
+default = ["cache-repositories", "lock-index"]
 cache-repositories = ["xdg"]
-lock_index = ["libc", "windows-sys"]
+lock-index = ["libc", "windows-sys"]
 
 [lints.clippy]
 pedantic = { level = "warn", priority = -1 }
