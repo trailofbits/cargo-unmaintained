@@ -106,7 +106,7 @@ fn snapbox() -> Result<()> {
 
             let mut command = Command::new(cargo_bin("cargo-unmaintained"));
             command
-                .args(["unmaintained", "--color=never", "--imprecise"])
+                .args(["unmaintained", "--color=never", "--no-warnings"])
                 .current_dir(dir);
 
             if enabled("VERBOSE") {
