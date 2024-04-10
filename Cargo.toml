@@ -79,3 +79,6 @@ libraries = [
 
 [workspace.metadata.unmaintained]
 ignore = ["adler"]
+
+[patch.crates-io]
+crates-index = { git = "https://github.com/smoelius/rust-crates-index", branch = "gix-error" }

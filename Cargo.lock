@@ -376,8 +376,7 @@ checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
 [[package]]
 name = "crates-index"
 version = "2.7.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "879bde76e7fb6166c3d36dd2b1e376d012e8b110b52cbec72bf59c40d20ec9fe"
+source = "git+https://github.com/smoelius/rust-crates-index?branch=gix-error#71eb5ec780ba439af556617ce90e122f5917c2d6"
 dependencies = [
  "gix",
  "hex",
