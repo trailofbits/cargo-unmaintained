@@ -35,7 +35,7 @@ mod repository_cache;
 mod url;
 mod verbose;
 
-#[cfg(feature = "lock_index")]
+#[cfg(feature = "lock-index")]
 mod flock;
 
 use url::{urls, Url};
@@ -1075,12 +1075,12 @@ static INDEX_PATH: Lazy<PathBuf> = Lazy::new(|| {
     cargo_home.join("registry/index")
 });
 
-#[cfg(feature = "lock_index")]
+#[cfg(feature = "lock-index")]
 fn lock_index() -> Result<File> {
     flock::lock_path(&INDEX_PATH).with_context(|| format!("failed to lock {:?}", &*INDEX_PATH))
 }
 
-#[cfg(not(feature = "lock_index"))]
+#[cfg(not(feature = "lock-index"))]
 fn lock_index() -> Result<File> {
     File::open(&*INDEX_PATH).with_context(|| format!("failed to open {:?}", &*INDEX_PATH))
 }

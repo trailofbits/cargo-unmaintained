@@ -107,7 +107,7 @@ impl Cache {
         // tests, because they run concurrently. I am not sure how much contention this locking
         // causes.
         let _lock: File;
-        #[cfg(all(feature = "cache-repositories", feature = "lock_index", not(windows)))]
+        #[cfg(all(feature = "cache-repositories", feature = "lock-index", not(windows)))]
         if self.tempdir.is_none() {
             _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
                 .with_context(|| format!("failed to lock {:?}", &*CACHE_DIRECTORY))?;
