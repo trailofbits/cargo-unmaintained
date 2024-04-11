@@ -146,7 +146,10 @@ yaml-rust...not found
 serde-yaml...not found
 toolbox...not found
 ignoring `https://arxiv.org/pdf/2108.04600.pdf` from `https://github.com/rustsec/advisory-db/issues/1933`
-not found (89)
+cargo-asm...not found
+cargo-show-asm...not found
+ignoring `https://rustsec.org/advisories/RUSTSEC-2020-0158.html` from `https://github.com/rustsec/advisory-db/issues/1935`
+not found (91)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -236,6 +239,8 @@ not found (89)
     yaml-rust                https://github.com/rustsec/advisory-db/issues/1921
     serde-yaml               https://github.com/rustsec/advisory-db/issues/1925
     toolbox                  https://github.com/rustsec/advisory-db/issues/1927
+    cargo-asm                https://github.com/rustsec/advisory-db/issues/1935
+    cargo-show-asm           https://github.com/rustsec/advisory-db/issues/1935
 found (41)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
