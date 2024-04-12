@@ -149,7 +149,12 @@ ignoring `https://arxiv.org/pdf/2108.04600.pdf` from `https://github.com/rustsec
 cargo-asm...not found
 cargo-show-asm...not found
 ignoring `https://rustsec.org/advisories/RUSTSEC-2020-0158.html` from `https://github.com/rustsec/advisory-db/issues/1935`
-not found (91)
+openslide...found
+openslide_rs...not found
+openslide-rs...not found
+ignoring `https://github.com/ojskrede` from `https://github.com/rustsec/advisory-db/issues/1937`
+openslide-rust...not found
+not found (94)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -241,7 +246,10 @@ not found (91)
     toolbox                  https://github.com/rustsec/advisory-db/issues/1927
     cargo-asm                https://github.com/rustsec/advisory-db/issues/1935
     cargo-show-asm           https://github.com/rustsec/advisory-db/issues/1935
-found (41)
+    openslide_rs             https://github.com/rustsec/advisory-db/issues/1937
+    openslide-rs             https://github.com/rustsec/advisory-db/issues/1937
+    openslide-rust           https://github.com/rustsec/advisory-db/issues/1937
+found (42)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -283,3 +291,4 @@ found (41)
     loopdev-erikh            https://github.com/rustsec/advisory-db/issues/1821
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
+    openslide                https://github.com/rustsec/advisory-db/issues/1937
