@@ -66,16 +66,6 @@ impl Cache {
         })
     }
 
-    pub fn finalize(&mut self) {
-        #[allow(clippy::unwrap_used)]
-        if let Some(tempdir) = self.tempdir.take() {
-            drop(tempdir);
-        } else {
-            self.write_entries().unwrap();
-            self.write_timestamps().unwrap();
-        }
-    }
-
     #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
     pub fn clone_repository(&mut self, pkg: &Package) -> Result<(String, PathBuf)> {
         // smoelius: Ignore any errors that may occur while reading/deserializing.
@@ -88,17 +78,22 @@ impl Cache {
                 return Ok((entry.cloned_url, repo_dir));
             }
         }
+
         let url_and_dir = self.clone_repository_uncached(pkg)?;
+
         #[allow(clippy::unwrap_used)]
-        self.entries.insert(
-            pkg.name.clone(),
-            Entry {
-                named_url: pkg.repository.clone().unwrap(),
-                cloned_url: url_and_dir.0.as_str().to_owned(),
-            },
-        );
-        self.timestamps
-            .insert(url_digest(&url_and_dir.0), SystemTime::now());
+        let entry = Entry {
+            named_url: pkg.repository.clone().unwrap(),
+            cloned_url: url_and_dir.0.as_str().to_owned(),
+        };
+        self.write_entry(&pkg.name, &entry)?;
+        self.entries.insert(pkg.name.clone(), entry);
+
+        let digest = url_digest(&url_and_dir.0);
+        let timestamp = SystemTime::now();
+        self.write_timestamp(&digest, timestamp)?;
+        self.timestamps.insert(digest, timestamp);
+
         Ok(url_and_dir)
     }
 
@@ -187,25 +182,21 @@ impl Cache {
         Ok(*self.timestamps.get(&digest).unwrap())
     }
 
-    fn write_entries(&self) -> Result<()> {
+    fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
         create_dir_all(self.entries_dir()).with_context(|| "failed to create entries directory")?;
-        for (pkg_name, entry) in &self.entries {
-            let path = self.entries_dir().join(pkg_name);
-            let json = serde_json::to_string_pretty(entry)?;
-            write(&path, json).with_context(|| format!("failed to write `{}`", path.display()))?;
-        }
+        let path = self.entries_dir().join(pkg_name);
+        let json = serde_json::to_string_pretty(entry)?;
+        write(&path, json).with_context(|| format!("failed to write `{}`", path.display()))?;
         Ok(())
     }
 
-    fn write_timestamps(&self) -> Result<()> {
+    fn write_timestamp(&self, digest: &str, timestamp: SystemTime) -> Result<()> {
         create_dir_all(self.timestamps_dir())
             .with_context(|| "failed to create timestamps directory")?;
-        for (digest, timestamp) in &self.timestamps {
-            let path = self.timestamps_dir().join(digest);
-            let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
-            write(&path, duration.as_secs().to_string())
-                .with_context(|| format!("failed to write `{}`", path.display()))?;
-        }
+        let path = self.timestamps_dir().join(digest);
+        let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
+        write(&path, duration.as_secs().to_string())
+            .with_context(|| format!("failed to write `{}`", path.display()))?;
         Ok(())
     }
 
