@@ -899,13 +899,16 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
             continue;
         }
         let contents = read_to_string(path).with_context(|| format!("failed to read {path:?}"))?;
-        let Ok(table) = contents.parse::<Table>().map_err(|error| {
+        let Ok(table) = contents.parse::<Table>()
+        /* smoelius: This "failed to parse" warning is a little too noisy.
+        .map_err(|error| {
             warn!(
                 "failed to parse {:?}: {}",
                 path,
                 error.to_string().trim_end()
             );
-        }) else {
+        }) */
+        else {
             continue;
         };
         if table
