@@ -390,19 +390,7 @@ fn main() -> Result<()> {
     }
 }
 
-struct FinalizeOnDiskRepositoryCache;
-
-impl Drop for FinalizeOnDiskRepositoryCache {
-    fn drop(&mut self) {
-        ON_DISK_REPOSITORY_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| {
-            on_disk_repository_cache(once_cell).finalize();
-        });
-    }
-}
-
 fn unmaintained() -> Result<bool> {
-    let _finalize_on_disk_repository_cache = FinalizeOnDiskRepositoryCache;
-
     let mut unmaintained_pkgs = Vec::new();
 
     let metadata = metadata()?;
