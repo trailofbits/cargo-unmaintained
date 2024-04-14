@@ -1,4 +1,4 @@
-95 advisories for unmaintained packages
+97 advisories for unmaintained packages
 lz4-compress...recently updated
 tempdir...found
 typemap...not found
@@ -135,6 +135,8 @@ puccinier...error:
 ```
 Error: found no packages matching `puccinier`
 ```
+rsa-export...found
+libp2p-tokio-socks5...found
 not found - error (8)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -177,7 +179,7 @@ not found - other (22)
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     yaml-rust            https://rustsec.org/advisories/RUSTSEC-2024-0320.html
-found (57)
+found (59)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
     safe-nd              https://rustsec.org/advisories/RUSTSEC-2020-0063.html
@@ -235,3 +237,5 @@ found (57)
     dlopen_derive        https://rustsec.org/advisories/RUSTSEC-2023-0051.html
     hpack                https://rustsec.org/advisories/RUSTSEC-2023-0084.html
     filesystem           https://rustsec.org/advisories/RUSTSEC-2024-0015.html
+    rsa-export           https://rustsec.org/advisories/RUSTSEC-2024-0333.html
+    libp2p-tokio-socks5  https://rustsec.org/advisories/RUSTSEC-2024-0334.html
