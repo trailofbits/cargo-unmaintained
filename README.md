@@ -4,7 +4,7 @@
 
 `cargo-unmaintained` is similar to [`cargo-audit`]. However, `cargo-unmaintained` finds unmaintained packages automatically using heuristics, rather than rely on users to manually submit them to the [RustSec Advisory Database].
 
-`cargo-unmaintained` defines an unmaintained package X as one that satisfies one of 1 through 4 below:
+`cargo-unmaintained` defines an unmaintained package X as one that satisfies one of 1 through 3 below:
 
 1. X's repository is archived (see [Notes] below).
 
