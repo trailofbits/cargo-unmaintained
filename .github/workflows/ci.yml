@@ -95,11 +95,15 @@ jobs:
           cargo install group-runner             || true
 
       - name: Enable externally influenced tests
-        if: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
         run: |
-          echo 'ENABLE_EI_TESTS=--features=ei' >> "$GITHUB_ENV"
-          echo 'EI_TESTS_0=--test rustsec_advisories' >> "$GITHUB_ENV"
-          echo 'EI_TESTS_1=--test rustsec_issues' >> "$GITHUB_ENV"
+          if [[ ${{ github.event_name }} = 'schedule' ]] ||
+            [[ ${{ github.event_name }} = 'workflow_dispatch' ]] ||
+            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'rustsec_\(advisories\|issues\)' >/dev/null
+          then
+            echo 'ENABLE_EI_TESTS=--features=ei' >> "$GITHUB_ENV"
+            echo 'EI_TESTS_0=--test rustsec_advisories' >> "$GITHUB_ENV"
+            echo 'EI_TESTS_1=--test rustsec_issues' >> "$GITHUB_ENV"
+          fi
 
       - name: Enable verbose logging
         if: ${{ runner.debug == 1 }}
