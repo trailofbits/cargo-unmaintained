@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.0.0
+
+- Up `curl` timeout to 60 seconds. (10 seconds was a little too aggressive.) ([79905a8](https://github.com/trailofbits/cargo-unmaintained/commit/79905a8e1b373035e13fddd3b850cda0362e6eb3))
+- Eliminate reliance on `octocrab`. (The tests still use `octocrab`, though.) ([#193](https://github.com/trailofbits/cargo-unmaintained/pull/193))
+- Cache repositories on disk between runs ([33585c5](https://github.com/trailofbits/cargo-unmaintained/commit/33585c5520f9e2ec83fdb8bc34057a12d1a9ab67)
+  and [edb06c7](https://github.com/trailofbits/cargo-unmaintained/commit/edb06c77d90dbf1792849c89cc68f58f16c70ae5))
+- BREAKING CHANGE: Remove `--imprecise` option ([addffbc](https://github.com/trailofbits/cargo-unmaintained/commit/addffbc3742981bb6c4a68bb47d1ea97e4930d60))
+- BREAKING CHANGE: Rename `lock_index` feature to `lock-index` ([#222](https://github.com/trailofbits/cargo-unmaintained/pull/222))
+- Add "No unmaintained packages found" message ([#223](https://github.com/trailofbits/cargo-unmaintained/pull/223))
+- Silence "failed to parse" warnings ([86221f8](https://github.com/trailofbits/cargo-unmaintained/commit/86221f8b0eafcf1a5ccd4a1f0e975ced11663a01))
+
 ## 0.4.0
 
 - A package passed to `-p` is no longer required to be a dependency. Passing any `NAME` in `cargo unmaintained -p NAME` will cause the package to be downloaded from `crates.io` and checked. ([#136](https://github.com/trailofbits/cargo-unmaintained/pull/136))
