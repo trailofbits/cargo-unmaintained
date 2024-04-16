@@ -252,7 +252,6 @@ dependencies = [
  "log",
  "once_cell",
  "predicates",
- "proc-macro2",
  "rayon",
  "regex",
  "remain",
