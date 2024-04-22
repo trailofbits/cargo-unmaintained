@@ -154,7 +154,8 @@ openslide_rs...not found
 openslide-rs...not found
 ignoring `https://github.com/ojskrede` from `https://github.com/rustsec/advisory-db/issues/1937`
 openslide-rust...not found
-not found (94)
+google-apis-rs...not found
+not found (95)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -249,6 +250,7 @@ not found (94)
     openslide_rs             https://github.com/rustsec/advisory-db/issues/1937
     openslide-rs             https://github.com/rustsec/advisory-db/issues/1937
     openslide-rust           https://github.com/rustsec/advisory-db/issues/1937
+    google-apis-rs           https://github.com/rustsec/advisory-db/issues/1945
 found (42)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
