@@ -96,6 +96,7 @@ jobs:
 
       - name: Enable externally influenced tests
         run: |
+          git fetch https://github.com/${{ github.repository }}
           if [[ ${{ github.event_name }} = 'schedule' ]] ||
             [[ ${{ github.event_name }} = 'workflow_dispatch' ]] ||
             git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'rustsec_\(advisories\|issues\)' >/dev/null
