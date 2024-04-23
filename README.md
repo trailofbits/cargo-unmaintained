@@ -44,6 +44,10 @@ For example, the following is the output produced by running `cargo-unmaintained
 
 <img src="etc/output.png" width=725>
 
+## Installation
+
+`cargo install cargo-unmaintained`
+
 ## Usage
 
 ```
