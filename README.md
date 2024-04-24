@@ -46,7 +46,9 @@ For example, the following is the output produced by running `cargo-unmaintained
 
 ## Installation
 
-`cargo install cargo-unmaintained`
+```sh
+cargo install cargo-unmaintained
+```
 
 ## Usage
 
