@@ -1,4 +1,4 @@
-97 advisories for unmaintained packages
+98 advisories for unmaintained packages
 lz4-compress...recently updated
 tempdir...found
 typemap...not found
@@ -137,6 +137,7 @@ Error: found no packages matching `puccinier`
 ```
 rsa-export...found
 libp2p-tokio-socks5...found
+zip_next...found
 not found - error (8)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -169,7 +170,7 @@ not found - other (15)
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     yaml-rust            https://rustsec.org/advisories/RUSTSEC-2024-0320.html
-found (69)
+found (70)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
@@ -239,8 +240,9 @@ found (69)
     filesystem           https://rustsec.org/advisories/RUSTSEC-2024-0015.html
     rsa-export           https://rustsec.org/advisories/RUSTSEC-2024-0333.html
     libp2p-tokio-socks5  https://rustsec.org/advisories/RUSTSEC-2024-0334.html
+    zip_next             https://rustsec.org/advisories/RUSTSEC-2024-0337.html
 ---
-As of 2024-04-14, the RustSec Advisory Database contains 97 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 69 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+As of 2024-04-28, the RustSec Advisory Database contains 98 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 70 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
 - Of the 28 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 8 do not build
   - 3 are existent, unarchived leaves
