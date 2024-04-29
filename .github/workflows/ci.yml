@@ -119,7 +119,9 @@ jobs:
           echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
           case '${{ matrix.test }}' in
             without-token)
-              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS $EI_TESTS_0 $EI_TESTS_1 -- --nocapture
+              # smoelius: Do not use `$EI_TESTS_0` or `$EI_TESTS_1` in the next command as it would
+              # cause the command to run only those tests.
+              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS -- --nocapture
               ;;
             with-token-0)
               export GITHUB_TOKEN_PATH
