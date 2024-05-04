@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+- Don't emit duplicate errors when cloning a repository fails ([#251](https://github.com/trailofbits/cargo-unmaintained/pull/251))
+
 ## 1.0.0
 
 - Up `curl` timeout to 60 seconds. (10 seconds was a little too aggressive.) ([79905a8](https://github.com/trailofbits/cargo-unmaintained/commit/79905a8e1b373035e13fddd3b850cda0362e6eb3))
