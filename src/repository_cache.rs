@@ -142,6 +142,8 @@ impl Cache {
             let error = String::from_utf8(output.stderr)?;
             errors.push(error);
         }
+        // smoelius: Don't emit duplicate errors.
+        errors.dedup();
         Err(anyhow!("{:#?}", errors))
     }
 
