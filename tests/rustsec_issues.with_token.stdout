@@ -155,8 +155,8 @@ openslide-rs...not found
 ignoring `https://github.com/ojskrede` from `https://github.com/rustsec/advisory-db/issues/1937`
 openslide-rust...not found
 google-apis-rs...not found
-isahc...found
-not found (95)
+isahc...not found
+not found (96)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -252,7 +252,8 @@ not found (95)
     openslide-rs             https://github.com/rustsec/advisory-db/issues/1937
     openslide-rust           https://github.com/rustsec/advisory-db/issues/1937
     google-apis-rs           https://github.com/rustsec/advisory-db/issues/1945
-found (43)
+    isahc                    https://github.com/rustsec/advisory-db/issues/1954
+found (42)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -295,4 +296,3 @@ found (43)
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     openslide                https://github.com/rustsec/advisory-db/issues/1937
-    isahc                    https://github.com/rustsec/advisory-db/issues/1954
