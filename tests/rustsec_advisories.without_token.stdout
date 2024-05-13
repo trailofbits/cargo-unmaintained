@@ -43,7 +43,7 @@ safe-api...error:
 ```
     Updating crates.io index
 error: failed to select a version for the requirement `quinn = "~0.3.0"`
-candidate versions found which didn't match: 0.10.2, 0.10.1, 0.10.0, ...
+candidate versions found which didn't match: 0.11.0, 0.10.2, 0.10.1, ...
 location searched: crates.io index
 required by package `quic-p2p v0.2.1`
     ... which satisfies dependency `quic-p2p = "~0.2.1"` of package `safe_core v0.33.0`
