@@ -156,7 +156,10 @@ ignoring `https://github.com/ojskrede` from `https://github.com/rustsec/advisory
 openslide-rust...not found
 google-apis-rs...not found
 isahc...not found
-not found (101)
+zip...not found
+zip-old...not found
+zip2...not found
+not found (104)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -258,6 +261,9 @@ not found (101)
     openslide-rust           https://github.com/rustsec/advisory-db/issues/1937
     google-apis-rs           https://github.com/rustsec/advisory-db/issues/1945
     isahc                    https://github.com/rustsec/advisory-db/issues/1954
+    zip                      https://github.com/rustsec/advisory-db/issues/1956
+    zip-old                  https://github.com/rustsec/advisory-db/issues/1956
+    zip2                     https://github.com/rustsec/advisory-db/issues/1956
 found (37)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
