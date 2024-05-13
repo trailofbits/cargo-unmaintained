@@ -9,11 +9,11 @@ repository = "https://github.com/trailofbits/cargo-unmaintained"
 
 [[test]]
 name = "rustsec_advisories"
-required-features = ["ei"]
+required-features = ["test-ei"]
 
 [[test]]
 name = "rustsec_issues"
-required-features = ["ei"]
+required-features = ["test-ei"]
 
 [dependencies]
 anyhow = { version = "1.0", features = ["backtrace"] }
@@ -59,7 +59,7 @@ snapbox = "0.5"
 [features]
 default = ["cache-repositories", "lock-index"]
 cache-repositories = ["xdg"]
-ei = []                                        # ei = "externally influenced"
+test-ei = []                                   # ei = "externally influenced"
 lock-index = ["libc", "windows-sys"]
 
 [lints.clippy]

@@ -90,10 +90,10 @@ ignore = ["matchers"]
 
 ## Testing
 
-Some tests are not run by default because they are "externally influenced," i.e., they rely on data from external sources. To enable these additional tests, enable feature `ei`, e.g.:
+Some tests are not run by default because they are "externally influenced," i.e., they rely on data from external sources. To enable these additional tests, enable feature `test-ei`, e.g.:
 
 ```sh
-cargo test --features=ei
+cargo test --features=test-ei
 ```
 
 ## Known problems
