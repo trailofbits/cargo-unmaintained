@@ -1,4 +1,4 @@
-use snapbox::{assert_matches, Data};
+use snapbox::{assert_data_eq, Data};
 use std::{
     env::{remove_var, var},
     fs::write,
@@ -30,9 +30,9 @@ fn rustsec_issues() {
     if var("BLESS").is_ok() {
         write(path_stdout, stdout_actual).unwrap();
     } else {
-        assert_matches(
-            Data::read_from(&PathBuf::from(path_stdout), None),
+        assert_data_eq!(
             stdout_actual,
+            Data::read_from(&PathBuf::from(path_stdout), None),
         );
     }
 }

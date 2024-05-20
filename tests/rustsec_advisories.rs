@@ -1,4 +1,4 @@
-use snapbox::assert_matches;
+use snapbox::assert_data_eq;
 use std::{env::remove_var, fs::read_to_string, process::Command};
 
 mod util;
@@ -26,9 +26,9 @@ fn rustsec_advisories() {
     .unwrap();
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
-    assert_matches(
-        above_cut_line(&stdout_expected),
+    assert_data_eq!(
         above_cut_line(stdout_actual),
+        above_cut_line(&stdout_expected),
     );
 }
 
