@@ -136,7 +136,7 @@ hpack...found
 hpack-patched...not found
 ignoring `https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html` from `https://github.com/rustsec/advisory-db/issues/1784`
 loopdev-erikh...found
-loopdev...not found
+loopdev...found
 rust-cpython...not found
 smartstring...not found
 filesystem-rs...not found
@@ -159,7 +159,7 @@ isahc...not found
 zip...not found
 zip-old...not found
 zip2...not found
-not found (99)
+not found (98)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -242,7 +242,6 @@ not found (99)
     syn                      https://github.com/rustsec/advisory-db/issues/1735
     teams                    https://github.com/rustsec/advisory-db/issues/1756
     hpack-patched            https://github.com/rustsec/advisory-db/issues/1784
-    loopdev                  https://github.com/rustsec/advisory-db/issues/1821
     rust-cpython             https://github.com/rustsec/advisory-db/issues/1822
     smartstring              https://github.com/rustsec/advisory-db/issues/1854
     filesystem-rs            https://github.com/rustsec/advisory-db/issues/1870
@@ -259,7 +258,7 @@ not found (99)
     zip                      https://github.com/rustsec/advisory-db/issues/1956
     zip-old                  https://github.com/rustsec/advisory-db/issues/1956
     zip2                     https://github.com/rustsec/advisory-db/issues/1956
-found (42)
+found (43)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -299,6 +298,7 @@ found (42)
     cloud-storage-rs         https://github.com/rustsec/advisory-db/issues/1715
     hpack                    https://github.com/rustsec/advisory-db/issues/1784
     loopdev-erikh            https://github.com/rustsec/advisory-db/issues/1821
+    loopdev                  https://github.com/rustsec/advisory-db/issues/1821
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     openslide                https://github.com/rustsec/advisory-db/issues/1937
