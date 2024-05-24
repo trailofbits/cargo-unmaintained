@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.2
+
+- Update dependencies, including `gix` to version 0.63.0 ([#269](https://github.com/trailofbits/cargo-unmaintained/pull/269))
+
 ## 1.0.1
 
 - Don't emit duplicate errors when cloning a repository fails ([#251](https://github.com/trailofbits/cargo-unmaintained/pull/251))
