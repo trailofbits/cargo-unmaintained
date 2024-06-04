@@ -43,7 +43,7 @@ safe-api...error:
 ```
     Updating crates.io index
 error: failed to select a version for the requirement `quinn = "~0.3.0"`
-candidate versions found which didn't match: 0.11.0, 0.10.2, 0.10.1, ...
+candidate versions found which didn't match: 0.11.1, 0.11.0, 0.10.2, ...
 location searched: crates.io index
 required by package `quic-p2p v0.2.1`
     ... which satisfies dependency `quic-p2p = "~0.2.1"` of package `safe_core v0.33.0`
@@ -137,7 +137,7 @@ Error: found no packages matching `puccinier`
 ```
 rsa-export...found
 libp2p-tokio-socks5...found
-zip_next...not found
+zip_next...recently updated
 not found - error (8)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -153,11 +153,12 @@ not found - leaf (5)
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
     safemem              https://rustsec.org/advisories/RUSTSEC-2023-0081.html
-not found - recently-updated (3)
+not found - recently-updated (4)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
-not found - other (23)
+    zip_next             https://rustsec.org/advisories/RUSTSEC-2024-0337.html
+not found - other (22)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
     failure              https://rustsec.org/advisories/RUSTSEC-2020-0036.html
@@ -180,7 +181,6 @@ not found - other (23)
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     yaml-rust            https://rustsec.org/advisories/RUSTSEC-2024-0320.html
-    zip_next             https://rustsec.org/advisories/RUSTSEC-2024-0337.html
 found (59)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
