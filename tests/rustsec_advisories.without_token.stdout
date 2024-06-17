@@ -3,7 +3,7 @@ lz4-compress...recently updated
 tempdir...found
 typemap...not found
 boxfnonce...leaf
-net2...recently updated
+net2...found
 block-cipher-trait...error:
 ```
     Updating crates.io index
@@ -153,9 +153,8 @@ not found - leaf (5)
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
     safemem              https://rustsec.org/advisories/RUSTSEC-2023-0081.html
-not found - recently-updated (4)
+not found - recently-updated (3)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
-    net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     tui                  https://rustsec.org/advisories/RUSTSEC-2023-0049.html
     zip_next             https://rustsec.org/advisories/RUSTSEC-2024-0337.html
 not found - other (22)
@@ -181,8 +180,9 @@ not found - other (22)
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     yaml-rust            https://rustsec.org/advisories/RUSTSEC-2024-0320.html
-found (59)
+found (60)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
+    net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
     safe-nd              https://rustsec.org/advisories/RUSTSEC-2020-0063.html
     ffi_utils            https://rustsec.org/advisories/RUSTSEC-2020-0064.html

@@ -3,7 +3,7 @@ lz4-compress...recently updated
 tempdir...found
 typemap...not found
 boxfnonce...found
-net2...recently updated
+net2...found
 block-cipher-trait...error:
 ```
     Updating crates.io index
@@ -151,9 +151,8 @@ not found - leaf (3)
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
-not found - recently-updated (2)
+not found - recently-updated (1)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
-    net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
 not found - other (15)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -170,9 +169,10 @@ not found - other (15)
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     yaml-rust            https://rustsec.org/advisories/RUSTSEC-2024-0320.html
-found (70)
+found (71)
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
+    net2                 https://rustsec.org/advisories/RUSTSEC-2020-0016.html
     bigint               https://rustsec.org/advisories/RUSTSEC-2020-0025.html
     failure              https://rustsec.org/advisories/RUSTSEC-2020-0036.html
     safe-nd              https://rustsec.org/advisories/RUSTSEC-2020-0063.html
@@ -242,9 +242,9 @@ found (70)
     libp2p-tokio-socks5  https://rustsec.org/advisories/RUSTSEC-2024-0334.html
     zip_next             https://rustsec.org/advisories/RUSTSEC-2024-0337.html
 ---
-As of 2024-04-28, the RustSec Advisory Database contains 98 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 70 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
-- Of the 28 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+As of 2024-06-17, the RustSec Advisory Database contains 98 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 71 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+- Of the 27 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 8 do not build
   - 3 are existent, unarchived leaves
-  - 2 were updated within the past 365 days
+  - 1 were updated within the past 365 days
   - 15 were not identified for other reasons
