@@ -8,17 +8,17 @@ use cargo_metadata::{
 use clap::{crate_version, Parser};
 use crates_index::GitIndex;
 use home::cargo_home;
-use log::debug;
 use once_cell::{sync::Lazy, unsync::OnceCell};
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
-    env::{args, var},
+    env::args,
     ffi::OsStr,
     fs::{read_to_string, File},
     path::{Path, PathBuf},
     process::{exit, Command},
     str::FromStr,
+    sync::atomic::{AtomicBool, Ordering},
     time::{Duration, SystemTime},
 };
 use tempfile::TempDir;
@@ -336,12 +336,13 @@ impl<'a> From<&'a Dependency> for DepReq<'a> {
     }
 }
 
+#[macro_export]
 macro_rules! warn {
     ($fmt:expr, $($arg:tt)*) => {
-        if crate::opts::get().no_warnings {
-            debug!($fmt, $($arg)*);
+        if $crate::opts::get().no_warnings {
+            log::debug!($fmt, $($arg)*);
         } else {
-            verbose::newline!();
+            $crate::verbose::newline!();
             eprintln!(concat!("warning: ", $fmt), $($arg)*);
         }
     };
@@ -367,18 +368,20 @@ thread_local! {
     static ON_DISK_REPOSITORY_CACHE_ONCE_CELL: RefCell<OnceCell<repository_cache::Cache>> = const { RefCell::new(OnceCell::new()) };
 }
 
+static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
+
 fn main() -> Result<()> {
     env_logger::init();
-
-    if let Ok(path) = var("GITHUB_TOKEN_PATH") {
-        github::load_token(&path)?;
-    }
 
     let Cargo {
         subcmd: CargoSubCommand::Unmaintained(opts),
     } = Cargo::parse_from(args());
 
     opts::init(opts);
+
+    if github::load_token(|_| Ok(()))? {
+        TOKEN_FOUND.store(true, Ordering::SeqCst);
+    }
 
     match unmaintained() {
         Ok(false) => exit(0),
@@ -546,7 +549,7 @@ fn is_unmaintained_package<'a>(
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
     if let Some(url_string) = &pkg.repository {
         let can_use_github_api =
-            var("GITHUB_TOKEN_PATH").is_ok() && url_string.starts_with("https://github.com/");
+            TOKEN_FOUND.load(Ordering::SeqCst) && url_string.starts_with("https://github.com/");
 
         if can_use_github_api {
             let repo_status = general_status(&pkg.name, url_string.as_str().into())?;
@@ -596,7 +599,7 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
         if let Some(&value) = general_status_cache.get(&url) {
             return Ok(value);
         }
-        let (use_github_api, what, how) = if var("GITHUB_TOKEN_PATH").is_ok()
+        let (use_github_api, what, how) = if TOKEN_FOUND.load(Ordering::SeqCst)
             && url.as_str().starts_with("https://github.com/")
         {
             (true, "archival status", "GitHub API")

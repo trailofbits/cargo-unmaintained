@@ -5,7 +5,7 @@ use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec::{advisory::Informational, Advisory, Database};
 use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes, Outcome};
-use std::{env::var, path::Path, process::Command};
+use std::{path::Path, process::Command};
 use strum_macros::{Display, EnumIter};
 
 // smoelius: "../../../" is not ideal, but I am trying to avoid turning `cargo-unmaintained` into a
@@ -130,15 +130,14 @@ fn main() -> Result<()> {
             .collect::<Vec<_>>(),
     );
 
-    if var("GITHUB_TOKEN_PATH").is_ok() {
-        println!("---");
-        display_expected_readme_contents(
-            &advisory_outcomes
-                .iter()
-                .map(|&(_, outcome)| outcome)
-                .collect::<Vec<_>>(),
-        );
-    }
+    println!("---");
+
+    display_expected_readme_contents(
+        &advisory_outcomes
+            .iter()
+            .map(|&(_, outcome)| outcome)
+            .collect::<Vec<_>>(),
+    );
 
     Ok(())
 }

@@ -7,27 +7,26 @@ use rustsec_util::{
 };
 use std::{
     collections::HashSet,
-    env::var,
     future::Future,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
-mod github_util;
-use github_util::{load_token, RT};
+mod octocrab_util;
 
 // smoelius: See comment in rustsec_advisories.rs regarding "../../../".
 #[path = "../../../../src/flush.rs"]
 mod flush;
 use flush::Flush;
 
+#[path = "../../../../src/github/util.rs"]
+mod github_util;
+
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn main() -> Result<()> {
-    if let Ok(path) = var("GITHUB_TOKEN_PATH") {
-        load_token(&path)?;
-    }
+    github_util::load_token(octocrab_util::load_token)?;
 
     let mut issues = Vec::new();
-    RT.block_on(async {
+    octocrab_util::RT.block_on(async {
         // smoelius: Based on: https://github.com/XAMPPRocky/octocrab/issues/507
         let octocrab = octocrab::instance();
         let issue_handler = octocrab.issues("rustsec", "advisory-db");
