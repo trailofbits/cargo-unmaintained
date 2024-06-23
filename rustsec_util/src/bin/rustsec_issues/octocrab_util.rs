@@ -1,6 +1,5 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use once_cell::sync::Lazy;
-use std::fs::read_to_string;
 use tokio::runtime;
 
 #[allow(clippy::unwrap_used)]
@@ -12,8 +11,7 @@ pub(super) static RT: Lazy<runtime::Runtime> = Lazy::new(|| {
         .unwrap()
 });
 
-pub(crate) fn load_token(path: &str) -> Result<()> {
-    let token = read_to_string(path).with_context(|| format!("failed to read {path:?}"))?;
+pub(crate) fn load_token(token: String) -> Result<()> {
     RT.block_on(async {
         let octocrab = octocrab::Octocrab::builder()
             .personal_token(token.trim_end().to_owned())

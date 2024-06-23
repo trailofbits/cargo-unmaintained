@@ -94,18 +94,6 @@ jobs:
           cargo install cargo-license            || true
           cargo install group-runner             || true
 
-      - name: Enable externally influenced tests
-        run: |
-          git fetch https://github.com/${{ github.repository }}
-          if [[ ${{ github.event_name }} = 'schedule' ]] ||
-            [[ ${{ github.event_name }} = 'workflow_dispatch' ]] ||
-            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'rustsec_\(advisories\|issues\)' >/dev/null
-          then
-            echo 'ENABLE_EI_TESTS=--features=test-ei' >> "$GITHUB_ENV"
-            echo 'EI_TESTS_0=--test rustsec_advisories' >> "$GITHUB_ENV"
-            echo 'EI_TESTS_1=--test rustsec_issues' >> "$GITHUB_ENV"
-          fi
-
       - name: Enable verbose logging
         if: ${{ runner.debug == 1 }}
         run: echo 'VERBOSE=1' >> "$GITHUB_ENV"
@@ -115,26 +103,22 @@ jobs:
 
       - name: Test
         run: |
-          GITHUB_TOKEN_PATH="$(mktemp)"
-          echo '${{ secrets.GITHUB_TOKEN }}' > "$GITHUB_TOKEN_PATH"
           case '${{ matrix.test }}' in
             without-token)
-              # smoelius: Do not use `$EI_TESTS_0` or `$EI_TESTS_1` in the next command as it would
-              # cause the command to run only those tests.
-              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS -- --nocapture
+              cargo test --config "$GROUP_RUNNER" -- --nocapture
               ;;
             with-token-0)
-              export GITHUB_TOKEN_PATH
-              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS \
+              export GITHUB_TOKEN='${{ github.token }}'
+              cargo test --config "$GROUP_RUNNER" --features=test-ei \
                 --test dogfood \
-                $EI_TESTS_0 \
+                --test rustsec_advisories \
                 -- --nocapture
               ;;
             with-token-1)
-              export GITHUB_TOKEN_PATH
-              cargo test --config "$GROUP_RUNNER" $ENABLE_EI_TESTS \
+              export GITHUB_TOKEN='${{ github.token }}'
+              cargo test --config "$GROUP_RUNNER" --features=test-ei \
+                --test rustsec_issues \
                 --test snapbox \
-                $EI_TESTS_1 \
                 -- --nocapture
               ;;
             *)

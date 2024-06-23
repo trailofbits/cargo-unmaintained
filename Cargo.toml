@@ -8,11 +8,19 @@ license = "AGPL-3.0"
 repository = "https://github.com/trailofbits/cargo-unmaintained"
 
 [[test]]
+name = "dogfood"
+required-features = ["test-ei"]
+
+[[test]]
 name = "rustsec_advisories"
 required-features = ["test-ei"]
 
 [[test]]
 name = "rustsec_issues"
+required-features = ["test-ei"]
+
+[[test]]
+name = "snapbox"
 required-features = ["test-ei"]
 
 [dependencies]
@@ -57,10 +65,11 @@ similar-asserts = "1.5"
 snapbox = "0.5"
 
 [features]
-default = ["cache-repositories", "lock-index"]
+default = ["cache-repositories", "lock-index", "__warnings"]
 cache-repositories = ["xdg"]
-test-ei = []                                   # ei = "externally influenced"
+test-ei = []                                                 # ei = "externally influenced"
 lock-index = ["libc", "windows-sys"]
+__warnings = []
 
 [lints.clippy]
 pedantic = { level = "warn", priority = -1 }

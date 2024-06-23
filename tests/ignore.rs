@@ -36,10 +36,11 @@ fn warn_not_depended_upon() -> Result<()> {
 
     let stderr = String::from_utf8(output.stderr).unwrap();
     assert!(
-        stderr.starts_with(&format!(
-            "warning: workspace metadata says to ignore `{NAME}`, but workspace does not depend \
-             upon `{NAME}`\n"
-        )),
+        stderr.lines().any(|line| line
+            == format!(
+                "warning: workspace metadata says to ignore `{NAME}`, but workspace does not \
+                 depend upon `{NAME}`"
+            )),
         "{stderr}"
     );
 
