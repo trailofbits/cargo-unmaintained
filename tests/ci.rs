@@ -161,7 +161,7 @@ fn prettier() {
 #[test]
 fn readme_contains_expected_contents() {
     let readme = read_to_string("README.md").unwrap();
-    let contents = read_to_string("tests/rustsec_advisories.with_token.stdout").unwrap();
+    let contents = read_to_string("tests/rustsec_advisories.stdout").unwrap();
     let expected_contents = below_cut_line(&contents).unwrap();
     for expected_line in expected_contents.lines() {
         assert!(

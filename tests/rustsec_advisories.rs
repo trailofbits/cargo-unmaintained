@@ -2,7 +2,7 @@ use snapbox::assert_data_eq;
 use std::{env::remove_var, fs::read_to_string, process::Command};
 
 mod util;
-use util::{split_at_cut_line, tee, token_modifier, Tee};
+use util::{split_at_cut_line, tee, Tee};
 
 #[ctor::ctor]
 fn initialize() {
@@ -19,11 +19,7 @@ fn rustsec_advisories() {
 
     let output = tee(command, Tee::Stdout).unwrap();
 
-    let stdout_expected = read_to_string(format!(
-        "tests/rustsec_advisories.{}.stdout",
-        token_modifier()
-    ))
-    .unwrap();
+    let stdout_expected = read_to_string("tests/rustsec_advisories.stdout").unwrap();
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
     assert_data_eq!(
