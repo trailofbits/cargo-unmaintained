@@ -59,15 +59,6 @@ pub fn tee(mut command: Command, which: Tee) -> Result<Output> {
 }
 
 #[must_use]
-pub fn token_modifier() -> &'static str {
-    if var("GITHUB_TOKEN_PATH").is_ok() {
-        "with_token"
-    } else {
-        "without_token"
-    }
-}
-
-#[must_use]
 pub fn enabled(key: &str) -> bool {
     var(key).map_or(false, |value| value != "0")
 }

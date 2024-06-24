@@ -7,7 +7,7 @@ use std::{
 };
 
 mod util;
-use util::{tee, token_modifier, Tee};
+use util::{tee, Tee};
 
 #[ctor::ctor]
 fn initialize() {
@@ -16,7 +16,7 @@ fn initialize() {
 
 #[test]
 fn rustsec_issues() {
-    let path_stdout = format!("tests/rustsec_issues.{}.stdout", token_modifier());
+    const PATH_STDOUT: &str = "tests/rustsec_issues.stdout";
 
     let mut command = Command::new("cargo");
     command
@@ -28,11 +28,11 @@ fn rustsec_issues() {
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
     if var("BLESS").is_ok() {
-        write(path_stdout, stdout_actual).unwrap();
+        write(PATH_STDOUT, stdout_actual).unwrap();
     } else {
         assert_data_eq!(
             stdout_actual,
-            Data::read_from(&PathBuf::from(path_stdout), None),
+            Data::read_from(&PathBuf::from(PATH_STDOUT), None),
         );
     }
 }

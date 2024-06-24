@@ -20,7 +20,7 @@ use std::{
 };
 
 mod util;
-use util::{enabled, tee, token_modifier, Tee};
+use util::{enabled, tee, Tee};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
@@ -62,8 +62,8 @@ fn snapbox() -> Result<()> {
         .into_par_iter()
         .panic_fuse()
         .try_for_each(|input_path| {
-            let stderr_path = input_path.with_extension(format!("{}.stderr", token_modifier()));
-            let stdout_path = input_path.with_extension(format!("{}.stdout", token_modifier()));
+            let stderr_path = input_path.with_extension("stderr");
+            let stdout_path = input_path.with_extension("stdout");
 
             let raw = read_to_string(input_path)?;
 
