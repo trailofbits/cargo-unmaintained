@@ -1,0 +1,5 @@
+# smoelius: The contents of this file are based on:
+# https://doc.rust-lang.org/cargo/reference/registries.html#using-an-alternate-registry
+
+[registries]
+my-registry = { index = "https://github.com/rust-lang/crates.io-index" }
