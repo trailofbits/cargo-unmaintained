@@ -636,6 +636,10 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
     }
     let mut deps = Vec::new();
     for dep in &pkg.dependencies {
+        // smoelius: Don't check dependencies in private registries.
+        if dep.registry.is_some() {
+            continue;
+        }
         // smoelius: Don't check dependencies specified by path.
         if dep.path.is_some() {
             continue;

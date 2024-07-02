@@ -1,0 +1,10 @@
+[package]
+name = "private-registry"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+crates-io = { path = "crates-io" }
+my-registry = { path = "my-registry" }
+
+[workspace]
