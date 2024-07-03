@@ -487,6 +487,11 @@ fn filter_packages<'a>(
     let metadata_latest_version_map = build_metadata_latest_version_map(metadata);
 
     for pkg in &metadata.packages {
+        // smoelius: Don't consider whether workspace members are unmaintained.
+        if metadata.workspace_members.contains(&pkg.id) {
+            continue;
+        }
+
         if ignored_packages.contains(&pkg.name) {
             continue;
         }
