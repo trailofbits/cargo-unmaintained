@@ -1,1 +1,5 @@
 Scanning 139 packages and their dependencies (pass --verbose for more information)
+warning: failed to clone `https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng`: [
+    "fatal: repository 'https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng/' not found/n",
+    "fatal: repository 'https://fuchsia.googlesource.com/fuchsia/+/' not found/n",
+]
