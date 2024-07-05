@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.0
+
+- FEATURE: Allow GitHub token to be passed in `GITHUB_TOKEN` environment variable; warn when neither `GITHUB_TOKEN_PATH` nor `GITHUB_TOKEN` is set ([9b39e32](https://github.com/trailofbits/cargo-unmaintained/commit/9b39e320b263910b2a4dc57f0fe6dd6027d7f6fd))
+- Don't check dependencies in private registries ([#281](https://github.com/trailofbits/cargo-unmaintained/pull/281))
+- Don't consider whether workspace members are unmaintained ([3f9836b](https://github.com/trailofbits/cargo-unmaintained/commit/3f9836bf53d2715a62820c9f7b0164e9dedb8abd))
+- Update `crates-index` to version `3.0` ([#300](https://github.com/trailofbits/cargo-unmaintained/pull/300))
+
 ## 1.0.2
 
 - Update dependencies, including `gix` to version 0.63.0 ([#269](https://github.com/trailofbits/cargo-unmaintained/pull/269))
