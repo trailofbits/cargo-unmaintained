@@ -159,7 +159,9 @@ isahc...not found
 zip...not found
 zip-old...not found
 zip2...not found
-not found (98)
+servo-fontconfig...found
+rust-fontconfig...not found
+not found (99)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -258,7 +260,8 @@ not found (98)
     zip                      https://github.com/rustsec/advisory-db/issues/1956
     zip-old                  https://github.com/rustsec/advisory-db/issues/1956
     zip2                     https://github.com/rustsec/advisory-db/issues/1956
-found (43)
+    rust-fontconfig          https://github.com/rustsec/advisory-db/issues/1998
+found (44)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -302,3 +305,4 @@ found (43)
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     openslide                https://github.com/rustsec/advisory-db/issues/1937
+    servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
