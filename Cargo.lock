@@ -382,9 +382,9 @@ checksum = "06ea2b9bc92be3c2baa9334a323ebca2d6f074ff852cd1d7b11064035cd3868f"
 
 [[package]]
 name = "crates-index"
-version = "2.10.1"
+version = "3.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b8a348a0130383cd8598969ba9f429d9a57b4a1fb3135ad048039012ee7226f0"
+checksum = "8cb2b4e2add8f7f0b01ca0a162c8dfaa42d4f9e42f787f2ab855a98bbcdbe017"
 dependencies = [
  "gix",
  "hex",
@@ -1435,9 +1435,9 @@ dependencies = [
 
 [[package]]
 name = "http"
-version = "0.2.12"
+version = "1.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "601cbb57e577e2f5ef5be8e7b83f0f63994f25aa94d673e54a92d5c516d101f1"
+checksum = "21b9ddb458710bc376481b842f5da65cdf31522de232c1ca8146abce2a358258"
 dependencies = [
  "bytes",
  "fnv",
