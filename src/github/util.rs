@@ -9,7 +9,7 @@ pub(crate) fn load_token(f: impl FnOnce(String) -> Result<()>) -> Result<bool> {
     } else if let Ok(token) = var("GITHUB_TOKEN") {
         // smoelius: Suppress warning if `CI` is set, i.e., if running on GitHub.
         if var("CI").is_err() {
-            #[cfg(feature = "__warnings")]
+            #[cfg(__warnings)]
             crate::warn!(
                 "found a token in `GITHUB_TOKEN`; consider using the more secure method of \
                  setting `GITHUB_TOKEN_PATH` to the path of a file containing the token",
@@ -17,7 +17,7 @@ pub(crate) fn load_token(f: impl FnOnce(String) -> Result<()>) -> Result<bool> {
         }
         token
     } else {
-        #[cfg(feature = "__warnings")]
+        #[cfg(__warnings)]
         crate::warn!(
             "`GITHUB_TOKEN_PATH` and `GITHUB_TOKEN` are not set; archival statuses will not be \
              checked",
