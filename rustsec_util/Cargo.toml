@@ -19,6 +19,12 @@ strum_macros = "0.26"
 tempfile = "3.10"
 tokio = "1.37"
 
+[lints.rust]
+unexpected_cfgs = { level = "deny", check-cfg = [
+    "cfg(dylint_lib, values(any()))",
+    'cfg(__warnings)',
+] }
+
 # smoelius: Putting this package in the same workspace as `cargo-unmaintained` produces the
 # following error:
 #

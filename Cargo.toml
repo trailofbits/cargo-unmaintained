@@ -65,11 +65,16 @@ similar-asserts = "1.5"
 snapbox = "0.6"
 
 [features]
-default = ["cache-repositories", "lock-index", "__warnings"]
+default = ["cache-repositories", "lock-index"]
 cache-repositories = ["xdg"]
-test-ei = []                                                 # ei = "externally influenced"
+test-ei = []                                   # ei = "externally influenced"
 lock-index = ["libc", "windows-sys"]
-__warnings = []
+
+[lints.rust]
+unexpected_cfgs = { level = "deny", check-cfg = [
+    'cfg(dylint_lib, values(any()))',
+    'cfg(__warnings)',
+] }
 
 [lints.clippy]
 pedantic = { level = "warn", priority = -1 }
