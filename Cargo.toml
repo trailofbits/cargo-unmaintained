@@ -70,11 +70,9 @@ cache-repositories = ["xdg"]
 test-ei = []                                   # ei = "externally influenced"
 lock-index = ["libc", "windows-sys"]
 
-[lints.rust]
-unexpected_cfgs = { level = "deny", check-cfg = [
-    'cfg(dylint_lib, values(any()))',
-    'cfg(__warnings)',
-] }
+[lints.rust.unexpected_cfgs]
+level = "deny"
+check-cfg = ["cfg(dylint_lib, values(any()))", "cfg(__warnings)"]
 
 [lints.clippy]
 pedantic = { level = "warn", priority = -1 }
