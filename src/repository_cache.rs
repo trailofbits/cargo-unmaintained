@@ -1,7 +1,7 @@
 //! On-disk repositories cache
 //!
 //! The on-disk cache consists of three subdirectories:
-//! - entries: Package data. Each file's name is that of package whose data it stores.
+//! - entries: Package data. Each file's name is that of the package whose data it stores.
 //! - repositories: Cloned repositories. Each subdirectory's name is the hash of the url that was
 //!   cloned.
 //! - timestamps: Number of seconds between the Unix epoch and the time when the repository was
