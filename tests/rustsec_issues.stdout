@@ -161,6 +161,9 @@ zip-old...not found
 zip2...not found
 servo-fontconfig...found
 rust-fontconfig...not found
+proc-macro-error...found
+ignoring `https://github.com/CreepySkeleton` from `https://github.com/rustsec/advisory-db/issues/2011`
+ignoring `https://gitlab.com/CreepySkeleton/proc-macro-error/-/issues/20` from `https://github.com/rustsec/advisory-db/issues/2011`
 not found (99)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
@@ -261,7 +264,7 @@ not found (99)
     zip-old                  https://github.com/rustsec/advisory-db/issues/1956
     zip2                     https://github.com/rustsec/advisory-db/issues/1956
     rust-fontconfig          https://github.com/rustsec/advisory-db/issues/1998
-found (44)
+found (45)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -306,3 +309,4 @@ found (44)
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     openslide                https://github.com/rustsec/advisory-db/issues/1937
     servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
+    proc-macro-error         https://github.com/rustsec/advisory-db/issues/2011
