@@ -1,21 +1,30 @@
-//! On-disk repositories cache
+//! On-disk cache
 //!
-//! The on-disk cache consists of three subdirectories:
-//! - entries: Package data. Each file's name is that of the package whose data it stores.
-//! - repositories: Cloned repositories. Each subdirectory's name is the hash of the url that was
+//! The on-disk cache consists of the following subdirectories:
+//! - `entries`: JSON-encoded [`Entry`]. Each file's name is that of package with which it is
+//!   associated.
+//! - `repositories`: Cloned repositories. Each subdirectory's name is the hash of the url that was
 //!   cloned.
-//! - timestamps: Number of seconds between the Unix epoch and the time when the repository was
+//! - `timestamps`: Number of seconds between the Unix epoch and the time when the repository was
 //!   cloned. Filenames are the same as those of the cloned repositories.
+//! - `versions`: JSON-encoded array of [`crates_io_api::Version`]. Each file's name is that of
+//!   package with which it is associated.
+//! - `versions_timestamps`: Number of seconds between the Unix epoch and the time when the versions
+//!   were fetched. Filenames are the same as those of the fetched versions.
 //!
 //! A package's entry is considered current if both of the following conditions are met:
 //! - A url associated with the package was successfully cloned.
 //! - The clone was performed no more than `refresh_age` days ago.
 //!
 //! If either of the above conditions are not met, an attempt is made to refresh the entry.
+//!
+//! A similar statement applies to versions.
 
 use super::{urls, SECS_PER_DAY};
 use anyhow::{anyhow, ensure, Context, Result};
 use cargo_metadata::Package;
+use crates_io_api::{SyncClient, Version};
+use once_cell::sync::Lazy;
 use serde::{Deserialize, Serialize};
 use std::{
     collections::HashMap,
@@ -26,6 +35,10 @@ use std::{
     time::{Duration, SystemTime},
 };
 use tempfile::{tempdir, TempDir};
+
+const USER_AGENT: &str = "cargo-unmaintained (github.com/trailofbits/cargo-unmaintained)";
+
+const RATE_LIMIT: Duration = Duration::from_secs(1);
 
 #[derive(Clone, Deserialize, Serialize)]
 struct Entry {
@@ -38,16 +51,22 @@ pub(crate) struct Cache {
     refresh_age: u64, // days
     entries: HashMap<String, Entry>,
     repository_timestamps: HashMap<String, SystemTime>,
+    versions: HashMap<String, Vec<Version>>,
+    versions_timestamps: HashMap<String, SystemTime>,
 }
 
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 #[allow(clippy::unwrap_used)]
-static CACHE_DIRECTORY: once_cell::sync::Lazy<PathBuf> = once_cell::sync::Lazy::new(|| {
+static CACHE_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
     let base_directories = xdg::BaseDirectories::new().unwrap();
     base_directories
         .create_cache_directory("cargo-unmaintained/v1")
         .unwrap()
 });
+
+#[allow(clippy::unwrap_used)]
+static CRATES_IO_SYNC_CLIENT: Lazy<SyncClient> =
+    Lazy::new(|| SyncClient::new(USER_AGENT, RATE_LIMIT).unwrap());
 
 impl Cache {
     pub fn new(temporary: bool, refresh_age: u64) -> Result<Self> {
@@ -63,6 +82,8 @@ impl Cache {
             refresh_age,
             entries: HashMap::new(),
             repository_timestamps: HashMap::new(),
+            versions: HashMap::new(),
+            versions_timestamps: HashMap::new(),
         })
     }
 
@@ -184,6 +205,58 @@ impl Cache {
         Ok(*self.repository_timestamps.get(&digest).unwrap())
     }
 
+    pub fn fetch_versions(&mut self, name: &str) -> Result<Vec<Version>> {
+        // smoelius: Ignore any errors that may occur while reading/deserializing.
+        if let Ok(versions) = self.versions(name) {
+            if self.versions_are_current(name).unwrap_or_default() {
+                return Ok(versions);
+            }
+        }
+
+        let crate_response = CRATES_IO_SYNC_CLIENT.get_crate(name)?;
+        let versions = crate_response.versions;
+        self.write_versions(name, &versions)?;
+        self.versions.insert(name.to_owned(), versions.clone());
+
+        let timestamp = SystemTime::now();
+        self.write_versions_timestamp(name, timestamp)?;
+        self.versions_timestamps.insert(name.to_owned(), timestamp);
+
+        Ok(versions)
+    }
+
+    fn versions(&mut self, name: &str) -> Result<Vec<Version>> {
+        if !self.versions.contains_key(name) {
+            let path = self.versions_dir().join(name);
+            let contents = read_to_string(&path)
+                .with_context(|| format!("failed to read `{}`", path.display()))?;
+            let versions = serde_json::from_str::<Vec<Version>>(&contents)?;
+            self.versions.insert(name.to_owned(), versions);
+        }
+        #[allow(clippy::unwrap_used)]
+        Ok(self.versions.get(name).cloned().unwrap())
+    }
+
+    fn versions_are_current(&mut self, url: &str) -> Result<bool> {
+        self.versions_timestamp(url).and_then(|timestamp| {
+            let duration = SystemTime::now().duration_since(timestamp)?;
+            Ok(duration.as_secs() < self.refresh_age * SECS_PER_DAY)
+        })
+    }
+
+    fn versions_timestamp(&mut self, name: &str) -> Result<SystemTime> {
+        if !self.versions_timestamps.contains_key(name) {
+            let path = self.versions_timestamps_dir().join(name);
+            let contents = read_to_string(&path)
+                .with_context(|| format!("failed to read `{}`", path.display()))?;
+            let secs = u64::from_str(&contents)?;
+            let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
+            self.versions_timestamps.insert(name.to_owned(), timestamp);
+        }
+        #[allow(clippy::unwrap_used)]
+        Ok(*self.versions_timestamps.get(name).unwrap())
+    }
+
     fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
         create_dir_all(self.entries_dir()).with_context(|| "failed to create entries directory")?;
         let path = self.entries_dir().join(pkg_name);
@@ -202,6 +275,25 @@ impl Cache {
         Ok(())
     }
 
+    fn write_versions(&self, name: &str, versions: &[Version]) -> Result<()> {
+        create_dir_all(self.versions_dir())
+            .with_context(|| "failed to create versions directory")?;
+        let path = self.versions_dir().join(name);
+        let json = serde_json::to_string_pretty(versions)?;
+        write(&path, json).with_context(|| format!("failed to write `{}`", path.display()))?;
+        Ok(())
+    }
+
+    fn write_versions_timestamp(&self, name: &str, timestamp: SystemTime) -> Result<()> {
+        create_dir_all(self.versions_timestamps_dir())
+            .with_context(|| "failed to create versions timestamps directory")?;
+        let path = self.versions_timestamps_dir().join(name);
+        let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
+        write(&path, duration.as_secs().to_string())
+            .with_context(|| format!("failed to write `{}`", path.display()))?;
+        Ok(())
+    }
+
     fn entries_dir(&self) -> PathBuf {
         self.base_dir().join("entries")
     }
@@ -213,6 +305,14 @@ impl Cache {
     // smoelius: FIXME: Rename this directory to "repository_timestamps".
     fn repository_timestamps_dir(&self) -> PathBuf {
         self.base_dir().join("timestamps")
+    }
+
+    fn versions_dir(&self) -> PathBuf {
+        self.base_dir().join("versions")
+    }
+
+    fn versions_timestamps_dir(&self) -> PathBuf {
+        self.base_dir().join("versions_timestamps")
     }
 
     fn base_dir(&self) -> &Path {
