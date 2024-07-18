@@ -12,7 +12,10 @@
 
 3. Both a and b below.
 
-   a. X depends on a version of a package Y that is incompatible with the Y's latest version.
+   a. X depends on a package Y whose latest version:
+
+   - is incompatible with the version that X depends on
+   - was released over a year ago (a configurable value)
 
    b. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 

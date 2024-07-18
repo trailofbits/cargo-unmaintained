@@ -663,11 +663,28 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
             continue;
         };
         if dep_pkg.version <= version_latest && !dep.req.matches(&version_latest) {
-            deps.push(OutdatedDep {
-                dep,
-                version_used: &dep_pkg.version,
-                version_latest,
-            });
+            let versions = versions(&dep_pkg.name)?;
+            // smoelius: Require at least one incompatible version of the dependency that is more
+            // than `max_age` days old.
+            if versions
+                .iter()
+                .try_fold(false, |init, version| -> Result<_> {
+                    if init {
+                        return Ok(true);
+                    }
+                    let duration = SystemTime::now().duration_since(version.created_at.into())?;
+                    let version_num = Version::parse(&version.num)?;
+                    Ok(duration.as_secs() >= opts::get().max_age * SECS_PER_DAY
+                        && dep_pkg.version <= version_num
+                        && !dep.req.matches(&version_num))
+                })?
+            {
+                deps.push(OutdatedDep {
+                    dep,
+                    version_used: &dep_pkg.version,
+                    version_latest,
+                });
+            }
         };
     }
     // smoelius: A dependency could appear more than once, e.g., because it is used with different
@@ -716,6 +733,16 @@ fn latest_version(name: &str) -> Result<Version> {
             },
             "latest version of `{}` using crates.io index",
             name,
+        )
+    })
+}
+
+fn versions(name: &str) -> Result<Vec<crates_io_api::Version>> {
+    ON_DISK_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| -> Result<_> {
+        verbose::wrap!(
+            || { on_disk_cache(once_cell).fetch_versions(name) },
+            "versions of `{}` using crates.io API",
+            name
         )
     })
 }
