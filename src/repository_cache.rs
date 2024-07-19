@@ -40,7 +40,7 @@ pub(crate) struct Cache {
     timestamps: HashMap<String, SystemTime>,
 }
 
-#[cfg(all(feature = "cache-repositories", not(windows)))]
+#[cfg(all(feature = "on-disk-cache", not(windows)))]
 #[allow(clippy::unwrap_used)]
 static CACHE_DIRECTORY: once_cell::sync::Lazy<PathBuf> = once_cell::sync::Lazy::new(|| {
     let base_directories = xdg::BaseDirectories::new().unwrap();
@@ -102,7 +102,7 @@ impl Cache {
         // tests, because they run concurrently. I am not sure how much contention this locking
         // causes.
         let _lock: File;
-        #[cfg(all(feature = "cache-repositories", feature = "lock-index", not(windows)))]
+        #[cfg(all(feature = "on-disk-cache", feature = "lock-index", not(windows)))]
         if self.tempdir.is_none() {
             _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
                 .with_context(|| format!("failed to lock {:?}", &*CACHE_DIRECTORY))?;
@@ -217,10 +217,10 @@ impl Cache {
     fn base_dir(&self) -> &Path {
         let base_dir = self.tempdir.as_ref().map(TempDir::path);
 
-        #[cfg(all(feature = "cache-repositories", not(windows)))]
+        #[cfg(all(feature = "on-disk-cache", not(windows)))]
         return base_dir.unwrap_or(&CACHE_DIRECTORY);
 
-        #[cfg(any(not(feature = "cache-repositories"), windows))]
+        #[cfg(any(not(feature = "on-disk-cache"), windows))]
         #[allow(clippy::unwrap_used)]
         base_dir.unwrap()
     }
