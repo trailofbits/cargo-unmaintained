@@ -37,7 +37,7 @@ pub(crate) struct Cache {
     tempdir: Option<TempDir>,
     refresh_age: u64, // days
     entries: HashMap<String, Entry>,
-    timestamps: HashMap<String, SystemTime>,
+    repository_timestamps: HashMap<String, SystemTime>,
 }
 
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
@@ -62,7 +62,7 @@ impl Cache {
             tempdir,
             refresh_age,
             entries: HashMap::new(),
-            timestamps: HashMap::new(),
+            repository_timestamps: HashMap::new(),
         })
     }
 
@@ -91,8 +91,8 @@ impl Cache {
 
         let digest = url_digest(&url_and_dir.0);
         let timestamp = SystemTime::now();
-        self.write_timestamp(&digest, timestamp)?;
-        self.timestamps.insert(digest, timestamp);
+        self.write_repository_timestamp(&digest, timestamp)?;
+        self.repository_timestamps.insert(digest, timestamp);
 
         Ok(url_and_dir)
     }
@@ -164,24 +164,24 @@ impl Cache {
     }
 
     fn repository_is_current(&mut self, url: &str) -> Result<bool> {
-        self.timestamp(url).and_then(|timestamp| {
+        self.repository_timestamp(url).and_then(|timestamp| {
             let duration = SystemTime::now().duration_since(timestamp)?;
             Ok(duration.as_secs() < self.refresh_age * SECS_PER_DAY)
         })
     }
 
-    fn timestamp(&mut self, url: &str) -> Result<SystemTime> {
+    fn repository_timestamp(&mut self, url: &str) -> Result<SystemTime> {
         let digest = url_digest(url);
-        if !self.timestamps.contains_key(&digest) {
-            let path = self.timestamps_dir().join(url_digest(url));
+        if !self.repository_timestamps.contains_key(&digest) {
+            let path = self.repository_timestamps_dir().join(url_digest(url));
             let contents = read_to_string(&path)
                 .with_context(|| format!("failed to read `{}`", path.display()))?;
             let secs = u64::from_str(&contents)?;
             let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
-            self.timestamps.insert(digest.clone(), timestamp);
+            self.repository_timestamps.insert(digest.clone(), timestamp);
         }
         #[allow(clippy::unwrap_used)]
-        Ok(*self.timestamps.get(&digest).unwrap())
+        Ok(*self.repository_timestamps.get(&digest).unwrap())
     }
 
     fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
@@ -192,10 +192,10 @@ impl Cache {
         Ok(())
     }
 
-    fn write_timestamp(&self, digest: &str, timestamp: SystemTime) -> Result<()> {
-        create_dir_all(self.timestamps_dir())
-            .with_context(|| "failed to create timestamps directory")?;
-        let path = self.timestamps_dir().join(digest);
+    fn write_repository_timestamp(&self, digest: &str, timestamp: SystemTime) -> Result<()> {
+        create_dir_all(self.repository_timestamps_dir())
+            .with_context(|| "failed to create repository timestamps directory")?;
+        let path = self.repository_timestamps_dir().join(digest);
         let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
         write(&path, duration.as_secs().to_string())
             .with_context(|| format!("failed to write `{}`", path.display()))?;
@@ -210,7 +210,8 @@ impl Cache {
         self.base_dir().join("repositories")
     }
 
-    fn timestamps_dir(&self) -> PathBuf {
+    // smoelius: FIXME: Rename this directory to "repository_timestamps".
+    fn repository_timestamps_dir(&self) -> PathBuf {
         self.base_dir().join("timestamps")
     }
 
