@@ -97,7 +97,7 @@ struct Opts {
     )]
     max_age: u64,
 
-    #[cfg(all(feature = "cache-repositories", not(windows)))]
+    #[cfg(all(feature = "on-disk-cache", not(windows)))]
     #[clap(long, help = "Do not save cloned repositories on disk for future runs")]
     no_cache: bool,
 
@@ -885,10 +885,10 @@ fn on_disk_repository_cache(
     once_cell: &mut OnceCell<repository_cache::Cache>,
 ) -> &mut repository_cache::Cache {
     let _: &repository_cache::Cache = once_cell.get_or_init(|| {
-        #[cfg(all(feature = "cache-repositories", not(windows)))]
+        #[cfg(all(feature = "on-disk-cache", not(windows)))]
         let temporary = opts::get().no_cache;
 
-        #[cfg(any(not(feature = "cache-repositories"), windows))]
+        #[cfg(any(not(feature = "on-disk-cache"), windows))]
         let temporary = true;
 
         #[allow(clippy::panic)]

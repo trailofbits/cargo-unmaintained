@@ -65,9 +65,10 @@ similar-asserts = "1.5"
 snapbox = "0.6"
 
 [features]
-default = ["cache-repositories", "lock-index"]
-cache-repositories = ["xdg"]
-test-ei = []                                   # ei = "externally influenced"
+default = ["on-disk-cache", "lock-index"]
+cache-repositories = ["on-disk-cache"]
+on-disk-cache = ["xdg"]
+test-ei = []                              # ei = "externally influenced"
 lock-index = ["libc", "windows-sys"]
 
 [lints.rust.unexpected_cfgs]
