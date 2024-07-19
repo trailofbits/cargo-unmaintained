@@ -7,7 +7,7 @@
 //! - timestamps: Number of seconds between the Unix epoch and the time when the repository was
 //!   cloned. Filenames are the same as those of the cloned repositories.
 //!
-//! An package's entry is considered current if both of the following conditions are met:
+//! A package's entry is considered current if both of the following conditions are met:
 //! - A url associated with the package was successfully cloned.
 //! - The clone was performed no more than `refresh_age` days ago.
 //!
