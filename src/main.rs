@@ -29,9 +29,9 @@ use walkdir::WalkDir;
 mod curl;
 mod flush;
 mod github;
+mod on_disk_cache;
 mod opts;
 mod packaging;
-mod repository_cache;
 mod url;
 mod verbose;
 
@@ -362,10 +362,10 @@ thread_local! {
     static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
     static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
-    static IN_MEMORY_REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
+    static REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
     // smoelius: The next static is an "on-disk" cache that resides at
     // `$HOME/.cache/cargo-unmaintained/v1`.
-    static ON_DISK_REPOSITORY_CACHE_ONCE_CELL: RefCell<OnceCell<repository_cache::Cache>> = const { RefCell::new(OnceCell::new()) };
+    static ON_DISK_CACHE_ONCE_CELL: RefCell<OnceCell<on_disk_cache::Cache>> = const { RefCell::new(OnceCell::new()) };
 }
 
 static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
@@ -808,65 +808,61 @@ enum Purpose {
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBuf>> {
-    let repo_status =
-        IN_MEMORY_REPOSITORY_CACHE.with_borrow_mut(|in_memory_repository_cache| -> Result<_> {
-            ON_DISK_REPOSITORY_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| -> Result<_> {
-                // smoelius: Check all urls associated with the package.
-                for url in urls(pkg) {
-                    if let Some(repo_status) = in_memory_repository_cache.get(&url) {
-                        return Ok(repo_status.clone());
-                    }
+    let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
+        ON_DISK_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| -> Result<_> {
+            // smoelius: Check all urls associated with the package.
+            for url in urls(pkg) {
+                if let Some(repo_status) = repository_cache.get(&url) {
+                    return Ok(repo_status.clone());
                 }
-                let what = match purpose {
-                    Purpose::Membership => "membership",
-                    Purpose::Timestamp => "timestamp",
-                };
-                verbose::wrap!(
-                    || {
-                        let url_and_dir = on_disk_repository_cache(once_cell).clone_repository(pkg);
-                        match url_and_dir {
-                            Ok((url_string, repo_dir)) => {
-                                // smoelius: Note the use of `leak` in the next line. But the url is
-                                // acting as a key in a global map, so it is not so bad.
-                                let url = Url::from(url_string.as_str()).leak();
-                                in_memory_repository_cache.insert(
-                                    url,
-                                    RepoStatus::Success(url, repo_dir.clone()).leak_url(),
-                                );
-                                Ok(RepoStatus::Success(url, repo_dir))
-                            }
-                            Err(error) => {
-                                let repo_status = if let Some(url_string) = &pkg.repository {
-                                    let url = url_string.as_str().into();
-                                    // smoelius: If cloning failed because the repository does not
-                                    // exist, adjust the repo status.
-                                    let existence = general_status(&pkg.name, url)?;
-                                    let repo_status = if existence.is_failure() {
-                                        existence.map_failure()
-                                    } else {
-                                        RepoStatus::Uncloneable(url)
-                                    };
-                                    warn!("failed to clone `{}`: {}", url_string, error);
-                                    repo_status
-                                } else {
-                                    RepoStatus::Unnamed
-                                };
-                                // smoelius: In the event of failure, set all urls associated with
-                                // the repository.
-                                for url in urls(pkg) {
-                                    in_memory_repository_cache
-                                        .insert(url.leak(), repo_status.clone().leak_url());
-                                }
-                                Ok(repo_status)
-                            }
+            }
+            let what = match purpose {
+                Purpose::Membership => "membership",
+                Purpose::Timestamp => "timestamp",
+            };
+            verbose::wrap!(
+                || {
+                    let url_and_dir = on_disk_cache(once_cell).clone_repository(pkg);
+                    match url_and_dir {
+                        Ok((url_string, repo_dir)) => {
+                            // smoelius: Note the use of `leak` in the next line. But the url is
+                            // acting as a key in a global map, so it is not so bad.
+                            let url = Url::from(url_string.as_str()).leak();
+                            repository_cache
+                                .insert(url, RepoStatus::Success(url, repo_dir.clone()).leak_url());
+                            Ok(RepoStatus::Success(url, repo_dir))
                         }
-                    },
-                    "{} of `{}` using shallow clone",
-                    what,
-                    pkg.name
-                )
-            })
-        })?;
+                        Err(error) => {
+                            let repo_status = if let Some(url_string) = &pkg.repository {
+                                let url = url_string.as_str().into();
+                                // smoelius: If cloning failed because the repository does not
+                                // exist, adjust the repo status.
+                                let existence = general_status(&pkg.name, url)?;
+                                let repo_status = if existence.is_failure() {
+                                    existence.map_failure()
+                                } else {
+                                    RepoStatus::Uncloneable(url)
+                                };
+                                warn!("failed to clone `{}`: {}", url_string, error);
+                                repo_status
+                            } else {
+                                RepoStatus::Unnamed
+                            };
+                            // smoelius: In the event of failure, set all urls associated with
+                            // the repository.
+                            for url in urls(pkg) {
+                                repository_cache.insert(url.leak(), repo_status.clone().leak_url());
+                            }
+                            Ok(repo_status)
+                        }
+                    }
+                },
+                "{} of `{}` using shallow clone",
+                what,
+                pkg.name
+            )
+        })
+    })?;
 
     let Some((url, repo_dir)) = repo_status.as_success() else {
         return Ok(repo_status);
@@ -881,10 +877,8 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
     }
 }
 
-fn on_disk_repository_cache(
-    once_cell: &mut OnceCell<repository_cache::Cache>,
-) -> &mut repository_cache::Cache {
-    let _: &repository_cache::Cache = once_cell.get_or_init(|| {
+fn on_disk_cache(once_cell: &mut OnceCell<on_disk_cache::Cache>) -> &mut on_disk_cache::Cache {
+    let _: &on_disk_cache::Cache = once_cell.get_or_init(|| {
         #[cfg(all(feature = "on-disk-cache", not(windows)))]
         let temporary = opts::get().no_cache;
 
@@ -892,7 +886,7 @@ fn on_disk_repository_cache(
         let temporary = true;
 
         #[allow(clippy::panic)]
-        repository_cache::Cache::new(
+        on_disk_cache::Cache::new(
             temporary,
             std::cmp::min(DEFAULT_REFRESH_AGE, opts::get().max_age),
         )
