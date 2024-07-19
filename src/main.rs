@@ -676,6 +676,12 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
     Ok(deps)
 }
 
+fn published(pkg: &Package) -> bool {
+    pkg.publish
+        .as_ref()
+        .map_or(true, |registries| !registries.is_empty())
+}
+
 fn find_packages<'a>(
     metadata: &'a Metadata,
     dep_req: DepReq<'a>,
@@ -712,12 +718,6 @@ fn latest_version(name: &str) -> Result<Version> {
             name,
         )
     })
-}
-
-fn published(pkg: &Package) -> bool {
-    pkg.publish
-        .as_ref()
-        .map_or(true, |registries| !registries.is_empty())
 }
 
 fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
