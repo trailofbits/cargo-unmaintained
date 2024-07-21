@@ -62,7 +62,7 @@ ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-
 ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-cee9-4101-972b-f8e4b9f511e9.png` from `https://github.com/rustsec/advisory-db/issues/1139`
 lmdb-rkv...found
 lmdb-rs...found
-prettytable-rs...not found
+prettytable-rs...found
 owning-ref-unsoundness...not found
 futures-intrusive...not found
 users...not found
@@ -164,6 +164,7 @@ rust-fontconfig...not found
 proc-macro-error...found
 ignoring `https://github.com/CreepySkeleton` from `https://github.com/rustsec/advisory-db/issues/2011`
 ignoring `https://gitlab.com/CreepySkeleton/proc-macro-error/-/issues/20` from `https://github.com/rustsec/advisory-db/issues/2011`
+async-priority-channel...not found
 not found (99)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
@@ -198,7 +199,6 @@ not found (99)
     windows-rs               https://github.com/rustsec/advisory-db/issues/1098
     xml-rs                   https://github.com/rustsec/advisory-db/issues/1121
     cargo-download           https://github.com/rustsec/advisory-db/issues/1132
-    prettytable-rs           https://github.com/rustsec/advisory-db/issues/1173
     owning-ref-unsoundness   https://github.com/rustsec/advisory-db/issues/1174
     futures-intrusive        https://github.com/rustsec/advisory-db/issues/1175
     users                    https://github.com/rustsec/advisory-db/issues/1179
@@ -264,7 +264,8 @@ not found (99)
     zip-old                  https://github.com/rustsec/advisory-db/issues/1956
     zip2                     https://github.com/rustsec/advisory-db/issues/1956
     rust-fontconfig          https://github.com/rustsec/advisory-db/issues/1998
-found (45)
+    async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
+found (46)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -285,6 +286,7 @@ found (45)
     cbor                     https://github.com/rustsec/advisory-db/issues/1110
     lmdb-rkv                 https://github.com/rustsec/advisory-db/issues/1142
     lmdb-rs                  https://github.com/rustsec/advisory-db/issues/1142
+    prettytable-rs           https://github.com/rustsec/advisory-db/issues/1173
     sass-rs                  https://github.com/rustsec/advisory-db/issues/1228
     static_type_map          https://github.com/rustsec/advisory-db/issues/1236
     wee_alloc                https://github.com/rustsec/advisory-db/issues/1394
