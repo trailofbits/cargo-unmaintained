@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.0
+
+- FEATURE: Consider when dependencies were published. Don't report a package as unmaintained just because an incompatible upgrade exists for one of its dependencies, but that upgrade is less than 365 days old (the default). ([#311](https://github.com/trailofbits/cargo-unmaintained/pull/311))
+
 ## 1.1.0
 
 - FEATURE: Allow GitHub token to be passed in `GITHUB_TOKEN` environment variable; warn when neither `GITHUB_TOKEN_PATH` nor `GITHUB_TOKEN` is set ([9b39e32](https://github.com/trailofbits/cargo-unmaintained/commit/9b39e320b263910b2a4dc57f0fe6dd6027d7f6fd))
