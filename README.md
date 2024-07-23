@@ -27,7 +27,7 @@ As of 2024-06-17, the RustSec Advisory Database contains 98 active advisories fo
 
 - The above conditions consider a "leaf" package (i.e., a package with no dependencies) unmaintained only if conditions 1 or 2 apply.
 
-- The purpose of condition 3(b) is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
+- The purpose of the "over a year ago" qualifications in conditions 3 is to give package maintainers a chance to update their packages. That is, an incompatible upgrade to one of X's dependencies could require time-consuming changes to X. Without this check, `cargo-unmaintained` would produce many false positives.
 
 - Of the 27 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 8 do not build
