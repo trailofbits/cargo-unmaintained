@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.2.1
+
+- Update lockfile. Needed to get `cargo-unmaintained` to build with Rust 1.8.0. ([275c9db](https://github.com/trailofbits/cargo-unmaintained/commit/275c9db172210d8b2e9decde315c1b1bdd49e8ab))
+
 ## 1.2.0
 
 - FEATURE: Consider when dependencies were published. Don't report a package as unmaintained just because an incompatible upgrade exists for one of its dependencies, but that upgrade is less than 365 days old (the default). ([#311](https://github.com/trailofbits/cargo-unmaintained/pull/311))
