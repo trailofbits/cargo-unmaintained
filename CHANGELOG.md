@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.3.0
+
+- FEATURE: Better progress reporting ([#325](https://github.com/trailofbits/cargo-unmaintained/pull/325))
+
 ## 1.2.0
 
 - FEATURE: Consider when dependencies were published. Don't report a package as unmaintained just because an incompatible upgrade exists for one of its dependencies, but that upgrade is less than 365 days old (the default). ([#311](https://github.com/trailofbits/cargo-unmaintained/pull/311))
