@@ -9,12 +9,14 @@ use clap::{crate_version, Parser};
 use crates_index::GitIndex;
 use home::cargo_home;
 use once_cell::{sync::Lazy, unsync::OnceCell};
+use progress::Progress;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
     env::args,
     ffi::OsStr,
     fs::{read_to_string, File},
+    io::IsTerminal,
     path::{Path, PathBuf},
     process::{exit, Command},
     str::FromStr,
@@ -32,6 +34,7 @@ mod github;
 mod on_disk_cache;
 mod opts;
 mod packaging;
+mod progress;
 mod url;
 mod verbose;
 
@@ -412,7 +415,17 @@ fn unmaintained() -> Result<bool> {
         }
     );
 
+    let mut progress = if std::io::stderr().is_terminal() && !opts::get().verbose {
+        Some(Progress::new(packages.len()))
+    } else {
+        None
+    };
+
     for pkg in packages {
+        if let Some(progress) = progress.as_mut() {
+            progress.advance(&pkg.name)?;
+        }
+
         if let Some(unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
             unmaintained_pkgs.push(unmaintained_pkg);
 
@@ -420,6 +433,10 @@ fn unmaintained() -> Result<bool> {
                 break;
             }
         }
+    }
+
+    if let Some(progress) = progress.as_mut() {
+        progress.finish()?;
     }
 
     if unmaintained_pkgs.is_empty() {
