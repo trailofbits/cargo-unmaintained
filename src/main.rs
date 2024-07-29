@@ -9,7 +9,6 @@ use clap::{crate_version, Parser};
 use crates_index::GitIndex;
 use home::cargo_home;
 use once_cell::{sync::Lazy, unsync::OnceCell};
-use progress::Progress;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
@@ -346,6 +345,7 @@ macro_rules! warn {
             log::debug!($fmt, $($arg)*);
         } else {
             $crate::verbose::newline!();
+            $crate::PROGRESS.with_borrow_mut(|progress| progress.as_mut().map($crate::progress::Progress::newline));
             eprintln!(concat!("warning: ", $fmt), $($arg)*);
         }
     };
@@ -361,6 +361,7 @@ thread_local! {
         }
         index
     });
+    static PROGRESS: RefCell<Option<progress::Progress>> = const { RefCell::new(None) };
     // smoelius: The next four statics are "in-memory" caches.
     // smoelius: Note that repositories are (currently) stored in both an in-memory cache and an
     // on-disk cache. The former is keyed by url; the latter is keyed by package.
@@ -415,16 +416,17 @@ fn unmaintained() -> Result<bool> {
         }
     );
 
-    let mut progress = if std::io::stderr().is_terminal() && !opts::get().verbose {
-        Some(Progress::new(packages.len()))
-    } else {
-        None
-    };
+    if std::io::stderr().is_terminal() && !opts::get().verbose {
+        PROGRESS
+            .with_borrow_mut(|progress| *progress = Some(progress::Progress::new(packages.len())));
+    }
 
     for pkg in packages {
-        if let Some(progress) = progress.as_mut() {
-            progress.advance(&pkg.name)?;
-        }
+        PROGRESS.with_borrow_mut(|progress| {
+            progress
+                .as_mut()
+                .map_or(Ok(()), |progress| progress.advance(&pkg.name))
+        })?;
 
         if let Some(unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
             unmaintained_pkgs.push(unmaintained_pkg);
@@ -435,9 +437,8 @@ fn unmaintained() -> Result<bool> {
         }
     }
 
-    if let Some(progress) = progress.as_mut() {
-        progress.finish()?;
-    }
+    PROGRESS
+        .with_borrow_mut(|progress| progress.as_mut().map_or(Ok(()), progress::Progress::finish))?;
 
     if unmaintained_pkgs.is_empty() {
         eprintln!("No unmaintained packages found");

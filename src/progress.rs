@@ -6,6 +6,7 @@ pub struct Progress {
     i: usize,
     width_n: usize,
     width_prev: usize,
+    newline_needed: bool,
     finished: bool,
 }
 
@@ -24,6 +25,7 @@ impl Progress {
             i: 0,
             width_n: n.to_string().len(),
             width_prev: 0,
+            newline_needed: false,
             finished: false,
         }
     }
@@ -38,9 +40,16 @@ impl Progress {
     pub fn finish(&mut self) -> Result<()> {
         assert!(self.i == self.n);
         self.draw("")?;
-        eprintln!();
+        self.newline();
         self.finished = true;
         Ok(())
+    }
+
+    pub fn newline(&mut self) {
+        if self.newline_needed {
+            eprintln!();
+        }
+        self.newline_needed = false;
     }
 
     fn draw(&mut self, msg: &str) -> Result<()> {
@@ -55,6 +64,7 @@ impl Progress {
         eprint!("{formatted_msg}{:width_to_overwrite$}\r", "");
         <_ as Flush>::flush(&mut std::io::stderr()).with_context(|| "failed to flush stderr")?;
         self.width_prev = formatted_msg.len();
+        self.newline_needed = true;
         Ok(())
     }
 }
