@@ -100,7 +100,7 @@ struct Opts {
     max_age: u64,
 
     #[cfg(all(feature = "on-disk-cache", not(windows)))]
-    #[clap(long, help = "Do not save cloned repositories on disk for future runs")]
+    #[clap(long, help = "Do not cache data on disk for future runs")]
     no_cache: bool,
 
     #[clap(
