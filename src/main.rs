@@ -712,9 +712,7 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
 }
 
 fn published(pkg: &Package) -> bool {
-    pkg.publish
-        .as_ref()
-        .map_or(true, |registries| !registries.is_empty())
+    pkg.publish.as_deref() != Some(&[])
 }
 
 fn find_packages<'a>(
