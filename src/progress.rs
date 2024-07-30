@@ -37,8 +37,11 @@ impl Progress {
         Ok(())
     }
 
+    #[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
     pub fn finish(&mut self) -> Result<()> {
-        assert!(self.i == self.n);
+        // smoelius: Don't assert here. If --fail-fast was passed, `finish` may be called before all
+        // packages have been scanned.
+        // assert_eq!(self.i, self.n);
         self.draw("")?;
         self.newline();
         self.finished = true;
