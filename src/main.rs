@@ -365,6 +365,9 @@ thread_local! {
     // smoelius: The next four statics are "in-memory" caches.
     // smoelius: Note that repositories are (currently) stored in both an in-memory cache and an
     // on-disk cache. The former is keyed by url; the latter is keyed by package.
+    // smoelius: A reason for having the former is the following. Multiple packages map to the same
+    // url, and multiple urls map to the same shortened url. Thus, a cache keyed by url has a
+    // greater chance of a cache hit.
     static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
     static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
