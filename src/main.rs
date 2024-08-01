@@ -8,7 +8,7 @@ use cargo_metadata::{
 use clap::{crate_version, Parser};
 use crates_index::GitIndex;
 use home::cargo_home;
-use once_cell::{sync::Lazy, unsync::OnceCell};
+use once_cell::sync::Lazy;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
@@ -43,8 +43,6 @@ mod flock;
 use url::{urls, Url};
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
-
-const DEFAULT_REFRESH_AGE: u64 = 30; // days
 
 #[derive(Debug, Parser)]
 #[clap(bin_name = "cargo", display_name = "cargo")]
@@ -372,9 +370,6 @@ thread_local! {
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
     static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
     static REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
-    // smoelius: The next static is an "on-disk" cache that resides at
-    // `$HOME/.cache/cargo-unmaintained/v1`.
-    static ON_DISK_CACHE_ONCE_CELL: RefCell<OnceCell<on_disk_cache::Cache>> = const { RefCell::new(OnceCell::new()) };
 }
 
 static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
@@ -757,9 +752,9 @@ fn latest_version(name: &str) -> Result<Version> {
 }
 
 fn versions(name: &str) -> Result<Vec<crates_io_api::Version>> {
-    ON_DISK_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| -> Result<_> {
+    on_disk_cache::with_cache(|cache| -> Result<_> {
         verbose::wrap!(
-            || { on_disk_cache(once_cell).fetch_versions(name) },
+            || { cache.fetch_versions(name) },
             "versions of `{}` using crates.io API",
             name
         )
@@ -857,7 +852,7 @@ enum Purpose {
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBuf>> {
     let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
-        ON_DISK_CACHE_ONCE_CELL.with_borrow_mut(|once_cell| -> Result<_> {
+        on_disk_cache::with_cache(|cache| -> Result<_> {
             // smoelius: Check all urls associated with the package.
             for url in urls(pkg) {
                 if let Some(repo_status) = repository_cache.get(&url) {
@@ -870,7 +865,7 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
             };
             verbose::wrap!(
                 || {
-                    let url_and_dir = on_disk_cache(once_cell).clone_repository(pkg);
+                    let url_and_dir = cache.clone_repository(pkg);
                     match url_and_dir {
                         Ok((url_string, repo_dir)) => {
                             // smoelius: Note the use of `leak` in the next line. But the url is
@@ -923,26 +918,6 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
     } else {
         Ok(RepoStatus::Unassociated(url))
     }
-}
-
-fn on_disk_cache(once_cell: &mut OnceCell<on_disk_cache::Cache>) -> &mut on_disk_cache::Cache {
-    let _: &on_disk_cache::Cache = once_cell.get_or_init(|| {
-        #[cfg(all(feature = "on-disk-cache", not(windows)))]
-        let temporary = opts::get().no_cache;
-
-        #[cfg(any(not(feature = "on-disk-cache"), windows))]
-        let temporary = true;
-
-        #[allow(clippy::panic)]
-        on_disk_cache::Cache::new(
-            temporary,
-            std::cmp::min(DEFAULT_REFRESH_AGE, opts::get().max_age),
-        )
-        .unwrap_or_else(|error| panic!("failed to create on-disk repository cache: {error}"))
-    });
-
-    #[allow(clippy::unwrap_used)]
-    once_cell.get_mut().unwrap()
 }
 
 fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {

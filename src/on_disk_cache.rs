@@ -22,14 +22,17 @@
 //! If either of the above conditions are not met, an attempt is made to refresh the entry.
 //!
 //! A similar statement applies to versions.
+//!
+//! The on-disk cache resides at `$HOME/.cache/cargo-unmaintained/v1`.
 
 use super::{urls, SECS_PER_DAY};
 use anyhow::{anyhow, ensure, Context, Result};
 use cargo_metadata::Package;
 use crates_io_api::{SyncClient, Version};
-use once_cell::sync::Lazy;
+use once_cell::{sync::Lazy, unsync::OnceCell};
 use serde::{Deserialize, Serialize};
 use std::{
+    cell::RefCell,
     collections::HashMap,
     fs::{create_dir_all, read_to_string, write, File},
     path::{Path, PathBuf},
@@ -38,6 +41,8 @@ use std::{
     time::{Duration, SystemTime},
 };
 use tempfile::{tempdir, TempDir};
+
+const DEFAULT_REFRESH_AGE: u64 = 30; // days
 
 const USER_AGENT: &str = "cargo-unmaintained (github.com/trailofbits/cargo-unmaintained)";
 
@@ -58,6 +63,10 @@ pub(crate) struct Cache {
     versions_timestamps: HashMap<String, SystemTime>,
 }
 
+thread_local! {
+    static CACHE_ONCE_CELL: RefCell<OnceCell<Cache>> = const { RefCell::new(OnceCell::new()) };
+}
+
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 #[allow(clippy::unwrap_used)]
 static CACHE_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
@@ -71,8 +80,32 @@ static CACHE_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
 static CRATES_IO_SYNC_CLIENT: Lazy<SyncClient> =
     Lazy::new(|| SyncClient::new(USER_AGENT, RATE_LIMIT).unwrap());
 
+pub fn with_cache<T>(f: impl FnOnce(&mut Cache) -> T) -> T {
+    CACHE_ONCE_CELL.with_borrow_mut(|once_cell| {
+        let _: &Cache = once_cell.get_or_init(|| {
+            #[cfg(all(feature = "on-disk-cache", not(windows)))]
+            let temporary = crate::opts::get().no_cache;
+
+            #[cfg(any(not(feature = "on-disk-cache"), windows))]
+            let temporary = true;
+
+            #[allow(clippy::panic)]
+            Cache::new(
+                temporary,
+                std::cmp::min(DEFAULT_REFRESH_AGE, crate::opts::get().max_age),
+            )
+            .unwrap_or_else(|error| panic!("failed to create on-disk repository cache: {error}"))
+        });
+
+        #[allow(clippy::unwrap_used)]
+        let cache = once_cell.get_mut().unwrap();
+
+        f(cache)
+    })
+}
+
 impl Cache {
-    pub fn new(temporary: bool, refresh_age: u64) -> Result<Self> {
+    fn new(temporary: bool, refresh_age: u64) -> Result<Self> {
         let tempdir = if temporary {
             tempdir()
                 .map(Option::Some)
