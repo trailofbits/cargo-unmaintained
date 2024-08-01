@@ -103,6 +103,10 @@ cargo test --features=test-ei
 
 **Repositories whose urls change across versions may be incorrectly reported as unmaintained.** `cargo-unmaintained` treats the metadata of the latest version of a package referred to by a project as "ground truth." However, this can cause false positives. For example, if the latest version of [`regex-automata`] that your project relies on is [0.2.0], `cargo-unmaintained` will report the package is unmaintained, though it is not.
 
+## Semantic versioning policy
+
+We reserve the right to change what data is stored in the cache, as well as how that data is stored, and to consider such changes non-breaking.
+
 ## License
 
 `cargo-unmaintained` is licensed and distributed under the AGPLv3 license. [Contact us](mailto:opensource@trailofbits.com) if you're looking for an exception to the terms.
