@@ -1,16 +1,19 @@
 //! On-disk cache
 //!
 //! The on-disk cache consists of the following subdirectories:
-//! - `entries`: JSON-encoded [`Entry`]. Each file's name is that of package with which it is
-//!   associated.
+//! - `entries`: JSON-encoded [`Entry`]. Each file's name is the associated package's name.
 //! - `repositories`: Cloned repositories. Each subdirectory's name is the hash of the url that was
 //!   cloned.
 //! - `timestamps`: Number of seconds between the Unix epoch and the time when the repository was
 //!   cloned. Filenames are the same as those of the cloned repositories.
-//! - `versions`: JSON-encoded array of [`crates_io_api::Version`]. Each file's name is that of
-//!   package with which it is associated.
+//! - `versions`: JSON-encoded array of [`crates_io_api::Version`]. Each file's name is the
+//!   associated package's name.
 //! - `versions_timestamps`: Number of seconds between the Unix epoch and the time when the versions
 //!   were fetched. Filenames are the same as those of the fetched versions.
+//!
+//! A package's entry is considered current if both of the following conditions are met:
+//! - A url associated with the package was successfully cloned.
+//! - The clone was performed no more than `refresh_age` days ago.
 //!
 //! A package's entry is considered current if both of the following conditions are met:
 //! - A url associated with the package was successfully cloned.
