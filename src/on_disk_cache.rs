@@ -214,6 +214,8 @@ impl Cache {
         }
 
         let crate_response = CRATES_IO_SYNC_CLIENT.get_crate(name)?;
+        // smoelius: Avoid using anything other than `versions` from `CrateResponse`. In particular,
+        // avoid using `crate_data`. The same data should be available in the crates.io index.
         let versions = crate_response.versions;
         self.write_versions(name, &versions)?;
         self.versions.insert(name.to_owned(), versions.clone());
