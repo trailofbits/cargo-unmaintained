@@ -85,13 +85,14 @@ missing-panics-doc = "allow"
 [workspace]
 exclude = ["fixtures"]
 
-[workspace.metadata.dylint]
-libraries = [
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/general" },
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/supplementary" },
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/inconsistent_qualification" },
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/suboptimal_pattern" },
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/try_io_result" },
+[[workspace.metadata.dylint.libraries]]
+git = "https://github.com/trailofbits/dylint"
+pattern = [
+    "examples/general",
+    "examples/supplementary",
+    "examples/restriction/inconsistent_qualification",
+    "examples/restriction/suboptimal_pattern",
+    "examples/restriction/try_io_result",
 ]
 
 [workspace.metadata.unmaintained]
