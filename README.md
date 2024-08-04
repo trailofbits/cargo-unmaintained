@@ -101,7 +101,17 @@ cargo test --features=test-ei
 
 ## Known problems
 
-**Repositories whose urls change across versions may be incorrectly reported as unmaintained.** `cargo-unmaintained` treats the metadata of the latest version of a package referred to by a project as "ground truth." However, this can cause false positives. For example, if the latest version of [`regex-automata`] that your project relies on is [0.2.0], `cargo-unmaintained` will report the package is unmaintained, though it is not.
+**If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative).** The following is a sketch of how this can occur.
+
+- The project relies on version 1 of package X which has no dependencies.
+- Version 2 of package X exists, and adds version 1 of package Y as a dependency.
+- Version 2 of package Y exists.
+
+Note that version 1 of package X appears maintained, but version 2 does not. Ignoring a few details, version 2 satisfies condition 3 above.
+
+`cargo-unmaintained` does not, in all cases, check whether the latest version of a package is used, as doing so would be cost prohibitive. A downside of this choice is that false negatives can result.
+
+Note that false _positives_ should not arise in a corresponding way. Before flagging a package as unmaintained, `cargo-unmaintained` verifies that the package's latest version would be considered unmaintained as well.
 
 ## Anti-goals
 
