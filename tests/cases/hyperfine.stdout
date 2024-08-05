@@ -1,17 +1,14 @@
 bitvec (https://github.com/bitvecto-rs/bitvec updated [..] days ago)
     radium (requirement: ^0.7, version used: 0.7.0, latest: [..])
     wyz (requirement: ^0.5, version used: 0.5.1, latest: [..])
-cloudabi (https://github.com/nuxinl/cloudabi updated [..] days ago)
+cloudabi (https://github.com/nuxinl/cloudabi updated [..] days ago)*
     bitflags (requirement: ^1.0, version used: 1.3.2, latest: [..])
 statistical (https://github.com/JeffBelgum/statistical updated [..] days ago)
     num (requirement: ^0.2, version used: 0.2.1, latest: [..])
     rand (requirement: ^0.6, version used: 0.6.5, latest: [..])
-borsh-derive (not in https://github.com/nearprotocol/borsh)
 borsh-derive-internal (not in https://github.com/nearprotocol/borsh)
 borsh-schema-derive-internal (not in https://github.com/nearprotocol/borsh)
-rand_hc (not in https://github.com/rust-random/rand)
-rand_isaac (not in https://github.com/rust-random/rand)
-rand_jitter (not in https://github.com/rust-random/rand)
-rand_os (not in https://github.com/rust-random/rand)
-rand_xorshift (not in https://github.com/rust-random/rand)
+rand_os (not in https://github.com/rust-random/rand)*
 fuchsia-cprng (https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng does not exist)
+
+* a newer version of the package is available
