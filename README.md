@@ -103,7 +103,7 @@ cargo test --features=test-ei
 
 **If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative).** The following is a sketch of how this can occur.
 
-- The project relies on version 1 of package X which has no dependencies.
+- The project relies on version 1 of package X, which has no dependencies.
 - Version 2 of package X exists, and adds version 1 of package Y as a dependency.
 - Version 2 of package Y exists.
 
