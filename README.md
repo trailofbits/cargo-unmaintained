@@ -103,6 +103,10 @@ cargo test --features=test-ei
 
 **Repositories whose urls change across versions may be incorrectly reported as unmaintained.** `cargo-unmaintained` treats the metadata of the latest version of a package referred to by a project as "ground truth." However, this can cause false positives. For example, if the latest version of [`regex-automata`] that your project relies on is [0.2.0], `cargo-unmaintained` will report the package is unmaintained, though it is not.
 
+## Anti-goals
+
+`cargo-unmaintained` is not meant to be a replacement for [`cargo-upgrade`]. `cargo-unmaintained` should not warn just because a package needs to be upgraded.
+
 ## Semantic versioning policy
 
 We reserve the right to change what data is stored in the cache, as well as how that data is stored, and to consider such changes non-breaking.
@@ -116,6 +120,7 @@ We reserve the right to change what data is stored in the cache, as well as how 
 [Notes]: #notes
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
 [`cargo-audit`]: https://github.com/RustSec/rustsec/tree/main/cargo-audit
+[`cargo-upgrade`]: https://github.com/killercup/cargo-edit?tab=readme-ov-file#cargo-upgrade
 [`regex-automata`]: https://crates.io/crates/regex-automata
 [`rustsec_advisories`]: ./rustsec_util/src/bin/rustsec_advisories.rs
 [personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
