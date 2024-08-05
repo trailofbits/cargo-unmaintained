@@ -16,7 +16,7 @@ regex = "1.10"
 rustsec = "0.29"
 strum = "0.26"
 strum_macros = "0.26"
-tempfile = "3.10"
+tempfile = "3.11"
 tokio = "1.38"
 
 [lints.rust.unexpected_cfgs]
