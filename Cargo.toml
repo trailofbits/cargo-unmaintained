@@ -40,7 +40,7 @@ remain = "0.2"
 serde = "1.0"
 serde_json = "1.0"
 sha1_smol = { version = "1.0", features = ["std"] }
-tempfile = "3.10"
+tempfile = "3.11"
 termcolor = "1.4"
 toml = "0.8"
 walkdir = "2.5"
