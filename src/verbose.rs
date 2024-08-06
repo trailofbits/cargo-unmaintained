@@ -2,7 +2,7 @@ use std::sync::atomic::AtomicBool;
 
 pub static __NEED_NEWLINE: AtomicBool = AtomicBool::new(false);
 
-macro_rules! __print {
+macro_rules! __eprint {
     ($fmt:expr) => {
         if crate::opts::get().verbose {
             $crate::verbose::__NEED_NEWLINE.store(true, std::sync::atomic::Ordering::SeqCst);
@@ -19,7 +19,7 @@ macro_rules! __print {
     };
 }
 
-macro_rules! __println {
+macro_rules! __eprintln {
     () => {
         if crate::opts::get().verbose {
             eprintln!();
@@ -43,20 +43,20 @@ macro_rules! __println {
 macro_rules! newline {
     () => {
         if $crate::verbose::__NEED_NEWLINE.load(std::sync::atomic::Ordering::SeqCst) {
-            $crate::verbose::__println!();
+            $crate::verbose::__eprintln!();
         }
     };
 }
 
 macro_rules! wrap {
     ($f:expr, $fmt:expr, $($arg:tt)*) => {{
-        $crate::verbose::__print!(concat!($fmt, "..."), $($arg)*);
+        $crate::verbose::__eprint!(concat!($fmt, "..."), $($arg)*);
         #[allow(clippy::redundant_closure_call)]
         let result = $f();
         if result.is_ok() {
-            $crate::verbose::__println!("ok");
+            $crate::verbose::__eprintln!("ok");
         } else {
-            $crate::verbose::__println!();
+            $crate::verbose::__eprintln!();
         }
         result
     }};
@@ -77,4 +77,4 @@ macro_rules! update {
 }
 
 // smoelius: "The trick": https://stackoverflow.com/a/31749071
-pub(crate) use {__print, __println, newline, wrap};
+pub(crate) use {__eprint, __eprintln, newline, wrap};
