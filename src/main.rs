@@ -132,6 +132,7 @@ struct Opts {
 struct UnmaintainedPkg<'a> {
     pkg: &'a Package,
     repo_age: RepoStatus<'a, u64>,
+    newer_version_is_available: bool,
     outdated_deps: Vec<OutdatedDep<'a>>,
 }
 
@@ -256,11 +257,18 @@ fn unmaintained() -> Result<bool> {
                 .map_or(Ok(()), |progress| progress.advance(&pkg.name))
         })?;
 
-        if let Some(unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
-            unmaintained_pkgs.push(unmaintained_pkg);
+        if let Some(mut unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
+            // smoelius: Before considering a package unmaintained, verify that its latest version
+            // would be considered unmaintained as well. Note that we still report the details of
+            // the version currently used. We may want to revisit this in the future.
+            let newer_version_is_available = newer_version_is_available(pkg)?;
+            if !newer_version_is_available || latest_version_is_unmaintained(&pkg.name)? {
+                unmaintained_pkg.newer_version_is_available = newer_version_is_available;
+                unmaintained_pkgs.push(unmaintained_pkg);
 
-            if opts::get().fail_fast {
-                break;
+                if opts::get().fail_fast {
+                    break;
+                }
             }
         }
     }
@@ -396,6 +404,37 @@ fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Ver
     map
 }
 
+fn newer_version_is_available(pkg: &Package) -> Result<bool> {
+    if pkg
+        .source
+        .as_ref()
+        .map_or(true, |source| !source.is_crates_io())
+    {
+        return Ok(false);
+    }
+
+    let latest_version = latest_version(&pkg.name)?;
+
+    Ok(pkg.version != latest_version)
+}
+
+fn latest_version_is_unmaintained(name: &str) -> Result<bool> {
+    let tempdir = packaging::temp_package(name)?;
+
+    let metadata = MetadataCommand::new().current_dir(tempdir.path()).exec()?;
+
+    #[allow(clippy::panic)]
+    let pkg = metadata
+        .packages
+        .iter()
+        .find(|pkg| name == pkg.name)
+        .unwrap_or_else(|| panic!("failed to find package `{name}`"));
+
+    let unmaintained_package = is_unmaintained_package(&metadata, pkg)?;
+
+    Ok(unmaintained_package.is_some())
+}
+
 fn is_unmaintained_package<'a>(
     metadata: &'a Metadata,
     pkg: &'a Package,
@@ -410,6 +449,7 @@ fn is_unmaintained_package<'a>(
                 return Ok(Some(UnmaintainedPkg {
                     pkg,
                     repo_age: repo_status.map_failure(),
+                    newer_version_is_available: false,
                     outdated_deps: Vec::new(),
                 }));
             }
@@ -420,6 +460,7 @@ fn is_unmaintained_package<'a>(
             return Ok(Some(UnmaintainedPkg {
                 pkg,
                 repo_age: repo_status.map_failure(),
+                newer_version_is_available: false,
                 outdated_deps: Vec::new(),
             }));
         }
@@ -443,6 +484,7 @@ fn is_unmaintained_package<'a>(
     Ok(Some(UnmaintainedPkg {
         pkg,
         repo_age,
+        newer_version_is_available: false,
         outdated_deps,
     }))
 }
@@ -786,10 +828,15 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
 
 fn display_unmaintained_pkgs(unmaintained_pkgs: &[UnmaintainedPkg]) -> Result<()> {
     let mut pkgs_needing_warning = Vec::new();
+    let mut at_least_one_newer_version_is_available = false;
     for unmaintained_pkg in unmaintained_pkgs {
+        at_least_one_newer_version_is_available |= unmaintained_pkg.newer_version_is_available;
         if display_unmaintained_pkg(unmaintained_pkg)? {
             pkgs_needing_warning.push(&unmaintained_pkg.pkg);
         }
+    }
+    if at_least_one_newer_version_is_available {
+        println!("\n* a newer version of the package is available");
     }
     if !pkgs_needing_warning.is_empty() {
         warn!(
@@ -811,6 +858,7 @@ fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> 
     let UnmaintainedPkg {
         pkg,
         repo_age,
+        newer_version_is_available,
         outdated_deps,
     } = unmaintained_pkg;
     stdout.set_color(ColorSpec::new().set_fg(repo_age.color()))?;
@@ -818,7 +866,11 @@ fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> 
     stdout.set_color(ColorSpec::new().set_fg(None))?;
     write!(stdout, " (")?;
     repo_age.write(&mut stdout)?;
-    writeln!(stdout, ")")?;
+    write!(stdout, ")")?;
+    if *newer_version_is_available {
+        write!(stdout, "*")?;
+    }
+    writeln!(stdout)?;
     for OutdatedDep {
         dep,
         version_used,
