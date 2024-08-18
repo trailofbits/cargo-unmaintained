@@ -6,6 +6,7 @@ use std::{
     process::Command,
 };
 
+#[path = "../../tests/util.rs"]
 mod util;
 use util::{tee, Tee};
 
@@ -21,7 +22,7 @@ fn rustsec_issues() {
     let mut command = Command::new("cargo");
     command
         .args(["run", "--bin=rustsec_issues"])
-        .current_dir("rustsec_util");
+        .current_dir("../rustsec_util");
 
     let output = tee(command, Tee::Stdout).unwrap();
 

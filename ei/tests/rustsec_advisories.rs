@@ -1,6 +1,7 @@
 use snapbox::assert_data_eq;
 use std::{env::remove_var, fs::read_to_string, process::Command};
 
+#[path = "../../tests/util.rs"]
 mod util;
 use util::{split_at_cut_line, tee, Tee};
 
@@ -14,7 +15,7 @@ fn rustsec_advisories() {
     let mut command = Command::new("cargo");
     command
         .args(["run", "--bin=rustsec_advisories"])
-        .current_dir("rustsec_util")
+        .current_dir("../rustsec_util")
         .env("RUST_BACKTRACE", "0");
 
     let output = tee(command, Tee::Stdout).unwrap();

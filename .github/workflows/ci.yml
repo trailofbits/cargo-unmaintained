@@ -109,14 +109,14 @@ jobs:
               ;;
             with-token-0)
               export GITHUB_TOKEN='${{ github.token }}'
-              cargo test --config "$GROUP_RUNNER" --features=test-ei \
+              cargo test --config "$GROUP_RUNNER" --package=ei \
                 --test dogfood \
                 --test rustsec_advisories \
                 -- --nocapture
               ;;
             with-token-1)
               export GITHUB_TOKEN='${{ github.token }}'
-              cargo test --config "$GROUP_RUNNER" --features=test-ei \
+              cargo test --config "$GROUP_RUNNER" --package=ei \
                 --test rustsec_issues \
                 --test snapbox \
                 -- --nocapture

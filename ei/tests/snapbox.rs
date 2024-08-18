@@ -15,10 +15,11 @@ use std::{
     env::var,
     ffi::OsStr,
     fs::{read_dir, read_to_string},
-    path::{Path, PathBuf},
+    path::Path,
     process::Command,
 };
 
+#[path = "../../tests/util.rs"]
 mod util;
 use util::{enabled, tee, Tee};
 
@@ -36,10 +37,11 @@ struct Test {
     rev: Option<String>,
 }
 
+#[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
 #[test]
 fn snapbox() -> Result<()> {
-    #[cfg(not(feature = "lock-index"))]
-    panic!("the `snapbox` test requires the `lock-index` feature");
+    // #[cfg(not(feature = "lock-index"))]
+    // panic!("the `snapbox` test requires the `lock-index` feature");
 
     let test_cases = Path::new("tests/cases");
 
@@ -73,7 +75,7 @@ fn snapbox() -> Result<()> {
             // https://github.com/solana-labs/rbpf/blob/f52bfa0f4912d5f6eaa364de7c42b6ee6be50a88/src/elf.rs#L401
             let tempdir: tempfile::TempDir;
             let dir = match (test.path, test.url) {
-                (Some(path), None) => PathBuf::from(path),
+                (Some(path), None) => Path::new("..").join(path),
                 (None, Some(url)) => {
                     tempdir = tempfile::tempdir()?;
 

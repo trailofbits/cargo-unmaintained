@@ -1,6 +1,7 @@
 use snapbox::cmd::cargo_bin;
 use std::{env::remove_var, process::Command};
 
+#[path = "../../tests/util.rs"]
 mod util;
 use util::{tee, Tee};
 
