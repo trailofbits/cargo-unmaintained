@@ -1,4 +1,6 @@
 oorandom (https://sr.ht/~icefox/oorandom/ is uncloneable)
+httpdate (https://github.com/pyfisch/httpdate updated [..] days ago)
+    criterion (requirement: ^0.3.5, version used: 0.3.6, latest: [..])
 structopt (https://github.com/TeXitoi/structopt updated [..] days ago)
     clap (requirement: ^2.33, version used: 2.34.0, latest: [..])
 structopt-derive (https://github.com/TeXitoi/structopt updated [..] days ago)
