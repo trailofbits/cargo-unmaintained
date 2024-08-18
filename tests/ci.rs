@@ -7,7 +7,7 @@ use tempfile::tempdir;
 mod util;
 use util::split_at_cut_line;
 
-static DIRS: &[&str] = &[".", "rustsec_util"];
+static DIRS: &[&str] = &[".", "ei", "rustsec_util"];
 
 #[ctor::ctor]
 fn initialize() {
@@ -58,18 +58,21 @@ fn format() {
 
 #[test]
 fn hack_feature_powerset_udeps() {
-    Command::new("rustup")
-        .env("RUSTFLAGS", "-D warnings")
-        .args([
-            "run",
-            "nightly",
-            "cargo",
-            "hack",
-            "--feature-powerset",
-            "udeps",
-        ])
-        .assert()
-        .success();
+    for dir in DIRS {
+        Command::new("rustup")
+            .env("RUSTFLAGS", "-D warnings")
+            .args([
+                "run",
+                "nightly",
+                "cargo",
+                "hack",
+                "--feature-powerset",
+                "udeps",
+            ])
+            .current_dir(dir)
+            .assert()
+            .success();
+    }
 }
 
 #[test]
@@ -91,6 +94,7 @@ fn license() {
         {
             if [
                 "AGPL-3.0 (1): cargo-unmaintained",
+                "AGPL-3.0 (1): ei",
                 "AGPL-3.0 (1): rustsec_util",
                 "Custom License File (1): ring",
                 "MPL-2.0 (1): uluru",
@@ -161,7 +165,7 @@ fn prettier() {
 #[test]
 fn readme_contains_expected_contents() {
     let readme = read_to_string("README.md").unwrap();
-    let contents = read_to_string("tests/rustsec_advisories.stdout").unwrap();
+    let contents = read_to_string("ei/tests/rustsec_advisories.stdout").unwrap();
     let expected_contents = below_cut_line(&contents).unwrap();
     for expected_line in expected_contents.lines() {
         assert!(

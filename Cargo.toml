@@ -7,22 +7,6 @@ edition = "2021"
 license = "AGPL-3.0"
 repository = "https://github.com/trailofbits/cargo-unmaintained"
 
-[[test]]
-name = "dogfood"
-required-features = ["test-ei"]
-
-[[test]]
-name = "rustsec_advisories"
-required-features = ["test-ei"]
-
-[[test]]
-name = "rustsec_issues"
-required-features = ["test-ei"]
-
-[[test]]
-name = "snapbox"
-required-features = ["test-ei"]
-
 [dependencies]
 anyhow = { version = "1.0", features = ["backtrace"] }
 cargo_metadata = "0.18"
@@ -69,7 +53,6 @@ snapbox = "0.6"
 default = ["on-disk-cache", "lock-index"]
 cache-repositories = ["on-disk-cache"]
 on-disk-cache = ["xdg"]
-test-ei = []                              # ei = "externally influenced"
 lock-index = ["libc", "windows-sys"]
 
 [lints.rust.unexpected_cfgs]
@@ -84,6 +67,7 @@ missing-panics-doc = "allow"
 
 [workspace]
 exclude = ["fixtures"]
+members = ["ei"]
 
 [[workspace.metadata.dylint.libraries]]
 git = "https://github.com/trailofbits/dylint"
