@@ -166,7 +166,8 @@ ignoring `https://github.com/CreepySkeleton` from `https://github.com/rustsec/ad
 ignoring `https://gitlab.com/CreepySkeleton/proc-macro-error/-/issues/20` from `https://github.com/rustsec/advisory-db/issues/2011`
 async-priority-channel...not found
 winapi-rs...not found
-not found (101)
+minitrace-rust...not found
+not found (102)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -268,6 +269,7 @@ not found (101)
     rust-fontconfig          https://github.com/rustsec/advisory-db/issues/1998
     async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
     winapi-rs                https://github.com/rustsec/advisory-db/issues/2031
+    minitrace-rust           https://github.com/rustsec/advisory-db/issues/2037
 found (45)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
