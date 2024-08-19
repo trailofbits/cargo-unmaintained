@@ -17,7 +17,7 @@ rustsec = "0.29"
 strum = "0.26"
 strum_macros = "0.26"
 tempfile = "3.12"
-tokio = "1.38"
+tokio = "1.39"
 
 [lints.rust.unexpected_cfgs]
 level = "deny"
