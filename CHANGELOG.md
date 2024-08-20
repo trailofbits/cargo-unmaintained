@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.0
+
+- Fix three bugs introduced by [#325](https://github.com/trailofbits/cargo-unmaintained/pull/325):
+  - Avoid divide by zero in `Progress::draw` ([ef24aa9](https://github.com/trailofbits/cargo-unmaintained/commit/ef24aa968b4618a3beefd7daa989ace0082a8180))
+  - Write warnings on new lines ([5d31493](https://github.com/trailofbits/cargo-unmaintained/commit/5d314938f0372fa8a222211bb21f4773a0330508))
+  - Don't assert in `Progress::finish` ([#331](https://github.com/trailofbits/cargo-unmaintained/pull/331))
+- Update README.md ([#334](https://github.com/trailofbits/cargo-unmaintained/pull/334) and [#340](https://github.com/trailofbits/cargo-unmaintained/pull/340))
+- Update `--no-cache` description ([#329](https://github.com/trailofbits/cargo-unmaintained/pull/329))
+- FEATURE: Before reporting that a package is unmaintained, verify that its latest version would be considered unmaintained as well ([#339](https://github.com/trailofbits/cargo-unmaintained/pull/339))
+
 ## 1.3.0
 
 - FEATURE: Better progress reporting ([#325](https://github.com/trailofbits/cargo-unmaintained/pull/325))
