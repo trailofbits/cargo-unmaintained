@@ -167,7 +167,9 @@ ignoring `https://gitlab.com/CreepySkeleton/proc-macro-error/-/issues/20` from `
 async-priority-channel...not found
 winapi-rs...not found
 minitrace-rust...not found
-not found (102)
+instant...not found
+ignoring `https://matrix.org/blog/2024/08/libolm-deprecation/` from `https://github.com/rustsec/advisory-db/issues/2060`
+not found (103)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -270,6 +272,7 @@ not found (102)
     async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
     winapi-rs                https://github.com/rustsec/advisory-db/issues/2031
     minitrace-rust           https://github.com/rustsec/advisory-db/issues/2037
+    instant                  https://github.com/rustsec/advisory-db/issues/2056
 found (45)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
