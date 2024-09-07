@@ -169,7 +169,10 @@ winapi-rs...not found
 minitrace-rust...not found
 instant...not found
 ignoring `https://matrix.org/blog/2024/08/libolm-deprecation/` from `https://github.com/rustsec/advisory-db/issues/2060`
-not found (103)
+rust-bcc...not found
+strason...found
+hwloc-rs...not found
+not found (105)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -273,7 +276,9 @@ not found (103)
     winapi-rs                https://github.com/rustsec/advisory-db/issues/2031
     minitrace-rust           https://github.com/rustsec/advisory-db/issues/2037
     instant                  https://github.com/rustsec/advisory-db/issues/2056
-found (45)
+    rust-bcc                 https://github.com/rustsec/advisory-db/issues/2065
+    hwloc-rs                 https://github.com/rustsec/advisory-db/issues/2067
+found (46)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -319,3 +324,4 @@ found (45)
     openslide                https://github.com/rustsec/advisory-db/issues/1937
     servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
     proc-macro-error         https://github.com/rustsec/advisory-db/issues/2011
+    strason                  https://github.com/rustsec/advisory-db/issues/2066
