@@ -19,7 +19,7 @@
 
    b. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-As of 2024-06-17, the RustSec Advisory Database contains 98 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 71 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+As of 2024-09-06, the RustSec Advisory Database contains 99 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 72 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
 
 ### Notes
 
