@@ -133,7 +133,7 @@ syn...not found
 teams...not found
 ignoring `https://github.com/rust-bus` from `https://github.com/rustsec/advisory-db/issues/1756`
 hpack...found
-hpack-patched...not found
+hpack-patched...found
 ignoring `https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html` from `https://github.com/rustsec/advisory-db/issues/1784`
 loopdev-erikh...found
 loopdev...found
@@ -172,6 +172,8 @@ ignoring `https://matrix.org/blog/2024/08/libolm-deprecation/` from `https://git
 rust-bcc...not found
 strason...found
 hwloc-rs...not found
+get-size...not found
+ignoring `https://github.com/DKerp` from `https://github.com/rustsec/advisory-db/issues/2078`
 not found (105)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
@@ -254,7 +256,6 @@ not found (105)
     quote                    https://github.com/rustsec/advisory-db/issues/1735
     syn                      https://github.com/rustsec/advisory-db/issues/1735
     teams                    https://github.com/rustsec/advisory-db/issues/1756
-    hpack-patched            https://github.com/rustsec/advisory-db/issues/1784
     rust-cpython             https://github.com/rustsec/advisory-db/issues/1822
     smartstring              https://github.com/rustsec/advisory-db/issues/1854
     filesystem-rs            https://github.com/rustsec/advisory-db/issues/1870
@@ -278,7 +279,8 @@ not found (105)
     instant                  https://github.com/rustsec/advisory-db/issues/2056
     rust-bcc                 https://github.com/rustsec/advisory-db/issues/2065
     hwloc-rs                 https://github.com/rustsec/advisory-db/issues/2067
-found (46)
+    get-size                 https://github.com/rustsec/advisory-db/issues/2078
+found (47)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -317,6 +319,7 @@ found (46)
     cloud-storage            https://github.com/rustsec/advisory-db/issues/1715
     cloud-storage-rs         https://github.com/rustsec/advisory-db/issues/1715
     hpack                    https://github.com/rustsec/advisory-db/issues/1784
+    hpack-patched            https://github.com/rustsec/advisory-db/issues/1784
     loopdev-erikh            https://github.com/rustsec/advisory-db/issues/1821
     loopdev                  https://github.com/rustsec/advisory-db/issues/1821
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
