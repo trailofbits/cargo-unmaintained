@@ -174,7 +174,10 @@ strason...found
 hwloc-rs...not found
 get-size...not found
 ignoring `https://github.com/DKerp` from `https://github.com/rustsec/advisory-db/issues/2078`
-not found (105)
+users...not found
+atty...not found
+ignoring `https://osv.dev/vulnerability/RUSTSEC-2021-0145` from `https://github.com/rustsec/advisory-db/issues/2087`
+not found (107)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -280,6 +283,8 @@ not found (105)
     rust-bcc                 https://github.com/rustsec/advisory-db/issues/2065
     hwloc-rs                 https://github.com/rustsec/advisory-db/issues/2067
     get-size                 https://github.com/rustsec/advisory-db/issues/2078
+    users                    https://github.com/rustsec/advisory-db/issues/2086
+    atty                     https://github.com/rustsec/advisory-db/issues/2087
 found (47)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
