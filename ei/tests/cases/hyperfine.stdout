@@ -6,8 +6,8 @@ cloudabi (https://github.com/nuxinl/cloudabi updated [..] days ago)*
 statistical (https://github.com/JeffBelgum/statistical updated [..] days ago)
     num (requirement: ^0.2, version used: 0.2.1, latest: [..])
     rand (requirement: ^0.6, version used: 0.6.5, latest: [..])
-borsh-derive-internal (not in https://github.com/nearprotocol/borsh)
-borsh-schema-derive-internal (not in https://github.com/nearprotocol/borsh)
+borsh-derive-internal (not in https://github.com/nearprotocol/borsh)*
+borsh-schema-derive-internal (not in https://github.com/nearprotocol/borsh)*
 rand_os (not in https://github.com/rust-random/rand)*
 fuchsia-cprng (https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng does not exist)
 
