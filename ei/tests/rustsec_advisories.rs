@@ -1,5 +1,10 @@
 use snapbox::assert_data_eq;
-use std::{env::remove_var, fs::read_to_string, process::Command};
+use std::{
+    env::{remove_var, var},
+    fs::{read_to_string, write},
+    io::{stderr, Write},
+    process::Command,
+};
 
 #[path = "../../tests/util.rs"]
 mod util;
@@ -12,6 +17,8 @@ fn initialize() {
 
 #[test]
 fn rustsec_advisories() {
+    const PATH_STDOUT: &str = "tests/rustsec_advisories.stdout";
+
     let mut command = Command::new("cargo");
     command
         .args(["run", "--bin=rustsec_advisories"])
@@ -20,13 +27,24 @@ fn rustsec_advisories() {
 
     let output = tee(command, Tee::Stdout).unwrap();
 
-    let stdout_expected = read_to_string("tests/rustsec_advisories.stdout").unwrap();
+    let stdout_expected = read_to_string(PATH_STDOUT).unwrap();
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
-    assert_data_eq!(
-        above_cut_line(stdout_actual),
-        above_cut_line(&stdout_expected),
-    );
+    if var("BLESS").is_ok() {
+        write(PATH_STDOUT, stdout_actual).unwrap();
+
+        #[allow(clippy::explicit_write)]
+        writeln!(
+            stderr(),
+            "`{PATH_STDOUT}` was overwritten and may need to be adjusted."
+        )
+        .unwrap();
+    } else {
+        assert_data_eq!(
+            above_cut_line(stdout_actual),
+            above_cut_line(&stdout_expected),
+        );
+    }
 }
 
 fn above_cut_line(s: &str) -> &str {
