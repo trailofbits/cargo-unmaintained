@@ -20,4 +20,4 @@ tokio-rustls (not in https://github.com/tokio-rs/tls)*
 adler (https://github.com/jonas-schievink/adler.git archived)
 serde_cbor (https://github.com/pyfisch/cbor archived)
 
-* a newer version of the package is available
+* a newer (though still seemingly unmaintained) version of the package is available
