@@ -11,4 +11,4 @@ borsh-schema-derive-internal (not in https://github.com/nearprotocol/borsh)*
 rand_os (not in https://github.com/rust-random/rand)*
 fuchsia-cprng (https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng does not exist)
 
-* a newer version of the package is available
+* a newer (though still seemingly unmaintained) version of the package is available

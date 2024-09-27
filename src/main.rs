@@ -836,7 +836,9 @@ fn display_unmaintained_pkgs(unmaintained_pkgs: &[UnmaintainedPkg]) -> Result<()
         }
     }
     if at_least_one_newer_version_is_available {
-        println!("\n* a newer version of the package is available");
+        println!(
+            "\n* a newer (though still seemingly unmaintained) version of the package is available"
+        );
     }
     if !pkgs_needing_warning.is_empty() {
         warn!(
