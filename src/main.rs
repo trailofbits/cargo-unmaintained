@@ -59,20 +59,15 @@ enum CargoSubCommand {
     Unmaintained(Opts),
 }
 
+include!(concat!(env!("OUT_DIR"), "/after_help.rs"));
+
 #[allow(clippy::struct_excessive_bools)]
 #[derive(Debug, Parser)]
 #[remain::sorted]
 #[clap(
     version = crate_version!(),
     about = "Find unmaintained packages in Rust projects",
-    after_help = "\
-The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file containing a \
-personal access token. If set, cargo-unmaintained will use this token to authenticate to GitHub \
-and check whether packages' repositories have been archived.
-
-Unless --no-exit-code is passed, the exit status is 0 if no unmaintained packages were found and \
-no irrecoverable errors occurred, 1 if unmaintained packages were found, and 2 if an irrecoverable \
-error occurred."
+    after_help = AFTER_HELP
 )]
 struct Opts {
     #[clap(
@@ -121,6 +116,22 @@ struct Opts {
         value_name = "NAME"
     )]
     package: Option<String>,
+
+    #[cfg(not(windows))]
+    #[clap(
+        long,
+        help = "Read a personal access token from standard input and save it to \
+                $HOME/.config/cargo-unmaintained/token.txt"
+    )]
+    save_token: bool,
+
+    #[cfg(windows)]
+    #[clap(
+        long,
+        help = "Read a personal access token from standard input and save it to \
+                %LOCALAPPDATA%\\cargo-unmaintained\\token.txt"
+    )]
+    save_token: bool,
 
     #[clap(long, help = "Show paths to unmaintained packages")]
     tree: bool,
@@ -213,6 +224,12 @@ fn main() -> Result<()> {
     } = Cargo::parse_from(args());
 
     opts::init(opts);
+
+    if opts::get().save_token {
+        // smoelius: Currently, if additional options are passed besides --save-token, they are
+        // ignored and no error is emitted. This is ugly.
+        return github::save_token();
+    }
 
     if github::load_token(|_| Ok(()))? {
         TOKEN_FOUND.store(true, Ordering::SeqCst);

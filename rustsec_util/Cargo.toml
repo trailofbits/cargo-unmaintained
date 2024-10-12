@@ -19,6 +19,9 @@ strum_macros = "0.26"
 tempfile = "3.13"
 tokio = "1.40"
 
+[target.'cfg(unix)'.dependencies]
+xdg = { version = "2.5" }
+
 [lints.rust.unexpected_cfgs]
 level = "deny"
 check-cfg = ["cfg(dylint_lib, values(any()))", "cfg(__warnings)"]
