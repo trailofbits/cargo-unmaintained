@@ -18,6 +18,7 @@ mod octocrab_util;
 mod flush;
 use flush::Flush;
 
+#[allow(unused)]
 #[path = "../../../../src/github/util.rs"]
 mod github_util;
 
