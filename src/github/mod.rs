@@ -15,8 +15,8 @@ mod map_ext;
 use map_ext::MapExt;
 
 mod util;
-pub(crate) use util::load_token;
 use util::PERSONAL_TOKEN;
+pub(crate) use util::{load_token, save_token};
 
 #[allow(clippy::unwrap_used)]
 static RE: Lazy<Regex> =
