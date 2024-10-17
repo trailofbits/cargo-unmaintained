@@ -31,7 +31,7 @@ walkdir = "2.5"
 
 [target.'cfg(unix)'.dependencies]
 libc = { version = "0.2", optional = true }
-xdg = { version = "2.5", optional = true }
+xdg = { version = "2.5" }
 
 [target.'cfg(windows)'.dependencies]
 windows-sys = { version = "0.59", features = [
@@ -52,7 +52,7 @@ snapbox = "0.6"
 [features]
 default = ["on-disk-cache", "lock-index"]
 cache-repositories = ["on-disk-cache"]
-on-disk-cache = ["xdg"]
+on-disk-cache = []
 lock-index = ["libc", "windows-sys"]
 
 [lints.rust.unexpected_cfgs]
