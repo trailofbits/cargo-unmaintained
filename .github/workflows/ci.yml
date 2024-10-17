@@ -118,6 +118,7 @@ jobs:
               export GITHUB_TOKEN='${{ github.token }}'
               cargo test --config "$GROUP_RUNNER" --package=ei \
                 --test rustsec_issues \
+                --test save_token \
                 --test snapbox \
                 -- --nocapture
               ;;
