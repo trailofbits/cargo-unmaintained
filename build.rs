@@ -13,7 +13,7 @@ fn main() {
     println!("cargo:warning=Feature `cache-repositories` has been renamed to `on-disk-cache`");
 
     let out_dir = var("OUT_DIR").unwrap();
-    let path = PathBuf::from(out_dir).join("after_help.rs");
+    let path_buf = PathBuf::from(out_dir).join("after_help.rs");
     let contents = format!(
         r#"const AFTER_HELP: &str = "\
 The `GITHUB_TOKEN_PATH` environment variable can be set to the path of a file containing a \
@@ -31,5 +31,5 @@ no irrecoverable errors occurred, 1 if unmaintained packages were found, and 2 i
 error occurred.";
 "#,
     );
-    write(path, contents).unwrap();
+    write(path_buf, contents).unwrap();
 }

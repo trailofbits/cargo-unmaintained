@@ -75,6 +75,7 @@ pattern = [
     "examples/general",
     "examples/supplementary",
     "examples/restriction/inconsistent_qualification",
+    "examples/restriction/misleading_variable_name",
     "examples/restriction/suboptimal_pattern",
     "examples/restriction/try_io_result",
 ]

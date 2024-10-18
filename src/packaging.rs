@@ -19,13 +19,13 @@ pub(crate) fn temp_package(name: &str) -> Result<TempDir> {
         .with_context(|| "failed to create temporary package")?;
     ensure!(status.success());
 
-    let path = tempdir.path().join("Cargo.toml");
+    let path_buf = tempdir.path().join("Cargo.toml");
     let mut manifest = OpenOptions::new()
         .append(true)
-        .open(&path)
-        .with_context(|| format!("failed to open {path:?}"))?;
+        .open(&path_buf)
+        .with_context(|| format!("failed to open {path_buf:?}"))?;
     writeln!(manifest, r#"{name} = "*""#)
-        .with_context(|| format!("failed to write to {path:?}"))?;
+        .with_context(|| format!("failed to write to {path_buf:?}"))?;
 
     Ok(tempdir)
 }

@@ -103,8 +103,8 @@ fn snapbox() -> Result<()> {
                 }
             };
 
-            let path = dir.join("Cargo.lock");
-            assert!(path.exists(), "{path:?} does not exist");
+            let path_buf = dir.join("Cargo.lock");
+            assert!(path_buf.exists(), "{path_buf:?} does not exist");
 
             let mut command = Command::new(cargo_bin("cargo-unmaintained"));
             command
