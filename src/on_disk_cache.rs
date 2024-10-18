@@ -206,9 +206,9 @@ impl Cache {
 
     fn entry(&mut self, pkg: &Package) -> Result<Entry> {
         if !self.entries.contains_key(&pkg.name) {
-            let path = self.entries_dir().join(&pkg.name);
-            let contents = read_to_string(&path)
-                .with_context(|| format!("failed to read `{}`", path.display()))?;
+            let path_buf = self.entries_dir().join(&pkg.name);
+            let contents = read_to_string(&path_buf)
+                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let entry = serde_json::from_str::<Entry>(&contents)?;
             ensure!(
                 pkg.repository.as_ref() == Some(&entry.named_url),
@@ -230,9 +230,9 @@ impl Cache {
     fn repository_timestamp(&mut self, url: &str) -> Result<SystemTime> {
         let digest = url_digest(url);
         if !self.repository_timestamps.contains_key(&digest) {
-            let path = self.repository_timestamps_dir().join(url_digest(url));
-            let contents = read_to_string(&path)
-                .with_context(|| format!("failed to read `{}`", path.display()))?;
+            let path_buf = self.repository_timestamps_dir().join(url_digest(url));
+            let contents = read_to_string(&path_buf)
+                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let secs = u64::from_str(&contents)?;
             let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
             self.repository_timestamps.insert(digest.clone(), timestamp);
@@ -265,9 +265,9 @@ impl Cache {
 
     fn versions(&mut self, name: &str) -> Result<Vec<Version>> {
         if !self.versions.contains_key(name) {
-            let path = self.versions_dir().join(name);
-            let contents = read_to_string(&path)
-                .with_context(|| format!("failed to read `{}`", path.display()))?;
+            let path_buf = self.versions_dir().join(name);
+            let contents = read_to_string(&path_buf)
+                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let versions = serde_json::from_str::<Vec<Version>>(&contents)?;
             self.versions.insert(name.to_owned(), versions);
         }
@@ -284,9 +284,9 @@ impl Cache {
 
     fn versions_timestamp(&mut self, name: &str) -> Result<SystemTime> {
         if !self.versions_timestamps.contains_key(name) {
-            let path = self.versions_timestamps_dir().join(name);
-            let contents = read_to_string(&path)
-                .with_context(|| format!("failed to read `{}`", path.display()))?;
+            let path_buf = self.versions_timestamps_dir().join(name);
+            let contents = read_to_string(&path_buf)
+                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let secs = u64::from_str(&contents)?;
             let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
             self.versions_timestamps.insert(name.to_owned(), timestamp);
@@ -297,38 +297,40 @@ impl Cache {
 
     fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
         create_dir_all(self.entries_dir()).with_context(|| "failed to create entries directory")?;
-        let path = self.entries_dir().join(pkg_name);
+        let path_buf = self.entries_dir().join(pkg_name);
         let json = serde_json::to_string_pretty(entry)?;
-        write(&path, json).with_context(|| format!("failed to write `{}`", path.display()))?;
+        write(&path_buf, json)
+            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
 
     fn write_repository_timestamp(&self, digest: &str, timestamp: SystemTime) -> Result<()> {
         create_dir_all(self.repository_timestamps_dir())
             .with_context(|| "failed to create repository timestamps directory")?;
-        let path = self.repository_timestamps_dir().join(digest);
+        let path_buf = self.repository_timestamps_dir().join(digest);
         let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
-        write(&path, duration.as_secs().to_string())
-            .with_context(|| format!("failed to write `{}`", path.display()))?;
+        write(&path_buf, duration.as_secs().to_string())
+            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
 
     fn write_versions(&self, name: &str, versions: &[Version]) -> Result<()> {
         create_dir_all(self.versions_dir())
             .with_context(|| "failed to create versions directory")?;
-        let path = self.versions_dir().join(name);
+        let path_buf = self.versions_dir().join(name);
         let json = serde_json::to_string_pretty(versions)?;
-        write(&path, json).with_context(|| format!("failed to write `{}`", path.display()))?;
+        write(&path_buf, json)
+            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
 
     fn write_versions_timestamp(&self, name: &str, timestamp: SystemTime) -> Result<()> {
         create_dir_all(self.versions_timestamps_dir())
             .with_context(|| "failed to create versions timestamps directory")?;
-        let path = self.versions_timestamps_dir().join(name);
+        let path_buf = self.versions_timestamps_dir().join(name);
         let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
-        write(&path, duration.as_secs().to_string())
-            .with_context(|| format!("failed to write `{}`", path.display()))?;
+        write(&path_buf, duration.as_secs().to_string())
+            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
 
