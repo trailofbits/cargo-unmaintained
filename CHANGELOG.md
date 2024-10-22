@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.5.0
+
+- Clarify "newer version is available" message ([#394](https://github.com/trailofbits/cargo-unmaintained/pull/394))
+- FEATURE: Add `--save-token` option to store a personal access token in $HOME/.config/cargo-unmaintained/token.txt on Linux/macOS, or %LOCALAPPDATA%\cargo-unmaintained\token.txt on Windows. Note that the existing means for providing a personal access token (`GITHUB_TOKEN_PATH` and `GITHUB_TOKEN`) continue to work as before. ([9a529aa](https://github.com/trailofbits/cargo-unmaintained/commit/9a529aadbada51a543b4db94cef21efd2c3f5ffc))
+
 ## 1.4.0
 
 - Fix three bugs introduced by [#325](https://github.com/trailofbits/cargo-unmaintained/pull/325):
