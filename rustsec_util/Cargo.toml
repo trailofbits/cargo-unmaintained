@@ -17,7 +17,7 @@ rustsec = "0.29"
 strum = "0.26"
 strum_macros = "0.26"
 tempfile = "3.13"
-tokio = "1.40"
+tokio = "1.41"
 
 [target.'cfg(unix)'.dependencies]
 xdg = { version = "2.5" }
