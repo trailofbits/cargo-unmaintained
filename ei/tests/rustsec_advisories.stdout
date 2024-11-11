@@ -1,4 +1,4 @@
-100 advisories for unmaintained packages
+116 advisories for unmaintained packages
 lz4-compress...found
 tempdir...found
 typemap...not found
@@ -120,6 +120,7 @@ fehler...not found
 cpython...not found
 safemem...found
 hpack...found
+loopdev...found
 cosmwasm...error:
 ```
     Updating crates.io index
@@ -139,6 +140,21 @@ libp2p-tokio-socks5...found
 zip_next...found
 proc-macro-error...found
 atty...recently updated
+pqcrypto-dilithium...found
+pqcrypto-kyber...found
+hwloc...found
+bcc...found
+instant...not found
+cw0...found
+strason...found
+opentelemetry_api...found
+derivative...found
+openslide...found
+minitrace...recently updated
+mmap...found
+chrono-english...not found
+conrod_core...found
+conrod...found
 not found - error (8)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -152,9 +168,10 @@ not found - leaf (3)
     anymap               https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject          https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                 https://rustsec.org/advisories/RUSTSEC-2022-0081.html
-not found - recently-updated (1)
+not found - recently-updated (2)
     atty                 https://rustsec.org/advisories/RUSTSEC-2024-0375.html
-not found - other (15)
+    minitrace            https://rustsec.org/advisories/RUSTSEC-2024-0390.html
+not found - other (17)
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
     slice-deque          https://rustsec.org/advisories/RUSTSEC-2020-0158.html
@@ -170,7 +187,9 @@ not found - other (15)
     fehler               https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython              https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     yaml-rust            https://rustsec.org/advisories/RUSTSEC-2024-0320.html
-found (73)
+    instant              https://rustsec.org/advisories/RUSTSEC-2024-0384.html
+    chrono-english       https://rustsec.org/advisories/RUSTSEC-2024-0395.html
+found (86)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -238,16 +257,29 @@ found (73)
     dlopen_derive        https://rustsec.org/advisories/RUSTSEC-2023-0051.html
     safemem              https://rustsec.org/advisories/RUSTSEC-2023-0081.html
     hpack                https://rustsec.org/advisories/RUSTSEC-2023-0084.html
+    loopdev              https://rustsec.org/advisories/RUSTSEC-2023-0088.html
     generational-arena   https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     filesystem           https://rustsec.org/advisories/RUSTSEC-2024-0015.html
     rsa-export           https://rustsec.org/advisories/RUSTSEC-2024-0333.html
     libp2p-tokio-socks5  https://rustsec.org/advisories/RUSTSEC-2024-0334.html
     zip_next             https://rustsec.org/advisories/RUSTSEC-2024-0337.html
     proc-macro-error     https://rustsec.org/advisories/RUSTSEC-2024-0370.html
+    pqcrypto-dilithium   https://rustsec.org/advisories/RUSTSEC-2024-0380.html
+    pqcrypto-kyber       https://rustsec.org/advisories/RUSTSEC-2024-0381.html
+    hwloc                https://rustsec.org/advisories/RUSTSEC-2024-0382.html
+    bcc                  https://rustsec.org/advisories/RUSTSEC-2024-0383.html
+    cw0                  https://rustsec.org/advisories/RUSTSEC-2024-0385.html
+    strason              https://rustsec.org/advisories/RUSTSEC-2024-0386.html
+    opentelemetry_api    https://rustsec.org/advisories/RUSTSEC-2024-0387.html
+    derivative           https://rustsec.org/advisories/RUSTSEC-2024-0388.html
+    openslide            https://rustsec.org/advisories/RUSTSEC-2024-0389.html
+    mmap                 https://rustsec.org/advisories/RUSTSEC-2024-0394.html
+    conrod_core          https://rustsec.org/advisories/RUSTSEC-2024-0396.html
+    conrod               https://rustsec.org/advisories/RUSTSEC-2024-0397.html
 ---
-As of 2024-09-30, the RustSec Advisory Database contains 100 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 73 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
-- Of the 27 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+As of 2024-11-11, the RustSec Advisory Database contains 116 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 86 of them (more than two thirds). These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+- Of the 30 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 8 do not build
   - 3 are existent, unarchived leaves
-  - 1 were updated within the past 365 days
-  - 15 were not identified for other reasons
+  - 2 were updated within the past 365 days
+  - 17 were not identified for other reasons
