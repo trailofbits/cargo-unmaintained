@@ -1,9 +1,4 @@
 oorandom (https://sr.ht/~icefox/oorandom/ is uncloneable)*
-pprof (https://github.com/tikv/pprof-rs updated [..] days ago)*
-    criterion (requirement: ^0.3, version used: 0.3.6, latest: [..])
-    nix (requirement: ^0.24, version used: 0.24.2, latest: [..])
-    symbolic-demangle (requirement: ^8.0, version used: 8.8.0, latest: [..])
-    criterion (requirement: ^0.3, version used: 0.3.6, latest: [..])
 structopt (https://github.com/TeXitoi/structopt updated [..] days ago)
     clap (requirement: ^2.33, version used: 2.34.0, latest: [..])
 structopt-derive (https://github.com/TeXitoi/structopt updated [..] days ago)
