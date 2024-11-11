@@ -16,7 +16,7 @@ regex = "1.11"
 rustsec = "0.30"
 strum = "0.26"
 strum_macros = "0.26"
-tempfile = "3.13"
+tempfile = "3.14"
 tokio = "1.41"
 
 [target.'cfg(unix)'.dependencies]
