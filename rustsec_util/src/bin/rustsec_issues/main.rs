@@ -108,11 +108,14 @@ fn main() -> Result<()> {
     Ok(())
 }
 
+#[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
 async fn retry<T, F: Future<Output = octocrab::Result<T>>, G: Fn() -> F>(f: G) -> Result<T> {
     let octocrab = octocrab::instance();
 
     let rate_limit = octocrab.ratelimit().get().await?;
-    dbg!(&rate_limit.rate);
+    // smoelius: Disabling the next `dbg!` since we haven't had problems with rate limits in a
+    // while.
+    // dbg!(&rate_limit.rate);
 
     match f().await {
         Ok(value) => {
