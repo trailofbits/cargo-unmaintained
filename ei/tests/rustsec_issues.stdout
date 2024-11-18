@@ -38,9 +38,9 @@ calamine...not found
 rulinalg...found
 ab-glyph...not found
 ignoring `https://gitlab.redox-os.org/redox-os/rusttype/-/issues/148` from `https://github.com/rustsec/advisory-db/issues/867`
-block-ciphers...found
-block-ciphers...found
-block-ciphers...found
+block-ciphers...not found
+block-ciphers...not found
+block-ciphers...not found
 utils...found
 anymap...not found
 cosmos-rust...not found
@@ -48,7 +48,7 @@ destructure_traitobject...not found
 rust-traitobject...not found
 dryoc...not found
 AEADs...not found
-nacl-compat...found
+nacl-compat...not found
 libsodium-sys-stable...not found
 sodiumoxide...found
 ignoring `https://speakerdeck.com/tarcieri/thoughts-on-rust-cryptography?slide=84` from `https://github.com/rustsec/advisory-db/issues/1090`
@@ -178,7 +178,24 @@ users...not found
 atty...not found
 ignoring `https://osv.dev/vulnerability/RUSTSEC-2021-0145` from `https://github.com/rustsec/advisory-db/issues/2087`
 atty...not found
-not found (107)
+libyml...not found
+serde_norway...not found
+serde_yaml...found
+serde_yaml2...not found
+serde_yaml_ng...not found
+serde_yaml_ok...not found
+yaml-rust2...not found
+yaml-peg-rs...not found
+serde-yaml-ng...not found
+serde-norway...not found
+serde-yaml...not found
+pretty_yaml...not found
+serde-yaml-ok...not found
+serde-yaml-core...not found
+serde_yml...not found
+fast-xml...found
+Corundum...not found
+not found (126)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -201,12 +218,16 @@ not found (107)
     crate                    https://github.com/rustsec/advisory-db/issues/742 
     calamine                 https://github.com/rustsec/advisory-db/issues/742 
     ab-glyph                 https://github.com/rustsec/advisory-db/issues/867 
+    block-ciphers            https://github.com/rustsec/advisory-db/issues/893 
+    block-ciphers            https://github.com/rustsec/advisory-db/issues/895 
+    block-ciphers            https://github.com/rustsec/advisory-db/issues/897 
     anymap                   https://github.com/rustsec/advisory-db/issues/906 
     cosmos-rust              https://github.com/rustsec/advisory-db/issues/1010
     destructure_traitobject  https://github.com/rustsec/advisory-db/issues/1088
     rust-traitobject         https://github.com/rustsec/advisory-db/issues/1088
     dryoc                    https://github.com/rustsec/advisory-db/issues/1090
     AEADs                    https://github.com/rustsec/advisory-db/issues/1090
+    nacl-compat              https://github.com/rustsec/advisory-db/issues/1090
     libsodium-sys-stable     https://github.com/rustsec/advisory-db/issues/1090
     rust-ansi-term           https://github.com/rustsec/advisory-db/issues/1095
     windows-rs               https://github.com/rustsec/advisory-db/issues/1098
@@ -286,7 +307,22 @@ not found (107)
     users                    https://github.com/rustsec/advisory-db/issues/2086
     atty                     https://github.com/rustsec/advisory-db/issues/2087
     atty                     https://github.com/rustsec/advisory-db/issues/2089
-found (48)
+    libyml                   https://github.com/rustsec/advisory-db/issues/2132
+    serde_norway             https://github.com/rustsec/advisory-db/issues/2132
+    serde_yaml2              https://github.com/rustsec/advisory-db/issues/2132
+    serde_yaml_ng            https://github.com/rustsec/advisory-db/issues/2132
+    serde_yaml_ok            https://github.com/rustsec/advisory-db/issues/2132
+    yaml-rust2               https://github.com/rustsec/advisory-db/issues/2132
+    yaml-peg-rs              https://github.com/rustsec/advisory-db/issues/2132
+    serde-yaml-ng            https://github.com/rustsec/advisory-db/issues/2132
+    serde-norway             https://github.com/rustsec/advisory-db/issues/2132
+    serde-yaml               https://github.com/rustsec/advisory-db/issues/2132
+    pretty_yaml              https://github.com/rustsec/advisory-db/issues/2132
+    serde-yaml-ok            https://github.com/rustsec/advisory-db/issues/2132
+    serde-yaml-core          https://github.com/rustsec/advisory-db/issues/2132
+    serde_yml                https://github.com/rustsec/advisory-db/issues/2132
+    Corundum                 https://github.com/rustsec/advisory-db/issues/2140
+found (46)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -297,11 +333,7 @@ found (48)
     stderr                   https://github.com/rustsec/advisory-db/issues/585 
     office                   https://github.com/rustsec/advisory-db/issues/742 
     rulinalg                 https://github.com/rustsec/advisory-db/issues/801 
-    block-ciphers            https://github.com/rustsec/advisory-db/issues/893 
-    block-ciphers            https://github.com/rustsec/advisory-db/issues/895 
-    block-ciphers            https://github.com/rustsec/advisory-db/issues/897 
     utils                    https://github.com/rustsec/advisory-db/issues/904 
-    nacl-compat              https://github.com/rustsec/advisory-db/issues/1090
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/1090
     serde_cbor               https://github.com/rustsec/advisory-db/issues/1110
     cbor                     https://github.com/rustsec/advisory-db/issues/1110
@@ -335,3 +367,5 @@ found (48)
     servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
     proc-macro-error         https://github.com/rustsec/advisory-db/issues/2011
     strason                  https://github.com/rustsec/advisory-db/issues/2066
+    serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
+    fast-xml                 https://github.com/rustsec/advisory-db/issues/2134
