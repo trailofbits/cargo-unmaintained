@@ -1,4 +1,6 @@
 oorandom (https://sr.ht/~icefox/oorandom/ is uncloneable)*
+miow (https://github.com/yoshuawuyts/miow updated [..] days ago)
+    windows-sys (requirement: ^0.48.0, version used: 0.48.0, latest: [..])
 varisat (https://github.com/jix/varisat updated [..] days ago)
     itoa (requirement: ^0.4.4, version used: 0.4.8, latest: [..])
     ordered-float (requirement: ^2.0.0, version used: 2.10.1, latest: [..])
