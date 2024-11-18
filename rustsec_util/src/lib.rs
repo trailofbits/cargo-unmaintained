@@ -1,7 +1,7 @@
 use anyhow::{Context, Result};
 use once_cell::sync::Lazy;
 use std::{
-    env::consts::EXE_SUFFIX,
+    env::{consts::EXE_SUFFIX, var},
     path::PathBuf,
     process::{Command, ExitStatus},
 };
@@ -101,10 +101,20 @@ pub fn command_output(command: &mut Command) -> Result<Output> {
         .with_context(|| format!("failed to execute command: {command:?}"))?;
     let status = output.status;
     let stdout = String::from_utf8(output.stdout)?;
+    if enabled("VERBOSE") {
+        eprintln!("stdout=```\n{stdout}```");
+    }
     let stderr = String::from_utf8(output.stderr)?;
+    if enabled("VERBOSE") {
+        eprintln!("stderr=```\n{stderr}```");
+    }
     Ok(Output {
         status,
         stdout,
         stderr,
     })
+}
+
+fn enabled(key: &str) -> bool {
+    var(key).is_ok_and(|value| value != "0")
 }
