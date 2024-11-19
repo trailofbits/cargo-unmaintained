@@ -813,6 +813,7 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     for entry in WalkDir::new(repo_dir) {
         let entry = entry?;
         let path = entry.path();
+        dbg!(path);
         if path.file_name() != Some(OsStr::new("Cargo.toml")) {
             continue;
         }
@@ -829,6 +830,7 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
         else {
             continue;
         };
+        dbg!(&table);
         if table
             .get("package")
             .and_then(Value::as_table)

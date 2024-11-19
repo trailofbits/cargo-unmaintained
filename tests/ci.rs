@@ -1,4 +1,4 @@
-use assert_cmd::Command;
+use assert_cmd::{output::OutputError, Command};
 use regex::Regex;
 use similar_asserts::SimpleDiff;
 use std::{env::remove_var, fs::read_to_string, path::Path};
@@ -226,4 +226,16 @@ fn sort() {
             .assert()
             .success();
     }
+}
+
+#[test]
+fn pretty_yaml() {
+    let output = Command::cargo_bin("cargo-unmaintained")
+        .unwrap()
+        .args(["unmaintained", "-p", "pretty_yaml"])
+        .output()
+        .unwrap();
+    let output = OutputError::new(output);
+    println!("{}", output);
+    assert!(output.as_output().unwrap().status.success());
 }
