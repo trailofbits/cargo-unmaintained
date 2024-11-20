@@ -193,6 +193,7 @@ impl Cache {
             let output = command
                 .output()
                 .with_context(|| format!("failed to run command: {command:?}"))?;
+            dbg!(&output);
             if output.status.success() {
                 return Ok((url.as_str().to_owned(), repo_dir));
             }
