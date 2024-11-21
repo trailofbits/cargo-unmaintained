@@ -1,7 +1,7 @@
 #![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
-use anyhow::Result;
+use anyhow::{bail, Context, Result};
 use once_cell::sync::Lazy;
 use rayon::prelude::*;
 use regex::Regex;
@@ -15,6 +15,7 @@ use std::{
     env::var,
     ffi::OsStr,
     fs::{read_dir, read_to_string},
+    io::{stderr, Write},
     path::Path,
     process::Command,
 };
@@ -79,8 +80,11 @@ fn snapbox() -> Result<()> {
                 (None, Some(url)) => {
                     tempdir = tempfile::tempdir()?;
 
+                    // smoelius: Perform the checkout as a separate step so that errors that occur
+                    // in it can be ignored.
                     let mut command = SnapboxCommand::new("git").args([
                         "clone",
+                        "--no-checkout",
                         &url,
                         &tempdir.path().to_string_lossy(),
                     ]);
@@ -89,13 +93,8 @@ fn snapbox() -> Result<()> {
                     }
                     command.assert().success();
 
-                    if let Some(rev) = &test.rev {
-                        SnapboxCommand::new("git")
-                            .args(["checkout", rev])
-                            .current_dir(&tempdir)
-                            .assert()
-                            .success();
-                    }
+                    checkout(tempdir.path(), test.rev.as_deref()).unwrap();
+
                     tempdir.path().to_owned()
                 }
                 (_, _) => {
@@ -135,6 +134,50 @@ fn snapbox() -> Result<()> {
 
             Ok(())
         })
+}
+
+static GIT_CONFIG: Lazy<tempfile::NamedTempFile> = Lazy::new(|| {
+    let mut tempfile = tempfile::NamedTempFile::new().unwrap();
+    writeln!(
+        tempfile,
+        "\
+[core]
+        protectNTFS = false"
+    )
+    .unwrap();
+    tempfile
+});
+
+fn checkout(repo_dir: &Path, rev: Option<&str>) -> Result<()> {
+    for second_attempt in [false, true] {
+        let mut command = Command::new("git");
+        command.args(["checkout", "--quiet"]);
+        if let Some(rev) = rev {
+            command.arg(rev);
+        }
+        if second_attempt {
+            command.env("GIT_CONFIG_GLOBAL", GIT_CONFIG.path());
+        }
+        command.current_dir(repo_dir);
+        let output = command
+            .output()
+            .with_context(|| format!("failed to run command: {command:?}"))?;
+        if !output.status.success() {
+            let error = String::from_utf8(output.stderr)?;
+            let msg = format!(
+                "failed to checkout `{}`: ```\n{}```",
+                repo_dir.display(),
+                error
+            );
+            if second_attempt {
+                bail!(msg);
+            } else {
+                #[allow(clippy::explicit_write)]
+                writeln!(stderr(), "{msg}\nretrying with `GIT_CONFIG_GLOBAL`").unwrap();
+            }
+        }
+    }
+    Ok(())
 }
 
 static RES: Lazy<[Regex; 2]> = Lazy::new(|| {
