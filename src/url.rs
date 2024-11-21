@@ -54,7 +54,9 @@ pub(crate) fn urls(pkg: &cargo_metadata::Package) -> impl IntoIterator<Item = Ur
         urls.push(url);
 
         if let Some(shortened_url) = url.shorten() {
-            urls.push(shortened_url);
+            if url != shortened_url {
+                urls.push(shortened_url);
+            }
         }
     }
 
