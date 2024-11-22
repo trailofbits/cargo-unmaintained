@@ -110,17 +110,21 @@ cargo test --package ei
 
 ## Known problems
 
-**If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative).** The following is a sketch of how this can occur.
+- Mercurial repositories are considered "uncloneable" and therefore unmaintained. ([#369])
 
-- The project relies on version 1 of package X, which has no dependencies.
-- Version 2 of package X exists, and adds version 1 of package Y as a dependency.
-- Version 2 of package Y exists.
+- If a package is renamed from X to Y, it is immediately considered unmaintained because the package's repository no longer contains a package named X. ([#441])
 
-Note that version 1 of package X appears maintained, but version 2 does not. Ignoring a few details, version 2 satisfies condition 3 above.
+- If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative). The following is a sketch of how this can occur.
 
-`cargo-unmaintained` does not, in all cases, check whether the latest version of a package is used, as doing so would be cost prohibitive. A downside of this choice is that false negatives can result.
+  - The project relies on version 1 of package X, which has no dependencies.
+  - Version 2 of package X exists, and adds version 1 of package Y as a dependency.
+  - Version 2 of package Y exists.
 
-Note that false _positives_ should not arise in a corresponding way. Before flagging a package as unmaintained, `cargo-unmaintained` verifies that the package's latest version would be considered unmaintained as well.
+  Note that version 1 of package X appears maintained, but version 2 does not. Ignoring a few details, version 2 satisfies condition 3 above.
+
+  `cargo-unmaintained` does not, in all cases, check whether the latest version of a package is used, as doing so would be cost prohibitive. A downside of this choice is that false negatives can result.
+
+  Note that false _positives_ should not arise in a corresponding way. Before flagging a package as unmaintained, `cargo-unmaintained` verifies that the package's latest version would be considered unmaintained as well.
 
 ## Anti-goals
 
@@ -134,6 +138,8 @@ We reserve the right to change what data is stored in the cache, as well as how 
 
 `cargo-unmaintained` is licensed and distributed under the AGPLv3 license. [Contact us](mailto:opensource@trailofbits.com) if you're looking for an exception to the terms.
 
+[#369]: https://github.com/trailofbits/cargo-unmaintained/issues/369
+[#441]: https://github.com/trailofbits/cargo-unmaintained/issues/441
 [Cargo 0.74.0]: https://github.com/rust-lang/cargo/tree/d252bce6553c8cc521840c9dd6b9f6cd4aedd8b0
 [Notes]: #notes
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
