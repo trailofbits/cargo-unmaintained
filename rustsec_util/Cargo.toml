@@ -7,7 +7,7 @@ publish = false
 
 [dependencies]
 anyhow = { version = "1.0", features = ["backtrace"] }
-cargo_metadata = "0.18"
+cargo_metadata = "0.19"
 chrono = "0.4"
 log = "0.4"
 octocrab = "0.41"
