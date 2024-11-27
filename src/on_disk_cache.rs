@@ -23,10 +23,10 @@
 //!
 //! A similar statement applies to versions.
 //!
-//! The on-disk cache resides at `$HOME/.cache/cargo-unmaintained/v1`.
+//! The on-disk cache resides at `$HOME/.cache/cargo-unmaintained/v2`.
 
 use super::{urls, SECS_PER_DAY};
-use anyhow::{anyhow, ensure, Context, Result};
+use anyhow::{anyhow, bail, ensure, Context, Result};
 use cargo_metadata::Package;
 use crates_io_api::{SyncClient, Version};
 use once_cell::{sync::Lazy, unsync::OnceCell};
@@ -72,7 +72,7 @@ thread_local! {
 static CACHE_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
     let base_directories = xdg::BaseDirectories::new().unwrap();
     base_directories
-        .create_cache_directory("cargo-unmaintained/v1")
+        .create_cache_directory("cargo-unmaintained/v2")
         .unwrap()
 });
 
@@ -170,15 +170,23 @@ impl Cache {
             let repo_dir = self.repositories_dir().join(url_digest(url.as_str()));
             let exists = repository_existence(&repo_dir)?;
             let mut command = if exists {
+                let branch_name = branch_name(&repo_dir)?;
                 let mut command = Command::new("git");
-                command.args(["pull", "--ff-only"]);
+                command.args([
+                    "fetch",
+                    "--update-head-ok",
+                    "origin",
+                    &format!("{branch_name}:{branch_name}"),
+                ]);
                 command.current_dir(&repo_dir);
                 command
             } else {
                 let mut command = Command::new("git");
+                // smoelius: The full repository is no longer checked out.
                 command.args([
                     "clone",
                     "--depth=1",
+                    "--no-checkout",
                     "--quiet",
                     url.as_str(),
                     &repo_dir.to_string_lossy(),
@@ -378,4 +386,23 @@ fn repository_existence(repo_dir: &Path) -> Result<bool> {
             repo_dir.display()
         )
     })
+}
+
+fn branch_name(repo_dir: &Path) -> Result<String> {
+    let mut command = Command::new("git");
+    command.args(["rev-parse", "--abbrev-ref", "HEAD"]);
+    command.current_dir(repo_dir);
+    let output = command
+        .output()
+        .with_context(|| format!("failed to run command: {command:?}"))?;
+    if !output.status.success() {
+        let error = String::from_utf8(output.stderr)?;
+        bail!(
+            "failed to get `{}` branch name: {}",
+            repo_dir.display(),
+            error
+        );
+    }
+    let stdout = std::str::from_utf8(&output.stdout)?;
+    Ok(stdout.trim_end().to_owned())
 }
