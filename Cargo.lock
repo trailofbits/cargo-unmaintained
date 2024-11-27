@@ -249,7 +249,6 @@ dependencies = [
  "tempfile",
  "termcolor",
  "toml",
- "walkdir",
  "windows-sys 0.59.0",
  "xdg",
 ]

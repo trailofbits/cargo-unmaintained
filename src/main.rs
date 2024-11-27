@@ -14,10 +14,10 @@ use std::{
     collections::{HashMap, HashSet},
     env::args,
     ffi::OsStr,
-    fs::{read_to_string, File},
-    io::IsTerminal,
+    fs::File,
+    io::{BufRead, IsTerminal},
     path::{Path, PathBuf},
-    process::{exit, Command},
+    process::{exit, Command, Stdio},
     str::FromStr,
     sync::atomic::{AtomicBool, Ordering},
     time::{Duration, SystemTime},
@@ -25,7 +25,6 @@ use std::{
 use tempfile::TempDir;
 use termcolor::{ColorChoice, ColorSpec, StandardStream, WriteColor};
 use toml::{Table, Value};
-use walkdir::WalkDir;
 
 mod curl;
 mod flush;
@@ -809,14 +808,30 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
     }
 }
 
+const LINE_PREFIX: &str = "D  ";
+
 fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
-    for entry in WalkDir::new(repo_dir) {
-        let entry = entry?;
-        let path = entry.path();
+    let mut command = Command::new("git");
+    command.args(["status", "--porcelain"]);
+    command.current_dir(repo_dir);
+    command.stdout(Stdio::piped());
+    let mut child = command
+        .spawn()
+        .with_context(|| format!("command failed: {command:?}"))?;
+    #[allow(clippy::unwrap_used)]
+    let stdout = child.stdout.take().unwrap();
+    let reader = std::io::BufReader::new(stdout);
+    for result in reader.lines() {
+        let line = result.with_context(|| format!("failed to read `{}`", repo_dir.display()))?;
+        #[allow(clippy::panic)]
+        let path = line.strip_prefix(LINE_PREFIX).map_or_else(
+            || panic!("cache is corrupt at `{}`", repo_dir.display()),
+            Path::new,
+        );
         if path.file_name() != Some(OsStr::new("Cargo.toml")) {
             continue;
         }
-        let contents = read_to_string(path).with_context(|| format!("failed to read {path:?}"))?;
+        let contents = show(repo_dir, path)?;
         let Ok(table) = contents.parse::<Table>()
         /* smoelius: This "failed to parse" warning is a little too noisy.
         .map_err(|error| {
@@ -841,6 +856,26 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     }
 
     Ok(false)
+}
+
+fn show(repo_dir: &Path, path: &Path) -> Result<String> {
+    let mut command = Command::new("git");
+    command.args(["show", &format!("HEAD:{}", path.display())]);
+    command.current_dir(repo_dir);
+    command.stdout(Stdio::piped());
+    let output = command
+        .output()
+        .with_context(|| format!("failed to run command: {command:?}"))?;
+    if !output.status.success() {
+        let error = String::from_utf8(output.stderr)?;
+        bail!(
+            "failed to read `{}` in `{}`: {}",
+            path.display(),
+            repo_dir.display(),
+            error
+        );
+    }
+    String::from_utf8(output.stdout).map_err(Into::into)
 }
 
 fn display_unmaintained_pkgs(unmaintained_pkgs: &[UnmaintainedPkg]) -> Result<()> {
