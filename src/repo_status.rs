@@ -97,7 +97,7 @@ impl<'a, T, E> RepoStatus<'a, Result<T, E>> {
 /// Multiples of `max_age` that cause the color to go completely from yellow to red.
 const SATURATION_MULTIPLIER: u64 = 3;
 
-impl<'a> RepoStatus<'a, u64> {
+impl RepoStatus<'_, u64> {
     pub fn color(&self) -> Option<Color> {
         let age = match self {
             // smoelius: `Uncloneable` and `Unnamed` default to yellow.
