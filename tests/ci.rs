@@ -103,6 +103,16 @@ fn license() {
             {
                 continue;
             }
+            // smoelius: Exception for `idna` dependencies.
+            if line
+                == "Unicode-3.0 (19): icu_collections, icu_locid, icu_locid_transform, \
+                    icu_locid_transform_data, icu_normalizer, icu_normalizer_data, icu_properties, \
+                    icu_properties_data, icu_provider, icu_provider_macros, litemap, tinystr, \
+                    writeable, yoke, yoke-derive, zerofrom, zerofrom-derive, zerovec, \
+                    zerovec-derive"
+            {
+                continue;
+            }
             assert!(re.is_match(line), "{line:?} does not match");
         }
     }
