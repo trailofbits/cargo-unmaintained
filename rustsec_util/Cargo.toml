@@ -45,14 +45,5 @@ check-cfg = ["cfg(dylint_lib, values(any()))", "cfg(__warnings)"]
 #      |
 #   26 | compile_error!("Cannot set both 'http-client-reqwest' and 'http-client-curl' features as they are mutually exclusive");
 #      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-[workspace]
-
-[workspace.metadata.dylint]
-libraries = [
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/general" },
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/supplementary" },
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/inconsistent_qualification" },
-    # { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/suboptimal_pattern" },
-    { git = "https://github.com/trailofbits/dylint", pattern = "examples/restriction/try_io_result" },
-]
+#
+# smoelius: I no longer observe the above error.

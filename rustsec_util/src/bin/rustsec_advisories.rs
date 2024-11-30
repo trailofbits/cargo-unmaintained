@@ -120,6 +120,7 @@ fn main() -> Result<()> {
 
     assert_eq!(count, advisory_outcomes.len());
 
+    #[cfg_attr(dylint_lib = "supplementary", allow(suboptimal_pattern))]
     display_advisory_outcomes(
         &advisory_outcomes
             .iter()
