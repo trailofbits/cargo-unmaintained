@@ -80,4 +80,9 @@ pattern = [
 ]
 
 [workspace.metadata.unmaintained]
-ignore = ["adler", "foreign-types"]
+ignore = [
+    "foreign-types",
+    "icu_locid",
+    "icu_locid_transform",
+    "icu_locid_transform_data",
+]
