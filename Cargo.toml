@@ -9,7 +9,7 @@ repository = "https://github.com/trailofbits/cargo-unmaintained"
 
 [dependencies]
 anyhow = { version = "1.0", features = ["backtrace"] }
-cargo_metadata = "0.18"
+cargo_metadata = "0.19"
 chrono = "0.4"
 clap = { version = "4.5", features = ["cargo", "derive", "wrap_help"] }
 crates-index = { version = "3.3", features = ["git-https"] }
