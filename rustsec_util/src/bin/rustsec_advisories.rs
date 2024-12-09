@@ -161,12 +161,13 @@ fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
     let leaf = count!(outcomes, Outcome::NotFound(Reason::Leaf));
     let recently_updated = count!(outcomes, Outcome::NotFound(Reason::RecentlyUpdated));
     let other = count!(outcomes, Outcome::NotFound(Reason::Other));
-    assert!(found * 3 > count * 2);
+    #[cfg_attr(dylint_lib = "supplementary", allow(unnamed_constant))]
+    let percentage = found * 100 / count;
     println!(
         "As of {today}, the RustSec Advisory Database contains {count} active advisories for \
          unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically \
-         identifies {found} of them (more than two thirds). These results can be reproduced by \
-         running the [`rustsec_advisories`] binary within this repository.",
+         identifies {found} ({percentage}) of them. These results can be reproduced by running \
+         the [`rustsec_advisories`] binary within this repository.",
     );
     println!(
         "- Of the {not_found} packages in the RustSec Advisory Database _not_ identified by \
