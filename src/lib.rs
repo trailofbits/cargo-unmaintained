@@ -34,6 +34,7 @@ mod curl;
 mod on_disk_cache;
 mod opts;
 mod progress;
+mod serialize;
 mod verbose;
 
 #[cfg(feature = "lock-index")]
@@ -84,6 +85,9 @@ struct Opts {
         conflicts_with = "no_exit_code"
     )]
     fail_fast: bool,
+
+    #[clap(long, help = "Output JSON (experimental)")]
+    json: bool,
 
     #[clap(
         long,
@@ -293,14 +297,22 @@ fn unmaintained() -> Result<bool> {
     PROGRESS
         .with_borrow_mut(|progress| progress.as_mut().map_or(Ok(()), progress::Progress::finish))?;
 
-    if unmaintained_pkgs.is_empty() {
-        eprintln!("No unmaintained packages found");
-        return Ok(false);
+    if opts::get().json {
+        unmaintained_pkgs.sort_by_key(|unmaintained| &unmaintained.pkg.id);
+
+        let json = serde_json::to_string_pretty(&unmaintained_pkgs)?;
+
+        println!("{json}");
+    } else {
+        if unmaintained_pkgs.is_empty() {
+            eprintln!("No unmaintained packages found");
+            return Ok(false);
+        }
+
+        unmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age.erase_url());
+
+        display_unmaintained_pkgs(&unmaintained_pkgs)?;
     }
-
-    unmaintained_pkgs.sort_by_key(|unmaintained| unmaintained.repo_age.erase_url());
-
-    display_unmaintained_pkgs(&unmaintained_pkgs)?;
 
     Ok(!opts::get().no_exit_code)
 }
