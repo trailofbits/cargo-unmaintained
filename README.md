@@ -61,6 +61,7 @@ Usage: cargo unmaintained [OPTIONS]
 Options:
       --color <WHEN>    When to use color: always, auto, or never [default: auto]
       --fail-fast       Exit as soon as an unmaintained package is found
+      --json            Output JSON (experimental)
       --max-age <DAYS>  Age in days that a repository's last commit must not exceed for the
                         repository to be considered current; 0 effectively disables this check,
                         though ages are still reported [default: 365]
