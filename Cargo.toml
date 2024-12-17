@@ -28,17 +28,6 @@ tempfile = "3.14"
 termcolor = "1.4"
 toml = "0.8"
 
-[target.'cfg(unix)'.dependencies]
-libc = { version = "0.2", optional = true }
-xdg = { version = "2.5" }
-
-[target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.59", features = [
-    "Win32_Storage_FileSystem",
-    "Win32_Foundation",
-    "Win32_System_IO",
-], optional = true }
-
 [dev-dependencies]
 assert_cmd = "2.0"
 ctor = "0.2"
@@ -63,6 +52,17 @@ pedantic = { level = "warn", priority = -1 }
 format-collect = "allow"
 missing-errors-doc = "allow"
 missing-panics-doc = "allow"
+
+[target.'cfg(unix)'.dependencies]
+libc = { version = "0.2", optional = true }
+xdg = { version = "2.5" }
+
+[target.'cfg(windows)'.dependencies]
+windows-sys = { version = "0.59", features = [
+    "Win32_Storage_FileSystem",
+    "Win32_Foundation",
+    "Win32_System_IO",
+], optional = true }
 
 [workspace]
 exclude = ["fixtures"]
