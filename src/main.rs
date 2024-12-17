@@ -884,7 +884,7 @@ fn display_unmaintained_pkgs(unmaintained_pkgs: &[UnmaintainedPkg]) -> Result<()
     for unmaintained_pkg in unmaintained_pkgs {
         at_least_one_newer_version_is_available |= unmaintained_pkg.newer_version_is_available;
         if display_unmaintained_pkg(unmaintained_pkg)? {
-            pkgs_needing_warning.push(&unmaintained_pkg.pkg);
+            pkgs_needing_warning.push(unmaintained_pkg.pkg);
         }
     }
     if at_least_one_newer_version_is_available {
