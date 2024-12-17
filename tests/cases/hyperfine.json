@@ -1,0 +1,83 @@
+[
+  {
+    "name": "bitvec",
+    "outdated_deps": [
+      {
+        "name": "radium",
+        "req": "^0.7",
+        "version_latest": null,
+        "version_used": "0.7.0"
+      },
+      {
+        "name": "wyz",
+        "req": "^0.5",
+        "version_latest": null,
+        "version_used": "0.5.1"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "1.0.1"
+  },
+  {
+    "name": "borsh-derive-internal",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.10.3"
+  },
+  {
+    "name": "borsh-schema-derive-internal",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.10.3"
+  },
+  {
+    "name": "cloudabi",
+    "outdated_deps": [
+      {
+        "name": "bitflags",
+        "req": "^1.0",
+        "version_latest": null,
+        "version_used": "1.3.2"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.0.3"
+  },
+  {
+    "name": "fuchsia-cprng",
+    "outdated_deps": [],
+    "repo_status": "Nonexistent",
+    "version": "0.1.1"
+  },
+  {
+    "name": "rand_os",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.1.3"
+  },
+  {
+    "name": "statistical",
+    "outdated_deps": [
+      {
+        "name": "num",
+        "req": "^0.2",
+        "version_latest": null,
+        "version_used": "0.2.1"
+      },
+      {
+        "name": "rand",
+        "req": "^0.6",
+        "version_latest": null,
+        "version_used": "0.6.5"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "1.0.0"
+  }
+]
