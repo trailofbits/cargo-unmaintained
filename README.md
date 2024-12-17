@@ -133,7 +133,10 @@ cargo test --features=ei
 
 ## Semantic versioning policy
 
-We reserve the right to change what data is stored in the cache, as well as how that data is stored, and to consider such changes non-breaking.
+We reserve the right to change the following and to consider such changes non-breaking:
+
+- what data is stored in the cache, as well as how that data is stored
+- the output produced the experimental `--json` option
 
 ## License
 
