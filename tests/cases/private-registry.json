@@ -1,0 +1,15 @@
+[
+  {
+    "name": "crates-io",
+    "outdated_deps": [
+      {
+        "name": "syn",
+        "req": "^1.0",
+        "version_latest": null,
+        "version_used": "1.0.109"
+      }
+    ],
+    "repo_status": "Unnamed",
+    "version": "0.1.0"
+  }
+]

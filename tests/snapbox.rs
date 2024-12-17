@@ -4,7 +4,6 @@
 use anyhow::{bail, Context, Result};
 use once_cell::sync::Lazy;
 use rayon::prelude::*;
-use regex::Regex;
 use serde::Deserialize;
 use snapbox::{
     assert_data_eq,
@@ -14,7 +13,7 @@ use snapbox::{
 use std::{
     env::var,
     ffi::OsStr,
-    fs::{read_dir, read_to_string},
+    fs::{read_dir, read_to_string, write},
     io::{stderr, Write},
     path::{Path, PathBuf},
     process::Command,
@@ -65,7 +64,7 @@ fn snapbox() -> Result<()> {
         .panic_fuse()
         .try_for_each(|input_path| {
             let stderr_path = input_path.with_extension("stderr");
-            let stdout_path = input_path.with_extension("stdout");
+            let json_path = input_path.with_extension("json");
 
             let raw = read_to_string(input_path)?;
 
@@ -106,29 +105,37 @@ fn snapbox() -> Result<()> {
 
             let mut command = Command::new(cargo_bin("cargo-unmaintained"));
             command
-                .args(["unmaintained", "--color=never"])
+                .args(["unmaintained", "--color=never", "--json"])
                 .current_dir(dir);
 
-            if enabled("VERBOSE") {
+            let stdout_actual = if enabled("VERBOSE") {
                 // smoelius If `VERBOSE` is enabled, don't bother comparing stderr, because it won't
                 // match.
                 command.arg("--verbose");
 
                 let output = tee(command, Tee::Stdout)?;
 
-                let stdout_actual = String::from_utf8(output.captured)?;
-
-                assert_data_eq!(stdout_actual, Data::read_from(&stdout_path, None));
+                output.captured
             } else {
                 let output = command.output()?;
 
                 let stderr_actual = String::from_utf8(output.stderr)?;
-                let stdout_actual = String::from_utf8(output.stdout)?;
 
                 // smoelius: Compare stderr before stdout so that you can see any errors that
                 // occurred.
                 assert_data_eq!(stderr_actual, Data::read_from(&stderr_path, None));
-                assert_data_eq!(stdout_actual, Data::read_from(&stdout_path, None));
+
+                output.stdout
+            };
+
+            let mut json = serde_json::from_slice(&stdout_actual)?;
+            visit_key_value_pairs(&mut json, &mut redact);
+            let json_pretty = serde_json::to_string_pretty(&json).unwrap() + "\n";
+
+            if var("BLESS").is_ok() {
+                write(json_path, json_pretty).unwrap();
+            } else {
+                assert_data_eq!(json_pretty, Data::read_from(&json_path, None));
             }
 
             Ok(())
@@ -178,31 +185,31 @@ fn checkout(repo_dir: &Path, rev: Option<&str>) -> Result<()> {
     Ok(())
 }
 
-static RES: Lazy<[Regex; 2]> = Lazy::new(|| {
-    [
-        Regex::new(r"([^ ]*) days").unwrap(),
-        Regex::new(r"latest: ([^ )]*)").unwrap(),
-    ]
-});
-
-#[test]
-fn snapbox_expected() -> Result<()> {
-    for entry in read_dir("tests/cases")? {
-        let entry = entry?;
-        let path = entry.path();
-        if path.extension() != Some(OsStr::new("stdout")) {
-            continue;
+fn visit_key_value_pairs(
+    value: &mut serde_json::Value,
+    f: &mut impl FnMut(&str, &mut serde_json::Value),
+) {
+    match value {
+        serde_json::Value::Null
+        | serde_json::Value::Bool(_)
+        | serde_json::Value::Number(_)
+        | serde_json::Value::String(_) => {}
+        serde_json::Value::Array(array) => {
+            for value in array {
+                visit_key_value_pairs(value, f);
+            }
         }
-        let contents = read_to_string(path)?;
-        for line in contents.lines() {
-            for re in &*RES {
-                if let Some(captures) = re.captures(line) {
-                    assert_eq!(2, captures.len());
-                    assert_eq!("[..]", &captures[1]);
-                }
+        serde_json::Value::Object(object) => {
+            for (key, value) in object.iter_mut() {
+                f(key, value);
+                visit_key_value_pairs(value, f);
             }
         }
     }
+}
 
-    Ok(())
+fn redact(key: &str, value: &mut serde_json::Value) {
+    if key == "Age" || key == "version_latest" {
+        *value = serde_json::Value::Null;
+    }
 }
