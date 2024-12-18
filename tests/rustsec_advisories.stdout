@@ -305,7 +305,7 @@ found (99)
     gtk-layer-shell      https://rustsec.org/advisories/RUSTSEC-2024-0422.html
     gtk-layer-shell-sys  https://rustsec.org/advisories/RUSTSEC-2024-0423.html
 ---
-As of 2024-12-09, the RustSec Advisory Database contains 130 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 99 (76%) of them. These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+As of 2024-12-09, the RustSec Advisory Database contains 130 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 99 (76%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 - Of the 31 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 8 do not build
   - 3 are existent, unarchived leaves

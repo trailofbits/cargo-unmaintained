@@ -2,7 +2,7 @@ use anyhow::{ensure, Context, Result};
 use std::{fs::OpenOptions, io::Write, process::Command};
 use tempfile::{tempdir, TempDir};
 
-pub(crate) fn temp_package(name: &str) -> Result<TempDir> {
+pub fn temp_package(name: &str) -> Result<TempDir> {
     let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
 
     // smoelius: Passing `--vcs=none` adds a tiny bit of speedup. This is useful when `cargo

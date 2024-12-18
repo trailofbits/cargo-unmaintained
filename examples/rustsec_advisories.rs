@@ -1,22 +1,16 @@
 use anyhow::{ensure, Context, Result};
 use cargo_metadata::MetadataCommand;
+use cargo_unmaintained::{flush::Flush, packaging::temp_package};
 use chrono::Utc;
 use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec::{advisory::Informational, Advisory, Database};
-use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes, Outcome};
 use std::{path::Path, process::Command};
 use strum_macros::{Display, EnumIter};
 
-// smoelius: "../../../" is not ideal, but I am trying to avoid turning `cargo-unmaintained` into a
-// multi-package project. For now, this seems like the best option.
-#[path = "../../../src/flush.rs"]
-mod flush;
-use flush::Flush;
-
-#[path = "../../../src/packaging.rs"]
-mod packaging;
-use packaging::temp_package;
+#[path = "rustsec_util/mod.rs"]
+mod rustsec_util;
+use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes, Outcome};
 
 #[derive(Clone, Copy, Display, EnumIter, Eq, PartialEq)]
 #[strum(serialize_all = "kebab_case")]

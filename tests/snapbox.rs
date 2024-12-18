@@ -16,11 +16,10 @@ use std::{
     ffi::OsStr,
     fs::{read_dir, read_to_string},
     io::{stderr, Write},
-    path::Path,
+    path::{Path, PathBuf},
     process::Command,
 };
 
-#[path = "../../tests/util.rs"]
 mod util;
 use util::{enabled, tee, Tee};
 
@@ -76,7 +75,7 @@ fn snapbox() -> Result<()> {
             // https://github.com/solana-labs/rbpf/blob/f52bfa0f4912d5f6eaa364de7c42b6ee6be50a88/src/elf.rs#L401
             let tempdir: tempfile::TempDir;
             let dir = match (test.path, test.url) {
-                (Some(path), None) => Path::new("..").join(path),
+                (Some(path), None) => PathBuf::from(path),
                 (None, Some(url)) => {
                     tempdir = tempfile::tempdir()?;
 

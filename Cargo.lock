@@ -299,18 +299,23 @@ dependencies = [
  "home",
  "libc",
  "log",
+ "octocrab",
  "once_cell",
  "predicates",
  "rayon",
  "regex",
  "remain",
+ "rustsec",
  "serde",
  "serde_json",
  "sha1_smol",
  "similar-asserts",
  "snapbox",
+ "strum",
+ "strum_macros",
  "tempfile",
  "termcolor",
+ "tokio",
  "toml",
  "windows-sys 0.59.0",
  "xdg",
@@ -625,24 +630,6 @@ name = "dunce"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "92773504d58c093f6de2459af4af33faa518c13451eb8f2b5698ed3d36e7c813"
-
-[[package]]
-name = "ei"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "assert_cmd",
- "ctor",
- "once_cell",
- "predicates",
- "rayon",
- "regex",
- "serde",
- "similar-asserts",
- "snapbox",
- "tempfile",
- "toml",
-]
 
 [[package]]
 name = "either"
@@ -3459,25 +3446,6 @@ dependencies = [
  "time",
  "toml",
  "url",
-]
-
-[[package]]
-name = "rustsec_util"
-version = "0.1.0"
-dependencies = [
- "anyhow",
- "cargo_metadata",
- "chrono",
- "log",
- "octocrab",
- "once_cell",
- "regex",
- "rustsec",
- "strum",
- "strum_macros",
- "tempfile",
- "tokio",
- "xdg",
 ]
 
 [[package]]

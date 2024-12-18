@@ -26,12 +26,13 @@ use tempfile::TempDir;
 use termcolor::{ColorChoice, ColorSpec, StandardStream, WriteColor};
 use toml::{Table, Value};
 
+pub mod flush;
+pub mod github;
+pub mod packaging;
+
 mod curl;
-mod flush;
-mod github;
 mod on_disk_cache;
 mod opts;
-mod packaging;
 mod progress;
 mod verbose;
 
@@ -215,7 +216,7 @@ thread_local! {
 
 static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
 
-fn main() -> Result<()> {
+pub fn run() -> Result<()> {
     env_logger::init();
 
     let Cargo {

@@ -14,7 +14,7 @@ use std::{
 mod map_ext;
 use map_ext::MapExt;
 
-mod util;
+pub mod util;
 use util::PERSONAL_TOKEN;
 pub(crate) use util::{load_token, save_token};
 
