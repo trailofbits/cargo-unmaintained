@@ -31,15 +31,20 @@ toml = "0.8"
 [dev-dependencies]
 assert_cmd = "2.0"
 ctor = "0.2"
+octocrab = "0.42"
 predicates = "3.1"
 rayon = "1.10"
-serde = "1.0"
+rustsec = "0.30"
 similar-asserts = "1.6"
 snapbox = "0.6"
+strum = "0.26"
+strum_macros = "0.26"
+tokio = "1.42"
 
 [features]
 default = ["on-disk-cache", "lock-index"]
 cache-repositories = ["on-disk-cache"]
+ei = []
 on-disk-cache = []
 lock-index = ["libc", "windows-sys"]
 
@@ -64,9 +69,24 @@ windows-sys = { version = "0.59", features = [
     "Win32_System_IO",
 ], optional = true }
 
+[[test]]
+name = "dogfood"
+required-features = ["ei"]
+
+[[test]]
+name = "rustsec_advisories"
+required-features = ["ei"]
+
+[[test]]
+name = "rustsec_issues"
+required-features = ["ei"]
+
+[[test]]
+name = "snapbox"
+required-features = ["ei"]
+
 [workspace]
 exclude = ["fixtures"]
-members = ["ei", "rustsec_util"]
 
 [[workspace.metadata.dylint.libraries]]
 git = "https://github.com/trailofbits/dylint"

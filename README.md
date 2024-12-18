@@ -19,7 +19,7 @@
 
    b. Either X has no associated repository, or its repository's last commit was over a year ago (a configurable value).
 
-As of 2024-12-09, the RustSec Advisory Database contains 130 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 99 (76%) of them. These results can be reproduced by running the [`rustsec_advisories`] binary within this repository.
+As of 2024-12-09, the RustSec Advisory Database contains 130 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 99 (76%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 
 ### Notes
 
@@ -102,10 +102,10 @@ ignore = ["matchers"]
 
 ## Testing
 
-Some tests are stored in a separate package `ei` because they are "externally influenced," i.e., they rely on data from external sources. To run these additional tests, use the following command:
+Some tests are "externally influenced," i.e., they rely on data from external sources. To run these tests, enable the `ei` feature, e.g., use the following command:
 
 ```sh
-cargo test --package ei
+cargo test --features=ei
 ```
 
 ## Known problems
@@ -145,5 +145,5 @@ We reserve the right to change what data is stored in the cache, as well as how 
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
 [`cargo-audit`]: https://github.com/RustSec/rustsec/tree/main/cargo-audit
 [`cargo-upgrade`]: https://github.com/killercup/cargo-edit?tab=readme-ov-file#cargo-upgrade
-[`rustsec_advisories`]: ./rustsec_util/src/bin/rustsec_advisories.rs
+[`rustsec_advisories`]: ./examples/rustsec_advisories.rs
 [personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens

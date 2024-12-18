@@ -35,7 +35,7 @@ fn save_token() {
     command
         .args(["unmaintained", "--color=never"])
         .env_remove("GITHUB_TOKEN")
-        .current_dir("../fixtures/archived");
+        .current_dir("fixtures/archived");
     let output = command.output().unwrap();
     let stdout = String::from_utf8(output.stdout).unwrap();
     let stderr = String::from_utf8(output.stderr).unwrap();

@@ -6,7 +6,6 @@ use std::{
     process::Command,
 };
 
-#[path = "../../tests/util.rs"]
 mod util;
 use util::{split_at_cut_line, tee, Tee};
 
@@ -21,8 +20,7 @@ fn rustsec_advisories() {
 
     let mut command = Command::new("cargo");
     command
-        .args(["run", "--bin=rustsec_advisories"])
-        .current_dir("../rustsec_util")
+        .args(["run", "--example=rustsec_advisories"])
         .env("RUST_BACKTRACE", "0");
 
     let output = tee(command, Tee::Stdout).unwrap();

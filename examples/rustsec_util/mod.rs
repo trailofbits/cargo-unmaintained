@@ -9,6 +9,7 @@ use std::{
 pub mod maybe_to_string;
 use maybe_to_string::MaybeToString;
 
+#[allow(dead_code)]
 #[derive(Debug)]
 pub struct Output {
     pub status: ExitStatus,
@@ -79,10 +80,10 @@ pub fn display_advisory_outcomes<T: MaybeToString + PartialEq + strum::IntoEnumI
 }
 
 static CARGO_UNMAINTAINED: Lazy<PathBuf> = Lazy::new(|| {
-    let output = command_output(Command::new("cargo").arg("build").current_dir("..")).unwrap();
+    let output = command_output(Command::new("cargo").arg("build")).unwrap();
     assert!(output.status.success());
 
-    PathBuf::from(format!("../target/debug/cargo-unmaintained{EXE_SUFFIX}"))
+    PathBuf::from(format!("target/debug/cargo-unmaintained{EXE_SUFFIX}"))
         .canonicalize()
         .unwrap()
 });

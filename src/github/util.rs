@@ -26,7 +26,7 @@ static TOKEN_PATH: Lazy<PathBuf> = Lazy::new(|| CONFIG_DIRECTORY.join("token.txt
 
 pub(super) static PERSONAL_TOKEN: OnceLock<String> = OnceLock::new();
 
-pub(crate) fn load_token(f: impl FnOnce(String) -> Result<()>) -> Result<bool> {
+pub fn load_token(f: impl FnOnce(String) -> Result<()>) -> Result<bool> {
     let token_untrimmed = if let Ok(path) = var("GITHUB_TOKEN_PATH") {
         read_to_string(&path).with_context(|| format!("failed to read {path:?}"))?
     } else if let Ok(token) = var("GITHUB_TOKEN") {
