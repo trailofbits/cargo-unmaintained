@@ -11,7 +11,7 @@ pub(super) static RT: Lazy<runtime::Runtime> = Lazy::new(|| {
         .unwrap()
 });
 
-pub(crate) fn load_token(token: String) -> Result<()> {
+pub(crate) fn load_token(token: &str) -> Result<()> {
     RT.block_on(async {
         let octocrab = octocrab::Octocrab::builder()
             .personal_token(token.trim_end())

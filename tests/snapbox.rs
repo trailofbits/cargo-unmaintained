@@ -170,10 +170,9 @@ fn checkout(repo_dir: &Path, rev: Option<&str>) -> Result<()> {
             );
             if second_attempt {
                 bail!(msg);
-            } else {
-                #[allow(clippy::explicit_write)]
-                writeln!(stderr(), "{msg}\nretrying with `GIT_CONFIG_GLOBAL`").unwrap();
             }
+            #[allow(clippy::explicit_write)]
+            writeln!(stderr(), "{msg}\nretrying with `GIT_CONFIG_GLOBAL`").unwrap();
         }
     }
     Ok(())
