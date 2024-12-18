@@ -27,7 +27,7 @@ fn save_token() {
     command.stdin(Stdio::piped());
     let mut child = command.spawn().unwrap();
     let mut stdin = child.stdin.take().unwrap();
-    writeln!(stdin, "{}", github_token).unwrap();
+    writeln!(stdin, "{github_token}").unwrap();
     let exit_status = child.wait().unwrap();
     assert!(exit_status.success());
 
