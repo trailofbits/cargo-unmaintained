@@ -1,4 +1,4 @@
-130 advisories for unmaintained packages
+132 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -29,9 +29,36 @@ fake_clock...found
 safe_bindgen...found
 quic-p2p...found
 routing...found
-safe_app...found
-safe_authenticator...found
-safe_vault...found
+safe_app...error:
+```
+    Updating crates.io index
+error: failed to select a version for the requirement `clap = "~2.14.0"`
+candidate versions found which didn't match: 4.5.23, 4.5.22, 4.5.21, ...
+location searched: crates.io index
+required by package `resource_proof v0.4.0`
+    ... which satisfies dependency `resource_proof = "~0.4.0"` of package `routing v0.31.0`
+    ... which satisfies dependency `routing = "~0.31.0"` of package `safe_app v0.1.0`
+    ... which satisfies dependency `safe_app = "*"` of package `safe_app-temp-package v0.1.0 ([..])`
+if you are looking for the prerelease package it needs to be specified explicitly
+    clap = { version = "4.0.0-rc.3" }
+```
+safe_authenticator...error:
+```
+    Updating crates.io index
+error: failed to select a version for the requirement `clap = "~2.14.0"`
+candidate versions found which didn't match: 4.5.23, 4.5.22, 4.5.21, ...
+location searched: crates.io index
+required by package `resource_proof v0.4.0`
+    ... which satisfies dependency `resource_proof = "~0.4.0"` of package `routing v0.31.0`
+    ... which satisfies dependency `routing = "~0.31.0"` of package `safe_authenticator v0.1.0`
+    ... which satisfies dependency `safe_authenticator = "*"` of package `safe_authenticator-temp-package v0.1.0 ([..])`
+if you are looking for the prerelease package it needs to be specified explicitly
+    clap = { version = "4.0.0-rc.3" }
+```
+safe_vault...error:
+```
+Error: found no packages matching `safe_vault`
+```
 safe_core...found
 stderr...found
 rulinalg...found
@@ -169,10 +196,15 @@ gtk3-macros...found
 gtk-sys...found
 gtk-layer-shell...found
 gtk-layer-shell-sys...found
-not found - error (8)
+get-size...not found
+get-size-derive...found
+not found - error (11)
     block-cipher-trait   https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0057.html
     stream-cipher        https://rustsec.org/advisories/RUSTSEC-2020-0058.html
+    safe_app             https://rustsec.org/advisories/RUSTSEC-2020-0083.html
+    safe_authenticator   https://rustsec.org/advisories/RUSTSEC-2020-0084.html
+    safe_vault           https://rustsec.org/advisories/RUSTSEC-2020-0085.html
     safe-api             https://rustsec.org/advisories/RUSTSEC-2021-0024.html
     miscreant            https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download       https://rustsec.org/advisories/RUSTSEC-2021-0133.html
@@ -185,7 +217,7 @@ not found - leaf (3)
 not found - recently-updated (2)
     atty                 https://rustsec.org/advisories/RUSTSEC-2024-0375.html
     minitrace            https://rustsec.org/advisories/RUSTSEC-2024-0390.html
-not found - other (18)
+not found - other (19)
     serial               https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap              https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype         https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -204,7 +236,8 @@ not found - other (18)
     yaml-rust            https://rustsec.org/advisories/RUSTSEC-2024-0320.html
     instant              https://rustsec.org/advisories/RUSTSEC-2024-0384.html
     chrono-english       https://rustsec.org/advisories/RUSTSEC-2024-0395.html
-found (99)
+    get-size             https://rustsec.org/advisories/RUSTSEC-2024-0425.html
+found (97)
     lz4-compress         https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir              https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce            https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -217,9 +250,6 @@ found (99)
     safe_bindgen         https://rustsec.org/advisories/RUSTSEC-2020-0066.html
     quic-p2p             https://rustsec.org/advisories/RUSTSEC-2020-0067.html
     routing              https://rustsec.org/advisories/RUSTSEC-2020-0076.html
-    safe_app             https://rustsec.org/advisories/RUSTSEC-2020-0083.html
-    safe_authenticator   https://rustsec.org/advisories/RUSTSEC-2020-0084.html
-    safe_vault           https://rustsec.org/advisories/RUSTSEC-2020-0085.html
     safe_core            https://rustsec.org/advisories/RUSTSEC-2020-0086.html
     stderr               https://rustsec.org/advisories/RUSTSEC-2020-0109.html
     rulinalg             https://rustsec.org/advisories/RUSTSEC-2020-0147.html
@@ -304,10 +334,11 @@ found (99)
     gtk-sys              https://rustsec.org/advisories/RUSTSEC-2024-0420.html
     gtk-layer-shell      https://rustsec.org/advisories/RUSTSEC-2024-0422.html
     gtk-layer-shell-sys  https://rustsec.org/advisories/RUSTSEC-2024-0423.html
+    get-size-derive      https://rustsec.org/advisories/RUSTSEC-2024-0427.html
 ---
-As of 2024-12-09, the RustSec Advisory Database contains 130 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 99 (76%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
-- Of the 31 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
-  - 8 do not build
+As of 2024-12-23, the RustSec Advisory Database contains 132 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 97 (73%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+- Of the 35 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+  - 11 do not build
   - 3 are existent, unarchived leaves
   - 2 were updated within the past 365 days
-  - 18 were not identified for other reasons
+  - 19 were not identified for other reasons

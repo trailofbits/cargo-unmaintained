@@ -160,8 +160,8 @@ fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
     println!(
         "As of {today}, the RustSec Advisory Database contains {count} active advisories for \
          unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically \
-         identifies {found} ({percentage}) of them. These results can be reproduced by running \
-         the [`rustsec_advisories`] binary within this repository.",
+         identifies {found} ({percentage}%) of them. These results can be reproduced by running \
+         the [`rustsec_advisories`] example within this repository.",
     );
     println!(
         "- Of the {not_found} packages in the RustSec Advisory Database _not_ identified by \
