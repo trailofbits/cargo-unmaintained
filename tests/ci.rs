@@ -60,7 +60,9 @@ fn format() {
 fn hack_feature_powerset_udeps() {
     for dir in DIRS {
         Command::new("rustup")
-            .env("RUSTFLAGS", "-D warnings")
+            // smoelius: `--check-cfg cfg(test)` to work around the following issue:
+            // https://github.com/est31/cargo-udeps/issues/293
+            .env("RUSTFLAGS", "-D warnings --check-cfg cfg(test)")
             .args([
                 "run",
                 "nightly",
