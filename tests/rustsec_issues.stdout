@@ -197,7 +197,9 @@ fast-xml...found
 Corundum...not found
 rust-phf...not found
 fxhash...not found
-not found (128)
+backon...not found
+backoff...not found
+not found (130)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -326,6 +328,8 @@ not found (128)
     Corundum                 https://github.com/rustsec/advisory-db/issues/2140
     rust-phf                 https://github.com/rustsec/advisory-db/issues/2180
     fxhash                   https://github.com/rustsec/advisory-db/issues/2185
+    backon                   https://github.com/rustsec/advisory-db/issues/2187
+    backoff                  https://github.com/rustsec/advisory-db/issues/2187
 found (46)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
