@@ -437,7 +437,7 @@ fn newer_version_is_available(pkg: &Package) -> Result<bool> {
     if pkg
         .source
         .as_ref()
-        .map_or(true, |source| !source.is_crates_io())
+        .is_none_or(|source| !source.is_crates_io())
     {
         return Ok(false);
     }
@@ -505,7 +505,7 @@ fn is_unmaintained_package<'a>(
 
     if repo_age
         .as_success()
-        .map_or(false, |(_, &age)| age < opts::get().max_age * SECS_PER_DAY)
+        .is_some_and(|(_, &age)| age < opts::get().max_age * SECS_PER_DAY)
     {
         return Ok(None);
     }

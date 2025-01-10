@@ -18,7 +18,11 @@ fn initialize() {
 fn clippy() {
     for dir in DIRS {
         Command::new("cargo")
+            // smoelius: Remove `CARGO` environment variable to work around:
+            // https://github.com/est31/cargo-udeps/issues/293
+            .env_remove("CARGO")
             .args([
+                "+nightly",
                 "clippy",
                 "--all-features",
                 "--all-targets",
