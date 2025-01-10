@@ -18,7 +18,11 @@ fn initialize() {
 fn clippy() {
     for dir in DIRS {
         Command::new("cargo")
+            // smoelius: Remove `CARGO` environment variable to work around:
+            // https://github.com/rust-lang/rust/pull/131729
+            .env_remove("CARGO")
             .args([
+                "+nightly",
                 "clippy",
                 "--all-features",
                 "--all-targets",
