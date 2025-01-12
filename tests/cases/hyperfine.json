@@ -79,5 +79,11 @@
       "Age": null
     },
     "version": "1.0.0"
+  },
+  {
+    "name": "utf8parse",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.2.1"
   }
 ]
