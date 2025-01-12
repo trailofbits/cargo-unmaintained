@@ -93,6 +93,12 @@
     "version": "0.7.0"
   },
   {
+    "name": "utf8parse",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.2.1"
+  },
+  {
     "name": "varisat-dimacs",
     "outdated_deps": [
       {
