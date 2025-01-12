@@ -87,6 +87,7 @@ jobs:
         run: |
           rustup update          --no-self-update
           rustup install nightly --no-self-update
+          rustup component add clippy  --toolchain nightly
           rustup component add rustfmt --toolchain nightly
           export CARGO_TARGET_DIR="$(mktemp -d)"
           cargo install cargo-dylint --git=https://github.com/trailofbits/dylint --no-default-features --features=cargo-cli || true
