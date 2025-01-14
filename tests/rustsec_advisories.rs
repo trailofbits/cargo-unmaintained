@@ -18,6 +18,7 @@ fn initialize() {
     remove_var("CARGO_TERM_COLOR");
 }
 
+#[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
 #[test]
 fn rustsec_advisories() {
     let mut command = Command::new("cargo");
