@@ -1,3 +1,5 @@
+use once_cell::sync::Lazy;
+use regex::Regex;
 use snapbox::assert_data_eq;
 use std::{
     env::{remove_var, var},
@@ -9,6 +11,8 @@ use std::{
 mod util;
 use util::{split_at_cut_line, tee, Tee};
 
+const PATH_STDOUT: &str = "tests/rustsec_advisories.stdout";
+
 #[ctor::ctor]
 fn initialize() {
     remove_var("CARGO_TERM_COLOR");
@@ -16,8 +20,6 @@ fn initialize() {
 
 #[test]
 fn rustsec_advisories() {
-    const PATH_STDOUT: &str = "tests/rustsec_advisories.stdout";
-
     let mut command = Command::new("cargo");
     command
         .args(["run", "--example=rustsec_advisories"])
@@ -47,4 +49,21 @@ fn rustsec_advisories() {
 
 fn above_cut_line(s: &str) -> &str {
     split_at_cut_line(s).map_or(s, |(above, _)| above)
+}
+
+static CANDIDATE_VERSIONS_RE: Lazy<Regex> =
+    Lazy::new(|| Regex::new(r"^candidate versions found which didn't match: [0-9]").unwrap());
+static TMP_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"/tmp\b").unwrap());
+
+#[test]
+fn sanitary() {
+    let contents = read_to_string(PATH_STDOUT).unwrap();
+
+    for line in contents.lines() {
+        assert!(
+            !CANDIDATE_VERSIONS_RE.is_match(line),
+            "{line:?} matches `CANDIDATE_VERSIONS_RE`"
+        );
+        assert!(!TMP_RE.is_match(line), "{line:?} matches `TMP_RE`");
+    }
 }
