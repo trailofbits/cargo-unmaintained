@@ -111,8 +111,6 @@ cargo test --features=ei
 
 ## Known problems
 
-- Mercurial repositories are considered "uncloneable" and therefore unmaintained. ([#369])
-
 - If a package is renamed from X to Y, it is immediately considered unmaintained because the package's repository no longer contains a package named X. ([#441])
 
 - If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative). The following is a sketch of how this can occur.
@@ -142,7 +140,6 @@ We reserve the right to change the following and to consider such changes non-br
 
 `cargo-unmaintained` is licensed and distributed under the AGPLv3 license. [Contact us](mailto:opensource@trailofbits.com) if you're looking for an exception to the terms.
 
-[#369]: https://github.com/trailofbits/cargo-unmaintained/issues/369
 [#441]: https://github.com/trailofbits/cargo-unmaintained/issues/441
 [Cargo 0.74.0]: https://github.com/rust-lang/cargo/tree/d252bce6553c8cc521840c9dd6b9f6cd4aedd8b0
 [Notes]: #notes
