@@ -1,0 +1,4 @@
+Scanning 1 packages and their dependencies (pass --verbose for more information)
+warning: failed to clone `https://hg.sr.ht/~icefox/oorandom`: [
+    "fatal: repository 'https://hg.sr.ht/~icefox/oorandom/' not found/n",
+]

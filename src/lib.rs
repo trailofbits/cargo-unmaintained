@@ -472,8 +472,10 @@ fn is_unmaintained_package<'a>(
         let can_use_github_api =
             TOKEN_FOUND.load(Ordering::SeqCst) && url_string.starts_with("https://github.com/");
 
+        let url = url_string.as_str().into();
+
         if can_use_github_api {
-            let repo_status = general_status(&pkg.name, url_string.as_str().into())?;
+            let repo_status = general_status(&pkg.name, url)?;
             if repo_status.is_failure() {
                 return Ok(Some(UnmaintainedPkg {
                     pkg,
@@ -486,6 +488,10 @@ fn is_unmaintained_package<'a>(
 
         let repo_status = clone_repository(pkg, Purpose::Membership)?;
         if repo_status.is_failure() {
+            // smoelius: Mercurial repos get a pass.
+            if matches!(repo_status, RepoStatus::Uncloneable(_)) && curl::is_mercurial_repo(url)? {
+                return Ok(None);
+            }
             return Ok(Some(UnmaintainedPkg {
                 pkg,
                 repo_age: repo_status.map_failure(),
