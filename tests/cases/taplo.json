@@ -12,12 +12,6 @@
     "version": "0.1.19"
   },
   {
-    "name": "oorandom",
-    "outdated_deps": [],
-    "repo_status": "Uncloneable",
-    "version": "11.1.3"
-  },
-  {
     "name": "proc-macro-error",
     "outdated_deps": [
       {
