@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.1
+
+- Do not consider a package unmaintained because it is stored in a Mercurial repository ([#489](https://github.com/trailofbits/cargo-unmaintained/pull/489))
+
 ## 1.6.0
 
 - Add experimental `--json` option to output JSON ([#464](https://github.com/trailofbits/cargo-unmaintained/pull/464))
