@@ -199,7 +199,14 @@ rust-phf...not found
 fxhash...not found
 backon...not found
 backoff...not found
-not found (130)
+conv...not found
+custom_derive...found
+macro_attr...not found
+rust-conv...not found
+rust-custom-derive...not found
+ignoring `https://gitlab.com/antonok/enum_dispatch/-/merge_requests/44` from `https://github.com/rustsec/advisory-db/issues/2199`
+paste...found
+not found (134)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -330,7 +337,11 @@ not found (130)
     fxhash                   https://github.com/rustsec/advisory-db/issues/2185
     backon                   https://github.com/rustsec/advisory-db/issues/2187
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
-found (46)
+    conv                     https://github.com/rustsec/advisory-db/issues/2199
+    macro_attr               https://github.com/rustsec/advisory-db/issues/2199
+    rust-conv                https://github.com/rustsec/advisory-db/issues/2199
+    rust-custom-derive       https://github.com/rustsec/advisory-db/issues/2199
+found (48)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -377,3 +388,5 @@ found (46)
     strason                  https://github.com/rustsec/advisory-db/issues/2066
     serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
     fast-xml                 https://github.com/rustsec/advisory-db/issues/2134
+    custom_derive            https://github.com/rustsec/advisory-db/issues/2199
+    paste                    https://github.com/rustsec/advisory-db/issues/2203
