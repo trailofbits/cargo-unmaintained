@@ -1,13 +1,13 @@
 use super::{curl, RepoStatus, Url};
 use anyhow::{anyhow, bail, Result};
 use chrono::{DateTime, Utc};
-use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
     cell::RefCell,
     collections::HashMap,
     io::Read,
     rc::Rc,
+    sync::LazyLock,
     time::{Duration, SystemTime},
 };
 
@@ -19,8 +19,8 @@ use util::PERSONAL_TOKEN;
 pub(crate) use util::{load_token, save_token};
 
 #[allow(clippy::unwrap_used)]
-static RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^https://github\.com/(([^/]*)/([^/]*))").unwrap());
+static RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^https://github\.com/(([^/]*)/([^/]*))").unwrap());
 
 thread_local! {
     static REPOSITORY_CACHE: RefCell<HashMap<String, Option<Rc<serde_json::Value>>>> = RefCell::new(HashMap::new());

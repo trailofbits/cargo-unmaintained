@@ -29,15 +29,15 @@ use super::{urls, SECS_PER_DAY};
 use anyhow::{anyhow, bail, ensure, Context, Result};
 use cargo_metadata::Package;
 use crates_io_api::{SyncClient, Version};
-use once_cell::{sync::Lazy, unsync::OnceCell};
 use serde::{Deserialize, Serialize};
 use std::{
-    cell::RefCell,
+    cell::{OnceCell, RefCell},
     collections::HashMap,
     fs::{create_dir_all, read_to_string, write, File},
     path::{Path, PathBuf},
     process::{Command, Stdio},
     str::FromStr,
+    sync::LazyLock,
     time::{Duration, SystemTime},
 };
 use tempfile::{tempdir, TempDir};
@@ -69,7 +69,7 @@ thread_local! {
 
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 #[allow(clippy::unwrap_used)]
-static CACHE_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
+static CACHE_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
     let base_directories = xdg::BaseDirectories::new().unwrap();
     base_directories
         .create_cache_directory("cargo-unmaintained/v2")
@@ -77,8 +77,8 @@ static CACHE_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
 });
 
 #[allow(clippy::unwrap_used)]
-static CRATES_IO_SYNC_CLIENT: Lazy<SyncClient> =
-    Lazy::new(|| SyncClient::new(USER_AGENT, RATE_LIMIT).unwrap());
+static CRATES_IO_SYNC_CLIENT: LazyLock<SyncClient> =
+    LazyLock::new(|| SyncClient::new(USER_AGENT, RATE_LIMIT).unwrap());
 
 pub fn with_cache<T>(f: impl FnOnce(&mut Cache) -> T) -> T {
     CACHE_ONCE_CELL.with_borrow_mut(|once_cell| {

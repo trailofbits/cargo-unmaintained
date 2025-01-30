@@ -1,10 +1,10 @@
 #![allow(clippy::unwrap_used)]
 
-use once_cell::sync::OnceCell;
+use std::sync::OnceLock;
 
 use super::Opts;
 
-static OPTS: OnceCell<Opts> = OnceCell::new();
+static OPTS: OnceLock<Opts> = OnceLock::new();
 
 pub(crate) fn init(opts: Opts) {
     OPTS.set(opts).unwrap();

@@ -1,4 +1,3 @@
-use once_cell::sync::Lazy;
 use regex::Regex;
 use snapbox::assert_data_eq;
 use std::{
@@ -6,6 +5,7 @@ use std::{
     fs::{read_to_string, write},
     io::{stderr, Write},
     process::Command,
+    sync::LazyLock,
 };
 
 mod util;
@@ -52,9 +52,9 @@ fn above_cut_line(s: &str) -> &str {
     split_at_cut_line(s).map_or(s, |(above, _)| above)
 }
 
-static CANDIDATE_VERSIONS_RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new(r"^candidate versions found which didn't match: [0-9]").unwrap());
-static TMP_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"/tmp\b").unwrap());
+static CANDIDATE_VERSIONS_RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new(r"^candidate versions found which didn't match: [0-9]").unwrap());
+static TMP_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"/tmp\b").unwrap());
 
 #[test]
 fn sanitary() {

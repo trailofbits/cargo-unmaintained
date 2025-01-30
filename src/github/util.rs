@@ -1,15 +1,14 @@
 use anyhow::{anyhow, Context, Result};
-use once_cell::sync::Lazy;
 use std::{
     env::var,
     fs::{create_dir_all, read_to_string, File, OpenOptions},
     io::{stdin, Write},
     path::PathBuf,
-    sync::OnceLock,
+    sync::{LazyLock, OnceLock},
 };
 
 #[allow(clippy::unwrap_used)]
-static CONFIG_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
+static CONFIG_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
     #[cfg(not(windows))]
     {
         let base_directories = xdg::BaseDirectories::new().unwrap();
@@ -22,7 +21,7 @@ static CONFIG_DIRECTORY: Lazy<PathBuf> = Lazy::new(|| {
     }
 });
 
-static TOKEN_PATH: Lazy<PathBuf> = Lazy::new(|| CONFIG_DIRECTORY.join("token.txt"));
+static TOKEN_PATH: LazyLock<PathBuf> = LazyLock::new(|| CONFIG_DIRECTORY.join("token.txt"));
 
 pub(super) static PERSONAL_TOKEN: OnceLock<String> = OnceLock::new();
 
