@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.6.2
+
+- Eliminate reliance on `once_cell` ([f12bb3a](https://github.com/trailofbits/cargo-unmaintained/commit/f12bb3ad03ce5b5b43424518a2b4bf41268de53b))
+
 ## 1.6.1
 
 - Do not consider a package unmaintained because it is stored in a Mercurial repository ([#489](https://github.com/trailofbits/cargo-unmaintained/pull/489))
