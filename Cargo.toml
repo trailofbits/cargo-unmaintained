@@ -106,4 +106,5 @@ ignore = [
     "icu_locid_transform_data",
     # https://github.com/alacritty/vte/pull/122#issuecomment-2579278540
     "utf8parse",
+    "wit-bindgen-rt",
 ]
