@@ -56,7 +56,7 @@ fn main() -> Result<()> {
                     .any(|label| label.name == "Unmaintained")
             {
                 return None;
-            };
+            }
             let mut urls = issue.body.as_deref().map(extract_urls).unwrap_or_default();
             if urls.is_empty() {
                 return None;
