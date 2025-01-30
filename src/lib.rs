@@ -608,7 +608,7 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
                     version_latest,
                 });
             }
-        };
+        }
     }
     // smoelius: A dependency could appear more than once, e.g., because it is used with different
     // features as a normal and as a development dependency.
@@ -720,7 +720,7 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     if pkg.repository.is_none() {
         return Ok(RepoStatus::Unnamed);
-    };
+    }
 
     timestamp_from_clone(pkg)
 }
