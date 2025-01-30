@@ -1,11 +1,11 @@
 use anyhow::{Context, Result};
 use cargo_unmaintained::{flush::Flush, github::util as github_util};
 use log::debug;
-use once_cell::sync::Lazy;
 use regex::Regex;
 use std::{
     collections::HashSet,
     future::Future,
+    sync::LazyLock,
     time::{Duration, SystemTime, UNIX_EPOCH},
 };
 
@@ -144,13 +144,13 @@ async fn retry<T, F: Future<Output = octocrab::Result<T>>, G: Fn() -> F>(f: G) -
     result.map_err(Into::into)
 }
 
-static URL_RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"\bhttps://[^\s()<>]*").unwrap());
+static URL_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"\bhttps://[^\s()<>]*").unwrap());
 
 fn extract_urls(body: &str) -> Vec<&str> {
     URL_RE.find_iter(body).map(|m| m.as_str()).collect()
 }
 
-static NAME_RES: Lazy<Vec<Regex>> = Lazy::new(|| {
+static NAME_RES: LazyLock<Vec<Regex>> = LazyLock::new(|| {
     [
         r"^https://crates\.io/(crates/)?(?<name>[0-9A-Za-z_-]*)",
         r"^https://docs.rs/(?<name>[0-9A-Za-z_-]*)",

@@ -8,7 +8,6 @@ use cargo_metadata::{
 use clap::{crate_version, Parser};
 use crates_index::GitIndex;
 use home::cargo_home;
-use once_cell::sync::Lazy;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
@@ -19,7 +18,10 @@ use std::{
     path::{Path, PathBuf},
     process::{exit, Command, Stdio},
     str::FromStr,
-    sync::atomic::{AtomicBool, Ordering},
+    sync::{
+        atomic::{AtomicBool, Ordering},
+        LazyLock,
+    },
     time::{Duration, SystemTime},
 };
 use tempfile::TempDir;
@@ -197,7 +199,7 @@ macro_rules! warn {
 
 thread_local! {
     #[allow(clippy::unwrap_used)]
-    static INDEX: Lazy<GitIndex> = Lazy::new(|| {
+    static INDEX: LazyLock<GitIndex> = LazyLock::new(|| {
         let _lock = lock_index().unwrap();
         let mut index = GitIndex::new_cargo_default().unwrap();
         if let Err(error) = index.update() {
@@ -639,7 +641,7 @@ fn latest_version(name: &str) -> Result<Version> {
         verbose::wrap!(
             || {
                 let krate = INDEX.with(|index| {
-                    let _ = Lazy::force(index);
+                    let _ = LazyLock::force(index);
                     let _lock = lock_index()?;
                     index
                         .crate_(name)
@@ -984,7 +986,7 @@ fn display_path(name: &str, version: &Version) -> Result<bool> {
     }
 }
 
-static INDEX_PATH: Lazy<PathBuf> = Lazy::new(|| {
+static INDEX_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
     #[allow(clippy::unwrap_used)]
     let cargo_home = cargo_home().unwrap();
     cargo_home.join("registry/index")

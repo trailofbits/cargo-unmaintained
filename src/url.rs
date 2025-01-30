@@ -1,8 +1,8 @@
-use once_cell::sync::Lazy;
 use regex::Regex;
+use std::sync::LazyLock;
 
 #[allow(clippy::unwrap_used)]
-static RE: Lazy<Regex> = Lazy::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").unwrap());
+static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"^https://[^/]*/[^/]*/[^/]*").unwrap());
 
 #[derive(Clone, Copy, Debug, Default, Eq, Hash, Ord, PartialEq, PartialOrd)]
 pub(crate) struct Url<'a>(&'a str);

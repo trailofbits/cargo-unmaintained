@@ -2,10 +2,9 @@ use anyhow::{ensure, Context, Result};
 use cargo_metadata::MetadataCommand;
 use cargo_unmaintained::{flush::Flush, packaging::temp_package};
 use chrono::Utc;
-use once_cell::sync::Lazy;
 use regex::Regex;
 use rustsec::{advisory::Informational, Advisory, Database};
-use std::{path::Path, process::Command};
+use std::{path::Path, process::Command, sync::LazyLock};
 use strum_macros::{Display, EnumIter};
 
 #[path = "rustsec_util/mod.rs"]
@@ -21,8 +20,8 @@ enum Reason {
     Other,
 }
 
-static RE: Lazy<Regex> =
-    Lazy::new(|| Regex::new("(?m)^error: [0-9]+ denied warning[s]? found!$").unwrap());
+static RE: LazyLock<Regex> =
+    LazyLock::new(|| Regex::new("(?m)^error: [0-9]+ denied warning[s]? found!$").unwrap());
 
 fn main() -> Result<()> {
     let mut advisory_outcomes = Vec::new();

@@ -1,9 +1,9 @@
 use anyhow::Result;
-use once_cell::sync::Lazy;
+use std::sync::LazyLock;
 use tokio::runtime;
 
 #[allow(clippy::unwrap_used)]
-pub(super) static RT: Lazy<runtime::Runtime> = Lazy::new(|| {
+pub(super) static RT: LazyLock<runtime::Runtime> = LazyLock::new(|| {
     runtime::Builder::new_current_thread()
         .enable_io()
         .enable_time()

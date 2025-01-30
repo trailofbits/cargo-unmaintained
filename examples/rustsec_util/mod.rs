@@ -1,9 +1,9 @@
 use anyhow::{Context, Result};
-use once_cell::sync::Lazy;
 use std::{
     env::{consts::EXE_SUFFIX, var},
     path::PathBuf,
     process::{Command, ExitStatus},
+    sync::LazyLock,
 };
 
 pub mod maybe_to_string;
@@ -79,7 +79,7 @@ pub fn display_advisory_outcomes<T: MaybeToString + PartialEq + strum::IntoEnumI
     }
 }
 
-static CARGO_UNMAINTAINED: Lazy<PathBuf> = Lazy::new(|| {
+static CARGO_UNMAINTAINED: LazyLock<PathBuf> = LazyLock::new(|| {
     let output = command_output(Command::new("cargo").arg("build")).unwrap();
     assert!(output.status.success());
 

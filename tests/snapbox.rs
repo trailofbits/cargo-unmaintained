@@ -2,7 +2,6 @@
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
 use anyhow::{bail, Context, Result};
-use once_cell::sync::Lazy;
 use rayon::prelude::*;
 use serde::Deserialize;
 use snapbox::{
@@ -17,6 +16,7 @@ use std::{
     io::{stderr, Write},
     path::{Path, PathBuf},
     process::Command,
+    sync::LazyLock,
 };
 
 mod util;
@@ -142,7 +142,7 @@ fn snapbox() -> Result<()> {
         })
 }
 
-static GIT_CONFIG: Lazy<tempfile::NamedTempFile> = Lazy::new(|| {
+static GIT_CONFIG: LazyLock<tempfile::NamedTempFile> = LazyLock::new(|| {
     let mut tempfile = tempfile::NamedTempFile::new().unwrap();
     writeln!(
         tempfile,
