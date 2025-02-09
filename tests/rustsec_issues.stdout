@@ -164,7 +164,7 @@ rust-fontconfig...not found
 proc-macro-error...found
 ignoring `https://github.com/CreepySkeleton` from `https://github.com/rustsec/advisory-db/issues/2011`
 ignoring `https://gitlab.com/CreepySkeleton/proc-macro-error/-/issues/20` from `https://github.com/rustsec/advisory-db/issues/2011`
-async-priority-channel...not found
+async-priority-channel...found
 winapi-rs...not found
 minitrace-rust...not found
 instant...not found
@@ -206,7 +206,7 @@ rust-conv...not found
 rust-custom-derive...not found
 ignoring `https://gitlab.com/antonok/enum_dispatch/-/merge_requests/44` from `https://github.com/rustsec/advisory-db/issues/2199`
 paste...found
-not found (134)
+not found (133)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -308,7 +308,6 @@ not found (134)
     zip-old                  https://github.com/rustsec/advisory-db/issues/1956
     zip2                     https://github.com/rustsec/advisory-db/issues/1956
     rust-fontconfig          https://github.com/rustsec/advisory-db/issues/1998
-    async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
     winapi-rs                https://github.com/rustsec/advisory-db/issues/2031
     minitrace-rust           https://github.com/rustsec/advisory-db/issues/2037
     instant                  https://github.com/rustsec/advisory-db/issues/2056
@@ -341,7 +340,7 @@ not found (134)
     macro_attr               https://github.com/rustsec/advisory-db/issues/2199
     rust-conv                https://github.com/rustsec/advisory-db/issues/2199
     rust-custom-derive       https://github.com/rustsec/advisory-db/issues/2199
-found (48)
+found (49)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -385,6 +384,7 @@ found (48)
     openslide                https://github.com/rustsec/advisory-db/issues/1937
     servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
     proc-macro-error         https://github.com/rustsec/advisory-db/issues/2011
+    async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
     strason                  https://github.com/rustsec/advisory-db/issues/2066
     serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
     fast-xml                 https://github.com/rustsec/advisory-db/issues/2134
