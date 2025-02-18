@@ -6,6 +6,48 @@
     "version": "1.0.2"
   },
   {
+    "name": "ff",
+    "outdated_deps": [
+      {
+        "name": "rand_core",
+        "req": "^0.6",
+        "version_latest": null,
+        "version_used": "0.6.4"
+      },
+      {
+        "name": "rand",
+        "req": "^0.8",
+        "version_latest": null,
+        "version_used": "0.8.5"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.13.0"
+  },
+  {
+    "name": "group",
+    "outdated_deps": [
+      {
+        "name": "rand",
+        "req": "^0.8",
+        "version_latest": null,
+        "version_used": "0.8.5"
+      },
+      {
+        "name": "rand_core",
+        "req": "^0.6",
+        "version_latest": null,
+        "version_used": "0.6.4"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.13.0"
+  },
+  {
     "name": "im-rc",
     "outdated_deps": [
       {
@@ -15,10 +57,22 @@
         "version_used": "2.1.0"
       },
       {
+        "name": "rand_core",
+        "req": "^0.6",
+        "version_latest": null,
+        "version_used": "0.6.4"
+      },
+      {
         "name": "sized-chunks",
         "req": "^0.6.4",
         "version_latest": null,
         "version_used": "0.6.5"
+      },
+      {
+        "name": "rand",
+        "req": "^0.8",
+        "version_latest": null,
+        "version_used": "0.8.5"
       }
     ],
     "repo_status": {
@@ -34,6 +88,12 @@
         "req": "^0.48.0",
         "version_latest": null,
         "version_used": "0.48.0"
+      },
+      {
+        "name": "rand",
+        "req": "^0.8.0",
+        "version_latest": null,
+        "version_used": "0.8.5"
       }
     ],
     "repo_status": {
