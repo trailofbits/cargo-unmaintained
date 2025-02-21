@@ -3,7 +3,7 @@ name = "cargo-unmaintained"
 version = "1.6.3"
 authors = ["Samuel Moelius <sam@moeli.us>"]
 description = "Find unmaintained packages in Rust projects"
-edition = "2021"
+edition = "2024"
 license = "AGPL-3.0"
 repository = "https://github.com/trailofbits/cargo-unmaintained"
 
