@@ -2,7 +2,7 @@ use snapbox::cmd::cargo_bin;
 use std::{env::remove_var, process::Command};
 
 mod util;
-use util::{tee, Tee};
+use util::{Tee, tee};
 
 #[ctor::ctor]
 fn initialize() {

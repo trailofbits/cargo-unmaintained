@@ -1,5 +1,5 @@
 use super::{RepoStatus, Url};
-use anyhow::{anyhow, Result};
+use anyhow::{Result, anyhow};
 use curl::easy::{Easy, List};
 use std::time::Duration;
 

@@ -1,7 +1,7 @@
 use snapbox::cmd::cargo_bin;
 use std::{
     env::{remove_var, var},
-    io::{stderr, Write},
+    io::{Write, stderr},
     process::{Command, Stdio},
 };
 

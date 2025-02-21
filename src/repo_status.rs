@@ -1,4 +1,4 @@
-use super::{opts, Url, SECS_PER_DAY};
+use super::{SECS_PER_DAY, Url, opts};
 use anyhow::Result;
 use termcolor::{Color, ColorSpec, WriteColor};
 

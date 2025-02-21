@@ -3,13 +3,13 @@ use snapbox::assert_data_eq;
 use std::{
     env::{remove_var, var},
     fs::{read_to_string, write},
-    io::{stderr, Write},
+    io::{Write, stderr},
     process::Command,
     sync::LazyLock,
 };
 
 mod util;
-use util::{split_at_cut_line, tee, Tee};
+use util::{Tee, split_at_cut_line, tee};
 
 const PATH_STDOUT: &str = "tests/rustsec_advisories.stdout";
 

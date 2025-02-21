@@ -1,5 +1,5 @@
-use super::{curl, RepoStatus, Url};
-use anyhow::{anyhow, bail, Result};
+use super::{RepoStatus, Url, curl};
+use anyhow::{Result, anyhow, bail};
 use chrono::{DateTime, Utc};
 use regex::Regex;
 use std::{

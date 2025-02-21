@@ -1,26 +1,25 @@
 #![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
-use anyhow::{bail, Context, Result};
+use anyhow::{Context, Result, bail};
 use rayon::prelude::*;
 use serde::Deserialize;
 use snapbox::{
-    assert_data_eq,
-    cmd::{cargo_bin, Command as SnapboxCommand},
-    Data,
+    Data, assert_data_eq,
+    cmd::{Command as SnapboxCommand, cargo_bin},
 };
 use std::{
     env::var,
     ffi::OsStr,
     fs::{read_dir, read_to_string, write},
-    io::{stderr, Write},
+    io::{Write, stderr},
     path::{Path, PathBuf},
     process::Command,
     sync::LazyLock,
 };
 
 mod util;
-use util::{enabled, tee, Tee};
+use util::{Tee, enabled, tee};
 
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]

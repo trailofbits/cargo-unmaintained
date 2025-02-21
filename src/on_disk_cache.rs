@@ -25,22 +25,22 @@
 //!
 //! The on-disk cache resides at `$HOME/.cache/cargo-unmaintained/v2`.
 
-use super::{urls, SECS_PER_DAY};
-use anyhow::{anyhow, bail, ensure, Context, Result};
+use super::{SECS_PER_DAY, urls};
+use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::Package;
 use crates_io_api::{SyncClient, Version};
 use serde::{Deserialize, Serialize};
 use std::{
     cell::{OnceCell, RefCell},
     collections::HashMap,
-    fs::{create_dir_all, read_to_string, write, File},
+    fs::{File, create_dir_all, read_to_string, write},
     path::{Path, PathBuf},
     process::{Command, Stdio},
     str::FromStr,
     sync::LazyLock,
     time::{Duration, SystemTime},
 };
-use tempfile::{tempdir, TempDir};
+use tempfile::{TempDir, tempdir};
 
 const DEFAULT_REFRESH_AGE: u64 = 30; // days
 

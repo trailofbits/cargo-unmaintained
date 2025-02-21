@@ -1,6 +1,6 @@
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result, ensure};
 use std::{fs::OpenOptions, io::Write, process::Command};
-use tempfile::{tempdir, TempDir};
+use tempfile::{TempDir, tempdir};
 
 pub fn temp_package(name: &str) -> Result<TempDir> {
     let tempdir = tempdir().with_context(|| "failed to create temporary directory")?;
