@@ -6,6 +6,12 @@
     "version": "1.0.2"
   },
   {
+    "name": "dirs",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.0.5"
+  },
+  {
     "name": "hermit-abi",
     "outdated_deps": [],
     "repo_status": "Unassociated",
