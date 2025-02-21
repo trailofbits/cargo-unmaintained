@@ -1,11 +1,11 @@
 #![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
 
-use anyhow::{anyhow, bail, ensure, Context, Result};
+use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::{
-    semver::{Version, VersionReq},
     Dependency, DependencyKind, Metadata, MetadataCommand, Package,
+    semver::{Version, VersionReq},
 };
-use clap::{crate_version, Parser};
+use clap::{Parser, crate_version};
 use crates_index::GitIndex;
 use home::cargo_home;
 use std::{
@@ -16,11 +16,11 @@ use std::{
     fs::File,
     io::{BufRead, IsTerminal},
     path::{Path, PathBuf},
-    process::{exit, Command, Stdio},
+    process::{Command, Stdio, exit},
     str::FromStr,
     sync::{
-        atomic::{AtomicBool, Ordering},
         LazyLock,
+        atomic::{AtomicBool, Ordering},
     },
     time::{Duration, SystemTime},
 };
@@ -46,7 +46,7 @@ mod repo_status;
 use repo_status::RepoStatus;
 
 mod url;
-use url::{urls, Url};
+use url::{Url, urls};
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 

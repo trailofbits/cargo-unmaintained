@@ -1,8 +1,8 @@
-use anyhow::{anyhow, Context, Result};
+use anyhow::{Context, Result, anyhow};
 use std::{
     env::var,
-    fs::{create_dir_all, read_to_string, File, OpenOptions},
-    io::{stdin, Write},
+    fs::{File, OpenOptions, create_dir_all, read_to_string},
+    io::{Write, stdin},
     path::PathBuf,
     sync::{LazyLock, OnceLock},
 };

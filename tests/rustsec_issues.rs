@@ -1,4 +1,4 @@
-use snapbox::{assert_data_eq, Data};
+use snapbox::{Data, assert_data_eq};
 use std::{
     env::{remove_var, var},
     fs::write,
@@ -7,7 +7,7 @@ use std::{
 };
 
 mod util;
-use util::{tee, Tee};
+use util::{Tee, tee};
 
 #[ctor::ctor]
 fn initialize() {

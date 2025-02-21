@@ -1,15 +1,15 @@
-use anyhow::{ensure, Context, Result};
+use anyhow::{Context, Result, ensure};
 use cargo_metadata::MetadataCommand;
 use cargo_unmaintained::{flush::Flush, packaging::temp_package};
 use chrono::Utc;
 use regex::Regex;
-use rustsec::{advisory::Informational, Advisory, Database};
+use rustsec::{Advisory, Database, advisory::Informational};
 use std::{path::Path, process::Command, sync::LazyLock};
 use strum_macros::{Display, EnumIter};
 
 #[path = "rustsec_util/mod.rs"]
 mod rustsec_util;
-use rustsec_util::{cargo_unmaintained, command_output, display_advisory_outcomes, Outcome};
+use rustsec_util::{Outcome, cargo_unmaintained, command_output, display_advisory_outcomes};
 
 #[derive(Clone, Copy, Display, EnumIter, Eq, PartialEq)]
 #[strum(serialize_all = "kebab_case")]

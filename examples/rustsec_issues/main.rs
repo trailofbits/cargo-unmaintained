@@ -14,7 +14,7 @@ mod octocrab_util;
 #[path = "../rustsec_util/mod.rs"]
 mod rustsec_util;
 use rustsec_util::{
-    cargo_unmaintained, command_output, display_advisory_outcomes, maybe_to_string, Outcome,
+    Outcome, cargo_unmaintained, command_output, display_advisory_outcomes, maybe_to_string,
 };
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]

@@ -1,4 +1,4 @@
-use super::{OutdatedDep, RepoStatus, UnmaintainedPkg, SECS_PER_DAY};
+use super::{OutdatedDep, RepoStatus, SECS_PER_DAY, UnmaintainedPkg};
 use cargo_metadata::semver::{Version, VersionReq};
 use serde::Serialize;
 

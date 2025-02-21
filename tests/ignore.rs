@@ -1,10 +1,10 @@
 #![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
-use anyhow::{ensure, Result};
+use anyhow::{Result, ensure};
 use snapbox::cmd::cargo_bin;
 use std::{fs::OpenOptions, io::Write, path::Path, process::Command};
-use tempfile::{tempdir, TempDir};
+use tempfile::{TempDir, tempdir};
 
 const NAME: &str = "bigint";
 
