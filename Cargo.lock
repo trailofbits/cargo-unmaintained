@@ -545,18 +545,19 @@ checksum = "d0a5c400df2834b80a4c3327b3aad3a4c4cd4de0629063962b03235697506a28"
 
 [[package]]
 name = "ctor"
-version = "0.3.4"
+version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "035a5c3c87da8be7a0e5ebd6fbabcccd8651a59c27197096d1dfd74f312aaee5"
+checksum = "a7747ac3a66a06f4ee6718686c8ea976d2d05fb30ada93ebd76b3f9aef97257c"
 dependencies = [
  "ctor-proc-macro",
+ "dtor",
 ]
 
 [[package]]
 name = "ctor-proc-macro"
-version = "0.0.2"
+version = "0.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "107adb396b2d8e7766e79151083ce1cc624b51dfd1c23e0429c50226bba693eb"
+checksum = "4f211af61d8efdd104f96e57adf5e426ba1bc3ed7a4ead616e15e5881fd79c4d"
 
 [[package]]
 name = "curl"
@@ -629,6 +630,21 @@ name = "doc-comment"
 version = "0.3.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "fea41bba32d969b513997752735605054bc0dfa92b4c56bf1189f2e174be7a10"
+
+[[package]]
+name = "dtor"
+version = "0.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8bf39a0bfd1f94d62ffdb2802a7e6244c0f34f6ebacf5d4c26547d08cd1d67a5"
+dependencies = [
+ "dtor-proc-macro",
+]
+
+[[package]]
+name = "dtor-proc-macro"
+version = "0.0.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7454e41ff9012c00d53cf7f475c5e3afa3b91b7c90568495495e8d9bf47a1055"
 
 [[package]]
 name = "dunce"
