@@ -162,7 +162,7 @@ impl Cache {
         #[cfg(all(feature = "on-disk-cache", feature = "lock-index", not(windows)))]
         if self.tempdir.is_none() {
             _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
-                .with_context(|| format!("failed to lock {:?}", &*CACHE_DIRECTORY))?;
+                .with_context(|| format!("failed to lock `{}`", CACHE_DIRECTORY.display()))?;
         }
 
         let mut errors = Vec::new();

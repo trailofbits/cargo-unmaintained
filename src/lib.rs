@@ -994,12 +994,13 @@ static INDEX_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
 
 #[cfg(feature = "lock-index")]
 fn lock_index() -> Result<File> {
-    flock::lock_path(&INDEX_PATH).with_context(|| format!("failed to lock {:?}", &*INDEX_PATH))
+    flock::lock_path(&INDEX_PATH)
+        .with_context(|| format!("failed to lock `{}`", INDEX_PATH.display()))
 }
 
 #[cfg(not(feature = "lock-index"))]
 fn lock_index() -> Result<File> {
-    File::open(&*INDEX_PATH).with_context(|| format!("failed to open {:?}", &*INDEX_PATH))
+    File::open(&*INDEX_PATH).with_context(|| format!("failed to open `{}`", INDEX_PATH.display()))
 }
 
 #[cfg(test)]
