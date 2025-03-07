@@ -23,9 +23,9 @@ pub fn temp_package(name: &str) -> Result<TempDir> {
     let mut manifest = OpenOptions::new()
         .append(true)
         .open(&path_buf)
-        .with_context(|| format!("failed to open {path_buf:?}"))?;
+        .with_context(|| format!("failed to open `{}`", path_buf.display()))?;
     writeln!(manifest, r#"{name} = "*""#)
-        .with_context(|| format!("failed to write to {path_buf:?}"))?;
+        .with_context(|| format!("failed to write to `{}`", path_buf.display()))?;
 
     Ok(tempdir)
 }
