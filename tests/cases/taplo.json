@@ -33,6 +33,33 @@
     "version": "1.0.4"
   },
   {
+    "name": "rust-argon2",
+    "outdated_deps": [
+      {
+        "name": "base64",
+        "req": "^0.13",
+        "version_latest": null,
+        "version_used": "0.13.1"
+      },
+      {
+        "name": "blake2b_simd",
+        "req": "^0.5",
+        "version_latest": null,
+        "version_used": "0.5.11"
+      },
+      {
+        "name": "constant_time_eq",
+        "req": "^0.1.4",
+        "version_latest": null,
+        "version_used": "0.1.5"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.8.3"
+  },
+  {
     "name": "serde_cbor",
     "outdated_deps": [],
     "repo_status": "Archived",
