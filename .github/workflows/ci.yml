@@ -4,7 +4,7 @@ on:
   merge_group:
   pull_request:
   schedule:
-    - cron: "0 3 * * 0" # 0 = Sunday
+    - cron: "0 3 * * sun"
   workflow_dispatch:
 
 concurrency:
@@ -104,23 +104,27 @@ jobs:
 
       - name: Test
         run: |
+          EI0=
+          EI1=
+          if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]]; then
+            EI0='--features=ei --test dogfood --test rustsec_advisories'
+            EI1='--features=ei --test rustsec_issues --test snapbox'
+          fi          
           case '${{ matrix.test }}' in
             without-token)
               cargo test --config "$GROUP_RUNNER" -- --nocapture
               ;;
             with-token-0)
               export GITHUB_TOKEN='${{ github.token }}'
-              cargo test --config "$GROUP_RUNNER" --features=ei \
-                --test dogfood \
-                --test rustsec_advisories \
+              cargo test --config "$GROUP_RUNNER" \
+                $EI0 \
                 -- --nocapture
               ;;
             with-token-1)
               export GITHUB_TOKEN='${{ github.token }}'
-              cargo test --config "$GROUP_RUNNER" --features=ei \
-                --test rustsec_issues \
+              cargo test --config "$GROUP_RUNNER" \
+                $EI1 \
                 --test save_token \
-                --test snapbox \
                 -- --nocapture
               ;;
             *)
