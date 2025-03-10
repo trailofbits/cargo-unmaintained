@@ -124,7 +124,6 @@ jobs:
               export GITHUB_TOKEN='${{ github.token }}'
               cargo test --config "$GROUP_RUNNER" \
                 $EI1 \
-                --test save_token \
                 -- --nocapture
               ;;
             *)
