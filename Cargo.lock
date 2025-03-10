@@ -464,9 +464,9 @@ checksum = "773648b94d0e5d620f64f280777445740e61fe701025087ec8b57f45c791888b"
 
 [[package]]
 name = "crates-index"
-version = "3.5.0"
+version = "3.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "13058139052295533e5f7b0ed22ecf3eb7d7a5c2cd5657d6a7c8b4d8d8e093e6"
+checksum = "b4460df75a81c9714b02c6ff4d1f2645e457d80eab69f528ce2cce980acf0b18"
 dependencies = [
  "gix 0.69.1",
  "hex",
@@ -474,6 +474,7 @@ dependencies = [
  "http",
  "memchr",
  "rustc-hash",
+ "rustc-stable-hash",
  "semver",
  "serde",
  "serde_derive",
