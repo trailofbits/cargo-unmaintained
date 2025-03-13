@@ -125,6 +125,12 @@ cargo test --features=ei
 
   Note that false _positives_ should not arise in a corresponding way. Before flagging a package as unmaintained, `cargo-unmaintained` verifies that the package's latest version would be considered unmaintained as well.
 
+## Questions
+
+- Yesterday, I got a warning about an unmaintained package. But, today, I don't. Why is that?
+
+  Possibly, an intermediate dependency was updated. Suppose package X depends on Y, which depends on Z. And suppose Z is considered unmaintained. Then Z will generated warnings for both X and Y. If Y is updated to no longer depend upon Z, and X uses the new version of Y, then X will no longer receive warnings about Z.
+
 ## Anti-goals
 
 `cargo-unmaintained` is not meant to be a replacement for [`cargo-upgrade`]. `cargo-unmaintained` should not warn just because a package needs to be upgraded.
