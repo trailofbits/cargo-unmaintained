@@ -302,7 +302,6 @@ dependencies = [
  "log",
  "octocrab",
  "predicates",
- "rayon",
  "regex",
  "remain",
  "rustsec",
