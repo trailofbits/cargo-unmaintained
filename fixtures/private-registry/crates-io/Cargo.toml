@@ -1,7 +1,7 @@
 [package]
 name = "crates-io"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 # smoelius: The next `dependencies` entry should match what is in ../my-registry/Cargo.toml, except
 # that file's entry has a `registry` field.
