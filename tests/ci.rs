@@ -1,7 +1,7 @@
 use assert_cmd::Command;
 use regex::Regex;
 use similar_asserts::SimpleDiff;
-use std::{env::remove_var, fs::read_to_string, path::Path};
+use std::{env::remove_var, fs::read_to_string};
 use tempfile::tempdir;
 
 mod util;
@@ -138,17 +138,15 @@ fn markdown_link_check() {
         .success();
 
     // smoelius: https://github.com/rust-lang/crates.io/issues/788
-    let config = Path::new(env!("CARGO_MANIFEST_DIR")).join("tests/markdown_link_check.json");
+    let config = concat!(
+        env!("CARGO_MANIFEST_DIR"),
+        "/tests/markdown_link_check.json"
+    );
 
-    let readme_md = Path::new(env!("CARGO_MANIFEST_DIR")).join("README.md");
+    let readme_md = concat!(env!("CARGO_MANIFEST_DIR"), "/README.md");
 
     Command::new("npx")
-        .args([
-            "markdown-link-check",
-            "--config",
-            &config.to_string_lossy(),
-            &readme_md.to_string_lossy(),
-        ])
+        .args(["markdown-link-check", "--config", config, readme_md])
         .current_dir(&tempdir)
         .assert()
         .success();
@@ -169,9 +167,9 @@ fn prettier() {
         .args([
             "prettier",
             "--check",
-            &format!("{}/**/*.md", env!("CARGO_MANIFEST_DIR")),
-            &format!("{}/**/*.yml", env!("CARGO_MANIFEST_DIR")),
-            &format!("!{}/target/**", env!("CARGO_MANIFEST_DIR")),
+            concat!(env!("CARGO_MANIFEST_DIR"), "/**/*.md",),
+            concat!(env!("CARGO_MANIFEST_DIR"), "/**/*.yml"),
+            concat!("!", env!("CARGO_MANIFEST_DIR"), "/target/**"),
         ])
         .current_dir(&tempdir)
         .assert()
