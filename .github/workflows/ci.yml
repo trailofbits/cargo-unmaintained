@@ -4,7 +4,7 @@ on:
   merge_group:
   pull_request:
   schedule:
-    - cron: "0 3 * * 0" # 0 = Sunday
+    - cron: "0 3 * * sun"
   workflow_dispatch:
 
 concurrency:
@@ -83,7 +83,7 @@ jobs:
 
       - uses: taiki-e/install-action@v2
         with:
-          tool: cargo-audit, cargo-hack, cargo-sort, cargo-udeps
+          tool: cargo-hack, cargo-sort, cargo-udeps
 
       - name: Install tools
         run: |
