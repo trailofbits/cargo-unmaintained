@@ -1,7 +1,7 @@
 [package]
 name = "timeout"
 version = "0.1.0"
-edition = "2021"
+edition = "2024"
 
 # smoelius: https://stackoverflow.com/a/56459603
 # repository = "https://httpstat.us/200?sleep=300000" # 5 minutes
