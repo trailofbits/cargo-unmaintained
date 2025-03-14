@@ -42,6 +42,8 @@ mod verbose;
 #[cfg(feature = "lock-index")]
 mod flock;
 
+use github::{Github as _, Impl as Github};
+
 mod repo_status;
 use repo_status::RepoStatus;
 
@@ -234,10 +236,10 @@ pub fn run() -> Result<()> {
     if opts::get().save_token {
         // smoelius: Currently, if additional options are passed besides --save-token, they are
         // ignored and no error is emitted. This is ugly.
-        return github::save_token();
+        return Github::save_token();
     }
 
-    if github::load_token(|_| Ok(()))? {
+    if Github::load_token(|_| Ok(()))? {
         TOKEN_FOUND.store(true, Ordering::SeqCst);
     }
 
@@ -541,7 +543,7 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
         verbose::wrap!(
             || {
                 let repo_status = if use_github_api {
-                    github::archival_status(url)
+                    Github::archival_status(url)
                 } else {
                     curl::existence(url)
                 }

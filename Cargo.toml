@@ -41,10 +41,14 @@ tokio = "1.43"
 
 [features]
 default = ["on-disk-cache", "lock-index"]
-cache-repositories = ["on-disk-cache"]
 ei = []
 on-disk-cache = []
 lock-index = ["libc", "windows-sys"]
+__mock_github = []
+__real_github = []
+
+# smoelius: Old feature that was renamed.
+cache-repositories = ["on-disk-cache"]
 
 [lints.rust.unexpected_cfgs]
 level = "deny"
@@ -84,7 +88,13 @@ name = "snapbox"
 required-features = ["ei"]
 
 [workspace]
-exclude = ["fixtures"]
+# smoelius: `mock_github` must not be a workspace member. If it were, it would enable the
+# `__mock_github` feature for all workspace members.
+exclude = ["fixtures", "mock_github"]
+
+# smoelius: Enabling `__mocked_cargo` causes `xdg` to appear unused.
+[workspace.metadata.cargo-udeps.ignore]
+normal = ["xdg"]
 
 [[workspace.metadata.dylint.libraries]]
 git = "https://github.com/trailofbits/dylint"
