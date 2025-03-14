@@ -1,4 +1,4 @@
-use super::{RepoStatus, Url, curl};
+use crate::{RepoStatus, Url, curl};
 use anyhow::{Result, bail};
 use regex::Regex;
 use std::{cell::RefCell, collections::HashMap, io::Read, rc::Rc, sync::LazyLock};
@@ -7,8 +7,6 @@ mod map_ext;
 use map_ext::MapExt;
 
 pub mod util;
-use util::PERSONAL_TOKEN;
-pub(crate) use util::{load_token, save_token};
 
 #[allow(clippy::unwrap_used)]
 static RE: LazyLock<Regex> =
@@ -18,21 +16,33 @@ thread_local! {
     static REPOSITORY_CACHE: RefCell<HashMap<String, Option<Rc<serde_json::Value>>>> = RefCell::new(HashMap::new());
 }
 
-pub(crate) fn archival_status(url: Url) -> Result<RepoStatus<()>> {
-    let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
+pub struct Impl;
 
-    let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
-        return Ok(RepoStatus::Nonexistent(url));
-    };
+impl super::Github for Impl {
+    fn load_token(f: impl FnOnce(&str) -> Result<()>) -> Result<bool> {
+        util::load_token(f)
+    }
 
-    if repository
-        .as_object()
-        .and_then(|map| map.get_bool("archived"))
-        .unwrap_or_default()
-    {
-        Ok(RepoStatus::Archived(url))
-    } else {
-        Ok(RepoStatus::Success(url, ()))
+    fn save_token() -> Result<()> {
+        util::save_token()
+    }
+
+    fn archival_status(url: Url) -> Result<RepoStatus<()>> {
+        let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
+
+        let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
+            return Ok(RepoStatus::Nonexistent(url));
+        };
+
+        if repository
+            .as_object()
+            .and_then(|map| map.get_bool("archived"))
+            .unwrap_or_default()
+        {
+            Ok(RepoStatus::Archived(url))
+        } else {
+            Ok(RepoStatus::Success(url, ()))
+        }
     }
 }
 
@@ -102,7 +112,7 @@ fn call_api(
 
     let mut list = ::curl::easy::List::new();
     list.append("User-Agent: cargo-unmaintained")?;
-    if let Some(token) = PERSONAL_TOKEN.get() {
+    if let Some(token) = util::PERSONAL_TOKEN.get() {
         list.append(&format!("Authorization: Bearer {token}"))?;
     }
 
