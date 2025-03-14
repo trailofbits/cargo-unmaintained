@@ -4,7 +4,7 @@ on:
   merge_group:
   pull_request:
   schedule:
-    - cron: "0 3 * * 0" # 0 = Sunday
+    - cron: "0 3 * * sun"
   workflow_dispatch:
 
 concurrency:
