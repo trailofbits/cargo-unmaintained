@@ -1,15 +1,7 @@
 use super::{RepoStatus, Url, curl};
-use anyhow::{Result, anyhow, bail};
-use chrono::{DateTime, Utc};
+use anyhow::{Result, bail};
 use regex::Regex;
-use std::{
-    cell::RefCell,
-    collections::HashMap,
-    io::Read,
-    rc::Rc,
-    sync::LazyLock,
-    time::{Duration, SystemTime},
-};
+use std::{cell::RefCell, collections::HashMap, io::Read, rc::Rc, sync::LazyLock};
 
 mod map_ext;
 use map_ext::MapExt;
@@ -42,50 +34,6 @@ pub(crate) fn archival_status(url: Url) -> Result<RepoStatus<()>> {
     } else {
         Ok(RepoStatus::Success(url, ()))
     }
-}
-
-// smoelius: Since --imprecise was removed, timestamps are no longer checked using the GitHub API.
-#[allow(dead_code)]
-pub(crate) fn timestamp(url: Url) -> Result<Option<(Url, SystemTime)>> {
-    let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
-
-    let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
-        return Ok(None);
-    };
-
-    let default_branch = repository
-        .as_object()
-        .and_then(|map| map.get_str("default_branch"))
-        .ok_or_else(|| anyhow!("{url} repository has no default branch"))?;
-
-    let page = {
-        let json = serde_json::json!({
-            "sha": default_branch,
-            "per_page": 1,
-        });
-
-        call_api(owner, repo, Some("commits"), json.to_string().as_bytes())
-    }?;
-
-    let item = page
-        .as_array()
-        .and_then(|array| array.first())
-        .ok_or_else(|| anyhow!("{url} page has no items"))?;
-    let git_user_time = item
-        .as_object()
-        .and_then(|map| map.get_object("commit"))
-        .and_then(|map| map.get("committer"))
-        .ok_or_else(|| anyhow!("{url} item commit has no committer"))?;
-    let date = git_user_time
-        .as_object()
-        .and_then(|map| map.get_str("date"))
-        .ok_or_else(|| anyhow!("{url} committer has no date"))?;
-
-    let date_time = date.parse::<DateTime<Utc>>()?;
-    let secs = date_time.timestamp().try_into()?;
-    let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
-
-    Ok(Some((url, timestamp)))
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
