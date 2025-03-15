@@ -1,6 +1,6 @@
 use snapbox::{Data, assert_data_eq};
 use std::{
-    env::{remove_var, var},
+    env::{remove_var, set_current_dir, var},
     fs::write,
     path::PathBuf,
     process::Command,
@@ -12,11 +12,12 @@ fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
     }
+    set_current_dir("..");
 }
 
 #[test]
 fn rustsec_issues() {
-    const PATH_STDOUT: &str = "tests/rustsec_issues.stdout";
+    const PATH_STDOUT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/rustsec_issues.stdout");
 
     let mut command = Command::new("cargo");
     command.args(["run", "--example=rustsec_issues"]);

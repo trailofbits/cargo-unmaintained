@@ -103,10 +103,10 @@ ignore = ["matchers"]
 
 ## Testing
 
-Some tests are "externally influenced," i.e., they rely on data from external sources. To run these tests, enable the `ei` feature, e.g., use the following command:
+Running just `cargo test` will not run the "continuous integration" or "externally influenced" tests. To run those additional tests, add `--workspace`, i.e.:
 
 ```sh
-cargo test --features=ei
+cargo test --workspace
 ```
 
 ## Known problems

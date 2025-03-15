@@ -1,7 +1,7 @@
 use regex::Regex;
 use snapbox::assert_data_eq;
 use std::{
-    env::{remove_var, var},
+    env::{remove_var, set_current_dir, var},
     fs::{read_to_string, write},
     io::{Write, stderr},
     process::Command,
@@ -9,13 +9,17 @@ use std::{
 };
 use testing::{Tee, split_at_cut_line, tee};
 
-const PATH_STDOUT: &str = "tests/rustsec_advisories.stdout";
+const PATH_STDOUT: &str = concat!(
+    env!("CARGO_MANIFEST_DIR"),
+    "/tests/rustsec_advisories.stdout"
+);
 
 #[ctor::ctor]
 fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
     }
+    set_current_dir("..");
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]

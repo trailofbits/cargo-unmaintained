@@ -1,0 +1,15 @@
+[package]
+name = "ei"
+version = "0.1.0"
+edition = "2024"
+publish = false
+
+[dev-dependencies]
+ctor = "0.4"
+regex = "1.11"
+snapbox = "0.6"
+
+testing = { path = "../testing" }
+
+[lints]
+workspace = true
