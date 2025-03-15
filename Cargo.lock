@@ -314,6 +314,7 @@ dependencies = [
  "strum_macros",
  "tempfile",
  "termcolor",
+ "testing",
  "tokio",
  "toml",
  "windows-sys 0.59.0",
@@ -368,6 +369,18 @@ dependencies = [
  "serde",
  "wasm-bindgen",
  "windows-targets",
+]
+
+[[package]]
+name = "ci"
+version = "0.1.0"
+dependencies = [
+ "assert_cmd",
+ "ctor",
+ "regex",
+ "similar-asserts",
+ "tempfile",
+ "testing",
 ]
 
 [[package]]
@@ -3945,6 +3958,18 @@ name = "termtree"
 version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "8f50febec83f5ee1df3015341d8bd429f2d1cc62bcba7ea2076759d315084683"
+
+[[package]]
+name = "testing"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "serde",
+ "serde_json",
+ "snapbox",
+ "tempfile",
+ "toml",
+]
 
 [[package]]
 name = "thiserror"

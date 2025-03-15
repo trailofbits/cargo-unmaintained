@@ -5,9 +5,7 @@ use std::{
     path::PathBuf,
     process::Command,
 };
-
-mod util;
-use util::{Tee, tee};
+use testing::{Tee, tee};
 
 #[ctor::ctor]
 fn initialize() {

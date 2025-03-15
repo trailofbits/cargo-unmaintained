@@ -1,11 +1,13 @@
 use assert_cmd::Command;
 use regex::Regex;
 use similar_asserts::SimpleDiff;
-use std::{env::remove_var, fs::read_to_string};
+use std::{
+    env::{remove_var, set_current_dir},
+    fs::read_to_string,
+    path::Path,
+};
 use tempfile::tempdir;
-
-mod util;
-use util::split_at_cut_line;
+use testing::split_at_cut_line;
 
 static DIRS: &[&str] = &["."];
 
@@ -14,6 +16,7 @@ fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
     }
+    set_current_dir("..");
 }
 
 #[test]
@@ -100,10 +103,10 @@ fn license() {
         {
             if [
                 "AGPL-3.0 (1): cargo-unmaintained",
-                "AGPL-3.0 (1): ei",
                 "AGPL-3.0 (1): rustsec_util",
                 "Custom License File (1): ring",
                 "MPL-2.0 (1): uluru",
+                "N/A (1): testing",
             ]
             .contains(&line)
             {
@@ -143,7 +146,7 @@ fn markdown_link_check() {
         "/tests/markdown_link_check.json"
     );
 
-    let readme_md = concat!(env!("CARGO_MANIFEST_DIR"), "/README.md");
+    let readme_md = concat!(env!("CARGO_MANIFEST_DIR"), "/../README.md");
 
     Command::new("npx")
         .args(["markdown-link-check", "--config", config, readme_md])
@@ -155,6 +158,13 @@ fn markdown_link_check() {
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn prettier() {
+    const ARGS: &[&str] = &["{}/**/*.md", "{}/**/*.yml", "!{}/target/**"];
+
+    // smoelius: Copied from Necessist:
+    // Prettier's handling of `..` seems to have changed between versions 3.4 and 3.5.
+    // Manually collapsing the `..` avoids the problem.
+    let parent = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+
     let tempdir = tempdir().unwrap();
 
     Command::new("npm")
@@ -164,13 +174,11 @@ fn prettier() {
         .success();
 
     Command::new("npx")
-        .args([
-            "prettier",
-            "--check",
-            concat!(env!("CARGO_MANIFEST_DIR"), "/**/*.md",),
-            concat!(env!("CARGO_MANIFEST_DIR"), "/**/*.yml"),
-            concat!("!", env!("CARGO_MANIFEST_DIR"), "/target/**"),
-        ])
+        .args(["prettier", "--check"])
+        .args(
+            ARGS.iter()
+                .map(|s| s.replace("{}", &parent.to_string_lossy())),
+        )
         .current_dir(&tempdir)
         .assert()
         .success();

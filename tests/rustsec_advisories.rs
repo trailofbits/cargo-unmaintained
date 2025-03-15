@@ -7,9 +7,7 @@ use std::{
     process::Command,
     sync::LazyLock,
 };
-
-mod util;
-use util::{Tee, split_at_cut_line, tee};
+use testing::{Tee, split_at_cut_line, tee};
 
 const PATH_STDOUT: &str = "tests/rustsec_advisories.stdout";
 
