@@ -1,8 +1,6 @@
 use snapbox::cmd::cargo_bin;
 use std::{env::remove_var, process::Command};
-
-mod util;
-use util::{Tee, tee};
+use testing::{Tee, tee};
 
 #[ctor::ctor]
 fn initialize() {

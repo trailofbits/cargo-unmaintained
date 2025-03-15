@@ -8,6 +8,8 @@ use std::{
     process::{Command, ExitStatus, Stdio},
 };
 
+pub mod snapbox;
+
 #[derive(Clone, Copy)]
 pub enum Tee {
     Stdout,

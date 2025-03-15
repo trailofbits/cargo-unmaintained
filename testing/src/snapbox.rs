@@ -1,6 +1,7 @@
 #![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
+use super::{Tee, enabled, tee};
 use anyhow::{Context, Result, bail};
 use serde::Deserialize;
 use snapbox::{
@@ -18,9 +19,6 @@ use std::{
     time::Instant,
 };
 
-mod util;
-use util::{Tee, enabled, tee};
-
 #[derive(Deserialize)]
 #[serde(deny_unknown_fields)]
 struct Test {
@@ -36,8 +34,7 @@ struct Test {
 }
 
 #[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
-#[test]
-fn snapbox() -> Result<()> {
+pub fn snapbox() -> Result<()> {
     // #[cfg(not(feature = "lock-index"))]
     // panic!("the `snapbox` test requires the `lock-index` feature");
 
