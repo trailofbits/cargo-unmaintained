@@ -31,12 +31,33 @@ struct Test {
     /// Repo revision; `None` (the default) means the head of the default branch
     #[serde(default)]
     rev: Option<String>,
+
+    /// Whether this test should use the real GitHub. The default is to use a mock GitHub.
+    #[serde(default)]
+    use_real_github: bool,
+
+    /// Environment varaibles
+    #[serde(default)]
+    env: Vec<(String, String)>,
 }
 
 #[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
-pub fn snapbox() -> Result<()> {
+pub fn snapbox(real_github: bool) -> Result<()> {
     // #[cfg(not(feature = "lock-index"))]
     // panic!("the `snapbox` test requires the `lock-index` feature");
+
+    if !real_github {
+        #[cfg_attr(dylint_lib = "general", allow(abs_home_path))]
+        let status = Command::new("cargo")
+            .args([
+                "build",
+                "--manifest-path",
+                concat!(env!("CARGO_MANIFEST_DIR"), "/../mock_github/Cargo.toml"),
+            ])
+            .status()
+            .unwrap();
+        assert!(status.success());
+    }
 
     let test_cases = Path::new("tests/cases");
 
@@ -62,6 +83,12 @@ pub fn snapbox() -> Result<()> {
         let raw = read_to_string(&input_path)?;
 
         let test: Test = toml::from_str(&raw).unwrap();
+
+        if test.use_real_github != real_github {
+            #[allow(clippy::explicit_write)]
+            writeln!(stderr(), "skipping `{}`", input_path.display()).unwrap();
+            continue;
+        }
 
         #[allow(clippy::explicit_write)]
         write!(stderr(), "running {}", input_path.display()).unwrap();
@@ -102,7 +129,16 @@ pub fn snapbox() -> Result<()> {
         let path_buf = dir.join("Cargo.lock");
         assert!(path_buf.exists(), "`{}` does not exist", path_buf.display());
 
-        let mut command = Command::new(cargo_bin("cargo-unmaintained"));
+        let mut command = if real_github {
+            Command::new(cargo_bin("cargo-unmaintained"))
+        } else {
+            #[cfg_attr(dylint_lib = "general", allow(abs_home_path))]
+            Command::new(concat!(
+                env!("CARGO_MANIFEST_DIR"),
+                "/../mock_github/target/debug/cargo-unmaintained-with-mock-github"
+            ))
+        };
+        command.envs(test.env);
         command
             .args(["unmaintained", "--color=never", "--json"])
             .current_dir(dir);

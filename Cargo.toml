@@ -75,23 +75,11 @@ windows-sys = { version = "0.59", features = [
     "Win32_System_IO",
 ], optional = true }
 
-[[test]]
-name = "dogfood"
-required-features = ["ei"]
-
-[[test]]
-name = "rustsec_advisories"
-required-features = ["ei"]
-
-[[test]]
-name = "rustsec_issues"
-required-features = ["ei"]
-
 [workspace]
 # smoelius: `mock_github` must not be a workspace member. If it were, it would enable the
 # `__mock_github` feature for all workspace members.
 exclude = ["fixtures", "mock_github"]
-members = ["ci", "testing"]
+members = ["ci", "ei", "testing"]
 
 # smoelius: Enabling `__mocked_cargo` causes `xdg` to appear unused.
 [workspace.metadata.cargo-udeps.ignore]
