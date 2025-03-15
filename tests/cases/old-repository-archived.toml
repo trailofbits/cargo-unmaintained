@@ -1,1 +1,3 @@
 path = "fixtures/old-repository-archived"
+
+env = [["ARCHIVAL_STATUS_https___github_com_BurntSushi_regex_automata", "1"]]
