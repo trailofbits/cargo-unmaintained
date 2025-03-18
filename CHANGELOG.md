@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.0
+
+- Add note to README.md about why a package could be flagged one day but not the next ([68ce0e0](https://github.com/trailofbits/cargo-unmaintained/commit/68ce0e03285139593d33a5859d85bc8d1146c206))
+- Make verbose printing more informative ([#548](https://github.com/trailofbits/cargo-unmaintained/pull/548))
+
 ## 1.6.3
 
 - Update dependencies, including `openssl` to version 0.10.70 ([#502](https://github.com/trailofbits/cargo-unmaintained/pull/502))
