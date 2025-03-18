@@ -490,7 +490,7 @@ fn is_unmaintained_package<'a>(
             }
         }
 
-        let repo_status = clone_repository(pkg, Purpose::Membership)?;
+        let repo_status = clone_repository(pkg)?;
         if repo_status.is_failure() {
             // smoelius: Mercurial repos get a pass.
             if matches!(repo_status, RepoStatus::Uncloneable(_)) && curl::is_mercurial_repo(url)? {
@@ -533,11 +533,14 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
         if let Some(&value) = general_status_cache.get(&url) {
             return Ok(value);
         }
+        let to_string: &dyn Fn(&RepoStatus<'static, ()>) -> String;
         let (use_github_api, what, how) = if TOKEN_FOUND.load(Ordering::SeqCst)
             && url.as_str().starts_with("https://github.com/")
         {
+            to_string = &RepoStatus::to_archival_status_string;
             (true, "archival status", "GitHub API")
         } else {
+            to_string = &RepoStatus::to_existence_string;
             (false, "existence", "HTTP request")
         };
         verbose::wrap!(
@@ -555,6 +558,7 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
                 general_status_cache.insert(url.leak(), repo_status);
                 Ok(repo_status)
             },
+            to_string,
             "{} of `{}` using {}",
             what,
             name,
@@ -656,6 +660,7 @@ fn latest_version(name: &str) -> Result<Version> {
                 latest_version_cache.insert(name.to_owned(), latest_version.clone());
                 Ok(latest_version)
             },
+            ToString::to_string,
             "latest version of `{}` using crates.io index",
             name,
         )
@@ -666,6 +671,7 @@ fn versions(name: &str) -> Result<Vec<crates_io_api::Version>> {
     on_disk_cache::with_cache(|cache| -> Result<_> {
         verbose::wrap!(
             || { cache.fetch_versions(name) },
+            |versions: &[crates_io_api::Version]| format!("{} versions", versions.len()),
             "versions of `{}` using crates.io API",
             name
         )
@@ -699,7 +705,7 @@ fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
                 // smoelius: `pkg`'s repository could contain other packages that were already
                 // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
                 // But in that case, we still need to verify that `pkg` appears in its repository.
-                let repo_status = clone_repository(pkg, Purpose::Membership)?;
+                let repo_status = clone_repository(pkg)?;
                 let Some((url_cloned, _)) = repo_status.as_success() else {
                     return Ok(repo_status.map_failure());
                 };
@@ -730,7 +736,7 @@ fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 }
 
 fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    let repo_status = clone_repository(pkg, Purpose::Timestamp)?;
+    let repo_status = clone_repository(pkg)?;
 
     let Some((url, repo_dir)) = repo_status.as_success() else {
         return Ok(repo_status.map_failure());
@@ -752,16 +758,9 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     Ok(RepoStatus::Success(url, timestamp))
 }
 
-#[derive(Clone, Copy)]
-enum Purpose {
-    /// Verify a package is a member of the repository
-    Membership,
-    /// Determine the repository's timestamp
-    Timestamp,
-}
-
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBuf>> {
+#[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
+fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
     let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
         on_disk_cache::with_cache(|cache| -> Result<_> {
             // smoelius: Check all urls associated with the package.
@@ -770,10 +769,12 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
                     return Ok(repo_status.clone());
                 }
             }
-            let what = match purpose {
+            // smoelius: To make verbose printing easier, "membership" is printed regardless of the
+            // check's purpose, and the `Purpose` type was removed.
+            /* let what = match purpose {
                 Purpose::Membership => "membership",
                 Purpose::Timestamp => "timestamp",
-            };
+            }; */
             verbose::wrap!(
                 || {
                     let url_and_dir = cache.clone_repository(pkg);
@@ -811,8 +812,8 @@ fn clone_repository(pkg: &Package, purpose: Purpose) -> Result<RepoStatus<PathBu
                         }
                     }
                 },
-                "{} of `{}` using shallow clone",
-                what,
+                RepoStatus::to_membership_string,
+                "membership of `{}` using shallow clone",
                 pkg.name
             )
         })

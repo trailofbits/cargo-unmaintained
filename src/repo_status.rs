@@ -1,5 +1,6 @@
 use super::{SECS_PER_DAY, Url, opts};
 use anyhow::Result;
+use std::path::PathBuf;
 use termcolor::{Color, ColorSpec, WriteColor};
 
 /// Repository statuses with the variants ordered by how "bad" they are.
@@ -163,6 +164,38 @@ impl RepoStatus<'_, u64> {
                 Ok(())
             }
         }
+    }
+}
+
+#[allow(clippy::wrong_self_convention)]
+impl RepoStatus<'_, ()> {
+    pub fn to_archival_status_string(&self) -> String {
+        let s = match self {
+            RepoStatus::Success(_, ()) => "unarchived",
+            RepoStatus::Archived(_) => "archived",
+            _ => "other",
+        };
+        s.to_owned()
+    }
+
+    pub fn to_existence_string(&self) -> String {
+        let s = match self {
+            RepoStatus::Success(_, ()) => "exists",
+            RepoStatus::Nonexistent(_) => "does not exist",
+            _ => "other",
+        };
+        s.to_owned()
+    }
+}
+
+impl RepoStatus<'_, PathBuf> {
+    pub fn to_membership_string(&self) -> String {
+        let s = match self {
+            RepoStatus::Success(_, _) => "member",
+            RepoStatus::Unassociated(_) => "non-member",
+            _ => "other",
+        };
+        s.to_owned()
     }
 }
 

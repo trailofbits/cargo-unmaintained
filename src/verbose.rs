@@ -49,12 +49,13 @@ macro_rules! newline {
 }
 
 macro_rules! wrap {
-    ($f:expr, $fmt:expr, $($arg:tt)*) => {{
+    ($f:expr, $to_string:expr, $fmt:expr, $($arg:tt)*) => {{
         $crate::verbose::__eprint!(concat!($fmt, "..."), $($arg)*);
         #[allow(clippy::redundant_closure_call)]
         let result = $f();
-        if result.is_ok() {
-            $crate::verbose::__eprintln!("ok");
+        if let Ok(value) = &result {
+            let s = $to_string(&value);
+            $crate::verbose::__eprintln!("ok ({s})");
         } else {
             $crate::verbose::__eprintln!();
         }
