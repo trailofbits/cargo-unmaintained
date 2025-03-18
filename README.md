@@ -69,6 +69,7 @@ Options:
       --no-exit-code    Do not set exit status when unmaintained packages are found
       --no-warnings     Do not show warnings
   -p, --package <NAME>  Check only whether package NAME is unmaintained
+      --purge           Remove all cached data from disk and exit
       --save-token      Read a personal access token from standard input and save it to
                         $HOME/.config/cargo-unmaintained/token.txt
       --tree            Show paths to unmaintained packages

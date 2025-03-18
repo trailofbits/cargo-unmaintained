@@ -406,3 +406,35 @@ fn branch_name(repo_dir: &Path) -> Result<String> {
     let stdout = std::str::from_utf8(&output.stdout)?;
     Ok(stdout.trim_end().to_owned())
 }
+
+/// Purges the on-disk cache directory.
+///
+/// It removes the entire cache directory at $HOME/.cache/cargo-unmaintained/v2.
+#[cfg(all(feature = "on-disk-cache", not(windows)))]
+pub fn purge_cache() -> Result<()> {
+    use std::fs::remove_dir_all;
+
+    if CACHE_DIRECTORY.exists() {
+        // Attempt to get a lock before removing
+        #[cfg(feature = "lock-index")]
+        let _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
+            .with_context(|| format!("failed to lock `{}`", CACHE_DIRECTORY.display()))?;
+
+        // Remove the entire cache directory
+        remove_dir_all(&*CACHE_DIRECTORY).with_context(|| {
+            format!(
+                "failed to remove cache directory at `{}`",
+                CACHE_DIRECTORY.display()
+            )
+        })?;
+
+        eprintln!("Cache directory removed: {}", CACHE_DIRECTORY.display());
+    } else {
+        eprintln!(
+            "Cache directory does not exist: {}",
+            CACHE_DIRECTORY.display()
+        );
+    }
+
+    Ok(())
+}
