@@ -44,7 +44,6 @@ tokio = "1.44"
 
 [features]
 default = ["on-disk-cache", "lock-index"]
-ei = []
 on-disk-cache = []
 lock-index = ["libc", "windows-sys"]
 __mock_github = []
@@ -52,6 +51,9 @@ __real_github = []
 
 # smoelius: Old feature that was renamed.
 cache-repositories = ["on-disk-cache"]
+
+# smoelius: Old feature that is no longer used.
+ei = []
 
 [lints]
 workspace = true

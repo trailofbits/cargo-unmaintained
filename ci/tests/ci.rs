@@ -76,6 +76,7 @@ fn hack_feature_powerset_udeps() {
                 "cargo",
                 "hack",
                 "--feature-powerset",
+                "--exclude=cache-repositories,ei",
                 "udeps",
             ])
             .current_dir(dir)
