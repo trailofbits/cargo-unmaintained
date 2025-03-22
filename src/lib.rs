@@ -125,6 +125,10 @@ struct Opts {
     )]
     package: Option<String>,
 
+    #[cfg(all(feature = "on-disk-cache", not(windows)))]
+    #[clap(long, help = "Remove all cached data from disk and exit")]
+    purge: bool,
+
     #[cfg(not(windows))]
     #[clap(
         long,
@@ -237,6 +241,11 @@ pub fn run() -> Result<()> {
         // smoelius: Currently, if additional options are passed besides --save-token, they are
         // ignored and no error is emitted. This is ugly.
         return Github::save_token();
+    }
+
+    #[cfg(all(feature = "on-disk-cache", not(windows)))]
+    if opts::get().purge {
+        return on_disk_cache::purge_cache();
     }
 
     if Github::load_token(|_| Ok(()))? {
