@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.0
+
+- FEATURE: Add `--purge` option to remove `$HOME/.cache/cargo-unmaintained` ([#551](https://github.com/trailofbits/cargo-unmaintained/pull/551))&mdash;thanks [@fabiocarlos97](https://github.com/fabiocarlos97)
+- Unpin `crate-index` dependency and upgrade it to version 3.8 ([#554](https://github.com/trailofbits/cargo-unmaintained/pull/554))
+
 ## 1.7.0
 
 - Add note to README.md about why a package could be flagged one day but not the next ([68ce0e0](https://github.com/trailofbits/cargo-unmaintained/commit/68ce0e03285139593d33a5859d85bc8d1146c206))
