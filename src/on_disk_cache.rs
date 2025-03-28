@@ -15,10 +15,6 @@
 //! - A url associated with the package was successfully cloned.
 //! - The clone was performed no more than `refresh_age` days ago.
 //!
-//! A package's entry is considered current if both of the following conditions are met:
-//! - A url associated with the package was successfully cloned.
-//! - The clone was performed no more than `refresh_age` days ago.
-//!
 //! If either of the above conditions are not met, an attempt is made to refresh the entry.
 //!
 //! A similar statement applies to versions.
