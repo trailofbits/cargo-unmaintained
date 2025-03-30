@@ -7,9 +7,12 @@ mod tests {
         use std::process::Command;
         use tempfile::tempdir;
 
+        /// The cache version (v2 currently, but could change in the future)
+        const CACHE_VERSION: &str = "v2";
+
         // Create a mock cache directory
         let dir = tempdir().unwrap();
-        let cache_path = dir.path().join("cargo-unmaintained/v2");
+        let cache_path = dir.path().join("cargo-unmaintained").join(CACHE_VERSION);
         create_dir_all(&cache_path).unwrap();
 
         // Create a dummy file inside
