@@ -7,7 +7,7 @@ mod tests {
         use std::process::Command;
         use tempfile::tempdir;
 
-        /// The cache version (v2 currently, but could change in the future)
+        // The cache version (v2 currently, but could change in the future)
         const CACHE_VERSION: &str = "v2";
 
         // Create a mock cache directory
