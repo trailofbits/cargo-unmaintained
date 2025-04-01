@@ -68,7 +68,7 @@ fn test_no_cache() {
     // Verify cache was purged
     assert!(!entry_exists(), "Cache entry should not exist after purge");
     assert!(
-        !cache_version_path.exists(),
+        !cache_root_path.exists(),
         "Cache directory should not exist after purge"
     );
 
