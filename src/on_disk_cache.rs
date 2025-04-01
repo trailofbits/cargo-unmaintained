@@ -410,7 +410,12 @@ fn branch_name(repo_dir: &Path) -> Result<String> {
 pub fn purge_cache() -> Result<()> {
     use std::fs::remove_dir_all;
 
-    if CACHE_DIRECTORY.exists() {
+    if CACHE_DIRECTORY.try_exists().with_context(|| {
+        format!(
+            "failed to determine whether `{}` exists",
+            CACHE_DIRECTORY.display()
+        )
+    })? {
         // Attempt to get a lock before removing
         #[cfg(feature = "lock-index")]
         let _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
