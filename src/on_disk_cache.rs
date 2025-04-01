@@ -68,9 +68,13 @@ thread_local! {
 static CACHE_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
     let base_directories = xdg::BaseDirectories::new().unwrap();
     base_directories
-        .create_cache_directory("cargo-unmaintained/v2")
+        .create_cache_directory("cargo-unmaintained")
         .unwrap()
 });
+
+#[cfg(all(feature = "on-disk-cache", not(windows)))]
+/// The current version of the cache structure
+static VERSION: &str = "v2";
 
 #[allow(clippy::unwrap_used)]
 static CRATES_IO_SYNC_CLIENT: LazyLock<SyncClient> =
@@ -363,7 +367,21 @@ impl Cache {
         let base_dir = self.tempdir.as_ref().map(TempDir::path);
 
         #[cfg(all(feature = "on-disk-cache", not(windows)))]
-        return base_dir.unwrap_or(&CACHE_DIRECTORY);
+        {
+            static VERSION_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
+                let mut path = CACHE_DIRECTORY.clone();
+                path.push(VERSION);
+                if let Err(e) = create_dir_all(&path) {
+                    #[allow(clippy::panic)]
+                    {
+                        eprintln!("Failed to create version directory: {e}");
+                        panic!("Failed to create version directory");
+                    }
+                }
+                path
+            });
+            base_dir.unwrap_or(&VERSION_DIR)
+        }
 
         #[cfg(any(not(feature = "on-disk-cache"), windows))]
         #[allow(clippy::unwrap_used)]
@@ -405,7 +423,7 @@ fn branch_name(repo_dir: &Path) -> Result<String> {
 
 /// Purges the on-disk cache directory.
 ///
-/// It removes the entire cache directory at $HOME/.cache/cargo-unmaintained/v2.
+/// It removes the entire cache directory at $HOME/.cache/cargo-unmaintained.
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 pub fn purge_cache() -> Result<()> {
     use std::fs::remove_dir_all;
