@@ -41,6 +41,7 @@ struct Test {
     env: Vec<(String, String)>,
 }
 
+#[allow(clippy::too_many_lines)]
 #[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
 pub fn snapbox(real_github: bool) -> Result<()> {
     // #[cfg(not(feature = "lock-index"))]
@@ -127,7 +128,11 @@ pub fn snapbox(real_github: bool) -> Result<()> {
         };
 
         let path_buf = dir.join("Cargo.lock");
-        assert!(path_buf.exists(), "`{}` does not exist", path_buf.display());
+        assert!(
+            path_buf.try_exists().is_ok_and(std::convert::identity),
+            "`{}` does not exist",
+            path_buf.display()
+        );
 
         let mut command = if real_github {
             Command::new(cargo_bin("cargo-unmaintained"))

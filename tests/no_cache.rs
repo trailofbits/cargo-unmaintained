@@ -15,6 +15,7 @@ const CACHE_VERSION: &str = "v2";
 ///
 /// The test verifies that running with --no-cache produces the same output
 /// as running after purging the cache completely.
+#[allow(clippy::disallowed_methods)]
 #[test]
 fn test_no_cache() {
     // Create a temporary directory for XDG_CACHE_HOME

@@ -1,5 +1,6 @@
 #![cfg(all(feature = "on-disk-cache", not(windows)))]
 
+#[allow(clippy::disallowed_methods)]
 #[test]
 fn test_purge() {
     use assert_cmd::cargo::CommandCargoExt;
