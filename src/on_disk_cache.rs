@@ -74,7 +74,7 @@ static CACHE_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
 
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 /// The current version of the cache structure
-static VERSION: &str = "v2";
+const VERSION: &str = "v2";
 
 #[allow(clippy::unwrap_used)]
 static CRATES_IO_SYNC_CLIENT: LazyLock<SyncClient> =
@@ -363,29 +363,17 @@ impl Cache {
         self.base_dir().join("versions_timestamps")
     }
 
-    fn base_dir(&self) -> &Path {
+    fn base_dir(&self) -> PathBuf {
         let base_dir = self.tempdir.as_ref().map(TempDir::path);
 
         #[cfg(all(feature = "on-disk-cache", not(windows)))]
         {
-            static VERSION_DIR: LazyLock<PathBuf> = LazyLock::new(|| {
-                let mut path = CACHE_DIRECTORY.clone();
-                path.push(VERSION);
-                if let Err(e) = create_dir_all(&path) {
-                    #[allow(clippy::panic)]
-                    {
-                        eprintln!("Failed to create version directory: {e}");
-                        panic!("Failed to create version directory");
-                    }
-                }
-                path
-            });
-            base_dir.unwrap_or(&VERSION_DIR)
+            base_dir.unwrap_or(&CACHE_DIRECTORY).join(VERSION)
         }
 
         #[cfg(any(not(feature = "on-disk-cache"), windows))]
         #[allow(clippy::unwrap_used)]
-        base_dir.unwrap()
+        base_dir.unwrap().to_path_buf()
     }
 }
 
