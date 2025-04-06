@@ -11,8 +11,6 @@ use std::{
 use tempfile::tempdir;
 use testing::split_at_cut_line;
 
-static DIRS: &[&str] = &["."];
-
 #[ctor::ctor]
 fn initialize() {
     unsafe {
@@ -23,110 +21,94 @@ fn initialize() {
 
 #[test]
 fn clippy() {
-    for dir in DIRS {
-        Command::new("cargo")
-            // smoelius: Remove `CARGO` environment variable to work around:
-            // https://github.com/rust-lang/rust/pull/131729
-            .env_remove("CARGO")
-            .args([
-                "+nightly",
-                "clippy",
-                "--all-features",
-                "--all-targets",
-                "--",
-                "--deny=warnings",
-            ])
-            .current_dir(dir)
-            .assert()
-            .success();
-    }
+    Command::new("cargo")
+        // smoelius: Remove `CARGO` environment variable to work around:
+        // https://github.com/rust-lang/rust/pull/131729
+        .env_remove("CARGO")
+        .args([
+            "+nightly",
+            "clippy",
+            "--all-features",
+            "--all-targets",
+            "--",
+            "--deny=warnings",
+        ])
+        .assert()
+        .success();
 }
 
 #[test]
 fn dylint() {
-    for dir in DIRS {
-        let assert = Command::new("cargo")
-            .args(["dylint", "--all", "--", "--all-features", "--all-targets"])
-            .env("DYLINT_RUSTFLAGS", "--deny warnings")
-            .current_dir(dir)
-            .assert();
-        let stderr = String::from_utf8(assert.get_output().stderr.clone()).unwrap();
-        assert!(assert.try_success().is_ok(), "{}", stderr);
-    }
+    let assert = Command::new("cargo")
+        .args(["dylint", "--all", "--", "--all-features", "--all-targets"])
+        .env("DYLINT_RUSTFLAGS", "--deny warnings")
+        .assert();
+    let stderr = String::from_utf8(assert.get_output().stderr.clone()).unwrap();
+    assert!(assert.try_success().is_ok(), "{}", stderr);
 }
 
 #[cfg_attr(target_os = "macos", ignore)]
 #[test]
 fn format() {
-    for dir in DIRS {
-        Command::new("rustup")
-            .args(["run", "nightly", "cargo", "fmt", "--check"])
-            .current_dir(dir)
-            .assert()
-            .success();
-    }
+    Command::new("rustup")
+        .args(["run", "nightly", "cargo", "fmt", "--check"])
+        .assert()
+        .success();
 }
 
 #[test]
 fn hack_feature_powerset_udeps() {
-    for dir in DIRS {
-        Command::new("rustup")
-            .env("RUSTFLAGS", "-D warnings")
-            .args([
-                "run",
-                "nightly",
-                "cargo",
-                "hack",
-                "--feature-powerset",
-                "--exclude=cache-repositories,ei",
-                "udeps",
-            ])
-            .current_dir(dir)
-            .assert()
-            .success();
-    }
+    Command::new("rustup")
+        .env("RUSTFLAGS", "-D warnings")
+        .args([
+            "run",
+            "nightly",
+            "cargo",
+            "hack",
+            "--feature-powerset",
+            "--exclude=cache-repositories,ei",
+            "udeps",
+        ])
+        .assert()
+        .success();
 }
 
 #[test]
 fn license() {
     let re = Regex::new(r"^[^:]*\b(Apache-2.0|BSD-3-Clause|ISC|MIT)\b").unwrap();
 
-    for dir in DIRS {
-        for line in std::str::from_utf8(
-            &Command::new("cargo")
-                .arg("license")
-                .current_dir(dir)
-                .assert()
-                .success()
-                .get_output()
-                .stdout,
-        )
-        .unwrap()
-        .lines()
+    for line in std::str::from_utf8(
+        &Command::new("cargo")
+            .arg("license")
+            .assert()
+            .success()
+            .get_output()
+            .stdout,
+    )
+    .unwrap()
+    .lines()
+    {
+        if [
+            "AGPL-3.0 (1): cargo-unmaintained",
+            "AGPL-3.0 (1): rustsec_util",
+            "Custom License File (1): ring",
+            "MPL-2.0 (1): uluru",
+            "N/A (1): testing",
+        ]
+        .contains(&line)
         {
-            if [
-                "AGPL-3.0 (1): cargo-unmaintained",
-                "AGPL-3.0 (1): rustsec_util",
-                "Custom License File (1): ring",
-                "MPL-2.0 (1): uluru",
-                "N/A (1): testing",
-            ]
-            .contains(&line)
-            {
-                continue;
-            }
-            // smoelius: Exception for `idna` dependencies.
-            if line
-                == "Unicode-3.0 (19): icu_collections, icu_locid, icu_locid_transform, \
-                    icu_locid_transform_data, icu_normalizer, icu_normalizer_data, icu_properties, \
-                    icu_properties_data, icu_provider, icu_provider_macros, litemap, tinystr, \
-                    writeable, yoke, yoke-derive, zerofrom, zerofrom-derive, zerovec, \
-                    zerovec-derive"
-            {
-                continue;
-            }
-            assert!(re.is_match(line), "{line:?} does not match");
+            continue;
         }
+        // smoelius: Exception for `idna` dependencies.
+        if line
+            == "Unicode-3.0 (19): icu_collections, icu_locid, icu_locid_transform, \
+                icu_locid_transform_data, icu_normalizer, icu_normalizer_data, icu_properties, \
+                icu_properties_data, icu_provider, icu_provider_macros, litemap, tinystr, \
+                writeable, yoke, yoke-derive, zerofrom, zerofrom-derive, zerovec, zerovec-derive"
+        {
+            continue;
+        }
+        assert!(re.is_match(line), "{line:?} does not match");
     }
 }
 
@@ -256,11 +238,8 @@ fn readme_reference_links_are_used() {
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn sort() {
-    for dir in DIRS {
-        Command::new("cargo")
-            .args(["sort", "--check", "--no-format"])
-            .current_dir(dir)
-            .assert()
-            .success();
-    }
+    Command::new("cargo")
+        .args(["sort", "--check", "--no-format"])
+        .assert()
+        .success();
 }
