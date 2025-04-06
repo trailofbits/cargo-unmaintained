@@ -1,3 +1,5 @@
+#![cfg(test)]
+
 use assert_cmd::Command;
 use regex::Regex;
 use similar_asserts::SimpleDiff;
@@ -142,10 +144,7 @@ fn markdown_link_check() {
         .success();
 
     // smoelius: https://github.com/rust-lang/crates.io/issues/788
-    let config = concat!(
-        env!("CARGO_MANIFEST_DIR"),
-        "/tests/markdown_link_check.json"
-    );
+    let config = concat!(env!("CARGO_MANIFEST_DIR"), "/markdown_link_check.json");
 
     let readme_md = concat!(env!("CARGO_MANIFEST_DIR"), "/../README.md");
 
