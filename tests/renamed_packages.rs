@@ -1,7 +1,7 @@
+use anyhow::{ Context, Result };
+use assert_cmd::prelude::*;
 use std::path::Path;
 use std::process::Command;
-use assert_cmd::prelude::*;
-use anyhow::{ Context, Result };
 
 fn run_test_on_fixture(fixture_path: &str) -> Result<String> {
     let output = Command::cargo_bin("cargo-unmaintained")
