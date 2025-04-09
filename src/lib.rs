@@ -1,32 +1,33 @@
 #![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
 
-use anyhow::{Context, Result, anyhow, bail, ensure};
+use anyhow::{ Context, Result, anyhow, bail, ensure };
 use cargo_metadata::{
-    Dependency, DependencyKind, Metadata, MetadataCommand, Package,
-    semver::{Version, VersionReq},
+    Dependency,
+    DependencyKind,
+    Metadata,
+    MetadataCommand,
+    Package,
+    semver::{ Version, VersionReq },
 };
-use clap::{Parser, crate_version};
+use clap::{ Parser, crate_version };
 use crates_index::GitIndex;
 use home::cargo_home;
 use std::{
     cell::RefCell,
-    collections::{HashMap, HashSet},
+    collections::{ HashMap, HashSet },
     env::args,
     ffi::OsStr,
     fs::File,
-    io::{BufRead, IsTerminal},
-    path::{Path, PathBuf},
-    process::{Command, Stdio, exit},
+    io::{ BufRead, IsTerminal },
+    path::{ Path, PathBuf },
+    process::{ Command, Stdio, exit },
     str::FromStr,
-    sync::{
-        LazyLock,
-        atomic::{AtomicBool, Ordering},
-    },
-    time::{Duration, SystemTime},
+    sync::{ LazyLock, atomic::{ AtomicBool, Ordering } },
+    time::{ Duration, SystemTime },
 };
 use tempfile::TempDir;
-use termcolor::{ColorChoice, ColorSpec, StandardStream, WriteColor};
-use toml::{Table, Value};
+use termcolor::{ ColorChoice, ColorSpec, StandardStream, WriteColor };
+use toml::{ Table, Value };
 
 pub mod flush;
 pub mod github;
@@ -42,15 +43,21 @@ mod verbose;
 #[cfg(feature = "lock-index")]
 mod flock;
 
-use github::{Github as _, Impl as Github};
+use github::{ Github as _, Impl as Github };
 
 mod repo_status;
 use repo_status::RepoStatus;
 
 mod url;
-use url::{Url, urls};
+use url::{ Url, urls };
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
+
+/// Percentage multiplier for similarity calculation
+const SIMILARITY_SCALE: usize = 100;
+
+/// Minimum similarity threshold (30%)
+const SIMILARITY_THRESHOLD: usize = 30;
 
 #[derive(Debug, Parser)]
 #[clap(bin_name = "cargo", display_name = "cargo")]
@@ -192,7 +199,10 @@ impl<'a> From<&'a Dependency> for DepReq<'a> {
 
 #[macro_export]
 macro_rules! warn {
-    ($fmt:expr, $($arg:tt)*) => {
+    (
+        $fmt:expr,
+        $($arg:tt)*
+    ) => {
         if $crate::opts::get().no_warnings {
             log::debug!($fmt, $($arg)*);
         } else {
@@ -220,10 +230,16 @@ thread_local! {
     // smoelius: A reason for having the former is the following. Multiple packages map to the same
     // url, and multiple urls map to the same shortened url. Thus, a cache keyed by url has a
     // greater chance of a cache hit.
-    static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
+    static GENERAL_STATUS_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, ()>>
+    > = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
-    static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
-    static REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
+    static TIMESTAMP_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, SystemTime>>
+    > = RefCell::new(HashMap::new());
+    static REPOSITORY_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, PathBuf>>
+    > = RefCell::new(HashMap::new());
 }
 
 static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
@@ -231,9 +247,7 @@ static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
 pub fn run() -> Result<()> {
     env_logger::init();
 
-    let Cargo {
-        subcmd: CargoSubCommand::Unmaintained(opts),
-    } = Cargo::parse_from(args());
+    let Cargo { subcmd: CargoSubCommand::Unmaintained(opts) } = Cargo::parse_from(args());
 
     opts::init(opts);
 
@@ -269,26 +283,23 @@ fn unmaintained() -> Result<bool> {
 
     let packages = packages(&metadata)?;
 
-    eprintln!(
-        "Scanning {} packages and their dependencies{}",
-        packages.len(),
-        if opts::get().verbose {
-            ""
-        } else {
-            " (pass --verbose for more information)"
-        }
-    );
+    eprintln!("Scanning {} packages and their dependencies{}", packages.len(), if
+        opts::get().verbose
+    {
+        ""
+    } else {
+        " (pass --verbose for more information)"
+    });
 
     if std::io::stderr().is_terminal() && !opts::get().verbose {
-        PROGRESS
-            .with_borrow_mut(|progress| *progress = Some(progress::Progress::new(packages.len())));
+        PROGRESS.with_borrow_mut(|progress| {
+            *progress = Some(progress::Progress::new(packages.len()));
+        });
     }
 
     for pkg in packages {
         PROGRESS.with_borrow_mut(|progress| {
-            progress
-                .as_mut()
-                .map_or(Ok(()), |progress| progress.advance(&pkg.name))
+            progress.as_mut().map_or(Ok(()), |progress| progress.advance(&pkg.name))
         })?;
 
         if let Some(mut unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
@@ -307,8 +318,9 @@ fn unmaintained() -> Result<bool> {
         }
     }
 
-    PROGRESS
-        .with_borrow_mut(|progress| progress.as_mut().map_or(Ok(()), progress::Progress::finish))?;
+    PROGRESS.with_borrow_mut(|progress|
+        progress.as_mut().map_or(Ok(()), progress::Progress::finish)
+    )?;
 
     if opts::get().json {
         unmaintained_pkgs.sort_by_key(|unmaintained| &unmaintained.pkg.id);
@@ -351,7 +363,8 @@ fn packages(metadata: &Metadata) -> Result<Vec<&Package>> {
         if !metadata.packages.iter().any(|pkg| pkg.name == *name) {
             warn!(
                 "workspace metadata says to ignore `{}`, but workspace does not depend upon `{}`",
-                name, name
+                name,
+                name
             );
         }
     }
@@ -377,7 +390,7 @@ fn ignored_packages(metadata: &Metadata) -> Result<HashSet<String>> {
 
 fn filter_packages<'a>(
     metadata: &'a Metadata,
-    ignored_packages: &HashSet<String>,
+    ignored_packages: &HashSet<String>
 ) -> Result<Vec<&'a Package>> {
     let mut packages = Vec::new();
 
@@ -398,10 +411,7 @@ fn filter_packages<'a>(
         let version = metadata_latest_version_map
             .get(&pkg.name)
             .unwrap_or_else(|| {
-                panic!(
-                    "`metadata_latest_version_map` does not contain {}",
-                    pkg.name
-                )
+                panic!("`metadata_latest_version_map` does not contain {}", pkg.name)
             });
 
         if pkg.version != *version {
@@ -447,11 +457,7 @@ fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Ver
 }
 
 fn newer_version_is_available(pkg: &Package) -> Result<bool> {
-    if pkg
-        .source
-        .as_ref()
-        .is_none_or(|source| !source.is_crates_io())
-    {
+    if pkg.source.as_ref().is_none_or(|source| !source.is_crates_io()) {
         return Ok(false);
     }
 
@@ -466,8 +472,7 @@ fn latest_version_is_unmaintained(name: &str) -> Result<bool> {
     let metadata = MetadataCommand::new().current_dir(tempdir.path()).exec()?;
 
     #[allow(clippy::panic)]
-    let pkg = metadata
-        .packages
+    let pkg = metadata.packages
         .iter()
         .find(|pkg| name == pkg.name)
         .unwrap_or_else(|| panic!("failed to find package `{name}`"));
@@ -479,7 +484,7 @@ fn latest_version_is_unmaintained(name: &str) -> Result<bool> {
 
 fn is_unmaintained_package<'a>(
     metadata: &'a Metadata,
-    pkg: &'a Package,
+    pkg: &'a Package
 ) -> Result<Option<UnmaintainedPkg<'a>>> {
     if let Some(url_string) = &pkg.repository {
         let can_use_github_api =
@@ -490,12 +495,14 @@ fn is_unmaintained_package<'a>(
         if can_use_github_api {
             let repo_status = general_status(&pkg.name, url)?;
             if repo_status.is_failure() {
-                return Ok(Some(UnmaintainedPkg {
-                    pkg,
-                    repo_age: repo_status.map_failure(),
-                    newer_version_is_available: false,
-                    outdated_deps: Vec::new(),
-                }));
+                return Ok(
+                    Some(UnmaintainedPkg {
+                        pkg,
+                        repo_age: repo_status.map_failure(),
+                        newer_version_is_available: false,
+                        outdated_deps: Vec::new(),
+                    })
+                );
             }
         }
 
@@ -505,12 +512,14 @@ fn is_unmaintained_package<'a>(
             if matches!(repo_status, RepoStatus::Uncloneable(_)) && curl::is_mercurial_repo(url)? {
                 return Ok(None);
             }
-            return Ok(Some(UnmaintainedPkg {
-                pkg,
-                repo_age: repo_status.map_failure(),
-                newer_version_is_available: false,
-                outdated_deps: Vec::new(),
-            }));
+            return Ok(
+                Some(UnmaintainedPkg {
+                    pkg,
+                    repo_age: repo_status.map_failure(),
+                    newer_version_is_available: false,
+                    outdated_deps: Vec::new(),
+                })
+            );
         }
     }
 
@@ -522,19 +531,18 @@ fn is_unmaintained_package<'a>(
 
     let repo_age = latest_commit_age(pkg)?;
 
-    if repo_age
-        .as_success()
-        .is_some_and(|(_, &age)| age < opts::get().max_age * SECS_PER_DAY)
-    {
+    if repo_age.as_success().is_some_and(|(_, &age)| age < opts::get().max_age * SECS_PER_DAY) {
         return Ok(None);
     }
 
-    Ok(Some(UnmaintainedPkg {
-        pkg,
-        repo_age,
-        newer_version_is_available: false,
-        outdated_deps,
-    }))
+    Ok(
+        Some(UnmaintainedPkg {
+            pkg,
+            repo_age,
+            newer_version_is_available: false,
+            outdated_deps,
+        })
+    )
 }
 
 fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
@@ -543,8 +551,9 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
             return Ok(value);
         }
         let to_string: &dyn Fn(&RepoStatus<'static, ()>) -> String;
-        let (use_github_api, what, how) = if TOKEN_FOUND.load(Ordering::SeqCst)
-            && url.as_str().starts_with("https://github.com/")
+        let (use_github_api, what, how) = if
+            TOKEN_FOUND.load(Ordering::SeqCst) &&
+            url.as_str().starts_with("https://github.com/")
         {
             to_string = &RepoStatus::to_archival_status_string;
             (true, "archival status", "GitHub API")
@@ -554,16 +563,18 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
         };
         verbose::wrap!(
             || {
-                let repo_status = if use_github_api {
-                    Github::archival_status(url)
-                } else {
-                    curl::existence(url)
-                }
-                .unwrap_or_else(|error| {
-                    warn!("failed to determine `{}` {}: {}", name, what, error);
-                    RepoStatus::Success(url, ())
-                })
-                .leak_url();
+                let repo_status = (
+                    if use_github_api {
+                        Github::archival_status(url)
+                    } else {
+                        curl::existence(url)
+                    }
+                )
+                    .unwrap_or_else(|error| {
+                        warn!("failed to determine `{}` {}: {}", name, what, error);
+                        RepoStatus::Success(url, ())
+                    })
+                    .leak_url();
                 general_status_cache.insert(url.leak(), repo_status);
                 Ok(repo_status)
             },
@@ -606,18 +617,22 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
             let versions = versions(&dep_pkg.name)?;
             // smoelius: Require at least one incompatible version of the dependency that is more
             // than `max_age` days old.
-            if versions
-                .iter()
-                .try_fold(false, |init, version| -> Result<_> {
-                    if init {
-                        return Ok(true);
+            if
+                versions.iter().try_fold(
+                    false,
+                    |init, version| -> Result<_> {
+                        if init {
+                            return Ok(true);
+                        }
+                        let duration = SystemTime::now().duration_since(version.created_at.into())?;
+                        let version_num = Version::parse(&version.num)?;
+                        Ok(
+                            duration.as_secs() >= opts::get().max_age * SECS_PER_DAY &&
+                                dep_pkg.version <= version_num &&
+                                !dep.req.matches(&version_num)
+                        )
                     }
-                    let duration = SystemTime::now().duration_since(version.created_at.into())?;
-                    let version_num = Version::parse(&version.num)?;
-                    Ok(duration.as_secs() >= opts::get().max_age * SECS_PER_DAY
-                        && dep_pkg.version <= version_num
-                        && !dep.req.matches(&version_num))
-                })?
+                )?
             {
                 deps.push(OutdatedDep {
                     dep,
@@ -639,12 +654,9 @@ fn published(pkg: &Package) -> bool {
 
 fn find_packages<'a>(
     metadata: &'a Metadata,
-    dep_req: DepReq<'a>,
+    dep_req: DepReq<'a>
 ) -> impl Iterator<Item = &'a Package> {
-    metadata
-        .packages
-        .iter()
-        .filter(move |pkg| dep_req.matches(pkg))
+    metadata.packages.iter().filter(move |pkg| dep_req.matches(pkg))
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
@@ -658,9 +670,7 @@ fn latest_version(name: &str) -> Result<Version> {
                 let krate = INDEX.with(|index| {
                     let _ = LazyLock::force(index);
                     let _lock = lock_index()?;
-                    index
-                        .crate_(name)
-                        .ok_or_else(|| anyhow!("failed to find `{}` in index", name))
+                    index.crate_(name).ok_or_else(|| anyhow!("failed to find `{}` in index", name))
                 })?;
                 let latest_version_index = krate
                     .highest_normal_version()
@@ -671,20 +681,22 @@ fn latest_version(name: &str) -> Result<Version> {
             },
             ToString::to_string,
             "latest version of `{}` using crates.io index",
-            name,
+            name
         )
     })
 }
 
 fn versions(name: &str) -> Result<Vec<crates_io_api::Version>> {
-    on_disk_cache::with_cache(|cache| -> Result<_> {
-        verbose::wrap!(
-            || { cache.fetch_versions(name) },
-            |versions: &[crates_io_api::Version]| format!("{} versions", versions.len()),
-            "versions of `{}` using crates.io API",
-            name
-        )
-    })
+    on_disk_cache::with_cache(
+        |cache| -> Result<_> {
+            verbose::wrap!(
+                || { cache.fetch_versions(name) },
+                |versions: &[crates_io_api::Version]| format!("{} versions", versions.len()),
+                "versions of `{}` using crates.io API",
+                name
+            )
+        }
+    )
 }
 
 fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
@@ -752,12 +764,8 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     };
 
     let mut command = Command::new("git");
-    command
-        .args(["log", "-1", "--pretty=format:%ct"])
-        .current_dir(repo_dir);
-    let output = command
-        .output()
-        .with_context(|| format!("failed to run command: {command:?}"))?;
+    command.args(["log", "-1", "--pretty=format:%ct"]).current_dir(repo_dir);
+    let output = command.output().with_context(|| format!("failed to run command: {command:?}"))?;
     ensure!(output.status.success(), "command failed: {command:?}");
 
     let stdout = std::str::from_utf8(&output.stdout)?;
@@ -770,63 +778,72 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 #[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
 fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
-    let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
-        on_disk_cache::with_cache(|cache| -> Result<_> {
-            // smoelius: Check all urls associated with the package.
-            for url in urls(pkg) {
-                if let Some(repo_status) = repository_cache.get(&url) {
-                    return Ok(repo_status.clone());
-                }
-            }
-            // smoelius: To make verbose printing easier, "membership" is printed regardless of the
-            // check's purpose, and the `Purpose` type was removed.
-            /* let what = match purpose {
+    let repo_status = REPOSITORY_CACHE.with_borrow_mut(
+        |repository_cache| -> Result<_> {
+            on_disk_cache::with_cache(
+                |cache| -> Result<_> {
+                    // smoelius: Check all urls associated with the package.
+                    for url in urls(pkg) {
+                        if let Some(repo_status) = repository_cache.get(&url) {
+                            return Ok(repo_status.clone());
+                        }
+                    }
+                    // smoelius: To make verbose printing easier, "membership" is printed regardless of the
+                    // check's purpose, and the `Purpose` type was removed.
+                    /* let what = match purpose {
                 Purpose::Membership => "membership",
                 Purpose::Timestamp => "timestamp",
             }; */
-            verbose::wrap!(
-                || {
-                    let url_and_dir = cache.clone_repository(pkg);
-                    match url_and_dir {
-                        Ok((url_string, repo_dir)) => {
-                            // smoelius: Note the use of `leak` in the next line. But the url is
-                            // acting as a key in a global map, so it is not so bad.
-                            let url = Url::from(url_string.as_str()).leak();
-                            repository_cache
-                                .insert(url, RepoStatus::Success(url, repo_dir.clone()).leak_url());
-                            Ok(RepoStatus::Success(url, repo_dir))
-                        }
-                        Err(error) => {
-                            let repo_status = if let Some(url_string) = &pkg.repository {
-                                let url = url_string.as_str().into();
-                                // smoelius: If cloning failed because the repository does not
-                                // exist, adjust the repo status.
-                                let existence = general_status(&pkg.name, url)?;
-                                let repo_status = if existence.is_failure() {
-                                    existence.map_failure()
-                                } else {
-                                    RepoStatus::Uncloneable(url)
-                                };
-                                warn!("failed to clone `{}`: {}", url_string, error);
-                                repo_status
-                            } else {
-                                RepoStatus::Unnamed
-                            };
-                            // smoelius: In the event of failure, set all urls associated with
-                            // the repository.
-                            for url in urls(pkg) {
-                                repository_cache.insert(url.leak(), repo_status.clone().leak_url());
+                    verbose::wrap!(
+                        || {
+                            let url_and_dir = cache.clone_repository(pkg);
+                            match url_and_dir {
+                                Ok((url_string, repo_dir)) => {
+                                    // smoelius: Note the use of `leak` in the next line. But the url is
+                                    // acting as a key in a global map, so it is not so bad.
+                                    let url = Url::from(url_string.as_str()).leak();
+                                    repository_cache.insert(
+                                        url,
+                                        RepoStatus::Success(url, repo_dir.clone()).leak_url()
+                                    );
+                                    Ok(RepoStatus::Success(url, repo_dir))
+                                }
+                                Err(error) => {
+                                    let repo_status = if let Some(url_string) = &pkg.repository {
+                                        let url = url_string.as_str().into();
+                                        // smoelius: If cloning failed because the repository does not
+                                        // exist, adjust the repo status.
+                                        let existence = general_status(&pkg.name, url)?;
+                                        let repo_status = if existence.is_failure() {
+                                            existence.map_failure()
+                                        } else {
+                                            RepoStatus::Uncloneable(url)
+                                        };
+                                        warn!("failed to clone `{}`: {}", url_string, error);
+                                        repo_status
+                                    } else {
+                                        RepoStatus::Unnamed
+                                    };
+                                    // smoelius: In the event of failure, set all urls associated with
+                                    // the repository.
+                                    for url in urls(pkg) {
+                                        repository_cache.insert(
+                                            url.leak(),
+                                            repo_status.clone().leak_url()
+                                        );
+                                    }
+                                    Ok(repo_status)
+                                }
                             }
-                            Ok(repo_status)
-                        }
-                    }
-                },
-                RepoStatus::to_membership_string,
-                "membership of `{}` using shallow clone",
-                pkg.name
+                        },
+                        RepoStatus::to_membership_string,
+                        "membership of `{}` using shallow clone",
+                        pkg.name
+                    )
+                }
             )
-        })
-    })?;
+        }
+    )?;
 
     let Some((url, repo_dir)) = repo_status.as_success() else {
         return Ok(repo_status);
@@ -848,25 +865,22 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     command.args(["status", "--porcelain"]);
     command.current_dir(repo_dir);
     command.stdout(Stdio::piped());
-    let mut child = command
-        .spawn()
-        .with_context(|| format!("command failed: {command:?}"))?;
+    let mut child = command.spawn().with_context(|| format!("command failed: {command:?}"))?;
     #[allow(clippy::unwrap_used)]
     let stdout = child.stdout.take().unwrap();
     let reader = std::io::BufReader::new(stdout);
     for result in reader.lines() {
         let line = result.with_context(|| format!("failed to read `{}`", repo_dir.display()))?;
         #[allow(clippy::panic)]
-        let path = line.strip_prefix(LINE_PREFIX).map_or_else(
-            || panic!("cache is corrupt at `{}`", repo_dir.display()),
-            Path::new,
-        );
+        let path = line
+            .strip_prefix(LINE_PREFIX)
+            .map_or_else(|| panic!("cache is corrupt at `{}`", repo_dir.display()), Path::new);
         if path.file_name() != Some(OsStr::new("Cargo.toml")) {
             continue;
         }
         let contents = show(repo_dir, path)?;
-        let Ok(table) = contents.parse::<Table>()
-        /* smoelius: This "failed to parse" warning is a little too noisy.
+        let Ok(table) =
+            contents.parse::<Table>() else /* smoelius: This "failed to parse" warning is a little too noisy.
         .map_err(|error| {
             warn!(
                 "failed to parse {:?}: {}",
@@ -874,16 +888,23 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
                 error.to_string().trim_end()
             );
         }) */
-        else {
+        {
             continue;
         };
-        if table
-            .get("package")
-            .and_then(Value::as_table)
-            .and_then(|table| table.get("name"))
-            .and_then(Value::as_str)
-            == Some(&pkg.name)
+
+        // First check exact name match (existing behavior)
+        if
+            table
+                .get("package")
+                .and_then(Value::as_table)
+                .and_then(|table| table.get("name"))
+                .and_then(Value::as_str) == Some(&pkg.name)
         {
+            return Ok(true);
+        }
+
+        // If name doesn't match, check if it might be a renamed package
+        if is_same_package_except_name(pkg, &table) {
             return Ok(true);
         }
     }
@@ -891,22 +912,105 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     Ok(false)
 }
 
+/// Checks if a package is the same as one defined in a Cargo.toml table, except for its name.
+/// This helps identify renamed packages.
+fn is_same_package_except_name(pkg: &Package, cargo_toml: &Table) -> bool {
+    let Some(pkg_table) = cargo_toml.get("package").and_then(Value::as_table) else {
+        return false;
+    };
+
+    // Check repository URL (if present in both)
+    if
+        let (Some(original_repo), Some(candidate_repo)) = (
+            &pkg.repository,
+            pkg_table.get("repository").and_then(Value::as_str),
+        )
+    {
+        if original_repo == candidate_repo {
+            return true;
+        }
+    }
+
+    // Check other invariant fields
+    // 1. Check authors (if present in both)
+    if !pkg.authors.is_empty() {
+        if let Some(candidate_authors) = pkg_table.get("authors").and_then(Value::as_array) {
+            let candidate_authors: Vec<&str> = candidate_authors
+                .iter()
+                .filter_map(|a| a.as_str())
+                .collect();
+
+            if
+                !candidate_authors.is_empty() &&
+                have_common_author(&pkg.authors, &candidate_authors)
+            {
+                return true;
+            }
+        }
+    }
+
+    // 2. Check version (exact match)
+    if let Some(version_str) = pkg_table.get("version").and_then(Value::as_str) {
+        if let Ok(version) = Version::from_str(version_str) {
+            if version == pkg.version {
+                return true;
+            }
+        }
+    }
+
+    // 3. Check description similarity (if present in both)
+    if
+        let (Some(original_desc), Some(candidate_desc)) = (
+            &pkg.description,
+            pkg_table.get("description").and_then(Value::as_str),
+        )
+    {
+        if high_similarity(original_desc, candidate_desc) {
+            return true;
+        }
+    }
+
+    false
+}
+
+/// Checks if two lists of authors have at least one author in common.
+fn have_common_author(authors1: &[String], authors2: &[&str]) -> bool {
+    for author1 in authors1 {
+        if authors2.contains(&author1.as_str()) {
+            return true;
+        }
+    }
+    false
+}
+
+/// Checks if two strings have high textual similarity.
+/// Returns true if they share a significant portion of words.
+fn high_similarity(s1: &str, s2: &str) -> bool {
+    let s1_words: HashSet<&str> = s1.split_whitespace().collect();
+    let s2_words: HashSet<&str> = s2.split_whitespace().collect();
+
+    if s1_words.is_empty() || s2_words.is_empty() {
+        return false;
+    }
+
+    let common_words = s1_words.intersection(&s2_words).count();
+    let min_words = s1_words.len().min(s2_words.len());
+
+    // Avoid precision loss by doing integer division first
+    let similarity = if min_words > 0 { (common_words * SIMILARITY_SCALE) / min_words } else { 0 };
+
+    similarity > SIMILARITY_THRESHOLD
+}
+
 fn show(repo_dir: &Path, path: &Path) -> Result<String> {
     let mut command = Command::new("git");
     command.args(["show", &format!("HEAD:{}", path.display())]);
     command.current_dir(repo_dir);
     command.stdout(Stdio::piped());
-    let output = command
-        .output()
-        .with_context(|| format!("failed to run command: {command:?}"))?;
+    let output = command.output().with_context(|| format!("failed to run command: {command:?}"))?;
     if !output.status.success() {
         let error = String::from_utf8(output.stderr)?;
-        bail!(
-            "failed to read `{}` in `{}`: {}",
-            path.display(),
-            repo_dir.display(),
-            error
-        );
+        bail!("failed to read `{}` in `{}`: {}", path.display(), repo_dir.display(), error);
     }
     String::from_utf8(output.stdout).map_err(Into::into)
 }
@@ -942,12 +1046,8 @@ fn display_unmaintained_pkgs(unmaintained_pkgs: &[UnmaintainedPkg]) -> Result<()
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> {
     use std::io::Write;
     let mut stdout = StandardStream::stdout(opts::get().color);
-    let UnmaintainedPkg {
-        pkg,
-        repo_age,
-        newer_version_is_available,
-        outdated_deps,
-    } = unmaintained_pkg;
+    let UnmaintainedPkg { pkg, repo_age, newer_version_is_available, outdated_deps } =
+        unmaintained_pkg;
     stdout.set_color(ColorSpec::new().set_fg(repo_age.color()))?;
     write!(stdout, "{}", pkg.name)?;
     stdout.set_color(ColorSpec::new().set_fg(None))?;
@@ -958,15 +1058,13 @@ fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> 
         write!(stdout, "*")?;
     }
     writeln!(stdout)?;
-    for OutdatedDep {
-        dep,
-        version_used,
-        version_latest,
-    } in outdated_deps
-    {
+    for OutdatedDep { dep, version_used, version_latest } in outdated_deps {
         println!(
             "    {} (requirement: {}, version used: {}, latest: {})",
-            dep.name, dep.req, version_used, version_latest
+            dep.name,
+            dep.req,
+            version_used,
+            version_latest
         );
     }
     if opts::get().tree {
@@ -982,14 +1080,14 @@ fn display_path(name: &str, version: &Version) -> Result<bool> {
     let spec = format!("{name}@{version}");
     let mut command = Command::new("cargo");
     command.args(["tree", "--workspace", "--target=all", "--invert", &spec]);
-    let output = command
-        .output()
-        .with_context(|| format!("failed to run command: {command:?}"))?;
+    let output = command.output().with_context(|| format!("failed to run command: {command:?}"))?;
     // smoelius: Hack. It appears that `cargo tree` does not print proc-macros used by proc-macros.
     // For now, check whether stdout begins as expected. If not, ignore it and ultimately emit a
     // warning.
     let stdout = String::from_utf8(output.stdout)?;
-    if stdout.split_ascii_whitespace().take(2).collect::<Vec<_>>() == [name, &format!("v{version}")]
+    if
+        stdout.split_ascii_whitespace().take(2).collect::<Vec<_>>() ==
+        [name, &format!("v{version}")]
     {
         print!("{stdout}");
         Ok(false)
@@ -1006,7 +1104,8 @@ static INDEX_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
 
 #[cfg(feature = "lock-index")]
 fn lock_index() -> Result<File> {
-    flock::lock_path(&INDEX_PATH)
+    flock
+        ::lock_path(&INDEX_PATH)
         .with_context(|| format!("failed to lock `{}`", INDEX_PATH.display()))
 }
 
@@ -1028,7 +1127,8 @@ mod tests {
 
     #[test]
     fn usage() {
-        std::process::Command::cargo_bin("cargo-unmaintained")
+        std::process::Command
+            ::cargo_bin("cargo-unmaintained")
             .unwrap()
             .args(["unmaintained", "--help"])
             .assert()
@@ -1038,15 +1138,33 @@ mod tests {
 
     #[test]
     fn version() {
-        std::process::Command::cargo_bin("cargo-unmaintained")
+        std::process::Command
+            ::cargo_bin("cargo-unmaintained")
             .unwrap()
             .args(["unmaintained", "--version"])
             .assert()
             .success()
-            .stdout(format!(
-                "cargo-unmaintained {}\n",
-                env!("CARGO_PKG_VERSION")
-            ));
+            .stdout(format!("cargo-unmaintained {}\n", env!("CARGO_PKG_VERSION")));
+    }
+
+    #[test]
+    fn test_similarity_functions() {
+        // Test have_common_author
+        let authors1 = vec![
+            "Author One <one@example.com>".to_string(),
+            "Author Two <two@example.com>".to_string()
+        ];
+        let authors2 = vec!["Author One <one@example.com>", "Author Three <three@example.com>"];
+
+        assert!(have_common_author(&authors1, &authors2));
+
+        let authors3 = vec!["Author Four <four@example.com>"];
+        assert!(!have_common_author(&authors1, &authors3));
+
+        // Test high_similarity
+        assert!(high_similarity("This is a test description", "This is a test summary"));
+        assert!(high_similarity("Package for parsing XML", "XML parsing package"));
+        assert!(!high_similarity("Completely different text", "Not related at all"));
     }
 
     #[test]
@@ -1058,7 +1176,7 @@ mod tests {
             RepoStatus::Success("d".into(), 1),
             RepoStatus::Unassociated("c".into()),
             RepoStatus::Nonexistent("b".into()),
-            RepoStatus::Archived("a".into()),
+            RepoStatus::Archived("a".into())
         ];
         let mut xs = ys.clone();
         xs.sort_by_key(|repo_status| repo_status.erase_url());
