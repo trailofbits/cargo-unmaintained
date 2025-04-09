@@ -1,4 +1,4 @@
-use anyhow::{ Context, Result };
+use anyhow::{Context, Result};
 use assert_cmd::prelude::*;
 use std::path::Path;
 use std::process::Command;
@@ -17,14 +17,20 @@ fn run_test_on_fixture(fixture_path: &str) -> Result<String> {
 #[test]
 fn renamed_package_not_flagged() {
     // Skip test if the fixtures directory doesn't exist
-    if !Path::new("fixtures").try_exists().expect("failed to check if fixtures directory exists") {
+    if !Path::new("fixtures")
+        .try_exists()
+        .expect("failed to check if fixtures directory exists")
+    {
         eprintln!("Skipping test: fixtures directory not found");
         return;
     }
 
     // Make sure our fixture directories exist
     let fixture_path = "fixtures/icu-rename/after";
-    if !Path::new(fixture_path).try_exists().expect("failed to check if fixture path exists") {
+    if !Path::new(fixture_path)
+        .try_exists()
+        .expect("failed to check if fixture path exists")
+    {
         eprintln!("Skipping test: {fixture_path} not found");
         return;
     }
