@@ -52,6 +52,12 @@ use url::{Url, urls};
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
+/// Percentage multiplier for similarity calculation
+const SIMILARITY_SCALE: usize = 100;
+
+/// Minimum similarity threshold (30%)
+const SIMILARITY_THRESHOLD: usize = 30;
+
 #[derive(Debug, Parser)]
 #[clap(bin_name = "cargo", display_name = "cargo")]
 struct Cargo {
@@ -192,7 +198,10 @@ impl<'a> From<&'a Dependency> for DepReq<'a> {
 
 #[macro_export]
 macro_rules! warn {
-    ($fmt:expr, $($arg:tt)*) => {
+    (
+        $fmt:expr,
+        $($arg:tt)*
+    ) => {
         if $crate::opts::get().no_warnings {
             log::debug!($fmt, $($arg)*);
         } else {
@@ -220,10 +229,16 @@ thread_local! {
     // smoelius: A reason for having the former is the following. Multiple packages map to the same
     // url, and multiple urls map to the same shortened url. Thus, a cache keyed by url has a
     // greater chance of a cache hit.
-    static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
+    static GENERAL_STATUS_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, ()>>
+    > = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
-    static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
-    static REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
+    static TIMESTAMP_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, SystemTime>>
+    > = RefCell::new(HashMap::new());
+    static REPOSITORY_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, PathBuf>>
+    > = RefCell::new(HashMap::new());
 }
 
 static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
@@ -280,8 +295,9 @@ fn unmaintained() -> Result<bool> {
     );
 
     if std::io::stderr().is_terminal() && !opts::get().verbose {
-        PROGRESS
-            .with_borrow_mut(|progress| *progress = Some(progress::Progress::new(packages.len())));
+        PROGRESS.with_borrow_mut(|progress| {
+            *progress = Some(progress::Progress::new(packages.len()));
+        });
     }
 
     for pkg in packages {
@@ -554,11 +570,11 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
         };
         verbose::wrap!(
             || {
-                let repo_status = if use_github_api {
+                let repo_status = (if use_github_api {
                     Github::archival_status(url)
                 } else {
                     curl::existence(url)
-                }
+                })
                 .unwrap_or_else(|error| {
                     warn!("failed to determine `{}` {}: {}", name, what, error);
                     RepoStatus::Success(url, ())
@@ -671,7 +687,7 @@ fn latest_version(name: &str) -> Result<Version> {
             },
             ToString::to_string,
             "latest version of `{}` using crates.io index",
-            name,
+            name
         )
     })
 }
@@ -865,7 +881,7 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
             continue;
         }
         let contents = show(repo_dir, path)?;
-        let Ok(table) = contents.parse::<Table>()
+        let Ok(table) = contents.parse::<Table>() else
         /* smoelius: This "failed to parse" warning is a little too noisy.
         .map_err(|error| {
             warn!(
@@ -874,9 +890,11 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
                 error.to_string().trim_end()
             );
         }) */
-        else {
+        {
             continue;
         };
+
+        // First check exact name match (existing behavior)
         if table
             .get("package")
             .and_then(Value::as_table)
@@ -886,9 +904,102 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
         {
             return Ok(true);
         }
+
+        // If name doesn't match, check if it might be a renamed package
+        if is_same_package_except_name(pkg, &table) {
+            return Ok(true);
+        }
     }
 
     Ok(false)
+}
+
+/// Checks if a package is the same as one defined in a Cargo.toml table, except for its name.
+/// This helps identify renamed packages.
+fn is_same_package_except_name(pkg: &Package, cargo_toml: &Table) -> bool {
+    let Some(pkg_table) = cargo_toml.get("package").and_then(Value::as_table) else {
+        return false;
+    };
+
+    // Check repository URL (if present in both)
+    if let (Some(original_repo), Some(candidate_repo)) = (
+        &pkg.repository,
+        pkg_table.get("repository").and_then(Value::as_str),
+    ) {
+        if original_repo == candidate_repo {
+            return true;
+        }
+    }
+
+    // Check other invariant fields
+    // 1. Check authors (if present in both)
+    if !pkg.authors.is_empty() {
+        if let Some(candidate_authors) = pkg_table.get("authors").and_then(Value::as_array) {
+            let candidate_authors: Vec<&str> = candidate_authors
+                .iter()
+                .filter_map(|a| a.as_str())
+                .collect();
+
+            if !candidate_authors.is_empty() && have_common_author(&pkg.authors, &candidate_authors)
+            {
+                return true;
+            }
+        }
+    }
+
+    // 2. Check version (exact match)
+    if let Some(version_str) = pkg_table.get("version").and_then(Value::as_str) {
+        if let Ok(version) = Version::from_str(version_str) {
+            if version == pkg.version {
+                return true;
+            }
+        }
+    }
+
+    // 3. Check description similarity (if present in both)
+    if let (Some(original_desc), Some(candidate_desc)) = (
+        &pkg.description,
+        pkg_table.get("description").and_then(Value::as_str),
+    ) {
+        if high_similarity(original_desc, candidate_desc) {
+            return true;
+        }
+    }
+
+    false
+}
+
+/// Checks if two lists of authors have at least one author in common.
+fn have_common_author(authors1: &[String], authors2: &[&str]) -> bool {
+    for author1 in authors1 {
+        if authors2.contains(&author1.as_str()) {
+            return true;
+        }
+    }
+    false
+}
+
+/// Checks if two strings have high textual similarity.
+/// Returns true if they share a significant portion of words.
+fn high_similarity(s1: &str, s2: &str) -> bool {
+    let s1_words: HashSet<&str> = s1.split_whitespace().collect();
+    let s2_words: HashSet<&str> = s2.split_whitespace().collect();
+
+    if s1_words.is_empty() || s2_words.is_empty() {
+        return false;
+    }
+
+    let common_words = s1_words.intersection(&s2_words).count();
+    let min_words = s1_words.len().min(s2_words.len());
+
+    // Avoid precision loss by doing integer division first
+    let similarity = if min_words > 0 {
+        (common_words * SIMILARITY_SCALE) / min_words
+    } else {
+        0
+    };
+
+    similarity > SIMILARITY_THRESHOLD
 }
 
 fn show(repo_dir: &Path, path: &Path) -> Result<String> {
@@ -1047,6 +1158,38 @@ mod tests {
                 "cargo-unmaintained {}\n",
                 env!("CARGO_PKG_VERSION")
             ));
+    }
+
+    #[test]
+    fn test_similarity_functions() {
+        // Test have_common_author
+        let authors1 = vec![
+            "Author One <one@example.com>".to_string(),
+            "Author Two <two@example.com>".to_string(),
+        ];
+        let authors2 = vec![
+            "Author One <one@example.com>",
+            "Author Three <three@example.com>",
+        ];
+
+        assert!(have_common_author(&authors1, &authors2));
+
+        let authors3 = vec!["Author Four <four@example.com>"];
+        assert!(!have_common_author(&authors1, &authors3));
+
+        // Test high_similarity
+        assert!(high_similarity(
+            "This is a test description",
+            "This is a test summary"
+        ));
+        assert!(high_similarity(
+            "Package for parsing XML",
+            "XML parsing package"
+        ));
+        assert!(!high_similarity(
+            "Completely different text",
+            "Not related at all"
+        ));
     }
 
     #[test]
