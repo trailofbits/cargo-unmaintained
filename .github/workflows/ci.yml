@@ -68,6 +68,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - uses: actions/cache@v4
         with:
@@ -108,7 +110,9 @@ jobs:
         run: |
           EI0='-p ei --test empty'
           EI1='-p ei --test empty'
-          if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]]; then
+          if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]] ||
+            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'ei' >/dev/null
+          then
             EI0="$EI0 --test dogfood --test rustsec_advisories"
             EI1="$EI1 --test rustsec_issues --test snapbox_real_github"
           fi
