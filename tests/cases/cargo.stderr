@@ -1,5 +1,4 @@
 Scanning 341 packages and their dependencies (pass --verbose for more information)
-warning: failed to determine `oorandom` existence: unexpected response code: 502
 warning: failed to clone `https://sr.ht/~icefox/oorandom/`: [
     "fatal: remote error: /n/nYou have tried to clone a project from sourcehut, but you probably meant to/nclone a specific git repository for this project instead. A single project on/nsourcehut often has more than one git repository./n/n/n/nTo browse all of the available repositories for this project, visit this URL:/n/n  https://sr.ht/~icefox/oorandom/sources/n",
 ]
