@@ -208,7 +208,11 @@ ignoring `https://gitlab.com/antonok/enum_dispatch/-/merge_requests/44` from `ht
 paste...found
 json5...not found
 json5-rs...not found
-not found (134)
+daemonize...not found
+gitpatch...not found
+patch...not found
+patch-rs...found
+not found (137)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -343,7 +347,10 @@ not found (134)
     rust-custom-derive       https://github.com/rustsec/advisory-db/issues/2199
     json5                    https://github.com/rustsec/advisory-db/issues/2237
     json5-rs                 https://github.com/rustsec/advisory-db/issues/2237
-found (50)
+    daemonize                https://github.com/rustsec/advisory-db/issues/2279
+    gitpatch                 https://github.com/rustsec/advisory-db/issues/2280
+    patch                    https://github.com/rustsec/advisory-db/issues/2280
+found (51)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -394,3 +401,4 @@ found (50)
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
     custom_derive            https://github.com/rustsec/advisory-db/issues/2199
     paste                    https://github.com/rustsec/advisory-db/issues/2203
+    patch-rs                 https://github.com/rustsec/advisory-db/issues/2280
