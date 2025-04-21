@@ -108,8 +108,8 @@ jobs:
 
       - name: Test
         run: |
-          EI0='-p ei --test empty'
-          EI1='-p ei --test empty'
+          EI0='-p ei --lib'
+          EI1='-p ei --lib'
           if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]] ||
             git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'ei' >/dev/null
           then
