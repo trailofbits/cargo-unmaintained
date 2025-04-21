@@ -6,27 +6,6 @@
     "version": "1.0.2"
   },
   {
-    "name": "group",
-    "outdated_deps": [
-      {
-        "name": "rand",
-        "req": "^0.8",
-        "version_latest": null,
-        "version_used": "0.8.5"
-      },
-      {
-        "name": "rand_core",
-        "req": "^0.6",
-        "version_latest": null,
-        "version_used": "0.6.4"
-      }
-    ],
-    "repo_status": {
-      "Age": null
-    },
-    "version": "0.13.0"
-  },
-  {
     "name": "im-rc",
     "outdated_deps": [
       {
