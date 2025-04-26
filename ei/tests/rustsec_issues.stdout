@@ -210,8 +210,10 @@ json5...not found
 json5-rs...not found
 daemonize...not found
 gitpatch...not found
-patch...not found
+patch...found
 patch-rs...found
+markdown-rs...not found
+ignoring `https://rustsec.org/advisories/RUSTSEC-2022-0044.html` from `https://github.com/rustsec/advisory-db/issues/2288`
 not found (137)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
@@ -349,8 +351,8 @@ not found (137)
     json5-rs                 https://github.com/rustsec/advisory-db/issues/2237
     daemonize                https://github.com/rustsec/advisory-db/issues/2279
     gitpatch                 https://github.com/rustsec/advisory-db/issues/2280
-    patch                    https://github.com/rustsec/advisory-db/issues/2280
-found (51)
+    markdown-rs              https://github.com/rustsec/advisory-db/issues/2288
+found (52)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -401,4 +403,5 @@ found (51)
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
     custom_derive            https://github.com/rustsec/advisory-db/issues/2199
     paste                    https://github.com/rustsec/advisory-db/issues/2203
+    patch                    https://github.com/rustsec/advisory-db/issues/2280
     patch-rs                 https://github.com/rustsec/advisory-db/issues/2280
