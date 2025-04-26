@@ -28,7 +28,7 @@
 
 ## 1.5.1
 
-- Clone but do not checkout repositories. **WARNING: This change causes the cache to be rebuilt.** Prior to this change, `cargo-unmaintained` could not handle repositories containing paths not supported by the host filesystem. This bug was observed on Windows (e.g., NTFS). Thanks to [@elopez](https://github.com/elopez) whose suggestions contributed to the fix. ([4dc9dc7](https://github.com/trailofbits/cargo-unmaintained/commit/4dc9dc708ffc414f253736616005e1b3aa7ee291))
+- Clone but do not checkout repositories. **WARNING: This change causes the cache to be rebuilt.** Prior to this change, `cargo-unmaintained` could not handle repositories containing paths not supported by the host filesystem. This bug was observed on Windows (e.g., NTFS). Thanks to [@elopez](https://github.com/elopez) whose suggestions contributed to the fix. ([6ce1f8d](https://github.com/trailofbits/cargo-unmaintained/commit/6ce1f8de9d09b4d41c714cd78480622da5f5f328))
 - Update list of [known problems](https://github.com/trailofbits/cargo-unmaintained?tab=readme-ov-file#known-problems) in README.md ([#451](https://github.com/trailofbits/cargo-unmaintained/pull/451))
 
 ## 1.5.0
