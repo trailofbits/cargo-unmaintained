@@ -1,4 +1,4 @@
-136 advisories for unmaintained packages
+135 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -144,7 +144,6 @@ static_type_map...found
 double-checked-cell...not found
 r2d2_odbc...found
 odbc...found
-markdown...not found
 interledger-packet...found
 mapr...found
 wee_alloc...found
@@ -262,7 +261,7 @@ not found - leaf (3)
 not found - recently-updated (2)
     atty                  https://rustsec.org/advisories/RUSTSEC-2024-0375.html
     minitrace             https://rustsec.org/advisories/RUSTSEC-2024-0390.html
-not found - other (19)
+not found - other (18)
     serial                https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap               https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype          https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -274,7 +273,6 @@ not found - other (19)
     twoway                https://rustsec.org/advisories/RUSTSEC-2021-0146.html
     encoding              https://rustsec.org/advisories/RUSTSEC-2021-0153.html
     double-checked-cell   https://rustsec.org/advisories/RUSTSEC-2022-0024.html
-    markdown              https://rustsec.org/advisories/RUSTSEC-2022-0044.html
     users                 https://rustsec.org/advisories/RUSTSEC-2023-0040.html
     fehler                https://rustsec.org/advisories/RUSTSEC-2023-0067.html
     cpython               https://rustsec.org/advisories/RUSTSEC-2023-0076.html
@@ -385,9 +383,9 @@ found (101)
     backoff               https://rustsec.org/advisories/RUSTSEC-2025-0012.html
     resolve               https://rustsec.org/advisories/RUSTSEC-2025-0013.html
 ---
-As of 2025-03-13, the RustSec Advisory Database contains 136 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 101 (74%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
-- Of the 35 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+As of 2025-04-26, the RustSec Advisory Database contains 135 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 101 (74%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+- Of the 34 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 11 do not build
   - 3 are existent, unarchived leaves
   - 2 were updated within the past 365 days
-  - 19 were not identified for other reasons
+  - 18 were not identified for other reasons
