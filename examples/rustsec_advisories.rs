@@ -31,8 +31,13 @@ fn main() -> Result<()> {
         database
             .into_iter()
             .filter(|advisory| {
+                // smoelius: `markdown` is an example of an advisory with patched versions:
+                // https://rustsec.org/advisories/RUSTSEC-2022-0044.html
+                // smoelius: `term` is an example of an advisory with unaffected versions:
+                // https://rustsec.org/advisories/RUSTSEC-2018-0015.html
                 advisory.metadata.informational == Some(Informational::Unmaintained)
                     && advisory.metadata.withdrawn.is_none()
+                    && advisory.versions.patched().is_empty()
                     && advisory.versions.unaffected().is_empty()
             })
             .collect::<Vec<_>>()
