@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.1
+
+- The `--purge` option now removes `$HOME/.cache/cargo-unmaintained` rather than `$HOME/.cache/cargo-unmaintained/v2` ([#565](https://github.com/trailofbits/cargo-unmaintained/pull/565))&mdash;thanks [@Stereco-btc](https://github.com/Stereco-btc)
+
 ## 1.8.0
 
 - FEATURE: Add `--purge` option to remove `$HOME/.cache/cargo-unmaintained` ([#551](https://github.com/trailofbits/cargo-unmaintained/pull/551))&mdash;thanks [@fabiocarlos97](https://github.com/fabiocarlos97)
