@@ -87,7 +87,7 @@ mod sys {
                 0,
                 !0,
                 !0,
-                &mut overlapped,
+                &raw mut overlapped,
             );
             if ret == 0 {
                 Err(Error::last_os_error())
