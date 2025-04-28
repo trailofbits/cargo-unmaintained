@@ -1,4 +1,6 @@
 #![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
+#![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
+#![cfg_attr(dylint_lib = "supplementary", allow(nonexistent_path_in_comment))]
 
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::{
