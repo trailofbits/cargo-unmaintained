@@ -768,7 +768,7 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-#[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
+#[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
 fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
     let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
         on_disk_cache::with_cache(|cache| -> Result<_> {

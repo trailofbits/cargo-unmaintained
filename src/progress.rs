@@ -37,7 +37,7 @@ impl Progress {
         Ok(())
     }
 
-    #[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
+    #[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
     pub fn finish(&mut self) -> Result<()> {
         // smoelius: Don't assert here. If --fail-fast was passed, `finish` may be called before all
         // packages have been scanned.

@@ -42,7 +42,7 @@ struct Test {
 }
 
 #[allow(clippy::too_many_lines)]
-#[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
+#[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
 pub fn snapbox(real_github: bool) -> Result<()> {
     // #[cfg(not(feature = "lock-index"))]
     // panic!("the `snapbox` test requires the `lock-index` feature");
