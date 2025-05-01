@@ -52,12 +52,6 @@ use url::{Url, urls};
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
-/// Percentage multiplier for similarity calculation
-const SIMILARITY_SCALE: usize = 100;
-
-/// Minimum similarity threshold (30%)
-const SIMILARITY_THRESHOLD: usize = 30;
-
 #[derive(Debug, Parser)]
 #[clap(bin_name = "cargo", display_name = "cargo")]
 struct Cargo {
@@ -784,7 +778,7 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-#[cfg_attr(dylint_lib = "supplementary", allow(commented_code))]
+#[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
 fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
     let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
         on_disk_cache::with_cache(|cache| -> Result<_> {
@@ -796,10 +790,6 @@ fn clone_repository(pkg: &Package) -> Result<RepoStatus<PathBuf>> {
             }
             // smoelius: To make verbose printing easier, "membership" is printed regardless of the
             // check's purpose, and the `Purpose` type was removed.
-            /* let what = match purpose {
-                Purpose::Membership => "membership",
-                Purpose::Timestamp => "timestamp",
-            }; */
             verbose::wrap!(
                 || {
                     let url_and_dir = cache.clone_repository(pkg);
@@ -914,92 +904,119 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     Ok(false)
 }
 
+// Macro for comparing fields that implement Deserialize, PartialEq, and Default.
+macro_rules! check_field {
+    ($pkg:expr, $pkg_table:expr, $field:ident, $FieldType:ty) => {{
+        let field_name_str = stringify!($field);
+        let original_value: &$FieldType = &$pkg.$field;
+
+        match $pkg_table.get(field_name_str) {
+            Some(value) => {
+                let deserializer = value.clone().into_deserializer();
+                match <$FieldType as serde::Deserialize>::deserialize(deserializer) {
+                    Ok(candidate_value) => {
+                        let typed_candidate: $FieldType = candidate_value;
+                        if original_value != &typed_candidate {
+                            return false;
+                        }
+                    }
+                    Err(e) => {
+                        warn!(
+                            "Failed to deserialize field '{}' for package comparison: {}. \
+                             Skipping check.",
+                            field_name_str, e
+                        );
+                        return false;
+                    }
+                }
+            }
+            None => {
+                let default_value: $FieldType = <$FieldType as Default>::default();
+                if original_value != &default_value {
+                    return false;
+                }
+            }
+        }
+    }};
+}
+
 /// Checks if a package is the same as one defined in a Cargo.toml table, except for its name.
 /// This helps identify renamed packages.
 fn is_same_package_except_name(pkg: &Package, cargo_toml: &Table) -> bool {
+    use cargo_metadata::Edition;
+    use cargo_metadata::semver::Version;
+    use serde::de::IntoDeserializer;
+
     let Some(pkg_table) = cargo_toml.get("package").and_then(Value::as_table) else {
         return false;
     };
 
-    // Check repository URL (if present in both)
-    if let (Some(original_repo), Some(candidate_repo)) = (
-        &pkg.repository,
-        pkg_table.get("repository").and_then(Value::as_str),
-    ) {
-        if original_repo == candidate_repo {
-            return true;
-        }
-    }
-
-    // Check other invariant fields
-    // 1. Check authors (if present in both)
-    if !pkg.authors.is_empty() {
-        if let Some(candidate_authors) = pkg_table.get("authors").and_then(Value::as_array) {
-            let candidate_authors: Vec<&str> = candidate_authors
-                .iter()
-                .filter_map(|a| a.as_str())
-                .collect();
-
-            if !candidate_authors.is_empty() && have_common_author(&pkg.authors, &candidate_authors)
-            {
-                return true;
+    // --- Version Check (Direct) --- (No Default impl)
+    let field_name = "version";
+    match pkg_table.get(field_name) {
+        Some(value) => {
+            let deserializer = value.clone().into_deserializer();
+            match <Version as serde::Deserialize>::deserialize(deserializer) {
+                Ok(candidate_value) => {
+                    if pkg.version != candidate_value {
+                        return false;
+                    }
+                }
+                Err(e) => {
+                    warn!(
+                        "Failed to deserialize field '{}' for package comparison: {}. Skipping \
+                         check.",
+                        field_name, e
+                    );
+                }
             }
         }
+        None => {
+            return false;
+        } // Missing version is a mismatch
     }
 
-    // 2. Check version (exact match)
-    if let Some(version_str) = pkg_table.get("version").and_then(Value::as_str) {
-        if let Ok(version) = Version::from_str(version_str) {
-            if version == pkg.version {
-                return true;
+    // --- Fields checked with macro (Implement Default) ---
+    check_field!(pkg, pkg_table, authors, Vec<String>);
+    check_field!(pkg, pkg_table, description, Option<String>);
+    check_field!(pkg, pkg_table, repository, Option<String>);
+    check_field!(pkg, pkg_table, homepage, Option<String>);
+    check_field!(pkg, pkg_table, documentation, Option<String>);
+    check_field!(pkg, pkg_table, keywords, Vec<String>);
+    check_field!(pkg, pkg_table, categories, Vec<String>);
+    check_field!(pkg, pkg_table, license, Option<String>);
+    check_field!(pkg, pkg_table, edition, Edition);
+    // check_field!(pkg, pkg_table, license_file, Option<String>); // Requires Utf8PathBuf ->
+    // Default? check_field!(pkg, pkg_table, publish); // Type: Option<Vec<String>> or bool?
+
+    // --- Rust Version Check (Direct) --- (Option<Version>, No Default impl for Version)
+    let field_name = "rust_version";
+    match pkg_table.get(field_name) {
+        Some(value) => {
+            let deserializer = value.clone().into_deserializer();
+            match <Option<Version> as serde::Deserialize>::deserialize(deserializer) {
+                Ok(candidate_value) => {
+                    if pkg.rust_version != candidate_value {
+                        return false;
+                    }
+                }
+                Err(e) => {
+                    warn!(
+                        "Failed to deserialize field '{}' for package comparison: {}. Skipping \
+                         check.",
+                        field_name, e
+                    );
+                    return false;
+                }
             }
         }
-    }
-
-    // 3. Check description similarity (if present in both)
-    if let (Some(original_desc), Some(candidate_desc)) = (
-        &pkg.description,
-        pkg_table.get("description").and_then(Value::as_str),
-    ) {
-        if high_similarity(original_desc, candidate_desc) {
-            return true;
+        None => {
+            if pkg.rust_version.is_some() {
+                return false;
+            } // Compare original pkg.rust_version to None
         }
     }
-
-    false
-}
-
-/// Checks if two lists of authors have at least one author in common.
-fn have_common_author(authors1: &[String], authors2: &[&str]) -> bool {
-    for author1 in authors1 {
-        if authors2.contains(&author1.as_str()) {
-            return true;
-        }
-    }
-    false
-}
-
-/// Checks if two strings have high textual similarity.
-/// Returns true if they share a significant portion of words.
-fn high_similarity(s1: &str, s2: &str) -> bool {
-    let s1_words: HashSet<&str> = s1.split_whitespace().collect();
-    let s2_words: HashSet<&str> = s2.split_whitespace().collect();
-
-    if s1_words.is_empty() || s2_words.is_empty() {
-        return false;
-    }
-
-    let common_words = s1_words.intersection(&s2_words).count();
-    let min_words = s1_words.len().min(s2_words.len());
-
-    // Avoid precision loss by doing integer division first
-    let similarity = if min_words > 0 {
-        (common_words * SIMILARITY_SCALE) / min_words
-    } else {
-        0
-    };
-
-    similarity > SIMILARITY_THRESHOLD
+    true
 }
 
 fn show(repo_dir: &Path, path: &Path) -> Result<String> {
@@ -1158,38 +1175,6 @@ mod tests {
                 "cargo-unmaintained {}\n",
                 env!("CARGO_PKG_VERSION")
             ));
-    }
-
-    #[test]
-    fn test_similarity_functions() {
-        // Test have_common_author
-        let authors1 = vec![
-            "Author One <one@example.com>".to_string(),
-            "Author Two <two@example.com>".to_string(),
-        ];
-        let authors2 = vec![
-            "Author One <one@example.com>",
-            "Author Three <three@example.com>",
-        ];
-
-        assert!(have_common_author(&authors1, &authors2));
-
-        let authors3 = vec!["Author Four <four@example.com>"];
-        assert!(!have_common_author(&authors1, &authors3));
-
-        // Test high_similarity
-        assert!(high_similarity(
-            "This is a test description",
-            "This is a test summary"
-        ));
-        assert!(high_similarity(
-            "Package for parsing XML",
-            "XML parsing package"
-        ));
-        assert!(!high_similarity(
-            "Completely different text",
-            "Not related at all"
-        ));
     }
 
     #[test]
