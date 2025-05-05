@@ -68,7 +68,7 @@ missing-panics-doc = "allow"
 
 [target.'cfg(unix)'.dependencies]
 libc = { version = "0.2", optional = true }
-xdg = { version = "2.5" }
+xdg = { version = "3.0" }
 
 [target.'cfg(windows)'.dependencies]
 windows-sys = { version = "0.59", features = [
