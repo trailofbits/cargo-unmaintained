@@ -11,8 +11,10 @@ use std::{
 static CONFIG_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
     #[cfg(not(windows))]
     {
-        let base_directories = xdg::BaseDirectories::new().unwrap();
-        base_directories.get_config_file("cargo-unmaintained")
+        let base_directories = xdg::BaseDirectories::new();
+        base_directories
+            .create_config_directory("cargo-unmaintained")
+            .unwrap()
     }
     #[cfg(windows)]
     {
