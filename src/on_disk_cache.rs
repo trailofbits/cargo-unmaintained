@@ -66,7 +66,7 @@ thread_local! {
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 #[allow(clippy::unwrap_used)]
 static CACHE_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
-    let base_directories = xdg::BaseDirectories::new().unwrap();
+    let base_directories = xdg::BaseDirectories::new();
     base_directories
         .create_cache_directory("cargo-unmaintained")
         .unwrap()
