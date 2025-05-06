@@ -1,4 +1,4 @@
-135 advisories for unmaintained packages
+138 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -172,6 +172,7 @@ cpython...not found
 safemem...found
 hpack...found
 loopdev...found
+atomic-polyfill...found
 cosmwasm...error:
 ```
     Updating crates.io index
@@ -242,6 +243,8 @@ paste...found
 openpgp-card-sequoia...found
 backoff...found
 resolve...found
+rustc-serialize...found
+registry...found
 not found - error (11)
     block-cipher-trait    https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher          https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -280,7 +283,7 @@ not found - other (18)
     instant               https://rustsec.org/advisories/RUSTSEC-2024-0384.html
     chrono-english        https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     get-size              https://rustsec.org/advisories/RUSTSEC-2024-0425.html
-found (101)
+found (104)
     lz4-compress          https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir               https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce             https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -346,6 +349,7 @@ found (101)
     safemem               https://rustsec.org/advisories/RUSTSEC-2023-0081.html
     hpack                 https://rustsec.org/advisories/RUSTSEC-2023-0084.html
     loopdev               https://rustsec.org/advisories/RUSTSEC-2023-0088.html
+    atomic-polyfill       https://rustsec.org/advisories/RUSTSEC-2023-0089.html
     generational-arena    https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     filesystem            https://rustsec.org/advisories/RUSTSEC-2024-0015.html
     rsa-export            https://rustsec.org/advisories/RUSTSEC-2024-0333.html
@@ -382,8 +386,10 @@ found (101)
     openpgp-card-sequoia  https://rustsec.org/advisories/RUSTSEC-2025-0011.html
     backoff               https://rustsec.org/advisories/RUSTSEC-2025-0012.html
     resolve               https://rustsec.org/advisories/RUSTSEC-2025-0013.html
+    rustc-serialize       https://rustsec.org/advisories/RUSTSEC-2025-0025.html
+    registry              https://rustsec.org/advisories/RUSTSEC-2025-0026.html
 ---
-As of 2025-04-26, the RustSec Advisory Database contains 135 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 101 (74%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2025-05-05, the RustSec Advisory Database contains 138 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 104 (75%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 - Of the 34 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 11 do not build
   - 3 are existent, unarchived leaves
