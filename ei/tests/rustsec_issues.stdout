@@ -155,7 +155,7 @@ openslide-rs...not found
 ignoring `https://github.com/ojskrede` from `https://github.com/rustsec/advisory-db/issues/1937`
 openslide-rust...not found
 google-apis-rs...not found
-isahc...not found
+isahc...found
 zip...not found
 zip-old...not found
 zip2...not found
@@ -214,7 +214,7 @@ patch...found
 patch-rs...found
 markdown-rs...not found
 ignoring `https://rustsec.org/advisories/RUSTSEC-2022-0044.html` from `https://github.com/rustsec/advisory-db/issues/2288`
-not found (137)
+not found (136)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -311,7 +311,6 @@ not found (137)
     openslide-rs             https://github.com/rustsec/advisory-db/issues/1937
     openslide-rust           https://github.com/rustsec/advisory-db/issues/1937
     google-apis-rs           https://github.com/rustsec/advisory-db/issues/1945
-    isahc                    https://github.com/rustsec/advisory-db/issues/1954
     zip                      https://github.com/rustsec/advisory-db/issues/1956
     zip-old                  https://github.com/rustsec/advisory-db/issues/1956
     zip2                     https://github.com/rustsec/advisory-db/issues/1956
@@ -352,7 +351,7 @@ not found (137)
     daemonize                https://github.com/rustsec/advisory-db/issues/2279
     gitpatch                 https://github.com/rustsec/advisory-db/issues/2280
     markdown-rs              https://github.com/rustsec/advisory-db/issues/2288
-found (52)
+found (53)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -394,6 +393,7 @@ found (52)
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     toolbox                  https://github.com/rustsec/advisory-db/issues/1927
     openslide                https://github.com/rustsec/advisory-db/issues/1937
+    isahc                    https://github.com/rustsec/advisory-db/issues/1954
     servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
     proc-macro-error         https://github.com/rustsec/advisory-db/issues/2011
     async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
