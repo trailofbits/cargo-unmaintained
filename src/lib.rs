@@ -1,3 +1,10 @@
+//! Implementation details for `cargo-unmaintained`
+//!
+//! `cargo-unmaintained` is a tool for finding unmaintained packages in Rust
+//! projects.
+//!
+//! The tool's main source file is at `src/bin/cargo-unmaintained.rs`.
+
 #![deny(clippy::expect_used, clippy::panic, clippy::unwrap_used)]
 #![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
 #![cfg_attr(dylint_lib = "supplementary", allow(nonexistent_path_in_comment))]
