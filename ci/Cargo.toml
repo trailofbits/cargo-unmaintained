@@ -9,7 +9,7 @@ assert_cmd = "2.0"
 ctor = "0.4"
 regex = "1.11"
 similar-asserts = "1.7"
-tempfile = "3.19"
+tempfile = "3.20"
 
 testing = { path = "../testing" }
 
