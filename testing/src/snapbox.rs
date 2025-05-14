@@ -36,7 +36,7 @@ struct Test {
     #[serde(default)]
     use_real_github: bool,
 
-    /// Environment varaibles
+    /// Environment variables
     #[serde(default)]
     env: Vec<(String, String)>,
 }
