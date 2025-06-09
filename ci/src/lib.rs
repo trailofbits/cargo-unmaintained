@@ -47,9 +47,8 @@ fn dylint() {
     assert!(assert.try_success().is_ok(), "{}", stderr);
 }
 
-#[cfg_attr(target_os = "macos", ignore)]
 #[test]
-fn format() {
+fn fmt() {
     Command::new("rustup")
         .args(["run", "nightly", "cargo", "fmt", "--check"])
         .assert()
