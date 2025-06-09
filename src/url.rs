@@ -43,7 +43,7 @@ impl<'a> From<&'a str> for Url<'a> {
 ///
 /// - the repository url stored in the [`cargo_metadata::Package`]
 /// - a "shortened" url consisting of just the domain and two fragments
-pub(crate) fn urls(pkg: &cargo_metadata::Package) -> impl IntoIterator<Item = Url> {
+pub(crate) fn urls(pkg: &cargo_metadata::Package) -> impl IntoIterator<Item = Url<'_>> {
     let mut urls = Vec::new();
 
     if let Some(url_string) = &pkg.repository {

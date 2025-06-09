@@ -76,7 +76,7 @@ fn repository_uncached(owner: &str, repo: &str) -> Result<serde_json::Value> {
     call_api(owner, repo, None, &[])
 }
 
-fn match_github_url(url: Url) -> Result<(Url, &str, &str, &str)> {
+fn match_github_url(url: Url<'_>) -> Result<(Url<'_>, &str, &str, &str)> {
     let (url_string, owner_slash_repo, owner, repo) = {
         #[allow(clippy::unwrap_used)]
         if let Some(captures) = RE.captures(url.as_str()) {
