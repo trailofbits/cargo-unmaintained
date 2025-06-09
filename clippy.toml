@@ -3,3 +3,4 @@ disallowed-methods = [
     "std::io::Write::flush",
     { path = "std::path::Path::exists", reason = "use `std::path::Path::try_exists`" },
 ]
+msrv = "1.87"
