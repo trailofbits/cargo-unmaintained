@@ -130,7 +130,7 @@ cargo test --workspace
 
 - Yesterday, I got a warning about an unmaintained package. But, today, I don't. Why is that?
 
-  Possibly, an intermediate dependency was updated. Suppose package X depends on Y, which depends on Z. And suppose Z is considered unmaintained. Then Z will generated warnings for both X and Y. If Y is updated to no longer depend upon Z, and X uses the new version of Y, then X will no longer receive warnings about Z.
+  Possibly, an intermediate dependency was updated. Suppose package X depends on Y, which depends on Z. And suppose Z is considered unmaintained. Then Z will generate warnings for both X and Y. If Y is updated to no longer depend upon Z, and X uses the new version of Y, then X will no longer receive warnings about Z.
 
 ## Anti-goals
 
@@ -141,7 +141,7 @@ cargo test --workspace
 We reserve the right to change the following and to consider such changes non-breaking:
 
 - what data is stored in the cache, as well as how that data is stored
-- the output produced the experimental `--json` option
+- the output produced by the experimental `--json` option
 
 ## License
 
