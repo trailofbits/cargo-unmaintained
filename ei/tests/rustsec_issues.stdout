@@ -214,7 +214,9 @@ patch...found
 patch-rs...found
 markdown-rs...not found
 ignoring `https://rustsec.org/advisories/RUSTSEC-2022-0044.html` from `https://github.com/rustsec/advisory-db/issues/2288`
-not found (136)
+gl-rs...not found
+rust-number-prefix...not found
+not found (138)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -351,6 +353,8 @@ not found (136)
     daemonize                https://github.com/rustsec/advisory-db/issues/2279
     gitpatch                 https://github.com/rustsec/advisory-db/issues/2280
     markdown-rs              https://github.com/rustsec/advisory-db/issues/2288
+    gl-rs                    https://github.com/rustsec/advisory-db/issues/2306
+    rust-number-prefix       https://github.com/rustsec/advisory-db/issues/2319
 found (53)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 

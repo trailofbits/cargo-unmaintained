@@ -66,7 +66,15 @@ pub fn enabled(key: &str) -> bool {
 }
 
 #[must_use]
-pub fn split_at_cut_line(s: &str) -> Option<(&str, &str)> {
+pub fn split_at_cut_lines(s: &str) -> Option<(&str, &str, &str)> {
+    split_at_first_cut_line(s).and_then(|(top, bottom)| {
+        let (middle, bottom) = split_at_first_cut_line(bottom)?;
+        Some((top, middle, bottom))
+    })
+}
+
+#[must_use]
+pub fn split_at_first_cut_line(s: &str) -> Option<(&str, &str)> {
     const CUT_LINE: &str = "\n---\n";
     // smoelius: Preserve initial newline.
     s.find(CUT_LINE)

@@ -9,7 +9,7 @@ use std::{
     path::Path,
 };
 use tempfile::tempdir;
-use testing::split_at_cut_line;
+use testing::split_at_cut_lines;
 
 #[ctor::ctor]
 fn initialize() {
@@ -167,19 +167,29 @@ fn prettier() {
 
 #[test]
 fn readme_contains_expected_contents() {
-    let readme = read_to_string("README.md").unwrap();
     let contents = read_to_string("ei/tests/rustsec_advisories.stdout").unwrap();
-    let expected_contents = below_cut_line(&contents).unwrap();
-    for expected_line in expected_contents.lines() {
-        assert!(
-            readme.lines().any(|line| line == expected_line),
-            "failed to find line:\n```\n{expected_line}\n```",
-        );
-    }
-}
+    let (_, middle_expected, bottom_expected) = split_at_cut_lines(&contents).unwrap();
 
-fn below_cut_line(s: &str) -> Option<&str> {
-    split_at_cut_line(s).map(|(_, below)| below)
+    let readme = read_to_string("README.md").unwrap();
+    let lines = readme.lines();
+
+    let mut lines = lines.skip_while(|&line| line != "<!-- as-of start -->");
+    assert_eq!(lines.next(), Some("<!-- as-of start -->"));
+    assert_eq!(lines.next(), Some(""));
+    assert_eq!(lines.next(), Some(middle_expected.trim_end()));
+    assert_eq!(lines.next(), Some(""));
+    assert_eq!(lines.next(), Some("<!-- as-of end -->"));
+
+    let mut lines = lines
+        .skip_while(|&line| line != "<!-- not-identified start -->")
+        .peekable();
+    assert_eq!(lines.next(), Some("<!-- not-identified start -->"));
+    assert_eq!(lines.next(), Some(""));
+    let bottom_actual = lines
+        .take_while(|&line| line != "<!-- not-identified end -->")
+        .map(|line| format!("{line}\n"))
+        .collect::<String>();
+    assert_eq!(bottom_expected.to_owned() + "\n", bottom_actual);
 }
 
 #[cfg_attr(target_os = "windows", ignore)]
