@@ -61,7 +61,7 @@ fn main() -> Result<()> {
                 .current_dir(&tempdir),
         )?;
         if !output.status.success() {
-            println!("error:\n```\n{}\n```", output.stderr.trim_end());
+            println!("error:\n```\n{}\n```", output.stderr.trim_end().sanitize());
             advisory_outcomes.push((advisory, Outcome::NotFound(Reason::Error)));
             continue;
         }
@@ -129,8 +129,6 @@ fn main() -> Result<()> {
             .collect::<Vec<_>>(),
     );
 
-    println!("---");
-
     display_expected_readme_contents(
         &advisory_outcomes
             .iter()
@@ -150,6 +148,8 @@ macro_rules! count {
     };
 }
 
+const CUT_LINE: &str = "---";
+
 fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
     let today = Utc::now().date_naive();
     let count = outcomes.len();
@@ -161,12 +161,14 @@ fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
     let other = count!(outcomes, Outcome::NotFound(Reason::Other));
     #[cfg_attr(dylint_lib = "supplementary", allow(unnamed_constant))]
     let percentage = found * 100 / count;
+    println!("{CUT_LINE}");
     println!(
         "As of {today}, the RustSec Advisory Database contains {count} active advisories for \
          unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically \
          identifies {found} ({percentage}%) of them. These results can be reproduced by running \
          the [`rustsec_advisories`] example within this repository.",
     );
+    println!("{CUT_LINE}");
     println!(
         "- Of the {not_found} packages in the RustSec Advisory Database _not_ identified by \
          `cargo-unmaintained`:"
@@ -187,4 +189,15 @@ fn is_leaf(name: &str, path: &Path) -> Result<bool> {
         pkg.name == format!("{name}-temp-package")
             || pkg.dependencies.iter().all(|dep| dep.path.is_some())
     }))
+}
+
+trait Sanitize {
+    fn sanitize(&self) -> String;
+}
+
+impl Sanitize for &str {
+    fn sanitize(&self) -> String {
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new("/tmp/[^)]*").unwrap());
+        RE.replace_all(self, "[..]").to_string()
+    }
 }

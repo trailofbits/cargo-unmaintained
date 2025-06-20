@@ -7,7 +7,7 @@ use std::{
     process::Command,
     sync::LazyLock,
 };
-use testing::{Tee, split_at_cut_line, tee};
+use testing::{Tee, split_at_first_cut_line, tee};
 
 const PATH_STDOUT: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
@@ -53,7 +53,7 @@ fn rustsec_advisories() {
 }
 
 fn above_cut_line(s: &str) -> &str {
-    split_at_cut_line(s).map_or(s, |(above, _)| above)
+    split_at_first_cut_line(s).map_or(s, |(above, _)| above)
 }
 
 static CANDIDATE_VERSIONS_RE: LazyLock<Regex> =
