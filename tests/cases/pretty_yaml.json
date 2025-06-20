@@ -1,1 +1,17 @@
-[]
+[
+  {
+    "name": "countme",
+    "outdated_deps": [
+      {
+        "name": "rustc-hash",
+        "req": "^1.1",
+        "version_latest": null,
+        "version_used": "1.1.0"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "3.0.1"
+  }
+]
