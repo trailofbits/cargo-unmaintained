@@ -6,6 +6,21 @@
     "version": "1.0.2"
   },
   {
+    "name": "countme",
+    "outdated_deps": [
+      {
+        "name": "rustc-hash",
+        "req": "^1.1",
+        "version_latest": null,
+        "version_used": "1.1.0"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "3.0.1"
+  },
+  {
     "name": "dirs",
     "outdated_deps": [],
     "repo_status": "Archived",
@@ -16,6 +31,21 @@
     "outdated_deps": [],
     "repo_status": "Unassociated",
     "version": "0.1.19"
+  },
+  {
+    "name": "lsp-types",
+    "outdated_deps": [
+      {
+        "name": "bitflags",
+        "req": "^1.0.1",
+        "version_latest": null,
+        "version_used": "1.3.2"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.93.2"
   },
   {
     "name": "proc-macro-error",
