@@ -111,6 +111,21 @@
     "version": "0.2.1"
   },
   {
+    "name": "varisat-checker",
+    "outdated_deps": [
+      {
+        "name": "rustc-hash",
+        "req": "^1.1.0",
+        "version_latest": null,
+        "version_used": "1.1.0"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.2.2"
+  },
+  {
     "name": "varisat-dimacs",
     "outdated_deps": [
       {
@@ -160,6 +175,12 @@
         "req": "^2.0.0",
         "version_latest": null,
         "version_used": "2.10.1"
+      },
+      {
+        "name": "rustc-hash",
+        "req": "^1.1.0",
+        "version_latest": null,
+        "version_used": "1.1.0"
       },
       {
         "name": "vec_mut_scan",
