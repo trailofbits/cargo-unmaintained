@@ -15,13 +15,14 @@ use cargo_metadata::{
     semver::{Version, VersionReq},
 };
 use clap::{Parser, crate_version};
-use crates_index::GitIndex;
+use crates_index::{Error, GitIndex};
 use home::cargo_home;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
     env::args,
     ffi::OsStr,
+    fmt::Write,
     fs::File,
     io::{BufRead, IsTerminal},
     path::{Path, PathBuf},
@@ -212,16 +213,36 @@ macro_rules! warn {
     };
 }
 
-thread_local! {
-    #[allow(clippy::unwrap_used)]
-    static INDEX: LazyLock<GitIndex> = LazyLock::new(|| {
-        let _lock = lock_index().unwrap();
-        let mut index = GitIndex::new_cargo_default().unwrap();
-        if let Err(error) = index.update() {
-            warn!("failed to update index: {}", error);
+#[allow(clippy::unwrap_used)]
+fn create_index() -> GitIndex {
+    let _lock = lock_index().unwrap();
+    #[allow(clippy::panic)]
+    let mut index = match GitIndex::new_cargo_default() {
+        Ok(index) => index,
+        Err(error) => {
+            let mut msg = format!("failed to create index: {error}");
+            // smoelius: I once saw a recommendation to delete a corrupt crates.io index, but I
+            // cannot remember where. Maybe the following?
+            // https://github.com/rust-lang/cargo/issues/2403#issuecomment-186874266
+            if let Error::MissingHead { repo_path, .. } = &error {
+                write!(
+                    msg,
+                    "\n\nIf the problem persists, consider deleting this directory: {}",
+                    repo_path.display()
+                )
+                .unwrap();
+            }
+            panic!("{msg}");
         }
-        index
-    });
+    };
+    if let Err(error) = index.update() {
+        warn!("failed to update index: {}", error);
+    }
+    index
+}
+
+thread_local! {
+    static INDEX: LazyLock<GitIndex> = LazyLock::new(create_index);
     static PROGRESS: RefCell<Option<progress::Progress>> = const { RefCell::new(None) };
     // smoelius: The next four statics are "in-memory" caches.
     // smoelius: Note that repositories are (currently) stored in both an in-memory cache and an
