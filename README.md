@@ -13,7 +13,6 @@
 3. Both a and b below.
 
    a. X depends on a package Y whose latest version:
-
    - is incompatible with the version that X depends on
    - was released over a year ago (a configurable value)
 
@@ -123,7 +122,6 @@ cargo test --workspace
 - If a package is renamed from X to Y, it is immediately considered unmaintained because the package's repository no longer contains a package named X. ([#441])
 
 - If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative). The following is a sketch of how this can occur.
-
   - The project relies on version 1 of package X, which has no dependencies.
   - Version 2 of package X exists, and adds version 1 of package Y as a dependency.
   - Version 2 of package Y exists.
