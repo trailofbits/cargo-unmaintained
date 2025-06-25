@@ -56,16 +56,6 @@ ei = []
 [lints]
 workspace = true
 
-[workspace.lints.rust.unexpected_cfgs]
-level = "deny"
-check-cfg = ["cfg(dylint_lib, values(any()))", "cfg(__warnings)"]
-
-[workspace.lints.clippy]
-pedantic = { level = "warn", priority = -1 }
-format-collect = "allow"
-missing-errors-doc = "allow"
-missing-panics-doc = "allow"
-
 [target.'cfg(unix)'.dependencies]
 libc = { version = "0.2", optional = true }
 xdg = { version = "3.0" }
@@ -82,6 +72,16 @@ windows-sys = { version = "0.59", features = [
 # `__mock_github` feature for all workspace members.
 exclude = ["fixtures", "mock_github"]
 members = ["ci", "ei", "testing"]
+
+[workspace.lints.rust.unexpected_cfgs]
+level = "deny"
+check-cfg = ["cfg(dylint_lib, values(any()))", "cfg(__warnings)"]
+
+[workspace.lints.clippy]
+pedantic = { level = "warn", priority = -1 }
+format-collect = "allow"
+missing-errors-doc = "allow"
+missing-panics-doc = "allow"
 
 # smoelius: Enabling `__mocked_cargo` causes `xdg` to appear unused.
 [workspace.metadata.cargo-udeps.ignore]
