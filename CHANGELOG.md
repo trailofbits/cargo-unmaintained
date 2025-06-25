@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.8.2
+
+- Update `xdg` to version 3 ([#589](https://github.com/trailofbits/cargo-unmaintained/pull/589))
+- Add top level documentation to src/lib.rs and src/bin/cargo-unmaintained.rs ([#594](https://github.com/trailofbits/cargo-unmaintained/pull/594))&mdash;thanks [@teresper-eth](https://github.com/teresper-eth)
+- Fix doc comment in testing/src/snapbox.rs ([#599](https://github.com/trailofbits/cargo-unmaintained/pull/599))&mdash;thanks [@markopiers](https://github.com/markopiers)
+- Suggest deleting the crates.io index when `GitIndex::new_cargo_default` returns a `MissingHead` error ([7fe4efd](https://github.com/trailofbits/cargo-unmaintained/commit/7fe4efd29a646bf91f1b8623e59de8c27cdde23a))
+
 ## 1.8.1
 
 - The `--purge` option now removes `$HOME/.cache/cargo-unmaintained` rather than `$HOME/.cache/cargo-unmaintained/v2` ([#565](https://github.com/trailofbits/cargo-unmaintained/pull/565))&mdash;thanks [@Stereco-btc](https://github.com/Stereco-btc)
