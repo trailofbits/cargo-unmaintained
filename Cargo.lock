@@ -288,7 +288,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-unmaintained"
-version = "1.8.1"
+version = "1.8.2"
 dependencies = [
  "anyhow",
  "assert_cmd",
