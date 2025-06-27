@@ -126,14 +126,13 @@ impl Cache {
     #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
     pub fn clone_repository(&mut self, pkg: &Package) -> Result<(String, PathBuf)> {
         // smoelius: Ignore any errors that may occur while reading/deserializing.
-        if let Ok(entry) = self.entry(pkg) {
-            if self
+        if let Ok(entry) = self.entry(pkg)
+            && self
                 .repository_is_current(&entry.cloned_url)
                 .unwrap_or_default()
-            {
-                let repo_dir = self.repositories_dir().join(url_digest(&entry.cloned_url));
-                return Ok((entry.cloned_url, repo_dir));
-            }
+        {
+            let repo_dir = self.repositories_dir().join(url_digest(&entry.cloned_url));
+            return Ok((entry.cloned_url, repo_dir));
         }
 
         let url_and_dir = self.clone_repository_uncached(pkg)?;
@@ -251,10 +250,10 @@ impl Cache {
 
     pub fn fetch_versions(&mut self, name: &str) -> Result<Vec<Version>> {
         // smoelius: Ignore any errors that may occur while reading/deserializing.
-        if let Ok(versions) = self.versions(name) {
-            if self.versions_are_current(name).unwrap_or_default() {
-                return Ok(versions);
-            }
+        if let Ok(versions) = self.versions(name)
+            && self.versions_are_current(name).unwrap_or_default()
+        {
+            return Ok(versions);
         }
 
         let crate_response = CRATES_IO_SYNC_CLIENT.get_crate(name)?;
