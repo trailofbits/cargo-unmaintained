@@ -438,10 +438,10 @@ fn filter_packages<'a>(
             continue;
         }
 
-        if let Some(name) = &opts::get().package {
-            if pkg.name != *name {
-                continue;
-            }
+        if let Some(name) = &opts::get().package
+            && pkg.name != *name
+        {
+            continue;
         }
 
         packages.push(pkg);
