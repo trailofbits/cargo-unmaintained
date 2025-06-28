@@ -701,7 +701,7 @@ fn latest_version(name: &str) -> Result<Version> {
             },
             ToString::to_string,
             "latest version of `{}` using crates.io index",
-            name,
+            name
         )
     })
 }
