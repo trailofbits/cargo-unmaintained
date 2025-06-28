@@ -202,7 +202,10 @@ impl<'a> From<&'a Dependency> for DepReq<'a> {
 
 #[macro_export]
 macro_rules! warn {
-    ($fmt:expr, $($arg:tt)*) => {
+    (
+        $fmt:expr,
+        $($arg:tt)*
+    ) => {
         if $crate::opts::get().no_warnings {
             log::debug!($fmt, $($arg)*);
         } else {
@@ -250,10 +253,16 @@ thread_local! {
     // smoelius: A reason for having the former is the following. Multiple packages map to the same
     // url, and multiple urls map to the same shortened url. Thus, a cache keyed by url has a
     // greater chance of a cache hit.
-    static GENERAL_STATUS_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, ()>>> = RefCell::new(HashMap::new());
+    static GENERAL_STATUS_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, ()>>
+    > = RefCell::new(HashMap::new());
     static LATEST_VERSION_CACHE: RefCell<HashMap<String, Version>> = RefCell::new(HashMap::new());
-    static TIMESTAMP_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, SystemTime>>> = RefCell::new(HashMap::new());
-    static REPOSITORY_CACHE: RefCell<HashMap<Url<'static>, RepoStatus<'static, PathBuf>>> = RefCell::new(HashMap::new());
+    static TIMESTAMP_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, SystemTime>>
+    > = RefCell::new(HashMap::new());
+    static REPOSITORY_CACHE: RefCell<
+        HashMap<Url<'static>, RepoStatus<'static, PathBuf>>
+    > = RefCell::new(HashMap::new());
 }
 
 static TOKEN_FOUND: AtomicBool = AtomicBool::new(false);
@@ -310,8 +319,9 @@ fn unmaintained() -> Result<bool> {
     );
 
     if std::io::stderr().is_terminal() && !opts::get().verbose {
-        PROGRESS
-            .with_borrow_mut(|progress| *progress = Some(progress::Progress::new(packages.len())));
+        PROGRESS.with_borrow_mut(|progress| {
+            *progress = Some(progress::Progress::new(packages.len()));
+        });
     }
 
     for pkg in packages {
@@ -584,11 +594,11 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
         };
         verbose::wrap!(
             || {
-                let repo_status = if use_github_api {
+                let repo_status = (if use_github_api {
                     Github::archival_status(url)
                 } else {
                     curl::existence(url)
-                }
+                })
                 .unwrap_or_else(|error| {
                     warn!("failed to determine `{}` {}: {}", name, what, error);
                     RepoStatus::Success(url, ())
@@ -810,10 +820,6 @@ fn clone_repository(pkg: &Package) -> Result<RepoStatus<'_, PathBuf>> {
             }
             // smoelius: To make verbose printing easier, "membership" is printed regardless of the
             // check's purpose, and the `Purpose` type was removed.
-            /* let what = match purpose {
-                Purpose::Membership => "membership",
-                Purpose::Timestamp => "timestamp",
-            }; */
             verbose::wrap!(
                 || {
                     let url_and_dir = cache.clone_repository(pkg);
@@ -895,7 +901,7 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
             continue;
         }
         let contents = show(repo_dir, path)?;
-        let Ok(table) = contents.parse::<Table>()
+        let Ok(table) = contents.parse::<Table>() else
         /* smoelius: This "failed to parse" warning is a little too noisy.
         .map_err(|error| {
             warn!(
@@ -904,9 +910,11 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
                 error.to_string().trim_end()
             );
         }) */
-        else {
+        {
             continue;
         };
+
+        // First check exact name match (existing behavior)
         if table
             .get("package")
             .and_then(Value::as_table)
@@ -916,9 +924,129 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
         {
             return Ok(true);
         }
+
+        // If name doesn't match, check if it might be a renamed package
+        if is_same_package_except_name(pkg, &table) {
+            return Ok(true);
+        }
     }
 
     Ok(false)
+}
+
+// Macro for comparing fields that implement Deserialize, PartialEq, and Default.
+macro_rules! check_field {
+    ($pkg:expr, $pkg_table:expr, $field:ident, $FieldType:ty) => {{
+        let field_name_str = stringify!($field);
+        let original_value: &$FieldType = &$pkg.$field;
+
+        match $pkg_table.get(field_name_str) {
+            Some(value) => {
+                let deserializer = value.clone().into_deserializer();
+                match <$FieldType as serde::Deserialize>::deserialize(deserializer) {
+                    Ok(candidate_value) => {
+                        let typed_candidate: $FieldType = candidate_value;
+                        if original_value != &typed_candidate {
+                            return false;
+                        }
+                    }
+                    Err(e) => {
+                        warn!(
+                            "Failed to deserialize field '{}' for package comparison: {}. \
+                             Skipping check.",
+                            field_name_str, e
+                        );
+                        return false;
+                    }
+                }
+            }
+            None => {
+                let default_value: $FieldType = <$FieldType as Default>::default();
+                if original_value != &default_value {
+                    return false;
+                }
+            }
+        }
+    }};
+}
+
+/// Checks if a package is the same as one defined in a Cargo.toml table, except for its name.
+/// This helps identify renamed packages.
+fn is_same_package_except_name(pkg: &Package, cargo_toml: &Table) -> bool {
+    use cargo_metadata::Edition;
+    use cargo_metadata::semver::Version;
+    use serde::de::IntoDeserializer;
+
+    let Some(pkg_table) = cargo_toml.get("package").and_then(Value::as_table) else {
+        return false;
+    };
+
+    // --- Version Check (Direct) --- (No Default impl)
+    let field_name = "version";
+    match pkg_table.get(field_name) {
+        Some(value) => {
+            let deserializer = value.clone().into_deserializer();
+            match <Version as serde::Deserialize>::deserialize(deserializer) {
+                Ok(candidate_value) => {
+                    if pkg.version != candidate_value {
+                        return false;
+                    }
+                }
+                Err(e) => {
+                    warn!(
+                        "Failed to deserialize field '{}' for package comparison: {}. Skipping \
+                         check.",
+                        field_name, e
+                    );
+                }
+            }
+        }
+        None => {
+            return false;
+        } // Missing version is a mismatch
+    }
+
+    // --- Fields checked with macro (Implement Default) ---
+    check_field!(pkg, pkg_table, authors, Vec<String>);
+    check_field!(pkg, pkg_table, description, Option<String>);
+    check_field!(pkg, pkg_table, repository, Option<String>);
+    check_field!(pkg, pkg_table, homepage, Option<String>);
+    check_field!(pkg, pkg_table, documentation, Option<String>);
+    check_field!(pkg, pkg_table, keywords, Vec<String>);
+    check_field!(pkg, pkg_table, categories, Vec<String>);
+    check_field!(pkg, pkg_table, license, Option<String>);
+    check_field!(pkg, pkg_table, edition, Edition);
+    // check_field!(pkg, pkg_table, license_file, Option<String>); // Requires Utf8PathBuf ->
+    // Default? check_field!(pkg, pkg_table, publish); // Type: Option<Vec<String>> or bool?
+
+    // --- Rust Version Check (Direct) --- (Option<Version>, No Default impl for Version)
+    let field_name = "rust_version";
+    match pkg_table.get(field_name) {
+        Some(value) => {
+            let deserializer = value.clone().into_deserializer();
+            match <Option<Version> as serde::Deserialize>::deserialize(deserializer) {
+                Ok(candidate_value) => {
+                    if pkg.rust_version != candidate_value {
+                        return false;
+                    }
+                }
+                Err(e) => {
+                    warn!(
+                        "Failed to deserialize field '{}' for package comparison: {}. Skipping \
+                         check.",
+                        field_name, e
+                    );
+                    return false;
+                }
+            }
+        }
+        None => {
+            if pkg.rust_version.is_some() {
+                return false;
+            } // Compare original pkg.rust_version to None
+        }
+    }
+    true
 }
 
 fn show(repo_dir: &Path, path: &Path) -> Result<String> {

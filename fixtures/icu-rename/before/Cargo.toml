@@ -1,0 +1,11 @@
+[package]
+name = "icu_locid"
+version = "1.0.0"
+authors = ["Unicode Team <unicode@example.org>"]
+description = "Unicode ICU locale identifier APIs"
+edition = "2021"
+repository = "https://github.com/unicode-org/icu4x"
+license = "MIT OR Apache-2.0"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"], optional = true } 
