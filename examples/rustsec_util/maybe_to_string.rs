@@ -1,5 +1,7 @@
 use strum_macros::EnumIter;
 
+// smoelius: `Unit` is used by the `rustsec_issues` example, which refers to this module by path.
+#[allow(dead_code)]
 #[derive(EnumIter, Eq, PartialEq)]
 pub enum Unit {
     Unit,
