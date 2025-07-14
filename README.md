@@ -121,6 +121,18 @@ cargo test --workspace
 
 - If a package is renamed from X to Y, it is immediately considered unmaintained because the package's repository no longer contains a package named X. ([#441])
 
+  <details>
+
+  <summary>Discussion</summary>
+
+  I (@smoelius) suspect there may be no good solution to this problem.
+
+  PRs [#575] and [#613] explored the possibility of finding a package Y with the same properties package X but a different name. However, arbitrary changes could be made to a package before its name is changed. This fact complicates such package matching.
+
+  The `toml_write` package provides an example. Version 0.1.2 was published at commit [838a022] (2025-06-06). With commit [8658e70] (2025-06-12), the keyword `no_std` was added to its `Cargo.toml` file. Finally, with commit [b3594df] (2025-07-07), `toml_write` was renamed to `toml_writer`. Thus, the published `toml_write` package does not match the repository's `toml_writer` package because the latter's keywords include `no_std`.
+
+  </details>
+
 - If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative). The following is a sketch of how this can occur.
   - The project relies on version 1 of package X, which has no dependencies.
   - Version 2 of package X exists, and adds version 1 of package Y as a dependency.
@@ -154,10 +166,15 @@ We reserve the right to change the following and to consider such changes non-br
 `cargo-unmaintained` is licensed and distributed under the AGPLv3 license. [Contact us](mailto:opensource@trailofbits.com) if you're looking for an exception to the terms.
 
 [#441]: https://github.com/trailofbits/cargo-unmaintained/issues/441
+[#575]: https://github.com/trailofbits/cargo-unmaintained/pull/575
+[#613]: https://github.com/trailofbits/cargo-unmaintained/pull/613
+[838a022]: https://github.com/toml-rs/toml/commit/838a0223142a2137b530e020cb7231aba46f7946
+[8658e70]: https://github.com/toml-rs/toml/commit/8658e70adde19e1f55edd6b1f8e8d33fe5ee6151
 [Cargo 0.74.0]: https://github.com/rust-lang/cargo/tree/d252bce6553c8cc521840c9dd6b9f6cd4aedd8b0
 [Notes]: #notes
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
 [`cargo-audit`]: https://github.com/RustSec/rustsec/tree/main/cargo-audit
 [`cargo-upgrade`]: https://github.com/killercup/cargo-edit?tab=readme-ov-file#cargo-upgrade
 [`rustsec_advisories`]: ./examples/rustsec_advisories.rs
+[b3594df]: https://github.com/toml-rs/toml/commit/b3594df3b76a95d5d21f5af3a9847e44917c640a
 [personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
