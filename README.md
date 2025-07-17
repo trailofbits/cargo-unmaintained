@@ -131,6 +131,8 @@ cargo test --workspace
 
   The `toml_write` package provides an example. Version 0.1.2 was published at commit [838a022] (2025-06-06). With commit [8658e70] (2025-06-12), the keyword `no_std` was added to its `Cargo.toml` file. Finally, with commit [b3594df] (2025-07-07), `toml_write` was renamed to `toml_writer`. Thus, the published `toml_write` package does not match the repository's `toml_writer` package because the latter's keywords include `no_std`.
 
+  The recommended workaround is to use an [`ignore`] configuration. If the renamed package really is a false positive, it should be published shortly after it was renamed. Thus, such a workaround should not need to remain in place for long.
+
   </details>
 
 - If a project relies on an old version of a package, `cargo-unmaintained` may fail to flag the package as unmaintained (i.e., may produce a false negative). The following is a sketch of how this can occur.
@@ -175,6 +177,7 @@ We reserve the right to change the following and to consider such changes non-br
 [RustSec Advisory Database]: https://github.com/RustSec/advisory-db/
 [`cargo-audit`]: https://github.com/RustSec/rustsec/tree/main/cargo-audit
 [`cargo-upgrade`]: https://github.com/killercup/cargo-edit?tab=readme-ov-file#cargo-upgrade
+[`ignore`]: #ignoring-packages
 [`rustsec_advisories`]: ./examples/rustsec_advisories.rs
 [b3594df]: https://github.com/toml-rs/toml/commit/b3594df3b76a95d5d21f5af3a9847e44917c640a
 [personal access token]: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
