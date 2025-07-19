@@ -1,0 +1,4693 @@
+{
+  "crates_io_crates": {
+    "addr2line": [
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 4415,
+        "kind": "user",
+        "login": "philipc",
+        "name": "Philip Craig"
+      }
+    ],
+    "adler2": [
+      {
+        "id": 4968,
+        "kind": "user",
+        "login": "oyvindln",
+        "name": null
+      }
+    ],
+    "ahash": [
+      {
+        "id": 25353,
+        "kind": "user",
+        "login": "tkaitchuck",
+        "name": "Tom Kaitchuck"
+      }
+    ],
+    "aho-corasick": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "allocator-api2": [
+      {
+        "id": 945,
+        "kind": "user",
+        "login": "zakarumych",
+        "name": "Zakarum"
+      }
+    ],
+    "android-tzdata": [
+      {
+        "id": 201168,
+        "kind": "user",
+        "login": "RumovZ",
+        "name": null
+      }
+    ],
+    "android_system_properties": [
+      {
+        "id": 1281,
+        "kind": "user",
+        "login": "nical",
+        "name": "Nicolas Silva"
+      }
+    ],
+    "anstream": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "anstyle": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "anstyle-parse": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "anstyle-query": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "anstyle-wincon": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "anyhow": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "arc-swap": [
+      {
+        "id": 362,
+        "kind": "team",
+        "login": "github:rust-bus:maintainers",
+        "name": "maintainers"
+      },
+      {
+        "id": 5906,
+        "kind": "user",
+        "login": "vorner",
+        "name": "Michal 'vorner' Vaner"
+      }
+    ],
+    "arrayvec": [
+      {
+        "id": 356,
+        "kind": "user",
+        "login": "bluss",
+        "name": "bluss"
+      },
+      {
+        "id": 362,
+        "kind": "team",
+        "login": "github:rust-bus:maintainers",
+        "name": "maintainers"
+      }
+    ],
+    "async-compression": [
+      {
+        "id": 782,
+        "kind": "user",
+        "login": "Nemo157",
+        "name": "Nemo157"
+      },
+      {
+        "id": 3824,
+        "kind": "user",
+        "login": "yoshuawuyts",
+        "name": "Yosh"
+      },
+      {
+        "id": 56903,
+        "kind": "user",
+        "login": "robjtede",
+        "name": "Rob Ede"
+      },
+      {
+        "id": 122589,
+        "kind": "user",
+        "login": "NobodyXu",
+        "name": "Jiahao XU"
+      }
+    ],
+    "async-trait": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "atomic-waker": [
+      {
+        "id": 3341,
+        "kind": "team",
+        "login": "github:smol-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "autocfg": [
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      },
+      {
+        "id": 2699,
+        "kind": "user",
+        "login": "matklad",
+        "name": "Alex Kladov"
+      }
+    ],
+    "backtrace": [
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "base64": [
+      {
+        "id": 3027,
+        "kind": "user",
+        "login": "alicemaz",
+        "name": "Alice Maz"
+      },
+      {
+        "id": 5563,
+        "kind": "user",
+        "login": "marshallpierce",
+        "name": "Marshall Pierce"
+      }
+    ],
+    "bitflags": [
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 51,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:libs",
+        "name": "libs"
+      },
+      {
+        "id": 3204,
+        "kind": "user",
+        "login": "KodrAus",
+        "name": "Ashley Mannix"
+      },
+      {
+        "id": 4416,
+        "kind": "team",
+        "login": "github:bitflags:owners",
+        "name": "owners"
+      }
+    ],
+    "block-buffer": [
+      {
+        "id": 2398,
+        "kind": "team",
+        "login": "github:rustcrypto:utils",
+        "name": "utils"
+      },
+      {
+        "id": 5059,
+        "kind": "user",
+        "login": "newpavlov",
+        "name": "Artyom Pavlov"
+      }
+    ],
+    "borsh": [
+      {
+        "id": 134703,
+        "kind": "user",
+        "login": "nearprotocol-ci",
+        "name": null
+      }
+    ],
+    "bstr": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "bumpalo": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      }
+    ],
+    "byteorder": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "bytes": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1461,
+        "kind": "team",
+        "login": "github:tokio-rs:core",
+        "name": "Core"
+      },
+      {
+        "id": 6741,
+        "kind": "user",
+        "login": "Darksonn",
+        "name": "Alice Ryhl"
+      }
+    ],
+    "camino": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 6738,
+        "kind": "user",
+        "login": "sunshowers",
+        "name": "Rain"
+      }
+    ],
+    "cargo-platform": [
+      {
+        "id": 4282,
+        "kind": "team",
+        "login": "github:rust-lang:release-publishers",
+        "name": "release-publishers"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "cargo_metadata": [
+      {
+        "id": 1471,
+        "kind": "user",
+        "login": "oli-obk",
+        "name": "Oli Scherer"
+      }
+    ],
+    "cc": [
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "cfg-if": [
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "cfg_aliases": [
+      {
+        "id": 4239,
+        "kind": "team",
+        "login": "github:katharostech:crates-io-publishers",
+        "name": "Crates.io Publishers"
+      },
+      {
+        "id": 47500,
+        "kind": "user",
+        "login": "zicklag",
+        "name": "Zicklag"
+      }
+    ],
+    "chrono": [
+      {
+        "id": 23,
+        "kind": "user",
+        "login": "lifthrasiir",
+        "name": "Kang Seonghoon"
+      },
+      {
+        "id": 52,
+        "kind": "team",
+        "login": "github:chronotope:release-manager",
+        "name": "Release Manager"
+      }
+    ],
+    "clap": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 1194,
+        "kind": "user",
+        "login": "kbknapp",
+        "name": "Kevin K."
+      },
+      {
+        "id": 2002,
+        "kind": "team",
+        "login": "github:clap-rs:admins",
+        "name": "Admins"
+      }
+    ],
+    "clap_builder": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 2002,
+        "kind": "team",
+        "login": "github:clap-rs:admins",
+        "name": "Admins"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "clap_derive": [
+      {
+        "id": 1194,
+        "kind": "user",
+        "login": "kbknapp",
+        "name": "Kevin K."
+      },
+      {
+        "id": 2002,
+        "kind": "team",
+        "login": "github:clap-rs:admins",
+        "name": "Admins"
+      }
+    ],
+    "clap_lex": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 2002,
+        "kind": "team",
+        "login": "github:clap-rs:admins",
+        "name": "Admins"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "clru": [
+      {
+        "id": 95730,
+        "kind": "user",
+        "login": "marmeladema",
+        "name": "Élie ROUDNINSKI"
+      }
+    ],
+    "colorchoice": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "core-foundation": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 576,
+        "kind": "user",
+        "login": "larsbergstrom",
+        "name": "Lars Bergstrom"
+      },
+      {
+        "id": 1966,
+        "kind": "user",
+        "login": "metajack",
+        "name": "Jack Moffitt"
+      },
+      {
+        "id": 2017,
+        "kind": "user",
+        "login": "mbrubeck",
+        "name": "Matt Brubeck"
+      },
+      {
+        "id": 2258,
+        "kind": "user",
+        "login": "pcwalton",
+        "name": "Patrick Walton"
+      }
+    ],
+    "core-foundation-sys": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 576,
+        "kind": "user",
+        "login": "larsbergstrom",
+        "name": "Lars Bergstrom"
+      }
+    ],
+    "cpufeatures": [
+      {
+        "id": 267,
+        "kind": "user",
+        "login": "tarcieri",
+        "name": "Tony Arcieri"
+      },
+      {
+        "id": 2398,
+        "kind": "team",
+        "login": "github:rustcrypto:utils",
+        "name": "utils"
+      }
+    ],
+    "crates-index": [
+      {
+        "id": 8,
+        "kind": "user",
+        "login": "steveklabnik",
+        "name": "Steve Klabnik"
+      },
+      {
+        "id": 227,
+        "kind": "user",
+        "login": "frewsxcv",
+        "name": "Corey Farwell"
+      },
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      },
+      {
+        "id": 988,
+        "kind": "user",
+        "login": "kornelski",
+        "name": "Kornel"
+      }
+    ],
+    "crates_io_api": [
+      {
+        "id": 6653,
+        "kind": "user",
+        "login": "theduke",
+        "name": "Christoph Herzog"
+      }
+    ],
+    "crc32fast": [
+      {
+        "id": 1546,
+        "kind": "user",
+        "login": "srijs",
+        "name": "Sam Rijs"
+      }
+    ],
+    "crossbeam-channel": [
+      {
+        "id": 2347,
+        "kind": "user",
+        "login": "jeehoonkang",
+        "name": "Jeehoon Kang"
+      },
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "crossbeam-deque": [
+      {
+        "id": 2347,
+        "kind": "user",
+        "login": "jeehoonkang",
+        "name": "Jeehoon Kang"
+      },
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "crossbeam-epoch": [
+      {
+        "id": 2347,
+        "kind": "user",
+        "login": "jeehoonkang",
+        "name": "Jeehoon Kang"
+      },
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "crossbeam-utils": [
+      {
+        "id": 2347,
+        "kind": "user",
+        "login": "jeehoonkang",
+        "name": "Jeehoon Kang"
+      },
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "crypto-common": [
+      {
+        "id": 2370,
+        "kind": "team",
+        "login": "github:rustcrypto:traits",
+        "name": "traits"
+      },
+      {
+        "id": 5059,
+        "kind": "user",
+        "login": "newpavlov",
+        "name": "Artyom Pavlov"
+      }
+    ],
+    "curl": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 5613,
+        "kind": "user",
+        "login": "sagebind",
+        "name": "Stephen M. Coakley"
+      },
+      {
+        "id": 6202,
+        "kind": "user",
+        "login": "ehuss",
+        "name": "Eric Huss"
+      }
+    ],
+    "curl-sys": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 5613,
+        "kind": "user",
+        "login": "sagebind",
+        "name": "Stephen M. Coakley"
+      },
+      {
+        "id": 6202,
+        "kind": "user",
+        "login": "ehuss",
+        "name": "Eric Huss"
+      }
+    ],
+    "digest": [
+      {
+        "id": 2370,
+        "kind": "team",
+        "login": "github:rustcrypto:traits",
+        "name": "traits"
+      },
+      {
+        "id": 5059,
+        "kind": "user",
+        "login": "newpavlov",
+        "name": "Artyom Pavlov"
+      }
+    ],
+    "displaydoc": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 43601,
+        "kind": "user",
+        "login": "yaahc",
+        "name": "Jane Losare-Lusby"
+      }
+    ],
+    "dunce": [
+      {
+        "id": 988,
+        "kind": "user",
+        "login": "kornelski",
+        "name": "Kornel"
+      }
+    ],
+    "either": [
+      {
+        "id": 356,
+        "kind": "user",
+        "login": "bluss",
+        "name": "bluss"
+      },
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      },
+      {
+        "id": 1442,
+        "kind": "user",
+        "login": "jswrenn",
+        "name": "Jack Wrenn"
+      }
+    ],
+    "encoding_rs": [
+      {
+        "id": 4484,
+        "kind": "user",
+        "login": "hsivonen",
+        "name": "Henri Sivonen"
+      }
+    ],
+    "env_filter": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "env_logger": [
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      },
+      {
+        "id": 14,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:log-owners",
+        "name": "log-owners"
+      },
+      {
+        "id": 51,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:libs",
+        "name": "libs"
+      },
+      {
+        "id": 2851,
+        "kind": "team",
+        "login": "github:env-logger-rs:publishers",
+        "name": "Publishers"
+      },
+      {
+        "id": 8602,
+        "kind": "user",
+        "login": "sebasmagri",
+        "name": "Sebastián Magrí"
+      }
+    ],
+    "equivalent": [
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      }
+    ],
+    "errno": [
+      {
+        "id": 684,
+        "kind": "user",
+        "login": "lambda-fairy",
+        "name": "Chris Wong"
+      },
+      {
+        "id": 6825,
+        "kind": "user",
+        "login": "sunfishcode",
+        "name": "Dan Gohman"
+      }
+    ],
+    "faster-hex": [
+      {
+        "id": 31789,
+        "kind": "user",
+        "login": "zhangsoledad",
+        "name": "zhangsoledad"
+      },
+      {
+        "id": 35751,
+        "kind": "user",
+        "login": "jjyr",
+        "name": "jjy"
+      },
+      {
+        "id": 36018,
+        "kind": "user",
+        "login": "quake",
+        "name": "Quake Wang"
+      },
+      {
+        "id": 230478,
+        "kind": "user",
+        "login": "eval-exec",
+        "name": "Eval Exec"
+      }
+    ],
+    "fastrand": [
+      {
+        "id": 3341,
+        "kind": "team",
+        "login": "github:smol-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "filetime": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      }
+    ],
+    "flate2": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      },
+      {
+        "id": 4333,
+        "kind": "user",
+        "login": "joshtriplett",
+        "name": "Josh Triplett"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "fnv": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      }
+    ],
+    "foreign-types": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      }
+    ],
+    "foreign-types-shared": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      }
+    ],
+    "form_urlencoded": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 1895,
+        "kind": "team",
+        "login": "github:servo:rust-url",
+        "name": "rust-url"
+      }
+    ],
+    "futures": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-channel": [
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-core": [
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-executor": [
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-io": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-macro": [
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-sink": [
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-task": [
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "futures-util": [
+      {
+        "id": 5149,
+        "kind": "user",
+        "login": "cramertj",
+        "name": "Taylor Cramer"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "generic-array": [
+      {
+        "id": 1793,
+        "kind": "user",
+        "login": "fizyk20",
+        "name": "Bartłomiej Kamiński"
+      },
+      {
+        "id": 5704,
+        "kind": "user",
+        "login": "novacrazy",
+        "name": "Nova"
+      }
+    ],
+    "getrandom": [
+      {
+        "id": 563,
+        "kind": "team",
+        "login": "github:rust-random:maintainers",
+        "name": "maintainers"
+      },
+      {
+        "id": 1234,
+        "kind": "user",
+        "login": "dhardy",
+        "name": "Diggory Hardy"
+      }
+    ],
+    "gimli": [
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 4415,
+        "kind": "user",
+        "login": "philipc",
+        "name": "Philip Craig"
+      }
+    ],
+    "gix": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-actor": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-attributes": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-bitmap": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-chunk": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-command": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-commitgraph": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-config": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-config-value": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-credentials": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-date": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-diff": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-discover": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-features": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-filter": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-fs": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-glob": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-hash": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-hashtable": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-ignore": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-index": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-lock": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-negotiate": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-object": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-odb": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-pack": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-packetline": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-packetline-blocking": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-path": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-pathspec": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-prompt": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-protocol": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-quote": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-ref": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-refspec": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-revision": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-revwalk": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-sec": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-shallow": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-submodule": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-tempfile": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-trace": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-transport": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-traverse": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-url": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-utils": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-validate": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-worktree": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-worktree-state": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "h2": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      },
+      {
+        "id": 545,
+        "kind": "user",
+        "login": "olix0r",
+        "name": "Oliver Gould"
+      }
+    ],
+    "hash32": [
+      {
+        "id": 246,
+        "kind": "user",
+        "login": "japaric",
+        "name": "Jorge Aparicio"
+      },
+      {
+        "id": 2675,
+        "kind": "team",
+        "login": "github:rust-embedded-community:all",
+        "name": "all"
+      },
+      {
+        "id": 26212,
+        "kind": "user",
+        "login": "MabezDev",
+        "name": "Scott Mabin"
+      }
+    ],
+    "hashbrown": [
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "heapless": [
+      {
+        "id": 246,
+        "kind": "user",
+        "login": "japaric",
+        "name": "Jorge Aparicio"
+      },
+      {
+        "id": 513,
+        "kind": "user",
+        "login": "adamgreig",
+        "name": "Adam Greig"
+      },
+      {
+        "id": 8382,
+        "kind": "team",
+        "login": "github:rust-embedded:libs",
+        "name": "libs"
+      },
+      {
+        "id": 22489,
+        "kind": "user",
+        "login": "korken89",
+        "name": "Emil Fresk"
+      }
+    ],
+    "heck": [
+      {
+        "id": 1613,
+        "kind": "user",
+        "login": "withoutboats",
+        "name": "srrrse"
+      },
+      {
+        "id": 6913,
+        "kind": "user",
+        "login": "jplatte",
+        "name": "Jonas Platte"
+      }
+    ],
+    "hex": [
+      {
+        "id": 36,
+        "kind": "user",
+        "login": "KokaKiwi",
+        "name": "KokaKiwi"
+      }
+    ],
+    "home": [
+      {
+        "id": 443,
+        "kind": "user",
+        "login": "brson",
+        "name": "Brian Anderson"
+      },
+      {
+        "id": 3959,
+        "kind": "user",
+        "login": "LucioFranco",
+        "name": "Lucio Franco"
+      },
+      {
+        "id": 6202,
+        "kind": "user",
+        "login": "ehuss",
+        "name": "Eric Huss"
+      },
+      {
+        "id": 45329,
+        "kind": "user",
+        "login": "kinnison",
+        "name": "Daniel Silverstone"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "http": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "http-body": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      },
+      {
+        "id": 1429,
+        "kind": "team",
+        "login": "github:hyperium:http-util",
+        "name": "http-util"
+      }
+    ],
+    "http-body-util": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "httparse": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "hyper": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      },
+      {
+        "id": 6239,
+        "kind": "team",
+        "login": "github:hyperium:core",
+        "name": "Core"
+      }
+    ],
+    "hyper-rustls": [
+      {
+        "id": 2751,
+        "kind": "user",
+        "login": "ctz",
+        "name": "Joe Birr-Pixton"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      }
+    ],
+    "hyper-tls": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "hyper-util": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "iana-time-zone": [
+      {
+        "id": 649,
+        "kind": "user",
+        "login": "astraw",
+        "name": "Andrew Straw"
+      },
+      {
+        "id": 123528,
+        "kind": "user",
+        "login": "Kijewski",
+        "name": "René Kijewski"
+      }
+    ],
+    "iana-time-zone-haiku": [
+      {
+        "id": 649,
+        "kind": "user",
+        "login": "astraw",
+        "name": "Andrew Straw"
+      },
+      {
+        "id": 123528,
+        "kind": "user",
+        "login": "Kijewski",
+        "name": "René Kijewski"
+      }
+    ],
+    "icu_collections": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 128408,
+        "kind": "user",
+        "login": "sffc",
+        "name": "Shane F. Carr"
+      }
+    ],
+    "icu_locale_core": [
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 128408,
+        "kind": "user",
+        "login": "sffc",
+        "name": "Shane F. Carr"
+      }
+    ],
+    "icu_normalizer": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "icu_normalizer_data": [
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 128408,
+        "kind": "user",
+        "login": "sffc",
+        "name": "Shane F. Carr"
+      }
+    ],
+    "icu_properties": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 128408,
+        "kind": "user",
+        "login": "sffc",
+        "name": "Shane F. Carr"
+      }
+    ],
+    "icu_properties_data": [
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 128408,
+        "kind": "user",
+        "login": "sffc",
+        "name": "Shane F. Carr"
+      }
+    ],
+    "icu_provider": [
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 9648,
+        "kind": "user",
+        "login": "zbraniecki",
+        "name": "Zibi Braniecki"
+      }
+    ],
+    "idna": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 1895,
+        "kind": "team",
+        "login": "github:servo:rust-url",
+        "name": "rust-url"
+      }
+    ],
+    "idna_adapter": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 4484,
+        "kind": "user",
+        "login": "hsivonen",
+        "name": "Henri Sivonen"
+      },
+      {
+        "id": 72883,
+        "kind": "user",
+        "login": "valenting",
+        "name": "Valentin Gosu"
+      }
+    ],
+    "indexmap": [
+      {
+        "id": 356,
+        "kind": "user",
+        "login": "bluss",
+        "name": "bluss"
+      },
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      }
+    ],
+    "io-close": [
+      {
+        "id": 58881,
+        "kind": "user",
+        "login": "wufz",
+        "name": null
+      }
+    ],
+    "ipnet": [
+      {
+        "id": 8197,
+        "kind": "user",
+        "login": "krisprice",
+        "name": null
+      }
+    ],
+    "iri-string": [
+      {
+        "id": 3198,
+        "kind": "user",
+        "login": "lo48576",
+        "name": "YOSHIOKA Takuma"
+      }
+    ],
+    "is_terminal_polyfill": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "itoa": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "jiff": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "jiff-static": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "jiff-tzdb": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "jiff-tzdb-platform": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "js-sys": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "kstring": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "libc": [
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 3623,
+        "kind": "team",
+        "login": "github:rust-lang:libc",
+        "name": "libc"
+      },
+      {
+        "id": 4333,
+        "kind": "user",
+        "login": "joshtriplett",
+        "name": "Josh Triplett"
+      },
+      {
+        "id": 5725,
+        "kind": "user",
+        "login": "gnzlbg",
+        "name": "gnzlbg"
+      },
+      {
+        "id": 51017,
+        "kind": "user",
+        "login": "JohnTitor",
+        "name": "Yuki Okushi"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "libredox": [
+      {
+        "id": 2668,
+        "kind": "user",
+        "login": "jackpot51",
+        "name": "Jeremy Soller"
+      },
+      {
+        "id": 42742,
+        "kind": "user",
+        "login": "4lDO2",
+        "name": "4lDO2"
+      }
+    ],
+    "libz-rs-sys": [
+      {
+        "id": 1303,
+        "kind": "user",
+        "login": "rnijveld",
+        "name": "Ruben Nijveld"
+      },
+      {
+        "id": 256011,
+        "kind": "user",
+        "login": "folkertdev",
+        "name": "Folkert de Vries"
+      }
+    ],
+    "libz-sys": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      },
+      {
+        "id": 4333,
+        "kind": "user",
+        "login": "joshtriplett",
+        "name": "Josh Triplett"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "linux-raw-sys": [
+      {
+        "id": 6825,
+        "kind": "user",
+        "login": "sunfishcode",
+        "name": "Dan Gohman"
+      }
+    ],
+    "litemap": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "lock_api": [
+      {
+        "id": 1459,
+        "kind": "user",
+        "login": "faern",
+        "name": "Linus Färnstrand"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      }
+    ],
+    "log": [
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      },
+      {
+        "id": 14,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:log-owners",
+        "name": "log-owners"
+      },
+      {
+        "id": 51,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:libs",
+        "name": "libs"
+      },
+      {
+        "id": 3204,
+        "kind": "user",
+        "login": "KodrAus",
+        "name": "Ashley Mannix"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "lru-slab": [
+      {
+        "id": 5298,
+        "kind": "user",
+        "login": "Ralith",
+        "name": "Benjamin Saunders"
+      }
+    ],
+    "maybe-async": [
+      {
+        "id": 28057,
+        "kind": "user",
+        "login": "fMeow",
+        "name": "fMeow"
+      }
+    ],
+    "memchr": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "memmap2": [
+      {
+        "id": 471,
+        "kind": "user",
+        "login": "tbu-",
+        "name": "Tobias Bucher"
+      },
+      {
+        "id": 4818,
+        "kind": "user",
+        "login": "RazrFalcon",
+        "name": "Yevhenii Reizner"
+      },
+      {
+        "id": 35980,
+        "kind": "user",
+        "login": "de-vri-es",
+        "name": "Maarten de Vries"
+      },
+      {
+        "id": 142283,
+        "kind": "user",
+        "login": "allan2",
+        "name": "Allan"
+      }
+    ],
+    "mime": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "miniz_oxide": [
+      {
+        "id": 4968,
+        "kind": "user",
+        "login": "oyvindln",
+        "name": null
+      },
+      {
+        "id": 10555,
+        "kind": "user",
+        "login": "Frommi",
+        "name": null
+      }
+    ],
+    "mio": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1846,
+        "kind": "team",
+        "login": "github:tokio-rs:mio-core",
+        "name": "mio-core"
+      }
+    ],
+    "native-tls": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      }
+    ],
+    "normalize-line-endings": [
+      {
+        "id": 4114,
+        "kind": "user",
+        "login": "richard-uk1",
+        "name": "Richard Dodd"
+      }
+    ],
+    "num-bigint": [
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      }
+    ],
+    "num-integer": [
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      }
+    ],
+    "num-traits": [
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      }
+    ],
+    "object": [
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 4415,
+        "kind": "user",
+        "login": "philipc",
+        "name": "Philip Craig"
+      }
+    ],
+    "once_cell": [
+      {
+        "id": 2699,
+        "kind": "user",
+        "login": "matklad",
+        "name": "Alex Kladov"
+      },
+      {
+        "id": 5906,
+        "kind": "user",
+        "login": "vorner",
+        "name": "Michal 'vorner' Vaner"
+      }
+    ],
+    "once_cell_polyfill": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "openssl": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      },
+      {
+        "id": 163,
+        "kind": "user",
+        "login": "alex",
+        "name": "Alex Gaynor"
+      }
+    ],
+    "openssl-macros": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      }
+    ],
+    "openssl-probe": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      }
+    ],
+    "openssl-sys": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      },
+      {
+        "id": 163,
+        "kind": "user",
+        "login": "alex",
+        "name": "Alex Gaynor"
+      }
+    ],
+    "parking_lot": [
+      {
+        "id": 1459,
+        "kind": "user",
+        "login": "faern",
+        "name": "Linus Färnstrand"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      }
+    ],
+    "parking_lot_core": [
+      {
+        "id": 1459,
+        "kind": "user",
+        "login": "faern",
+        "name": "Linus Färnstrand"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      }
+    ],
+    "percent-encoding": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 1895,
+        "kind": "team",
+        "login": "github:servo:rust-url",
+        "name": "rust-url"
+      }
+    ],
+    "pin-project-lite": [
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "pin-utils": [
+      {
+        "id": 462,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:futures",
+        "name": "futures"
+      },
+      {
+        "id": 25248,
+        "kind": "user",
+        "login": "MajorBreakfast",
+        "name": "Josef Brandl"
+      }
+    ],
+    "pkg-config": [
+      {
+        "id": 3623,
+        "kind": "user",
+        "login": "sdroege",
+        "name": "Sebastian Dröge"
+      },
+      {
+        "id": 4333,
+        "kind": "user",
+        "login": "joshtriplett",
+        "name": "Josh Triplett"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "portable-atomic": [
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "portable-atomic-util": [
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "potential_utf": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 128408,
+        "kind": "user",
+        "login": "sffc",
+        "name": "Shane F. Carr"
+      }
+    ],
+    "ppv-lite86": [
+      {
+        "id": 12840,
+        "kind": "user",
+        "login": "kazcw",
+        "name": "Kaz Wesley"
+      }
+    ],
+    "proc-macro2": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "prodash": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "quinn": [
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 5298,
+        "kind": "user",
+        "login": "Ralith",
+        "name": "Benjamin Saunders"
+      }
+    ],
+    "quinn-proto": [
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 5298,
+        "kind": "user",
+        "login": "Ralith",
+        "name": "Benjamin Saunders"
+      }
+    ],
+    "quinn-udp": [
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 5298,
+        "kind": "user",
+        "login": "Ralith",
+        "name": "Benjamin Saunders"
+      },
+      {
+        "id": 83100,
+        "kind": "user",
+        "login": "mxinden",
+        "name": "Max Inden"
+      }
+    ],
+    "quote": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "r-efi": [
+      {
+        "id": 12177,
+        "kind": "user",
+        "login": "dvdhrm",
+        "name": "David Rheinsberg"
+      }
+    ],
+    "rand": [
+      {
+        "id": 51,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:libs",
+        "name": "libs"
+      },
+      {
+        "id": 563,
+        "kind": "team",
+        "login": "github:rust-random:maintainers",
+        "name": "maintainers"
+      },
+      {
+        "id": 1234,
+        "kind": "user",
+        "login": "dhardy",
+        "name": "Diggory Hardy"
+      }
+    ],
+    "rand_chacha": [
+      {
+        "id": 563,
+        "kind": "team",
+        "login": "github:rust-random:maintainers",
+        "name": "maintainers"
+      },
+      {
+        "id": 1234,
+        "kind": "user",
+        "login": "dhardy",
+        "name": "Diggory Hardy"
+      }
+    ],
+    "rand_core": [
+      {
+        "id": 563,
+        "kind": "team",
+        "login": "github:rust-random:maintainers",
+        "name": "maintainers"
+      },
+      {
+        "id": 1234,
+        "kind": "user",
+        "login": "dhardy",
+        "name": "Diggory Hardy"
+      }
+    ],
+    "rayon": [
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      },
+      {
+        "id": 1386,
+        "kind": "user",
+        "login": "nikomatsakis",
+        "name": "Niko Matsakis"
+      }
+    ],
+    "rayon-core": [
+      {
+        "id": 539,
+        "kind": "user",
+        "login": "cuviper",
+        "name": "Josh Stone"
+      },
+      {
+        "id": 1386,
+        "kind": "user",
+        "login": "nikomatsakis",
+        "name": "Niko Matsakis"
+      }
+    ],
+    "redox_syscall": [
+      {
+        "id": 2668,
+        "kind": "user",
+        "login": "jackpot51",
+        "name": "Jeremy Soller"
+      },
+      {
+        "id": 42742,
+        "kind": "user",
+        "login": "4lDO2",
+        "name": "4lDO2"
+      }
+    ],
+    "regex": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 19,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:regex-owners",
+        "name": "regex-owners"
+      },
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "regex-automata": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "regex-syntax": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 19,
+        "kind": "team",
+        "login": "github:rust-lang-nursery:regex-owners",
+        "name": "regex-owners"
+      },
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "remain": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "reqwest": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "ring": [
+      {
+        "id": 2342,
+        "kind": "user",
+        "login": "briansmith",
+        "name": "Brian Smith"
+      }
+    ],
+    "rustc-demangle": [
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 408,
+        "kind": "team",
+        "login": "github:rust-lang:compiler",
+        "name": "compiler"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "rustc-hash": [
+      {
+        "id": 70,
+        "kind": "team",
+        "login": "github:rust-lang:core",
+        "name": "core"
+      },
+      {
+        "id": 408,
+        "kind": "team",
+        "login": "github:rust-lang:compiler",
+        "name": "compiler"
+      },
+      {
+        "id": 1386,
+        "kind": "user",
+        "login": "nikomatsakis",
+        "name": "Niko Matsakis"
+      }
+    ],
+    "rustc-stable-hash": [
+      {
+        "id": 408,
+        "kind": "team",
+        "login": "github:rust-lang:compiler",
+        "name": "compiler"
+      },
+      {
+        "id": 4162,
+        "kind": "user",
+        "login": "michaelwoerister",
+        "name": "Michael Woerister"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "rustix": [
+      {
+        "id": 6825,
+        "kind": "user",
+        "login": "sunfishcode",
+        "name": "Dan Gohman"
+      }
+    ],
+    "rustls": [
+      {
+        "id": 2751,
+        "kind": "user",
+        "login": "ctz",
+        "name": "Joe Birr-Pixton"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      }
+    ],
+    "rustls-native-certs": [
+      {
+        "id": 2751,
+        "kind": "user",
+        "login": "ctz",
+        "name": "Joe Birr-Pixton"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      }
+    ],
+    "rustls-pki-types": [
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      }
+    ],
+    "rustls-webpki": [
+      {
+        "id": 2751,
+        "kind": "user",
+        "login": "ctz",
+        "name": "Joe Birr-Pixton"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      }
+    ],
+    "rustversion": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "ryu": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "same-file": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "schannel": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      },
+      {
+        "id": 2728,
+        "kind": "user",
+        "login": "steffengy",
+        "name": "Steffen Butzer"
+      }
+    ],
+    "scopeguard": [
+      {
+        "id": 356,
+        "kind": "user",
+        "login": "bluss",
+        "name": "bluss"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      }
+    ],
+    "security-framework": [
+      {
+        "id": 988,
+        "kind": "user",
+        "login": "kornelski",
+        "name": "Kornel"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      }
+    ],
+    "security-framework-sys": [
+      {
+        "id": 988,
+        "kind": "user",
+        "login": "kornelski",
+        "name": "Kornel"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      }
+    ],
+    "semver": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "serde": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      },
+      {
+        "id": 8138,
+        "kind": "team",
+        "login": "github:serde-rs:publish",
+        "name": "publish"
+      }
+    ],
+    "serde_derive": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      },
+      {
+        "id": 8138,
+        "kind": "team",
+        "login": "github:serde-rs:publish",
+        "name": "publish"
+      }
+    ],
+    "serde_json": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      },
+      {
+        "id": 8138,
+        "kind": "team",
+        "login": "github:serde-rs:publish",
+        "name": "publish"
+      }
+    ],
+    "serde_path_to_error": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "serde_spanned": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      },
+      {
+        "id": 6908,
+        "kind": "team",
+        "login": "github:toml-rs:maintainers",
+        "name": "Maintainers"
+      }
+    ],
+    "serde_urlencoded": [
+      {
+        "id": 3100,
+        "kind": "user",
+        "login": "nox",
+        "name": "Anthony Ramine"
+      }
+    ],
+    "sha1": [
+      {
+        "id": 267,
+        "kind": "user",
+        "login": "tarcieri",
+        "name": "Tony Arcieri"
+      },
+      {
+        "id": 2369,
+        "kind": "team",
+        "login": "github:rustcrypto:hashes",
+        "name": "hashes"
+      },
+      {
+        "id": 5059,
+        "kind": "user",
+        "login": "newpavlov",
+        "name": "Artyom Pavlov"
+      }
+    ],
+    "sha1-checked": [
+      {
+        "id": 2369,
+        "kind": "team",
+        "login": "github:rustcrypto:hashes",
+        "name": "hashes"
+      },
+      {
+        "id": 5059,
+        "kind": "user",
+        "login": "newpavlov",
+        "name": "Artyom Pavlov"
+      }
+    ],
+    "sha1_smol": [
+      {
+        "id": 39,
+        "kind": "user",
+        "login": "mitsuhiko",
+        "name": "Armin Ronacher"
+      }
+    ],
+    "shell-words": [
+      {
+        "id": 62153,
+        "kind": "user",
+        "login": "tmiasko",
+        "name": "Tomasz Miąsko"
+      }
+    ],
+    "shlex": [
+      {
+        "id": 972,
+        "kind": "user",
+        "login": "comex",
+        "name": null
+      },
+      {
+        "id": 1214,
+        "kind": "user",
+        "login": "fenhl",
+        "name": "Fenhl"
+      }
+    ],
+    "similar": [
+      {
+        "id": 39,
+        "kind": "user",
+        "login": "mitsuhiko",
+        "name": "Armin Ronacher"
+      }
+    ],
+    "slab": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1461,
+        "kind": "team",
+        "login": "github:tokio-rs:core",
+        "name": "Core"
+      }
+    ],
+    "smallvec": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 2155,
+        "kind": "user",
+        "login": "Ms2ger",
+        "name": null
+      }
+    ],
+    "smol_str": [
+      {
+        "id": 1014,
+        "kind": "team",
+        "login": "github:rust-analyzer:review",
+        "name": "review"
+      },
+      {
+        "id": 2699,
+        "kind": "user",
+        "login": "matklad",
+        "name": "Alex Kladov"
+      },
+      {
+        "id": 16374,
+        "kind": "user",
+        "login": "Veykril",
+        "name": "Lukas Wirth"
+      }
+    ],
+    "snapbox": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "snapbox-macros": [
+      {
+        "id": 460,
+        "kind": "team",
+        "login": "github:rust-cli:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "socket2": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      },
+      {
+        "id": 5099,
+        "kind": "team",
+        "login": "github:tokio-rs:socket2",
+        "name": "Socket2"
+      },
+      {
+        "id": 6025,
+        "kind": "user",
+        "login": "Thomasdezeeuw",
+        "name": "Thomas de Zeeuw"
+      }
+    ],
+    "stable_deref_trait": [
+      {
+        "id": 394,
+        "kind": "user",
+        "login": "Kimundi",
+        "name": "Marvin Löbel"
+      },
+      {
+        "id": 1574,
+        "kind": "user",
+        "login": "jpernst",
+        "name": null
+      },
+      {
+        "id": 4492,
+        "kind": "user",
+        "login": "Storyyeller",
+        "name": "Robert Grosse"
+      }
+    ],
+    "static_assertions": [
+      {
+        "id": 3832,
+        "kind": "user",
+        "login": "nvzqz",
+        "name": "Nikolai Vazquez"
+      }
+    ],
+    "strsim": [
+      {
+        "id": 952,
+        "kind": "user",
+        "login": "dguo",
+        "name": "Danny Guo"
+      },
+      {
+        "id": 79123,
+        "kind": "user",
+        "login": "maxbachmann",
+        "name": "Max Bachmann"
+      }
+    ],
+    "subtle": [
+      {
+        "id": 5289,
+        "kind": "user",
+        "login": "isislovecruft",
+        "name": "isis agora lovecruft"
+      },
+      {
+        "id": 6398,
+        "kind": "team",
+        "login": "github:dalek-cryptography:subtle-maintainers",
+        "name": "subtle-maintainers"
+      }
+    ],
+    "syn": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "sync_wrapper": [
+      {
+        "id": 2272,
+        "kind": "team",
+        "login": "github:actyx:developers",
+        "name": "Developers"
+      },
+      {
+        "id": 86681,
+        "kind": "user",
+        "login": "rkuhn",
+        "name": "Roland Kuhn"
+      }
+    ],
+    "synstructure": [
+      {
+        "id": 1947,
+        "kind": "user",
+        "login": "mystor",
+        "name": "Nika Layzell"
+      }
+    ],
+    "system-configuration": [
+      {
+        "id": 1459,
+        "kind": "user",
+        "login": "faern",
+        "name": "Linus Färnstrand"
+      }
+    ],
+    "system-configuration-sys": [
+      {
+        "id": 1459,
+        "kind": "user",
+        "login": "faern",
+        "name": "Linus Färnstrand"
+      }
+    ],
+    "tempfile": [
+      {
+        "id": 280,
+        "kind": "user",
+        "login": "Stebalien",
+        "name": "Steven Allen"
+      },
+      {
+        "id": 3204,
+        "kind": "user",
+        "login": "KodrAus",
+        "name": "Ashley Mannix"
+      }
+    ],
+    "termcolor": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "terminal_size": [
+      {
+        "id": 933,
+        "kind": "user",
+        "login": "eminence",
+        "name": "Andrew Chin"
+      }
+    ],
+    "thiserror": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "thiserror-impl": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "tinystr": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 1968,
+        "kind": "user",
+        "login": "raphlinus",
+        "name": "Raph Levien"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 9648,
+        "kind": "user",
+        "login": "zbraniecki",
+        "name": "Zibi Braniecki"
+      }
+    ],
+    "tinyvec": [
+      {
+        "id": 362,
+        "kind": "team",
+        "login": "github:rust-bus:maintainers",
+        "name": "maintainers"
+      },
+      {
+        "id": 7211,
+        "kind": "user",
+        "login": "Lokathor",
+        "name": "Lokathor"
+      }
+    ],
+    "tinyvec_macros": [
+      {
+        "id": 94492,
+        "kind": "user",
+        "login": "Soveu",
+        "name": null
+      }
+    ],
+    "tokio": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1461,
+        "kind": "team",
+        "login": "github:tokio-rs:core",
+        "name": "Core"
+      },
+      {
+        "id": 6741,
+        "kind": "user",
+        "login": "Darksonn",
+        "name": "Alice Ryhl"
+      }
+    ],
+    "tokio-native-tls": [
+      {
+        "id": 3959,
+        "kind": "user",
+        "login": "LucioFranco",
+        "name": "Lucio Franco"
+      },
+      {
+        "id": 6950,
+        "kind": "team",
+        "login": "github:tokio-rs:tls",
+        "name": "tls"
+      }
+    ],
+    "tokio-rustls": [
+      {
+        "id": 4286,
+        "kind": "user",
+        "login": "quininer",
+        "name": "quininer"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      }
+    ],
+    "tokio-util": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1461,
+        "kind": "team",
+        "login": "github:tokio-rs:core",
+        "name": "Core"
+      },
+      {
+        "id": 6741,
+        "kind": "user",
+        "login": "Darksonn",
+        "name": "Alice Ryhl"
+      }
+    ],
+    "toml": [
+      {
+        "id": 6202,
+        "kind": "user",
+        "login": "ehuss",
+        "name": "Eric Huss"
+      },
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      },
+      {
+        "id": 6908,
+        "kind": "team",
+        "login": "github:toml-rs:maintainers",
+        "name": "Maintainers"
+      }
+    ],
+    "toml_datetime": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      },
+      {
+        "id": 6908,
+        "kind": "team",
+        "login": "github:toml-rs:maintainers",
+        "name": "Maintainers"
+      }
+    ],
+    "toml_edit": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      },
+      {
+        "id": 6908,
+        "kind": "team",
+        "login": "github:toml-rs:maintainers",
+        "name": "Maintainers"
+      },
+      {
+        "id": 7434,
+        "kind": "user",
+        "login": "ordian",
+        "name": null
+      }
+    ],
+    "toml_write": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      },
+      {
+        "id": 6908,
+        "kind": "team",
+        "login": "github:toml-rs:maintainers",
+        "name": "Maintainers"
+      }
+    ],
+    "tower": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      },
+      {
+        "id": 1348,
+        "kind": "team",
+        "login": "github:tower-rs:publish",
+        "name": "Publish"
+      }
+    ],
+    "tower-http": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1348,
+        "kind": "team",
+        "login": "github:tower-rs:publish",
+        "name": "Publish"
+      }
+    ],
+    "tower-layer": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1348,
+        "kind": "team",
+        "login": "github:tower-rs:publish",
+        "name": "Publish"
+      }
+    ],
+    "tower-service": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      },
+      {
+        "id": 1348,
+        "kind": "team",
+        "login": "github:tower-rs:publish",
+        "name": "Publish"
+      }
+    ],
+    "tracing": [
+      {
+        "id": 10,
+        "kind": "user",
+        "login": "carllerche",
+        "name": "Carl Lerche"
+      },
+      {
+        "id": 1249,
+        "kind": "user",
+        "login": "hawkw",
+        "name": "Eliza Weisman"
+      },
+      {
+        "id": 1294,
+        "kind": "team",
+        "login": "github:tokio-rs:publish-tracing",
+        "name": "Publish tracing"
+      }
+    ],
+    "tracing-attributes": [
+      {
+        "id": 1249,
+        "kind": "user",
+        "login": "hawkw",
+        "name": "Eliza Weisman"
+      },
+      {
+        "id": 1294,
+        "kind": "team",
+        "login": "github:tokio-rs:publish-tracing",
+        "name": "Publish tracing"
+      }
+    ],
+    "tracing-core": [
+      {
+        "id": 1249,
+        "kind": "user",
+        "login": "hawkw",
+        "name": "Eliza Weisman"
+      },
+      {
+        "id": 1294,
+        "kind": "team",
+        "login": "github:tokio-rs:publish-tracing",
+        "name": "Publish tracing"
+      }
+    ],
+    "try-lock": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "twox-hash": [
+      {
+        "id": 1060,
+        "kind": "user",
+        "login": "shepmaster",
+        "name": "Jake Goulding"
+      }
+    ],
+    "typenum": [
+      {
+        "id": 243,
+        "kind": "user",
+        "login": "paholg",
+        "name": "Paho Lurie-Gregg"
+      }
+    ],
+    "uluru": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 3788,
+        "kind": "user",
+        "login": "emilio",
+        "name": "Emilio Cobos Álvarez"
+      }
+    ],
+    "unicode-bom": [
+      {
+        "id": 30471,
+        "kind": "user",
+        "login": "philbooth",
+        "name": "Phil Booth"
+      }
+    ],
+    "unicode-ident": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
+      }
+    ],
+    "unicode-normalization": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 1458,
+        "kind": "user",
+        "login": "kwantam",
+        "name": "Riad S. Wahby"
+      },
+      {
+        "id": 21056,
+        "kind": "user",
+        "login": "sujayakar",
+        "name": "Sujay Jayakar"
+      }
+    ],
+    "unicode-segmentation": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 1458,
+        "kind": "user",
+        "login": "kwantam",
+        "name": "Riad S. Wahby"
+      },
+      {
+        "id": 21056,
+        "kind": "user",
+        "login": "sujayakar",
+        "name": "Sujay Jayakar"
+      }
+    ],
+    "untrusted": [
+      {
+        "id": 2342,
+        "kind": "user",
+        "login": "briansmith",
+        "name": "Brian Smith"
+      }
+    ],
+    "url": [
+      {
+        "id": 5,
+        "kind": "team",
+        "login": "github:servo:cargo-publish",
+        "name": "cargo publish"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 350,
+        "kind": "user",
+        "login": "Hoverbear",
+        "name": "Ana Hobden"
+      },
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      },
+      {
+        "id": 1895,
+        "kind": "team",
+        "login": "github:servo:rust-url",
+        "name": "rust-url"
+      }
+    ],
+    "utf8_iter": [
+      {
+        "id": 4484,
+        "kind": "user",
+        "login": "hsivonen",
+        "name": "Henri Sivonen"
+      }
+    ],
+    "utf8parse": [
+      {
+        "id": 1317,
+        "kind": "user",
+        "login": "jwilm",
+        "name": "Joe Wilm"
+      },
+      {
+        "id": 1911,
+        "kind": "team",
+        "login": "github:alacritty:publishers",
+        "name": "Publishers"
+      },
+      {
+        "id": 8732,
+        "kind": "user",
+        "login": "chrisduerr",
+        "name": "Christian Duerr"
+      }
+    ],
+    "vcpkg": [
+      {
+        "id": 362,
+        "kind": "team",
+        "login": "github:rust-bus:maintainers",
+        "name": "maintainers"
+      },
+      {
+        "id": 988,
+        "kind": "user",
+        "login": "kornelski",
+        "name": "Kornel"
+      },
+      {
+        "id": 6092,
+        "kind": "user",
+        "login": "pkgw",
+        "name": "Peter Williams"
+      },
+      {
+        "id": 6457,
+        "kind": "user",
+        "login": "mcgoo",
+        "name": null
+      },
+      {
+        "id": 83082,
+        "kind": "user",
+        "login": "waych",
+        "name": "Mike Waychison"
+      }
+    ],
+    "version_check": [
+      {
+        "id": 3864,
+        "kind": "user",
+        "login": "SergioBenitez",
+        "name": "Sergio Benitez"
+      }
+    ],
+    "wait-timeout": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      }
+    ],
+    "walkdir": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "want": [
+      {
+        "id": 359,
+        "kind": "user",
+        "login": "seanmonstar",
+        "name": "Sean McArthur"
+      }
+    ],
+    "wasi": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 6825,
+        "kind": "user",
+        "login": "sunfishcode",
+        "name": "Dan Gohman"
+      }
+    ],
+    "wasm-bindgen": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "wasm-bindgen-backend": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "wasm-bindgen-futures": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "wasm-bindgen-macro": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "wasm-bindgen-macro-support": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "wasm-bindgen-shared": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "web-sys": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 1069,
+        "kind": "team",
+        "login": "github:rustwasm:core",
+        "name": "core"
+      },
+      {
+        "id": 8943,
+        "kind": "team",
+        "login": "github:rustwasm:wasm-bindgen-publish",
+        "name": "wasm-bindgen-publish"
+      }
+    ],
+    "web-time": [
+      {
+        "id": 34642,
+        "kind": "user",
+        "login": "daxpedda",
+        "name": null
+      }
+    ],
+    "winapi": [
+      {
+        "id": 63,
+        "kind": "user",
+        "login": "retep998",
+        "name": "Peter Atashian"
+      }
+    ],
+    "winapi-i686-pc-windows-gnu": [
+      {
+        "id": 63,
+        "kind": "user",
+        "login": "retep998",
+        "name": "Peter Atashian"
+      }
+    ],
+    "winapi-util": [
+      {
+        "id": 189,
+        "kind": "user",
+        "login": "BurntSushi",
+        "name": "Andrew Gallant"
+      }
+    ],
+    "winapi-x86_64-pc-windows-gnu": [
+      {
+        "id": 63,
+        "kind": "user",
+        "login": "retep998",
+        "name": "Peter Atashian"
+      }
+    ],
+    "windows-core": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-implement": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-interface": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-link": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-registry": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-result": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-strings": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-sys": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows-targets": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_aarch64_gnullvm": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_aarch64_msvc": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_i686_gnu": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_i686_gnullvm": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_i686_msvc": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_x86_64_gnu": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_x86_64_gnullvm": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "windows_x86_64_msvc": [
+      {
+        "id": 64539,
+        "kind": "user",
+        "login": "kennykerr",
+        "name": "Kenny Kerr"
+      }
+    ],
+    "winnow": [
+      {
+        "id": 6743,
+        "kind": "user",
+        "login": "epage",
+        "name": "Ed Page"
+      }
+    ],
+    "wit-bindgen-rt": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 2633,
+        "kind": "team",
+        "login": "github:bytecodealliance:wasmtime-publish",
+        "name": "wasmtime-publish"
+      }
+    ],
+    "writeable": [
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 9648,
+        "kind": "user",
+        "login": "zbraniecki",
+        "name": "Zibi Braniecki"
+      }
+    ],
+    "xdg": [
+      {
+        "id": 654,
+        "kind": "user",
+        "login": "whitequark",
+        "name": "whitequark"
+      }
+    ],
+    "yoke": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "yoke-derive": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "zerocopy": [
+      {
+        "id": 1442,
+        "kind": "user",
+        "login": "jswrenn",
+        "name": "Jack Wrenn"
+      },
+      {
+        "id": 7178,
+        "kind": "user",
+        "login": "joshlf",
+        "name": "Joshua Liebow-Feeser"
+      }
+    ],
+    "zerocopy-derive": [
+      {
+        "id": 7178,
+        "kind": "user",
+        "login": "joshlf",
+        "name": "Joshua Liebow-Feeser"
+      }
+    ],
+    "zerofrom": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "zerofrom-derive": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "zeroize": [
+      {
+        "id": 267,
+        "kind": "user",
+        "login": "tarcieri",
+        "name": "Tony Arcieri"
+      },
+      {
+        "id": 2398,
+        "kind": "team",
+        "login": "github:rustcrypto:utils",
+        "name": "utils"
+      }
+    ],
+    "zerotrie": [
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      },
+      {
+        "id": 128408,
+        "kind": "user",
+        "login": "sffc",
+        "name": "Shane F. Carr"
+      }
+    ],
+    "zerovec": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "zerovec-derive": [
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 3807,
+        "kind": "team",
+        "login": "github:unicode-org:icu4x-release",
+        "name": "icu4x-release"
+      }
+    ],
+    "zlib-rs": [
+      {
+        "id": 1303,
+        "kind": "user",
+        "login": "rnijveld",
+        "name": "Ruben Nijveld"
+      },
+      {
+        "id": 256011,
+        "kind": "user",
+        "login": "folkertdev",
+        "name": "Folkert de Vries"
+      }
+    ]
+  },
+  "not_audited": {
+    "foreign_crates": [],
+    "local_crates": [
+      "cargo-unmaintained",
+      "ci",
+      "ei",
+      "testing"
+    ]
+  }
+}
