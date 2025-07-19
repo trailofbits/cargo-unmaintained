@@ -381,6 +381,7 @@ dependencies = [
  "assert_cmd",
  "ctor",
  "regex",
+ "serde_json",
  "similar-asserts",
  "tempfile",
  "testing",
