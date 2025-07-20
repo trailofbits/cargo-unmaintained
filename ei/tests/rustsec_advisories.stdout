@@ -208,7 +208,7 @@ rsa-export...found
 libp2p-tokio-socks5...found
 zip_next...found
 proc-macro-error...found
-atty...recently updated
+atty...found
 pqcrypto-dilithium...found
 pqcrypto-kyber...found
 hwloc...found
@@ -262,8 +262,7 @@ not found - leaf (3)
     anymap                https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject           https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                  https://rustsec.org/advisories/RUSTSEC-2022-0081.html
-not found - recently-updated (3)
-    atty                  https://rustsec.org/advisories/RUSTSEC-2024-0375.html
+not found - recently-updated (2)
     minitrace             https://rustsec.org/advisories/RUSTSEC-2024-0390.html
     surf                  https://rustsec.org/advisories/RUSTSEC-2025-0036.html
 not found - other (18)
@@ -285,7 +284,7 @@ not found - other (18)
     instant               https://rustsec.org/advisories/RUSTSEC-2024-0384.html
     chrono-english        https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     get-size              https://rustsec.org/advisories/RUSTSEC-2024-0425.html
-found (104)
+found (105)
     lz4-compress          https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir               https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce             https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -358,6 +357,7 @@ found (104)
     libp2p-tokio-socks5   https://rustsec.org/advisories/RUSTSEC-2024-0334.html
     zip_next              https://rustsec.org/advisories/RUSTSEC-2024-0337.html
     proc-macro-error      https://rustsec.org/advisories/RUSTSEC-2024-0370.html
+    atty                  https://rustsec.org/advisories/RUSTSEC-2024-0375.html
     pqcrypto-dilithium    https://rustsec.org/advisories/RUSTSEC-2024-0380.html
     pqcrypto-kyber        https://rustsec.org/advisories/RUSTSEC-2024-0381.html
     hwloc                 https://rustsec.org/advisories/RUSTSEC-2024-0382.html
@@ -391,10 +391,10 @@ found (104)
     rustc-serialize       https://rustsec.org/advisories/RUSTSEC-2025-0025.html
     registry              https://rustsec.org/advisories/RUSTSEC-2025-0026.html
 ---
-As of 2025-06-11, the RustSec Advisory Database contains 139 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 104 (74%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2025-07-20, the RustSec Advisory Database contains 139 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 105 (75%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 35 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 34 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 11 do not build
   - 3 are existent, unarchived leaves
-  - 3 were updated within the past 365 days
+  - 2 were updated within the past 365 days
   - 18 were not identified for other reasons

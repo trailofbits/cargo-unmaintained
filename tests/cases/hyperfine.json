@@ -1,5 +1,20 @@
 [
   {
+    "name": "atty",
+    "outdated_deps": [
+      {
+        "name": "hermit-abi",
+        "req": "^0.1.6",
+        "version_latest": null,
+        "version_used": "0.1.19"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.2.14"
+  },
+  {
     "name": "bitvec",
     "outdated_deps": [
       {
