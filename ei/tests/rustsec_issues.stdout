@@ -56,7 +56,7 @@ rust-ansi-term...not found
 windows-rs...not found
 serde_cbor...found
 cbor...found
-xml-rs...not found
+xml-rs...found
 cargo-download...not found
 ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-cee9-4101-972b-f8e4b9f511e9.png` from `https://github.com/rustsec/advisory-db/issues/1138`
 ignoring `https://user-images.githubusercontent.com/19519553/147587813-34afbc8e-cee9-4101-972b-f8e4b9f511e9.png` from `https://github.com/rustsec/advisory-db/issues/1139`
@@ -175,9 +175,9 @@ hwloc-rs...not found
 get-size...not found
 ignoring `https://github.com/DKerp` from `https://github.com/rustsec/advisory-db/issues/2078`
 users...not found
-atty...not found
+atty...found
 ignoring `https://osv.dev/vulnerability/RUSTSEC-2021-0145` from `https://github.com/rustsec/advisory-db/issues/2087`
-atty...not found
+atty...found
 libyml...not found
 serde_norway...not found
 serde_yaml...found
@@ -216,7 +216,7 @@ markdown-rs...not found
 ignoring `https://rustsec.org/advisories/RUSTSEC-2022-0044.html` from `https://github.com/rustsec/advisory-db/issues/2288`
 gl-rs...not found
 rust-number-prefix...not found
-not found (138)
+not found (135)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -252,7 +252,6 @@ not found (138)
     libsodium-sys-stable     https://github.com/rustsec/advisory-db/issues/1090
     rust-ansi-term           https://github.com/rustsec/advisory-db/issues/1095
     windows-rs               https://github.com/rustsec/advisory-db/issues/1098
-    xml-rs                   https://github.com/rustsec/advisory-db/issues/1121
     cargo-download           https://github.com/rustsec/advisory-db/issues/1132
     prettytable-rs           https://github.com/rustsec/advisory-db/issues/1173
     owning-ref-unsoundness   https://github.com/rustsec/advisory-db/issues/1174
@@ -324,8 +323,6 @@ not found (138)
     hwloc-rs                 https://github.com/rustsec/advisory-db/issues/2067
     get-size                 https://github.com/rustsec/advisory-db/issues/2078
     users                    https://github.com/rustsec/advisory-db/issues/2086
-    atty                     https://github.com/rustsec/advisory-db/issues/2087
-    atty                     https://github.com/rustsec/advisory-db/issues/2089
     libyml                   https://github.com/rustsec/advisory-db/issues/2132
     serde_norway             https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml2              https://github.com/rustsec/advisory-db/issues/2132
@@ -355,7 +352,7 @@ not found (138)
     markdown-rs              https://github.com/rustsec/advisory-db/issues/2288
     gl-rs                    https://github.com/rustsec/advisory-db/issues/2306
     rust-number-prefix       https://github.com/rustsec/advisory-db/issues/2319
-found (53)
+found (56)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -370,6 +367,7 @@ found (53)
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/1090
     serde_cbor               https://github.com/rustsec/advisory-db/issues/1110
     cbor                     https://github.com/rustsec/advisory-db/issues/1110
+    xml-rs                   https://github.com/rustsec/advisory-db/issues/1121
     lmdb-rkv                 https://github.com/rustsec/advisory-db/issues/1142
     lmdb-rs                  https://github.com/rustsec/advisory-db/issues/1142
     sass-rs                  https://github.com/rustsec/advisory-db/issues/1228
@@ -402,6 +400,8 @@ found (53)
     proc-macro-error         https://github.com/rustsec/advisory-db/issues/2011
     async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
     strason                  https://github.com/rustsec/advisory-db/issues/2066
+    atty                     https://github.com/rustsec/advisory-db/issues/2087
+    atty                     https://github.com/rustsec/advisory-db/issues/2089
     serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
     fast-xml                 https://github.com/rustsec/advisory-db/issues/2134
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
