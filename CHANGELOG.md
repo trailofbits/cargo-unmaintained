@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.8.3
+
+- Improve documentation regarding known problems ([e08229f](https://github.com/trailofbits/cargo-unmaintained/commit/e08229fc4040b93199d7eead40e594d27ba1bbb6), [c258748](https://github.com/trailofbits/cargo-unmaintained/commit/c258748bdea05062dee49e10c1cec79037806929), and [1372b93](https://github.com/trailofbits/cargo-unmaintained/commit/1372b9302add9be054551339b0ad4c4025b23a9f))
+
 ## 1.8.2
 
 - Update `xdg` to version 3 ([#589](https://github.com/trailofbits/cargo-unmaintained/pull/589))
