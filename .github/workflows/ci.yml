@@ -47,7 +47,7 @@ jobs:
       GROUP_RUNNER: target.'cfg(all())'.runner = 'group-runner'
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
