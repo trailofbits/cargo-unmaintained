@@ -63,6 +63,27 @@
     "version": "0.93.2"
   },
   {
+    "name": "prettytable-rs",
+    "outdated_deps": [
+      {
+        "name": "encode_unicode",
+        "req": "^0.3",
+        "version_latest": null,
+        "version_used": "0.3.6"
+      },
+      {
+        "name": "term",
+        "req": "^0.5",
+        "version_latest": null,
+        "version_used": "0.5.2"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.8.0"
+  },
+  {
     "name": "proc-macro-error",
     "outdated_deps": [
       {
@@ -76,6 +97,12 @@
       "Age": null
     },
     "version": "1.0.4"
+  },
+  {
+    "name": "rustls-pemfile",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.0.1"
   },
   {
     "name": "serde_cbor",

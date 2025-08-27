@@ -1,4 +1,4 @@
-139 advisories for unmaintained packages
+140 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -219,7 +219,7 @@ strason...found
 opentelemetry_api...found
 derivative...found
 openslide...found
-minitrace...recently updated
+minitrace...found
 mmap...found
 chrono-english...not found
 conrod_core...found
@@ -246,6 +246,7 @@ resolve...found
 rustc-serialize...found
 registry...found
 surf...recently updated
+tsify-next...not found
 not found - error (11)
     block-cipher-trait    https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher          https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -262,10 +263,9 @@ not found - leaf (3)
     anymap                https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject           https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                  https://rustsec.org/advisories/RUSTSEC-2022-0081.html
-not found - recently-updated (2)
-    minitrace             https://rustsec.org/advisories/RUSTSEC-2024-0390.html
+not found - recently-updated (1)
     surf                  https://rustsec.org/advisories/RUSTSEC-2025-0036.html
-not found - other (18)
+not found - other (19)
     serial                https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap               https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype          https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -284,7 +284,8 @@ not found - other (18)
     instant               https://rustsec.org/advisories/RUSTSEC-2024-0384.html
     chrono-english        https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     get-size              https://rustsec.org/advisories/RUSTSEC-2024-0425.html
-found (105)
+    tsify-next            https://rustsec.org/advisories/RUSTSEC-2025-0048.html
+found (106)
     lz4-compress          https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir               https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce             https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -367,6 +368,7 @@ found (105)
     opentelemetry_api     https://rustsec.org/advisories/RUSTSEC-2024-0387.html
     derivative            https://rustsec.org/advisories/RUSTSEC-2024-0388.html
     openslide             https://rustsec.org/advisories/RUSTSEC-2024-0389.html
+    minitrace             https://rustsec.org/advisories/RUSTSEC-2024-0390.html
     mmap                  https://rustsec.org/advisories/RUSTSEC-2024-0394.html
     conrod_core           https://rustsec.org/advisories/RUSTSEC-2024-0396.html
     conrod                https://rustsec.org/advisories/RUSTSEC-2024-0397.html
@@ -391,10 +393,10 @@ found (105)
     rustc-serialize       https://rustsec.org/advisories/RUSTSEC-2025-0025.html
     registry              https://rustsec.org/advisories/RUSTSEC-2025-0026.html
 ---
-As of 2025-07-20, the RustSec Advisory Database contains 139 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 105 (75%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2025-08-27, the RustSec Advisory Database contains 140 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 106 (75%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 34 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 11 do not build
   - 3 are existent, unarchived leaves
-  - 2 were updated within the past 365 days
-  - 18 were not identified for other reasons
+  - 1 were updated within the past 365 days
+  - 19 were not identified for other reasons
