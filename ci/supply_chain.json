@@ -1018,6 +1018,14 @@
         "name": "Simon Sapin"
       }
     ],
+    "foldhash": [
+      {
+        "id": 24326,
+        "kind": "user",
+        "login": "orlp",
+        "name": "Orson Peters"
+      }
+    ],
     "foreign-types": [
       {
         "id": 5,
@@ -1618,14 +1626,6 @@
         "name": "Sebastian Thiel"
       }
     ],
-    "gix-worktree-state": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
     "h2": [
       {
         "id": 10,
@@ -2050,14 +2050,6 @@
         "kind": "user",
         "login": "cuviper",
         "name": "Josh Stone"
-      }
-    ],
-    "io-close": [
-      {
-        "id": 58881,
-        "kind": "user",
-        "login": "wufz",
-        "name": null
       }
     ],
     "io-uring": [
@@ -3694,41 +3686,7 @@
         "name": "Maintainers"
       }
     ],
-    "toml_edit": [
-      {
-        "id": 6743,
-        "kind": "user",
-        "login": "epage",
-        "name": "Ed Page"
-      },
-      {
-        "id": 6908,
-        "kind": "team",
-        "login": "github:toml-rs:maintainers",
-        "name": "Maintainers"
-      },
-      {
-        "id": 7434,
-        "kind": "user",
-        "login": "ordian",
-        "name": null
-      }
-    ],
     "toml_parser": [
-      {
-        "id": 6743,
-        "kind": "user",
-        "login": "epage",
-        "name": "Ed Page"
-      },
-      {
-        "id": 6908,
-        "kind": "team",
-        "login": "github:toml-rs:maintainers",
-        "name": "Maintainers"
-      }
-    ],
-    "toml_write": [
       {
         "id": 6743,
         "kind": "user",
@@ -4254,36 +4212,12 @@
         "name": null
       }
     ],
-    "winapi": [
-      {
-        "id": 63,
-        "kind": "user",
-        "login": "retep998",
-        "name": "Peter Atashian"
-      }
-    ],
-    "winapi-i686-pc-windows-gnu": [
-      {
-        "id": 63,
-        "kind": "user",
-        "login": "retep998",
-        "name": "Peter Atashian"
-      }
-    ],
     "winapi-util": [
       {
         "id": 189,
         "kind": "user",
         "login": "BurntSushi",
         "name": "Andrew Gallant"
-      }
-    ],
-    "winapi-x86_64-pc-windows-gnu": [
-      {
-        "id": 63,
-        "kind": "user",
-        "login": "retep998",
-        "name": "Peter Atashian"
       }
     ],
     "windows-core": [
