@@ -29,7 +29,7 @@ toml = "0.9"
 
 [dev-dependencies]
 assert_cmd = "2.0"
-ctor = "0.4"
+ctor = "0.5"
 octocrab = "0.44"
 predicates = "3.1"
 rustsec = "0.30"
