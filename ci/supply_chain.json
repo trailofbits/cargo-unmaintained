@@ -538,6 +538,46 @@
         "name": "Ed Page"
       }
     ],
+    "compression-codecs": [
+      {
+        "id": 3824,
+        "kind": "user",
+        "login": "yoshuawuyts",
+        "name": "Yosh"
+      },
+      {
+        "id": 56903,
+        "kind": "user",
+        "login": "robjtede",
+        "name": "Rob Ede"
+      },
+      {
+        "id": 122589,
+        "kind": "user",
+        "login": "NobodyXu",
+        "name": "Jiahao XU"
+      }
+    ],
+    "compression-core": [
+      {
+        "id": 3824,
+        "kind": "user",
+        "login": "yoshuawuyts",
+        "name": "Yosh"
+      },
+      {
+        "id": 56903,
+        "kind": "user",
+        "login": "robjtede",
+        "name": "Rob Ede"
+      },
+      {
+        "id": 122589,
+        "kind": "user",
+        "login": "NobodyXu",
+        "name": "Jiahao XU"
+      }
+    ],
     "core-foundation": [
       {
         "id": 5,
@@ -4364,7 +4404,7 @@
         "name": "Ed Page"
       }
     ],
-    "wit-bindgen-rt": [
+    "wit-bindgen": [
       {
         "id": 73222,
         "kind": "user",
