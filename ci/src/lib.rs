@@ -138,6 +138,15 @@ fn markdown_link_check() {
         .success();
 }
 
+#[test]
+fn mock_github_lockfile_is_up_to_date() {
+    Command::new("cargo")
+        .args(["check", "--locked"])
+        .current_dir("mock_github")
+        .assert()
+        .success();
+}
+
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn prettier() {
