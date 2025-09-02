@@ -8,6 +8,8 @@ use map_ext::MapExt;
 
 pub mod util;
 
+const OK: u32 = 200;
+
 #[allow(clippy::unwrap_used)]
 static RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new(r"^https://github\.com/(([^/]*)/([^/]*))").unwrap());
@@ -136,7 +138,7 @@ fn call_api(
     let response_code = handle.response_code()?;
 
     // smoelius: Should the next statement handle 404s, like `curl::existence` does?
-    if response_code != 200 {
+    if response_code != OK {
         bail!("unexpected response code: {response_code}");
     }
 
