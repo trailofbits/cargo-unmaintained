@@ -1,4 +1,4 @@
-141 advisories for unmaintained packages
+148 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -73,6 +73,7 @@ safe_vault...error:
 Error: found no packages matching `safe_vault`
 ```
 safe_core...found
+difference...not found
 stderr...found
 rulinalg...found
 slice-deque...not found
@@ -248,6 +249,12 @@ registry...found
 surf...recently updated
 tsify-next...not found
 async-std...recently updated
+adler...found
+fxhash...not found
+custom_derive...found
+servo-fontconfig...found
+crypto-hash...found
+iron...found
 not found - error (11)
     block-cipher-trait    https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher          https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -267,10 +274,11 @@ not found - leaf (3)
 not found - recently-updated (2)
     surf                  https://rustsec.org/advisories/RUSTSEC-2025-0036.html
     async-std             https://rustsec.org/advisories/RUSTSEC-2025-0052.html
-not found - other (19)
+not found - other (21)
     serial                https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap               https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype          https://rustsec.org/advisories/RUSTSEC-2020-0020.html
+    difference            https://rustsec.org/advisories/RUSTSEC-2020-0095.html
     slice-deque           https://rustsec.org/advisories/RUSTSEC-2020-0158.html
     mach                  https://rustsec.org/advisories/RUSTSEC-2020-0168.html
     ansi_term             https://rustsec.org/advisories/RUSTSEC-2021-0139.html
@@ -287,7 +295,8 @@ not found - other (19)
     chrono-english        https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     get-size              https://rustsec.org/advisories/RUSTSEC-2024-0425.html
     tsify-next            https://rustsec.org/advisories/RUSTSEC-2025-0048.html
-found (106)
+    fxhash                https://rustsec.org/advisories/RUSTSEC-2025-0057.html
+found (111)
     lz4-compress          https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir               https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce             https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -394,11 +403,16 @@ found (106)
     resolve               https://rustsec.org/advisories/RUSTSEC-2025-0013.html
     rustc-serialize       https://rustsec.org/advisories/RUSTSEC-2025-0025.html
     registry              https://rustsec.org/advisories/RUSTSEC-2025-0026.html
+    adler                 https://rustsec.org/advisories/RUSTSEC-2025-0056.html
+    custom_derive         https://rustsec.org/advisories/RUSTSEC-2025-0058.html
+    servo-fontconfig      https://rustsec.org/advisories/RUSTSEC-2025-0059.html
+    crypto-hash           https://rustsec.org/advisories/RUSTSEC-2025-0060.html
+    iron                  https://rustsec.org/advisories/RUSTSEC-2025-0061.html
 ---
-As of 2025-08-27, the RustSec Advisory Database contains 141 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 106 (75%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2025-09-09, the RustSec Advisory Database contains 148 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 111 (75%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 35 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 37 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 11 do not build
   - 3 are existent, unarchived leaves
   - 2 were updated within the past 365 days
-  - 19 were not identified for other reasons
+  - 21 were not identified for other reasons

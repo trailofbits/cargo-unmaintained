@@ -178,7 +178,7 @@ users...not found
 atty...found
 ignoring `https://osv.dev/vulnerability/RUSTSEC-2021-0145` from `https://github.com/rustsec/advisory-db/issues/2087`
 atty...found
-libyml...not found
+libyml...found
 serde_norway...not found
 serde_yaml...found
 serde_yaml2...not found
@@ -192,7 +192,7 @@ serde-yaml...not found
 pretty_yaml...not found
 serde-yaml-ok...not found
 serde-yaml-core...not found
-serde_yml...not found
+serde_yml...found
 fast-xml...found
 Corundum...not found
 rust-phf...not found
@@ -217,7 +217,8 @@ ignoring `https://rustsec.org/advisories/RUSTSEC-2022-0044.html` from `https://g
 gl-rs...not found
 rust-number-prefix...not found
 tsify...not found
-not found (136)
+rust-conv...not found
+not found (135)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -324,7 +325,6 @@ not found (136)
     hwloc-rs                 https://github.com/rustsec/advisory-db/issues/2067
     get-size                 https://github.com/rustsec/advisory-db/issues/2078
     users                    https://github.com/rustsec/advisory-db/issues/2086
-    libyml                   https://github.com/rustsec/advisory-db/issues/2132
     serde_norway             https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml2              https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml_ng            https://github.com/rustsec/advisory-db/issues/2132
@@ -337,7 +337,6 @@ not found (136)
     pretty_yaml              https://github.com/rustsec/advisory-db/issues/2132
     serde-yaml-ok            https://github.com/rustsec/advisory-db/issues/2132
     serde-yaml-core          https://github.com/rustsec/advisory-db/issues/2132
-    serde_yml                https://github.com/rustsec/advisory-db/issues/2132
     Corundum                 https://github.com/rustsec/advisory-db/issues/2140
     rust-phf                 https://github.com/rustsec/advisory-db/issues/2180
     fxhash                   https://github.com/rustsec/advisory-db/issues/2185
@@ -354,7 +353,8 @@ not found (136)
     gl-rs                    https://github.com/rustsec/advisory-db/issues/2306
     rust-number-prefix       https://github.com/rustsec/advisory-db/issues/2319
     tsify                    https://github.com/rustsec/advisory-db/issues/2353
-found (56)
+    rust-conv                https://github.com/rustsec/advisory-db/issues/2386
+found (58)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -404,7 +404,9 @@ found (56)
     strason                  https://github.com/rustsec/advisory-db/issues/2066
     atty                     https://github.com/rustsec/advisory-db/issues/2087
     atty                     https://github.com/rustsec/advisory-db/issues/2089
+    libyml                   https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
+    serde_yml                https://github.com/rustsec/advisory-db/issues/2132
     fast-xml                 https://github.com/rustsec/advisory-db/issues/2134
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
     custom_derive            https://github.com/rustsec/advisory-db/issues/2199
