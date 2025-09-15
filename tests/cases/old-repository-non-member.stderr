@@ -1,5 +1,5 @@
 Scanning 5 packages and their dependencies (pass --verbose for more information)
 warning: failed to clone `https://codeberg.org/flausch/gethostname.rs.git`: [
-    "[..]remote: Credentials are incorrect or have expired. Retry your command or see https://codeberg.org/forgejo/forgejo/issues/2809 for more information/nfatal: Authentication failed for 'https://codeberg.org/flausch/gethostname.rs.git/'/n",
+    "[..]remote: Credentials are incorrect or have expired. Retry your command or see https://codeberg.org/forgejo/forgejo/issues/2809 for more information/nfatal: Authentication failed for 'https://codeberg.org/Greebling/gethostname.rs.git/'/n",
 ...
 ]
