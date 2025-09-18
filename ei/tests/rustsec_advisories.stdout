@@ -1,4 +1,4 @@
-148 advisories for unmaintained packages
+151 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -174,6 +174,7 @@ safemem...found
 hpack...found
 loopdev...found
 atomic-polyfill...found
+martin-mbtiles...found
 cosmwasm...error:
 ```
     Updating crates.io index
@@ -255,6 +256,8 @@ custom_derive...found
 servo-fontconfig...found
 crypto-hash...found
 iron...found
+google-apis-common...not found
+daemonize...not found
 not found - error (11)
     block-cipher-trait    https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher          https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -274,7 +277,7 @@ not found - leaf (3)
 not found - recently-updated (2)
     surf                  https://rustsec.org/advisories/RUSTSEC-2025-0036.html
     async-std             https://rustsec.org/advisories/RUSTSEC-2025-0052.html
-not found - other (21)
+not found - other (23)
     serial                https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap               https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype          https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -296,7 +299,9 @@ not found - other (21)
     get-size              https://rustsec.org/advisories/RUSTSEC-2024-0425.html
     tsify-next            https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     fxhash                https://rustsec.org/advisories/RUSTSEC-2025-0057.html
-found (111)
+    google-apis-common    https://rustsec.org/advisories/RUSTSEC-2025-0066.html
+    daemonize             https://rustsec.org/advisories/RUSTSEC-2025-0069.html
+found (112)
     lz4-compress          https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir               https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce             https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -363,6 +368,7 @@ found (111)
     hpack                 https://rustsec.org/advisories/RUSTSEC-2023-0084.html
     loopdev               https://rustsec.org/advisories/RUSTSEC-2023-0088.html
     atomic-polyfill       https://rustsec.org/advisories/RUSTSEC-2023-0089.html
+    martin-mbtiles        https://rustsec.org/advisories/RUSTSEC-2023-0094.html
     generational-arena    https://rustsec.org/advisories/RUSTSEC-2024-0014.html
     filesystem            https://rustsec.org/advisories/RUSTSEC-2024-0015.html
     rsa-export            https://rustsec.org/advisories/RUSTSEC-2024-0333.html
@@ -409,10 +415,10 @@ found (111)
     crypto-hash           https://rustsec.org/advisories/RUSTSEC-2025-0060.html
     iron                  https://rustsec.org/advisories/RUSTSEC-2025-0061.html
 ---
-As of 2025-09-09, the RustSec Advisory Database contains 148 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 111 (75%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2025-09-18, the RustSec Advisory Database contains 151 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 112 (74%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 37 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 39 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 11 do not build
   - 3 are existent, unarchived leaves
   - 2 were updated within the past 365 days
-  - 21 were not identified for other reasons
+  - 23 were not identified for other reasons
