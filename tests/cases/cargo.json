@@ -39,27 +39,6 @@
     "version": "15.1.0"
   },
   {
-    "name": "miow",
-    "outdated_deps": [
-      {
-        "name": "windows-sys",
-        "req": "^0.48.0",
-        "version_latest": null,
-        "version_used": "0.48.0"
-      },
-      {
-        "name": "rand",
-        "req": "^0.8.0",
-        "version_latest": null,
-        "version_used": "0.8.5"
-      }
-    ],
-    "repo_status": {
-      "Age": null
-    },
-    "version": "0.6.0"
-  },
-  {
     "name": "partial_ref_derive",
     "outdated_deps": [
       {
