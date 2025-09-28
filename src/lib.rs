@@ -449,7 +449,7 @@ fn filter_packages<'a>(
 
     if let Some(name) = &opts::get().package {
         if packages.len() >= 2 {
-            bail!("found multiple packages matching `{name}`: {:#?}", packages);
+            bail!("found multiple packages matching `{name}`: {packages:#?}");
         }
 
         if packages.is_empty() {
@@ -690,11 +690,11 @@ fn latest_version(name: &str) -> Result<Version> {
                     let _lock = lock_index()?;
                     index
                         .crate_(name)
-                        .ok_or_else(|| anyhow!("failed to find `{}` in index", name))
+                        .ok_or_else(|| anyhow!("failed to find `{name}` in index"))
                 })?;
                 let latest_version_index = krate
                     .highest_normal_version()
-                    .ok_or_else(|| anyhow!("`{}` has no normal version", name))?;
+                    .ok_or_else(|| anyhow!("`{name}` has no normal version"))?;
                 let latest_version = Version::from_str(latest_version_index.version())?;
                 latest_version_cache.insert(name.to_owned(), latest_version.clone());
                 Ok(latest_version)

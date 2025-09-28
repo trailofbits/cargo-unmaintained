@@ -208,7 +208,7 @@ impl Cache {
         }
         // smoelius: Don't emit duplicate errors.
         errors.dedup();
-        Err(anyhow!("{:#?}", errors))
+        Err(anyhow!("{errors:#?}"))
     }
 
     fn entry(&mut self, pkg: &Package) -> Result<Entry> {
