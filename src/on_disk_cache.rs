@@ -23,7 +23,7 @@
 
 use super::{SECS_PER_DAY, urls};
 use anyhow::{Context, Result, anyhow, bail, ensure};
-use cargo_metadata::Package;
+use cargo_metadata::{Package, PackageName};
 use crates_io_api::{SyncClient, Version};
 use serde::{Deserialize, Serialize};
 use std::{
@@ -53,7 +53,7 @@ struct Entry {
 pub(crate) struct Cache {
     tempdir: Option<TempDir>,
     refresh_age: u64, // days
-    entries: HashMap<String, Entry>,
+    entries: HashMap<PackageName, Entry>,
     repository_timestamps: HashMap<String, SystemTime>,
     versions: HashMap<String, Vec<Version>>,
     versions_timestamps: HashMap<String, SystemTime>,
@@ -213,7 +213,7 @@ impl Cache {
 
     fn entry(&mut self, pkg: &Package) -> Result<Entry> {
         if !self.entries.contains_key(&pkg.name) {
-            let path_buf = self.entries_dir().join(&pkg.name);
+            let path_buf = self.entries_dir().join(pkg.name.as_str());
             let contents = read_to_string(&path_buf)
                 .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let entry = serde_json::from_str::<Entry>(&contents)?;
