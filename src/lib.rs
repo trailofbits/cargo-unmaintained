@@ -11,7 +11,7 @@
 
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::{
-    Dependency, DependencyKind, Metadata, MetadataCommand, Package,
+    Dependency, DependencyKind, Metadata, MetadataCommand, Package, PackageName,
     semver::{Version, VersionReq},
 };
 use clap::{Parser, crate_version};
@@ -187,7 +187,7 @@ impl<'a> DepReq<'a> {
     }
 
     fn matches(&self, pkg: &Package) -> bool {
-        self.name == pkg.name && self.req.matches(&pkg.version)
+        self.name == pkg.name.as_str() && self.req.matches(&pkg.version)
     }
 }
 
@@ -420,7 +420,7 @@ fn filter_packages<'a>(
             continue;
         }
 
-        if ignored_packages.contains(&pkg.name) {
+        if ignored_packages.contains(pkg.name.as_str()) {
             continue;
         }
 
@@ -460,8 +460,8 @@ fn filter_packages<'a>(
     Ok(packages)
 }
 
-fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<String, Version> {
-    let mut map: HashMap<String, Version> = HashMap::new();
+fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<PackageName, Version> {
+    let mut map: HashMap<PackageName, Version> = HashMap::new();
 
     for pkg in &metadata.packages {
         if let Some(version) = map.get_mut(&pkg.name) {
@@ -499,7 +499,7 @@ fn latest_version_is_unmaintained(name: &str) -> Result<bool> {
     let pkg = metadata
         .packages
         .iter()
-        .find(|pkg| name == pkg.name)
+        .find(|pkg| name == pkg.name.as_str())
         .unwrap_or_else(|| panic!("failed to find package `{name}`"));
 
     let unmaintained_package = is_unmaintained_package(&metadata, pkg)?;
