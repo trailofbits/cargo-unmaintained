@@ -3526,6 +3526,12 @@
         "kind": "user",
         "login": "faern",
         "name": "Linus Färnstrand"
+      },
+      {
+        "id": 12822,
+        "kind": "team",
+        "login": "github:mullvad:appteam-crates-io",
+        "name": "appteam-crates.io"
       }
     ],
     "system-configuration-sys": [
@@ -3534,6 +3540,12 @@
         "kind": "user",
         "login": "faern",
         "name": "Linus Färnstrand"
+      },
+      {
+        "id": 12822,
+        "kind": "team",
+        "login": "github:mullvad:appteam-crates-io",
+        "name": "appteam-crates.io"
       }
     ],
     "tempfile": [
