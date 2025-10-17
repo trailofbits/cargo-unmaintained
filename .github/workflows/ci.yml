@@ -68,7 +68,7 @@ jobs:
 
       - uses: taiki-e/install-action@v2
         with:
-          tool: cargo-audit, cargo-hack, cargo-sort, cargo-udeps
+          tool: cargo-audit, cargo-hack, cargo-udeps
 
       - name: Install tools
         run: |
