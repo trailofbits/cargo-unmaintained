@@ -2084,20 +2084,6 @@
         "name": "Josh Stone"
       }
     ],
-    "io-uring": [
-      {
-        "id": 4286,
-        "kind": "user",
-        "login": "quininer",
-        "name": "quininer"
-      },
-      {
-        "id": 4636,
-        "kind": "team",
-        "login": "github:tokio-rs:uring-core",
-        "name": "uring-core"
-      }
-    ],
     "ipnet": [
       {
         "id": 8197,
