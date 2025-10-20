@@ -38,7 +38,7 @@ snapbox = "0.6"
 strum = "0.27"
 strum_macros = "0.27"
 testing = { path = "testing" }
-tokio = "1.46"
+tokio = "1.48"
 
 [features]
 default = ["on-disk-cache", "lock-index"]
