@@ -218,7 +218,9 @@ gl-rs...not found
 rust-number-prefix...not found
 tsify...not found
 rust-conv...not found
-not found (135)
+rust-urlpattern...not found
+rust-unic...not found
+not found (137)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -354,6 +356,8 @@ not found (135)
     rust-number-prefix       https://github.com/rustsec/advisory-db/issues/2319
     tsify                    https://github.com/rustsec/advisory-db/issues/2353
     rust-conv                https://github.com/rustsec/advisory-db/issues/2386
+    rust-urlpattern          https://github.com/rustsec/advisory-db/issues/2414
+    rust-unic                https://github.com/rustsec/advisory-db/issues/2414
 found (58)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 

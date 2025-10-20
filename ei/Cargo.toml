@@ -5,7 +5,7 @@ edition = "2024"
 publish = false
 
 [dev-dependencies]
-ctor = "0.5"
+ctor = "0.6"
 regex = "1.11"
 snapbox = "0.6"
 
