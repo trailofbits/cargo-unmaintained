@@ -6,7 +6,7 @@ publish = false
 
 [dev-dependencies]
 ctor = "0.6"
-regex = "1.11"
+regex = "1.12"
 snapbox = "0.6"
 
 testing = { path = "../testing" }
