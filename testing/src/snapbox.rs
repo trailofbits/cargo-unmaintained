@@ -4,10 +4,7 @@
 use super::{Tee, enabled, tee};
 use anyhow::{Context, Result, bail};
 use serde::Deserialize;
-use snapbox::{
-    Data, assert_data_eq,
-    cmd::{Command as SnapboxCommand, cargo_bin},
-};
+use snapbox::{Data, assert_data_eq, cmd::Command as SnapboxCommand};
 use std::{
     env::var,
     ffi::OsStr,
@@ -46,19 +43,6 @@ struct Test {
 pub fn snapbox(real_github: bool) -> Result<()> {
     // #[cfg(not(feature = "lock-index"))]
     // panic!("the `snapbox` test requires the `lock-index` feature");
-
-    if !real_github {
-        #[cfg_attr(dylint_lib = "general", allow(abs_home_path))]
-        let status = Command::new("cargo")
-            .args([
-                "build",
-                "--manifest-path",
-                concat!(env!("CARGO_MANIFEST_DIR"), "/../mock_github/Cargo.toml"),
-            ])
-            .status()
-            .unwrap();
-        assert!(status.success());
-    }
 
     let test_cases = Path::new("tests/cases");
 
@@ -149,19 +133,25 @@ pub fn snapbox(real_github: bool) -> Result<()> {
             path_buf.display()
         );
 
-        let mut command = if real_github {
-            Command::new(cargo_bin("cargo-unmaintained"))
+        let mut command = Command::new("cargo");
+        command.args(["run", "--quiet"]);
+        #[cfg_attr(dylint_lib = "general", allow(abs_home_path))]
+        if real_github {
+            command.args([
+                "--bin=cargo-unmaintained",
+                "--manifest-path",
+                concat!(env!("CARGO_MANIFEST_DIR"), "/../Cargo.toml"),
+            ]);
         } else {
-            #[cfg_attr(dylint_lib = "general", allow(abs_home_path))]
-            Command::new(concat!(
-                env!("CARGO_MANIFEST_DIR"),
-                "/../mock_github/target/debug/cargo-unmaintained-with-mock-github"
-            ))
-        };
+            command.args([
+                "--bin=cargo-unmaintained-with-mock-github",
+                "--manifest-path",
+                concat!(env!("CARGO_MANIFEST_DIR"), "/../mock_github/Cargo.toml"),
+            ]);
+        }
+        command.args(["--", "unmaintained", "--color=never", "--json"]);
         command.envs(test.env);
-        command
-            .args(["unmaintained", "--color=never", "--json"])
-            .current_dir(dir);
+        command.current_dir(dir);
 
         let stdout_actual = if enabled("VERBOSE") {
             // smoelius If `VERBOSE` is enabled, don't bother comparing stderr, because it won't
