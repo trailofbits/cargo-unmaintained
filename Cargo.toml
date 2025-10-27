@@ -83,7 +83,7 @@ format-collect = "allow"
 missing-errors-doc = "allow"
 missing-panics-doc = "allow"
 
-# smoelius: Enabling `__mocked_cargo` causes `xdg` to appear unused.
+# smoelius: Enabling `__mock_github` causes `xdg` to appear unused.
 [workspace.metadata.cargo-udeps.ignore]
 normal = ["xdg"]
 
