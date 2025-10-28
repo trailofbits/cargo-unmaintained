@@ -93,7 +93,6 @@ pub fn snapbox(real_github: bool) -> Result<()> {
 
         #[allow(clippy::explicit_write)]
         write!(stderr(), "running {}", input_path.display()).unwrap();
-        #[allow(clippy::disallowed_methods)]
         stderr().flush().unwrap();
         let start = Instant::now();
 

@@ -38,7 +38,6 @@ use tempfile::TempDir;
 use termcolor::{ColorChoice, ColorSpec, StandardStream, WriteColor};
 use toml::{Table, Value};
 
-pub mod flush;
 pub mod github;
 pub mod packaging;
 

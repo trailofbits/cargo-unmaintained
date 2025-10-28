@@ -7,14 +7,14 @@ macro_rules! __eprint {
         if crate::opts::get().verbose {
             $crate::verbose::__NEED_NEWLINE.store(true, std::sync::atomic::Ordering::SeqCst);
             eprint!($fmt);
-            <_ as $crate::flush::Flush>::flush(&mut std::io::stderr()).unwrap();
+            <_ as std::io::Write>::flush(&mut std::io::stderr()).unwrap();
         }
     };
     ($fmt:expr, $($arg:tt)*) => {
         if crate::opts::get().verbose {
             $crate::verbose::__NEED_NEWLINE.store(true, std::sync::atomic::Ordering::SeqCst);
             eprint!($fmt, $($arg)*);
-            <_ as $crate::flush::Flush>::flush(&mut std::io::stderr()).unwrap();
+            <_ as std::io::Write>::flush(&mut std::io::stderr()).unwrap();
         }
     };
 }

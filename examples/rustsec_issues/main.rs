@@ -1,5 +1,5 @@
 use anyhow::{Context, Result};
-use cargo_unmaintained::{flush::Flush, github::util as github_util};
+use cargo_unmaintained::github::util as github_util;
 use log::debug;
 use regex::Regex;
 use std::{
@@ -81,7 +81,7 @@ fn main() -> Result<()> {
                 }
                 checked.insert(name);
                 print!("{name}...");
-                <_ as Flush>::flush(&mut std::io::stdout())
+                <_ as std::io::Write>::flush(&mut std::io::stdout())
                     .with_context(|| "failed to flush stdout")?;
                 if is_unmaintained(name)? {
                     println!("found");

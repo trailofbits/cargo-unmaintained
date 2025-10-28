@@ -1,6 +1,6 @@
 use anyhow::{Context, Result, ensure};
 use cargo_metadata::MetadataCommand;
-use cargo_unmaintained::{flush::Flush, packaging::temp_package};
+use cargo_unmaintained::packaging::temp_package;
 use chrono::Utc;
 use regex::Regex;
 use rustsec::{Advisory, Database, advisory::Informational};
@@ -51,7 +51,8 @@ fn main() -> Result<()> {
 
     for advisory in advisories {
         print!("{}...", advisory.metadata.package);
-        <_ as Flush>::flush(&mut std::io::stdout()).with_context(|| "failed to flush stdout")?;
+        <_ as std::io::Write>::flush(&mut std::io::stdout())
+            .with_context(|| "failed to flush stdout")?;
 
         let tempdir = temp_package(advisory.metadata.package.as_str())?;
 

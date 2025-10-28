@@ -1,4 +1,3 @@
-use crate::flush::Flush;
 use anyhow::{Context, Result};
 
 pub struct Progress {
@@ -65,7 +64,8 @@ impl Progress {
         let formatted_msg = format!("{:>width_n$}/{} ({percent}%) {msg}", self.i, self.n,);
         let width_to_overwrite = self.width_prev.saturating_sub(formatted_msg.len());
         eprint!("{formatted_msg}{:width_to_overwrite$}\r", "");
-        <_ as Flush>::flush(&mut std::io::stderr()).with_context(|| "failed to flush stderr")?;
+        <_ as std::io::Write>::flush(&mut std::io::stderr())
+            .with_context(|| "failed to flush stderr")?;
         self.width_prev = formatted_msg.len();
         self.newline_needed = true;
         Ok(())
