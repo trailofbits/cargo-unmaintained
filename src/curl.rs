@@ -1,4 +1,4 @@
-use super::{RepoStatus, Url};
+use super::{RepoStatus, USER_AGENT, Url};
 use anyhow::{Result, anyhow};
 use curl::easy::{Easy, List};
 use std::time::Duration;
@@ -57,5 +57,6 @@ pub(crate) fn handle(url: Url) -> Result<Easy> {
     handle.url(url.as_str())?;
     handle.follow_location(true)?;
     handle.timeout(Duration::from_secs(TIMEOUT))?;
+    handle.useragent(USER_AGENT)?;
     Ok(handle)
 }

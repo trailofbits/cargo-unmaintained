@@ -62,6 +62,8 @@ use url::{Url, urls};
 
 const SECS_PER_DAY: u64 = 24 * 60 * 60;
 
+const USER_AGENT: &str = "cargo-unmaintained (github.com/trailofbits/cargo-unmaintained)";
+
 #[derive(Debug, Parser)]
 #[clap(bin_name = "cargo", display_name = "cargo")]
 struct Cargo {

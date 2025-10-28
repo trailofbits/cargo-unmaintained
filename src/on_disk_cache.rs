@@ -21,7 +21,7 @@
 //!
 //! The on-disk cache resides at `$HOME/.cache/cargo-unmaintained/v2`.
 
-use super::{SECS_PER_DAY, urls};
+use super::{SECS_PER_DAY, USER_AGENT, urls};
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::{Package, PackageName};
 use crates_io_api::{SyncClient, Version};
@@ -39,8 +39,6 @@ use std::{
 use tempfile::{TempDir, tempdir};
 
 const DEFAULT_REFRESH_AGE: u64 = 30; // days
-
-const USER_AGENT: &str = "cargo-unmaintained (github.com/trailofbits/cargo-unmaintained)";
 
 const RATE_LIMIT: Duration = Duration::from_secs(1);
 
