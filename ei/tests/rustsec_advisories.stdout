@@ -1,4 +1,4 @@
-151 advisories for unmaintained packages
+182 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -258,167 +258,229 @@ crypto-hash...found
 iron...found
 google-apis-common...not found
 daemonize...not found
+unic-segment...not found
+unic-char-range...not found
+unic-ucd-name...not found
+unic-ucd...not found
+unic-ucd-normal...not found
+unic-ucd-hangul...not found
+unic-common...leaf
+unic-char-property...not found
+unic-normal...not found
+unic-ucd-bidi...not found
+unic-emoji...not found
+unic-idna...not found
+unic-char...not found
+unic-cli...found
+unic-idna-punycode...not found
+unic-ucd-name_aliases...not found
+unic-emoji-char...not found
+unic-utils...found
+unic-ucd-case...not found
+unic-char-basics...not found
+unic-ucd-category...not found
+unic...not found
+unic-bidi...not found
+unic-idna-mapping...not found
+unic-ucd-version...not found
+unic-ucd-block...not found
+unic-ucd-ident...not found
+unic-ucd-common...not found
+unic-ucd-age...not found
+unic-ucd-core...found
+unic-ucd-segment...not found
 not found - error (11)
-    block-cipher-trait    https://rustsec.org/advisories/RUSTSEC-2020-0018.html
-    block-cipher          https://rustsec.org/advisories/RUSTSEC-2020-0057.html
-    stream-cipher         https://rustsec.org/advisories/RUSTSEC-2020-0058.html
-    safe_app              https://rustsec.org/advisories/RUSTSEC-2020-0083.html
-    safe_authenticator    https://rustsec.org/advisories/RUSTSEC-2020-0084.html
-    safe_vault            https://rustsec.org/advisories/RUSTSEC-2020-0085.html
-    safe-api              https://rustsec.org/advisories/RUSTSEC-2021-0024.html
-    miscreant             https://rustsec.org/advisories/RUSTSEC-2021-0062.html
-    cargo-download        https://rustsec.org/advisories/RUSTSEC-2021-0133.html
-    cosmwasm              https://rustsec.org/advisories/RUSTSEC-2024-0004.html
-    puccinier             https://rustsec.org/advisories/RUSTSEC-2024-0331.html
-not found - leaf (3)
-    anymap                https://rustsec.org/advisories/RUSTSEC-2021-0065.html
-    traitobject           https://rustsec.org/advisories/RUSTSEC-2021-0144.html
-    json                  https://rustsec.org/advisories/RUSTSEC-2022-0081.html
+    block-cipher-trait     https://rustsec.org/advisories/RUSTSEC-2020-0018.html
+    block-cipher           https://rustsec.org/advisories/RUSTSEC-2020-0057.html
+    stream-cipher          https://rustsec.org/advisories/RUSTSEC-2020-0058.html
+    safe_app               https://rustsec.org/advisories/RUSTSEC-2020-0083.html
+    safe_authenticator     https://rustsec.org/advisories/RUSTSEC-2020-0084.html
+    safe_vault             https://rustsec.org/advisories/RUSTSEC-2020-0085.html
+    safe-api               https://rustsec.org/advisories/RUSTSEC-2021-0024.html
+    miscreant              https://rustsec.org/advisories/RUSTSEC-2021-0062.html
+    cargo-download         https://rustsec.org/advisories/RUSTSEC-2021-0133.html
+    cosmwasm               https://rustsec.org/advisories/RUSTSEC-2024-0004.html
+    puccinier              https://rustsec.org/advisories/RUSTSEC-2024-0331.html
+not found - leaf (4)
+    anymap                 https://rustsec.org/advisories/RUSTSEC-2021-0065.html
+    traitobject            https://rustsec.org/advisories/RUSTSEC-2021-0144.html
+    json                   https://rustsec.org/advisories/RUSTSEC-2022-0081.html
+    unic-common            https://rustsec.org/advisories/RUSTSEC-2025-0080.html
 not found - recently-updated (2)
-    surf                  https://rustsec.org/advisories/RUSTSEC-2025-0036.html
-    async-std             https://rustsec.org/advisories/RUSTSEC-2025-0052.html
-not found - other (23)
-    serial                https://rustsec.org/advisories/RUSTSEC-2017-0008.html
-    typemap               https://rustsec.org/advisories/RUSTSEC-2019-0039.html
-    stb_truetype          https://rustsec.org/advisories/RUSTSEC-2020-0020.html
-    difference            https://rustsec.org/advisories/RUSTSEC-2020-0095.html
-    slice-deque           https://rustsec.org/advisories/RUSTSEC-2020-0158.html
-    mach                  https://rustsec.org/advisories/RUSTSEC-2020-0168.html
-    ansi_term             https://rustsec.org/advisories/RUSTSEC-2021-0139.html
-    dotenv                https://rustsec.org/advisories/RUSTSEC-2021-0141.html
-    dotenv_codegen        https://rustsec.org/advisories/RUSTSEC-2021-0142.html
-    twoway                https://rustsec.org/advisories/RUSTSEC-2021-0146.html
-    encoding              https://rustsec.org/advisories/RUSTSEC-2021-0153.html
-    double-checked-cell   https://rustsec.org/advisories/RUSTSEC-2022-0024.html
-    users                 https://rustsec.org/advisories/RUSTSEC-2023-0040.html
-    fehler                https://rustsec.org/advisories/RUSTSEC-2023-0067.html
-    cpython               https://rustsec.org/advisories/RUSTSEC-2023-0076.html
-    yaml-rust             https://rustsec.org/advisories/RUSTSEC-2024-0320.html
-    instant               https://rustsec.org/advisories/RUSTSEC-2024-0384.html
-    chrono-english        https://rustsec.org/advisories/RUSTSEC-2024-0395.html
-    get-size              https://rustsec.org/advisories/RUSTSEC-2024-0425.html
-    tsify-next            https://rustsec.org/advisories/RUSTSEC-2025-0048.html
-    fxhash                https://rustsec.org/advisories/RUSTSEC-2025-0057.html
-    google-apis-common    https://rustsec.org/advisories/RUSTSEC-2025-0066.html
-    daemonize             https://rustsec.org/advisories/RUSTSEC-2025-0069.html
-found (112)
-    lz4-compress          https://rustsec.org/advisories/RUSTSEC-2017-0007.html
-    tempdir               https://rustsec.org/advisories/RUSTSEC-2018-0017.html
-    boxfnonce             https://rustsec.org/advisories/RUSTSEC-2019-0040.html
-    net2                  https://rustsec.org/advisories/RUSTSEC-2020-0016.html
-    bigint                https://rustsec.org/advisories/RUSTSEC-2020-0025.html
-    failure               https://rustsec.org/advisories/RUSTSEC-2020-0036.html
-    safe-nd               https://rustsec.org/advisories/RUSTSEC-2020-0063.html
-    ffi_utils             https://rustsec.org/advisories/RUSTSEC-2020-0064.html
-    fake_clock            https://rustsec.org/advisories/RUSTSEC-2020-0065.html
-    safe_bindgen          https://rustsec.org/advisories/RUSTSEC-2020-0066.html
-    quic-p2p              https://rustsec.org/advisories/RUSTSEC-2020-0067.html
-    routing               https://rustsec.org/advisories/RUSTSEC-2020-0076.html
-    safe_core             https://rustsec.org/advisories/RUSTSEC-2020-0086.html
-    stderr                https://rustsec.org/advisories/RUSTSEC-2020-0109.html
-    rulinalg              https://rustsec.org/advisories/RUSTSEC-2020-0147.html
-    tokio-proto           https://rustsec.org/advisories/RUSTSEC-2020-0162.html
-    term_size             https://rustsec.org/advisories/RUSTSEC-2020-0163.html
-    interfaces2           https://rustsec.org/advisories/RUSTSEC-2021-0002.html
-    jsonrpc-quic          https://rustsec.org/advisories/RUSTSEC-2021-0025.html
-    office                https://rustsec.org/advisories/RUSTSEC-2021-0034.html
-    aesni                 https://rustsec.org/advisories/RUSTSEC-2021-0059.html
-    aes-soft              https://rustsec.org/advisories/RUSTSEC-2021-0060.html
-    aes-ctr               https://rustsec.org/advisories/RUSTSEC-2021-0061.html
-    cpuid-bool            https://rustsec.org/advisories/RUSTSEC-2021-0064.html
-    spirv_headers         https://rustsec.org/advisories/RUSTSEC-2021-0096.html
-    cosmos_sdk            https://rustsec.org/advisories/RUSTSEC-2021-0099.html
-    serde_cbor            https://rustsec.org/advisories/RUSTSEC-2021-0127.html
-    rental                https://rustsec.org/advisories/RUSTSEC-2021-0134.html
-    sass-rs               https://rustsec.org/advisories/RUSTSEC-2021-0136.html
-    sodiumoxide           https://rustsec.org/advisories/RUSTSEC-2021-0137.html
-    rusttype              https://rustsec.org/advisories/RUSTSEC-2021-0140.html
-    nphysics3d            https://rustsec.org/advisories/RUSTSEC-2021-0148.html
-    nphysics2d            https://rustsec.org/advisories/RUSTSEC-2021-0149.html
-    ncollide3d            https://rustsec.org/advisories/RUSTSEC-2021-0150.html
-    ncollide2d            https://rustsec.org/advisories/RUSTSEC-2021-0151.html
-    lmdb                  https://rustsec.org/advisories/RUSTSEC-2022-0001.html
-    ftd2xx-embedded-hal   https://rustsec.org/advisories/RUSTSEC-2022-0005.html
-    pty                   https://rustsec.org/advisories/RUSTSEC-2022-0015.html
-    static_type_map       https://rustsec.org/advisories/RUSTSEC-2022-0023.html
-    r2d2_odbc             https://rustsec.org/advisories/RUSTSEC-2022-0036.html
-    odbc                  https://rustsec.org/advisories/RUSTSEC-2022-0039.html
-    interledger-packet    https://rustsec.org/advisories/RUSTSEC-2022-0050.html
-    mapr                  https://rustsec.org/advisories/RUSTSEC-2022-0053.html
-    wee_alloc             https://rustsec.org/advisories/RUSTSEC-2022-0054.html
-    clipboard             https://rustsec.org/advisories/RUSTSEC-2022-0056.html
-    badge                 https://rustsec.org/advisories/RUSTSEC-2022-0057.html
-    orbtk                 https://rustsec.org/advisories/RUSTSEC-2022-0060.html
-    parity-wasm           https://rustsec.org/advisories/RUSTSEC-2022-0061.html
-    rusoto_credential     https://rustsec.org/advisories/RUSTSEC-2022-0071.html
-    alloc-cortex-m        https://rustsec.org/advisories/RUSTSEC-2022-0073.html
-    claim                 https://rustsec.org/advisories/RUSTSEC-2022-0077.html
-    parity-util-mem       https://rustsec.org/advisories/RUSTSEC-2022-0080.html
-    kuchiki               https://rustsec.org/advisories/RUSTSEC-2023-0019.html
-    git-hash              https://rustsec.org/advisories/RUSTSEC-2023-0025.html
-    git-path              https://rustsec.org/advisories/RUSTSEC-2023-0026.html
-    buf_redux             https://rustsec.org/advisories/RUSTSEC-2023-0028.html
-    tree_magic            https://rustsec.org/advisories/RUSTSEC-2023-0036.html
-    xsalsa20poly1305      https://rustsec.org/advisories/RUSTSEC-2023-0037.html
-    ftp                   https://rustsec.org/advisories/RUSTSEC-2023-0043.html
-    tui                   https://rustsec.org/advisories/RUSTSEC-2023-0049.html
-    multipart             https://rustsec.org/advisories/RUSTSEC-2023-0050.html
-    dlopen_derive         https://rustsec.org/advisories/RUSTSEC-2023-0051.html
-    safemem               https://rustsec.org/advisories/RUSTSEC-2023-0081.html
-    hpack                 https://rustsec.org/advisories/RUSTSEC-2023-0084.html
-    loopdev               https://rustsec.org/advisories/RUSTSEC-2023-0088.html
-    atomic-polyfill       https://rustsec.org/advisories/RUSTSEC-2023-0089.html
-    martin-mbtiles        https://rustsec.org/advisories/RUSTSEC-2023-0094.html
-    generational-arena    https://rustsec.org/advisories/RUSTSEC-2024-0014.html
-    filesystem            https://rustsec.org/advisories/RUSTSEC-2024-0015.html
-    rsa-export            https://rustsec.org/advisories/RUSTSEC-2024-0333.html
-    libp2p-tokio-socks5   https://rustsec.org/advisories/RUSTSEC-2024-0334.html
-    zip_next              https://rustsec.org/advisories/RUSTSEC-2024-0337.html
-    proc-macro-error      https://rustsec.org/advisories/RUSTSEC-2024-0370.html
-    atty                  https://rustsec.org/advisories/RUSTSEC-2024-0375.html
-    pqcrypto-dilithium    https://rustsec.org/advisories/RUSTSEC-2024-0380.html
-    pqcrypto-kyber        https://rustsec.org/advisories/RUSTSEC-2024-0381.html
-    hwloc                 https://rustsec.org/advisories/RUSTSEC-2024-0382.html
-    bcc                   https://rustsec.org/advisories/RUSTSEC-2024-0383.html
-    cw0                   https://rustsec.org/advisories/RUSTSEC-2024-0385.html
-    strason               https://rustsec.org/advisories/RUSTSEC-2024-0386.html
-    opentelemetry_api     https://rustsec.org/advisories/RUSTSEC-2024-0387.html
-    derivative            https://rustsec.org/advisories/RUSTSEC-2024-0388.html
-    openslide             https://rustsec.org/advisories/RUSTSEC-2024-0389.html
-    minitrace             https://rustsec.org/advisories/RUSTSEC-2024-0390.html
-    mmap                  https://rustsec.org/advisories/RUSTSEC-2024-0394.html
-    conrod_core           https://rustsec.org/advisories/RUSTSEC-2024-0396.html
-    conrod                https://rustsec.org/advisories/RUSTSEC-2024-0397.html
-    gdkwayland            https://rustsec.org/advisories/RUSTSEC-2024-0410.html
-    gdkwayland-sys        https://rustsec.org/advisories/RUSTSEC-2024-0411.html
-    gdk                   https://rustsec.org/advisories/RUSTSEC-2024-0412.html
-    atk                   https://rustsec.org/advisories/RUSTSEC-2024-0413.html
-    gdkx11-sys            https://rustsec.org/advisories/RUSTSEC-2024-0414.html
-    gtk                   https://rustsec.org/advisories/RUSTSEC-2024-0415.html
-    atk-sys               https://rustsec.org/advisories/RUSTSEC-2024-0416.html
-    gdkx11                https://rustsec.org/advisories/RUSTSEC-2024-0417.html
-    gdk-sys               https://rustsec.org/advisories/RUSTSEC-2024-0418.html
-    gtk3-macros           https://rustsec.org/advisories/RUSTSEC-2024-0419.html
-    gtk-sys               https://rustsec.org/advisories/RUSTSEC-2024-0420.html
-    gtk-layer-shell       https://rustsec.org/advisories/RUSTSEC-2024-0422.html
-    gtk-layer-shell-sys   https://rustsec.org/advisories/RUSTSEC-2024-0423.html
-    get-size-derive       https://rustsec.org/advisories/RUSTSEC-2024-0427.html
-    paste                 https://rustsec.org/advisories/RUSTSEC-2024-0436.html
-    openpgp-card-sequoia  https://rustsec.org/advisories/RUSTSEC-2025-0011.html
-    backoff               https://rustsec.org/advisories/RUSTSEC-2025-0012.html
-    resolve               https://rustsec.org/advisories/RUSTSEC-2025-0013.html
-    rustc-serialize       https://rustsec.org/advisories/RUSTSEC-2025-0025.html
-    registry              https://rustsec.org/advisories/RUSTSEC-2025-0026.html
-    adler                 https://rustsec.org/advisories/RUSTSEC-2025-0056.html
-    custom_derive         https://rustsec.org/advisories/RUSTSEC-2025-0058.html
-    servo-fontconfig      https://rustsec.org/advisories/RUSTSEC-2025-0059.html
-    crypto-hash           https://rustsec.org/advisories/RUSTSEC-2025-0060.html
-    iron                  https://rustsec.org/advisories/RUSTSEC-2025-0061.html
+    surf                   https://rustsec.org/advisories/RUSTSEC-2025-0036.html
+    async-std              https://rustsec.org/advisories/RUSTSEC-2025-0052.html
+not found - other (50)
+    serial                 https://rustsec.org/advisories/RUSTSEC-2017-0008.html
+    typemap                https://rustsec.org/advisories/RUSTSEC-2019-0039.html
+    stb_truetype           https://rustsec.org/advisories/RUSTSEC-2020-0020.html
+    difference             https://rustsec.org/advisories/RUSTSEC-2020-0095.html
+    slice-deque            https://rustsec.org/advisories/RUSTSEC-2020-0158.html
+    mach                   https://rustsec.org/advisories/RUSTSEC-2020-0168.html
+    ansi_term              https://rustsec.org/advisories/RUSTSEC-2021-0139.html
+    dotenv                 https://rustsec.org/advisories/RUSTSEC-2021-0141.html
+    dotenv_codegen         https://rustsec.org/advisories/RUSTSEC-2021-0142.html
+    twoway                 https://rustsec.org/advisories/RUSTSEC-2021-0146.html
+    encoding               https://rustsec.org/advisories/RUSTSEC-2021-0153.html
+    double-checked-cell    https://rustsec.org/advisories/RUSTSEC-2022-0024.html
+    users                  https://rustsec.org/advisories/RUSTSEC-2023-0040.html
+    fehler                 https://rustsec.org/advisories/RUSTSEC-2023-0067.html
+    cpython                https://rustsec.org/advisories/RUSTSEC-2023-0076.html
+    yaml-rust              https://rustsec.org/advisories/RUSTSEC-2024-0320.html
+    instant                https://rustsec.org/advisories/RUSTSEC-2024-0384.html
+    chrono-english         https://rustsec.org/advisories/RUSTSEC-2024-0395.html
+    get-size               https://rustsec.org/advisories/RUSTSEC-2024-0425.html
+    tsify-next             https://rustsec.org/advisories/RUSTSEC-2025-0048.html
+    fxhash                 https://rustsec.org/advisories/RUSTSEC-2025-0057.html
+    google-apis-common     https://rustsec.org/advisories/RUSTSEC-2025-0066.html
+    daemonize              https://rustsec.org/advisories/RUSTSEC-2025-0069.html
+    unic-segment           https://rustsec.org/advisories/RUSTSEC-2025-0074.html
+    unic-char-range        https://rustsec.org/advisories/RUSTSEC-2025-0075.html
+    unic-ucd-name          https://rustsec.org/advisories/RUSTSEC-2025-0076.html
+    unic-ucd               https://rustsec.org/advisories/RUSTSEC-2025-0077.html
+    unic-ucd-normal        https://rustsec.org/advisories/RUSTSEC-2025-0078.html
+    unic-ucd-hangul        https://rustsec.org/advisories/RUSTSEC-2025-0079.html
+    unic-char-property     https://rustsec.org/advisories/RUSTSEC-2025-0081.html
+    unic-normal            https://rustsec.org/advisories/RUSTSEC-2025-0082.html
+    unic-ucd-bidi          https://rustsec.org/advisories/RUSTSEC-2025-0083.html
+    unic-emoji             https://rustsec.org/advisories/RUSTSEC-2025-0084.html
+    unic-idna              https://rustsec.org/advisories/RUSTSEC-2025-0085.html
+    unic-char              https://rustsec.org/advisories/RUSTSEC-2025-0086.html
+    unic-idna-punycode     https://rustsec.org/advisories/RUSTSEC-2025-0088.html
+    unic-ucd-name_aliases  https://rustsec.org/advisories/RUSTSEC-2025-0089.html
+    unic-emoji-char        https://rustsec.org/advisories/RUSTSEC-2025-0090.html
+    unic-ucd-case          https://rustsec.org/advisories/RUSTSEC-2025-0092.html
+    unic-char-basics       https://rustsec.org/advisories/RUSTSEC-2025-0093.html
+    unic-ucd-category      https://rustsec.org/advisories/RUSTSEC-2025-0094.html
+    unic                   https://rustsec.org/advisories/RUSTSEC-2025-0095.html
+    unic-bidi              https://rustsec.org/advisories/RUSTSEC-2025-0096.html
+    unic-idna-mapping      https://rustsec.org/advisories/RUSTSEC-2025-0097.html
+    unic-ucd-version       https://rustsec.org/advisories/RUSTSEC-2025-0098.html
+    unic-ucd-block         https://rustsec.org/advisories/RUSTSEC-2025-0099.html
+    unic-ucd-ident         https://rustsec.org/advisories/RUSTSEC-2025-0100.html
+    unic-ucd-common        https://rustsec.org/advisories/RUSTSEC-2025-0101.html
+    unic-ucd-age           https://rustsec.org/advisories/RUSTSEC-2025-0102.html
+    unic-ucd-segment       https://rustsec.org/advisories/RUSTSEC-2025-0104.html
+found (115)
+    lz4-compress           https://rustsec.org/advisories/RUSTSEC-2017-0007.html
+    tempdir                https://rustsec.org/advisories/RUSTSEC-2018-0017.html
+    boxfnonce              https://rustsec.org/advisories/RUSTSEC-2019-0040.html
+    net2                   https://rustsec.org/advisories/RUSTSEC-2020-0016.html
+    bigint                 https://rustsec.org/advisories/RUSTSEC-2020-0025.html
+    failure                https://rustsec.org/advisories/RUSTSEC-2020-0036.html
+    safe-nd                https://rustsec.org/advisories/RUSTSEC-2020-0063.html
+    ffi_utils              https://rustsec.org/advisories/RUSTSEC-2020-0064.html
+    fake_clock             https://rustsec.org/advisories/RUSTSEC-2020-0065.html
+    safe_bindgen           https://rustsec.org/advisories/RUSTSEC-2020-0066.html
+    quic-p2p               https://rustsec.org/advisories/RUSTSEC-2020-0067.html
+    routing                https://rustsec.org/advisories/RUSTSEC-2020-0076.html
+    safe_core              https://rustsec.org/advisories/RUSTSEC-2020-0086.html
+    stderr                 https://rustsec.org/advisories/RUSTSEC-2020-0109.html
+    rulinalg               https://rustsec.org/advisories/RUSTSEC-2020-0147.html
+    tokio-proto            https://rustsec.org/advisories/RUSTSEC-2020-0162.html
+    term_size              https://rustsec.org/advisories/RUSTSEC-2020-0163.html
+    interfaces2            https://rustsec.org/advisories/RUSTSEC-2021-0002.html
+    jsonrpc-quic           https://rustsec.org/advisories/RUSTSEC-2021-0025.html
+    office                 https://rustsec.org/advisories/RUSTSEC-2021-0034.html
+    aesni                  https://rustsec.org/advisories/RUSTSEC-2021-0059.html
+    aes-soft               https://rustsec.org/advisories/RUSTSEC-2021-0060.html
+    aes-ctr                https://rustsec.org/advisories/RUSTSEC-2021-0061.html
+    cpuid-bool             https://rustsec.org/advisories/RUSTSEC-2021-0064.html
+    spirv_headers          https://rustsec.org/advisories/RUSTSEC-2021-0096.html
+    cosmos_sdk             https://rustsec.org/advisories/RUSTSEC-2021-0099.html
+    serde_cbor             https://rustsec.org/advisories/RUSTSEC-2021-0127.html
+    rental                 https://rustsec.org/advisories/RUSTSEC-2021-0134.html
+    sass-rs                https://rustsec.org/advisories/RUSTSEC-2021-0136.html
+    sodiumoxide            https://rustsec.org/advisories/RUSTSEC-2021-0137.html
+    rusttype               https://rustsec.org/advisories/RUSTSEC-2021-0140.html
+    nphysics3d             https://rustsec.org/advisories/RUSTSEC-2021-0148.html
+    nphysics2d             https://rustsec.org/advisories/RUSTSEC-2021-0149.html
+    ncollide3d             https://rustsec.org/advisories/RUSTSEC-2021-0150.html
+    ncollide2d             https://rustsec.org/advisories/RUSTSEC-2021-0151.html
+    lmdb                   https://rustsec.org/advisories/RUSTSEC-2022-0001.html
+    ftd2xx-embedded-hal    https://rustsec.org/advisories/RUSTSEC-2022-0005.html
+    pty                    https://rustsec.org/advisories/RUSTSEC-2022-0015.html
+    static_type_map        https://rustsec.org/advisories/RUSTSEC-2022-0023.html
+    r2d2_odbc              https://rustsec.org/advisories/RUSTSEC-2022-0036.html
+    odbc                   https://rustsec.org/advisories/RUSTSEC-2022-0039.html
+    interledger-packet     https://rustsec.org/advisories/RUSTSEC-2022-0050.html
+    mapr                   https://rustsec.org/advisories/RUSTSEC-2022-0053.html
+    wee_alloc              https://rustsec.org/advisories/RUSTSEC-2022-0054.html
+    clipboard              https://rustsec.org/advisories/RUSTSEC-2022-0056.html
+    badge                  https://rustsec.org/advisories/RUSTSEC-2022-0057.html
+    orbtk                  https://rustsec.org/advisories/RUSTSEC-2022-0060.html
+    parity-wasm            https://rustsec.org/advisories/RUSTSEC-2022-0061.html
+    rusoto_credential      https://rustsec.org/advisories/RUSTSEC-2022-0071.html
+    alloc-cortex-m         https://rustsec.org/advisories/RUSTSEC-2022-0073.html
+    claim                  https://rustsec.org/advisories/RUSTSEC-2022-0077.html
+    parity-util-mem        https://rustsec.org/advisories/RUSTSEC-2022-0080.html
+    kuchiki                https://rustsec.org/advisories/RUSTSEC-2023-0019.html
+    git-hash               https://rustsec.org/advisories/RUSTSEC-2023-0025.html
+    git-path               https://rustsec.org/advisories/RUSTSEC-2023-0026.html
+    buf_redux              https://rustsec.org/advisories/RUSTSEC-2023-0028.html
+    tree_magic             https://rustsec.org/advisories/RUSTSEC-2023-0036.html
+    xsalsa20poly1305       https://rustsec.org/advisories/RUSTSEC-2023-0037.html
+    ftp                    https://rustsec.org/advisories/RUSTSEC-2023-0043.html
+    tui                    https://rustsec.org/advisories/RUSTSEC-2023-0049.html
+    multipart              https://rustsec.org/advisories/RUSTSEC-2023-0050.html
+    dlopen_derive          https://rustsec.org/advisories/RUSTSEC-2023-0051.html
+    safemem                https://rustsec.org/advisories/RUSTSEC-2023-0081.html
+    hpack                  https://rustsec.org/advisories/RUSTSEC-2023-0084.html
+    loopdev                https://rustsec.org/advisories/RUSTSEC-2023-0088.html
+    atomic-polyfill        https://rustsec.org/advisories/RUSTSEC-2023-0089.html
+    martin-mbtiles         https://rustsec.org/advisories/RUSTSEC-2023-0094.html
+    generational-arena     https://rustsec.org/advisories/RUSTSEC-2024-0014.html
+    filesystem             https://rustsec.org/advisories/RUSTSEC-2024-0015.html
+    rsa-export             https://rustsec.org/advisories/RUSTSEC-2024-0333.html
+    libp2p-tokio-socks5    https://rustsec.org/advisories/RUSTSEC-2024-0334.html
+    zip_next               https://rustsec.org/advisories/RUSTSEC-2024-0337.html
+    proc-macro-error       https://rustsec.org/advisories/RUSTSEC-2024-0370.html
+    atty                   https://rustsec.org/advisories/RUSTSEC-2024-0375.html
+    pqcrypto-dilithium     https://rustsec.org/advisories/RUSTSEC-2024-0380.html
+    pqcrypto-kyber         https://rustsec.org/advisories/RUSTSEC-2024-0381.html
+    hwloc                  https://rustsec.org/advisories/RUSTSEC-2024-0382.html
+    bcc                    https://rustsec.org/advisories/RUSTSEC-2024-0383.html
+    cw0                    https://rustsec.org/advisories/RUSTSEC-2024-0385.html
+    strason                https://rustsec.org/advisories/RUSTSEC-2024-0386.html
+    opentelemetry_api      https://rustsec.org/advisories/RUSTSEC-2024-0387.html
+    derivative             https://rustsec.org/advisories/RUSTSEC-2024-0388.html
+    openslide              https://rustsec.org/advisories/RUSTSEC-2024-0389.html
+    minitrace              https://rustsec.org/advisories/RUSTSEC-2024-0390.html
+    mmap                   https://rustsec.org/advisories/RUSTSEC-2024-0394.html
+    conrod_core            https://rustsec.org/advisories/RUSTSEC-2024-0396.html
+    conrod                 https://rustsec.org/advisories/RUSTSEC-2024-0397.html
+    gdkwayland             https://rustsec.org/advisories/RUSTSEC-2024-0410.html
+    gdkwayland-sys         https://rustsec.org/advisories/RUSTSEC-2024-0411.html
+    gdk                    https://rustsec.org/advisories/RUSTSEC-2024-0412.html
+    atk                    https://rustsec.org/advisories/RUSTSEC-2024-0413.html
+    gdkx11-sys             https://rustsec.org/advisories/RUSTSEC-2024-0414.html
+    gtk                    https://rustsec.org/advisories/RUSTSEC-2024-0415.html
+    atk-sys                https://rustsec.org/advisories/RUSTSEC-2024-0416.html
+    gdkx11                 https://rustsec.org/advisories/RUSTSEC-2024-0417.html
+    gdk-sys                https://rustsec.org/advisories/RUSTSEC-2024-0418.html
+    gtk3-macros            https://rustsec.org/advisories/RUSTSEC-2024-0419.html
+    gtk-sys                https://rustsec.org/advisories/RUSTSEC-2024-0420.html
+    gtk-layer-shell        https://rustsec.org/advisories/RUSTSEC-2024-0422.html
+    gtk-layer-shell-sys    https://rustsec.org/advisories/RUSTSEC-2024-0423.html
+    get-size-derive        https://rustsec.org/advisories/RUSTSEC-2024-0427.html
+    paste                  https://rustsec.org/advisories/RUSTSEC-2024-0436.html
+    openpgp-card-sequoia   https://rustsec.org/advisories/RUSTSEC-2025-0011.html
+    backoff                https://rustsec.org/advisories/RUSTSEC-2025-0012.html
+    resolve                https://rustsec.org/advisories/RUSTSEC-2025-0013.html
+    rustc-serialize        https://rustsec.org/advisories/RUSTSEC-2025-0025.html
+    registry               https://rustsec.org/advisories/RUSTSEC-2025-0026.html
+    adler                  https://rustsec.org/advisories/RUSTSEC-2025-0056.html
+    custom_derive          https://rustsec.org/advisories/RUSTSEC-2025-0058.html
+    servo-fontconfig       https://rustsec.org/advisories/RUSTSEC-2025-0059.html
+    crypto-hash            https://rustsec.org/advisories/RUSTSEC-2025-0060.html
+    iron                   https://rustsec.org/advisories/RUSTSEC-2025-0061.html
+    unic-cli               https://rustsec.org/advisories/RUSTSEC-2025-0087.html
+    unic-utils             https://rustsec.org/advisories/RUSTSEC-2025-0091.html
+    unic-ucd-core          https://rustsec.org/advisories/RUSTSEC-2025-0103.html
 ---
-As of 2025-09-18, the RustSec Advisory Database contains 151 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 112 (74%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2025-10-29, the RustSec Advisory Database contains 182 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 115 (63%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 39 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 67 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 11 do not build
-  - 3 are existent, unarchived leaves
+  - 4 are existent, unarchived leaves
   - 2 were updated within the past 365 days
-  - 23 were not identified for other reasons
+  - 50 were not identified for other reasons
