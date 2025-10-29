@@ -76,6 +76,12 @@
         "req": "^0.5",
         "version_latest": null,
         "version_used": "0.5.2"
+      },
+      {
+        "name": "unicode-width",
+        "req": "^0.1",
+        "version_latest": null,
+        "version_used": "0.1.10"
       }
     ],
     "repo_status": {
@@ -166,5 +172,11 @@
     "outdated_deps": [],
     "repo_status": "Unassociated",
     "version": "0.23.4"
+  },
+  {
+    "name": "wasm-bindgen-backend",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.2.83"
   }
 ]

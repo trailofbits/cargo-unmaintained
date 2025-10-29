@@ -6,6 +6,12 @@
     "version": "1.0.2"
   },
   {
+    "name": "gix-packetline-blocking",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.17.0"
+  },
+  {
     "name": "im-rc",
     "outdated_deps": [
       {
@@ -52,21 +58,6 @@
       "Age": null
     },
     "version": "0.3.3"
-  },
-  {
-    "name": "rusty-fork",
-    "outdated_deps": [
-      {
-        "name": "quick-error",
-        "req": "^1.2",
-        "version_latest": null,
-        "version_used": "1.2.3"
-      }
-    ],
-    "repo_status": {
-      "Age": null
-    },
-    "version": "0.3.0"
   },
   {
     "name": "serde-value",
@@ -172,5 +163,11 @@
       "Age": null
     },
     "version": "0.2.2"
+  },
+  {
+    "name": "wasm-bindgen-backend",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.2.89"
   }
 ]

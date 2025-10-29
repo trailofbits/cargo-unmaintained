@@ -218,7 +218,14 @@ gl-rs...not found
 rust-number-prefix...not found
 tsify...not found
 rust-conv...not found
-not found (135)
+rust-urlpattern...not found
+rust-unic...not found
+icu...not found
+unic-ucd-core...found
+unic-ucd-utils...not found
+unic-utils...found
+ignoring `https://gist.github.com/lewismosciski/57ac3b8b7a861abdd0d7ae6f39de5a9d` from `https://github.com/rustsec/advisory-db/issues/2428`
+not found (139)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -354,7 +361,11 @@ not found (135)
     rust-number-prefix       https://github.com/rustsec/advisory-db/issues/2319
     tsify                    https://github.com/rustsec/advisory-db/issues/2353
     rust-conv                https://github.com/rustsec/advisory-db/issues/2386
-found (58)
+    rust-urlpattern          https://github.com/rustsec/advisory-db/issues/2414
+    rust-unic                https://github.com/rustsec/advisory-db/issues/2414
+    icu                      https://github.com/rustsec/advisory-db/issues/2424
+    unic-ucd-utils           https://github.com/rustsec/advisory-db/issues/2424
+found (60)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -413,3 +424,5 @@ found (58)
     paste                    https://github.com/rustsec/advisory-db/issues/2203
     patch                    https://github.com/rustsec/advisory-db/issues/2280
     patch-rs                 https://github.com/rustsec/advisory-db/issues/2280
+    unic-ucd-core            https://github.com/rustsec/advisory-db/issues/2424
+    unic-utils               https://github.com/rustsec/advisory-db/issues/2424
