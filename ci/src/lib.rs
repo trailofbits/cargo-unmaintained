@@ -1,6 +1,6 @@
 #![cfg(test)]
 
-use assert_cmd::{assert::OutputAssertExt, cargo::CommandCargoExt};
+use assert_cmd::assert::OutputAssertExt;
 use regex::Regex;
 use similar_asserts::SimpleDiff;
 use std::{
@@ -211,9 +211,16 @@ fn readme_contains_expected_contents() {
 fn readme_contains_usage() {
     let readme = read_to_string("README.md").unwrap();
 
-    let assert = Command::cargo_bin("cargo-unmaintained")
-        .unwrap()
-        .args(["unmaintained", "--help"])
+    let assert = Command::new("cargo")
+        .args([
+            "run",
+            "--bin=cargo-unmaintained",
+            "--manifest-path",
+            concat!(env!("CARGO_MANIFEST_DIR"), "/../Cargo.toml"),
+            "--",
+            "unmaintained",
+            "--help",
+        ])
         .assert();
     let stdout = &assert.get_output().stdout;
 

@@ -5,6 +5,7 @@ edition = "2024"
 publish = false
 
 [dev-dependencies]
+assert_cmd = "2.1"
 ctor = "0.6"
 regex = "1.12"
 snapbox = "0.6"

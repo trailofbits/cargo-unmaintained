@@ -1,4 +1,3 @@
-use snapbox::cmd::cargo_bin;
 use std::{
     env::{remove_var, set_current_dir},
     process::Command,
@@ -15,8 +14,17 @@ fn initialize() {
 
 #[test]
 fn dogfood() {
-    let mut command = Command::new(cargo_bin("cargo-unmaintained"));
-    command.args(["unmaintained", "--color=never", "--verbose"]);
+    let mut command = Command::new("cargo");
+    command.args([
+        "run",
+        "--bin=cargo-unmaintained",
+        "--manifest-path",
+        concat!(env!("CARGO_MANIFEST_DIR"), "/../Cargo.toml"),
+        "--",
+        "unmaintained",
+        "--color=never",
+        "--verbose",
+    ]);
 
     let output = tee(command, Tee::Stdout).unwrap();
 
