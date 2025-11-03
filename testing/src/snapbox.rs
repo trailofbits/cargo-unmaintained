@@ -163,7 +163,11 @@ pub fn snapbox(real_github: bool) -> Result<()> {
 
             // smoelius: Compare stderr before stdout so that you can see any errors that
             // occurred.
-            assert_data_eq!(stderr_actual, Data::read_from(&stderr_path, None));
+            if var("BLESS").is_ok() {
+                write(stderr_path, stderr_actual.replace("\\n", "/n")).unwrap();
+            } else {
+                assert_data_eq!(stderr_actual, Data::read_from(&stderr_path, None));
+            }
 
             output.stdout
         };
