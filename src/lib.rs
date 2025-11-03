@@ -1058,21 +1058,33 @@ mod tests {
         Opts::command().debug_assert();
     }
 
+    #[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
     #[test]
     fn usage() {
-        std::process::Command::cargo_bin("cargo-unmaintained")
-            .unwrap()
-            .args(["unmaintained", "--help"])
+        std::process::Command::new("cargo")
+            .args([
+                "run",
+                "--bin=cargo-unmaintained",
+                "--",
+                "unmaintained",
+                "--help",
+            ])
             .assert()
             .success()
             .stdout(predicates::str::contains("Usage: cargo unmaintained"));
     }
 
+    #[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
     #[test]
     fn version() {
-        std::process::Command::cargo_bin("cargo-unmaintained")
-            .unwrap()
-            .args(["unmaintained", "--version"])
+        std::process::Command::new("cargo")
+            .args([
+                "run",
+                "--bin=cargo-unmaintained",
+                "--",
+                "unmaintained",
+                "--version",
+            ])
             .assert()
             .success()
             .stdout(format!(

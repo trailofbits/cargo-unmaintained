@@ -82,7 +82,13 @@ ignore = ["{name}"]
 }
 
 fn cargo_unmaintained(dir: &Path) -> Command {
-    let mut command = Command::new(cargo_bin("cargo-unmaintained"));
+    #[cfg_attr(
+        dylint_lib = "general",
+        allow(abs_home_path, unnecessary_conversion_for_trait)
+    )]
+    // smoelius: `Command::new(cargo_bin!(..))` because this function's return type is
+    // `std::process::Command`, not `assert_cmd::Command`.
+    let mut command = Command::new(cargo_bin!("cargo-unmaintained"));
     command
         .args(["unmaintained", "--fail-fast"])
         .current_dir(dir);

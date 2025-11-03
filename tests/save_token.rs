@@ -24,7 +24,9 @@ fn save_token() {
         return;
     };
 
-    let mut command = Command::new(cargo_bin("cargo-unmaintained"));
+    #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
+    // smoelius: `cargo_bin_cmd!` returns `assert_cmd::Command`, which could not be used here.
+    let mut command = Command::new(cargo_bin!("cargo-unmaintained"));
     command.args(["unmaintained", "--save-token"]);
     command.stdin(Stdio::piped());
     let mut child = command.spawn().unwrap();
@@ -33,7 +35,8 @@ fn save_token() {
     let exit_status = child.wait().unwrap();
     assert!(exit_status.success());
 
-    let mut command = Command::new(cargo_bin("cargo-unmaintained"));
+    #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
+    let mut command = Command::new(cargo_bin!("cargo-unmaintained"));
     command
         .args(["unmaintained", "--color=never"])
         .env_remove("GITHUB_TOKEN")

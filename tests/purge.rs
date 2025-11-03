@@ -3,9 +3,8 @@
 #[allow(clippy::disallowed_methods)]
 #[test]
 fn test_purge() {
-    use assert_cmd::cargo::CommandCargoExt;
+    use assert_cmd::cargo::cargo_bin_cmd;
     use std::fs::{create_dir_all, write};
-    use std::process::Command;
     use tempfile::tempdir;
 
     // The cache version (v2 currently, but could change in the future)
@@ -24,7 +23,7 @@ fn test_purge() {
     assert!(test_file.exists());
 
     // Run the purge command
-    let mut cmd = Command::cargo_bin("cargo-unmaintained").unwrap();
+    let mut cmd = cargo_bin_cmd!("cargo-unmaintained");
 
     // Set environment variable for XDG_CACHE_HOME to our temp directory
     cmd.env("XDG_CACHE_HOME", dir.path());

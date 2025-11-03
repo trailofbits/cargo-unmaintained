@@ -1,8 +1,7 @@
 #![cfg(all(feature = "on-disk-cache", not(windows)))]
 
-use assert_cmd::cargo::CommandCargoExt;
+use assert_cmd::cargo::cargo_bin_cmd;
 use std::path::Path;
-use std::process::Command;
 use tempfile::tempdir;
 
 /// The package to use for testing
@@ -29,7 +28,7 @@ fn test_no_cache() {
 
     // Helper function to run cargo-unmaintained with specified arguments
     let run_command = |args: &[&str]| {
-        let mut cmd = Command::cargo_bin("cargo-unmaintained").unwrap();
+        let mut cmd = cargo_bin_cmd!("cargo-unmaintained");
         cmd.arg("unmaintained");
         cmd.args(args);
         // Use our temporary directory as cache location
