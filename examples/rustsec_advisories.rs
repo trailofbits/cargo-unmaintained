@@ -201,7 +201,7 @@ trait Sanitize {
 
 impl Sanitize for &str {
     fn sanitize(&self) -> String {
-        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new("/tmp/[^)]*").unwrap());
+        static RE: LazyLock<Regex> = LazyLock::new(|| Regex::new("/(private|tmp)/[^)]*").unwrap());
         RE.replace_all(self, "[..]").to_string()
     }
 }
