@@ -2389,7 +2389,7 @@
         "id": 142283,
         "kind": "user",
         "login": "allan2",
-        "name": "Allan"
+        "name": "Allan Zhang"
       }
     ],
     "mime": [
@@ -2532,6 +2532,12 @@
         "kind": "user",
         "login": "alexcrichton",
         "name": "Alex Crichton"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
       }
     ],
     "openssl-sys": [
@@ -3929,12 +3935,6 @@
       }
     ],
     "unicode-normalization": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
       {
         "id": 3,
         "kind": "user",
