@@ -23,6 +23,7 @@ enum Reason {
 static RE: LazyLock<Regex> =
     LazyLock::new(|| Regex::new("(?m)^error: [0-9]+ denied warning[s]? found!$").unwrap());
 
+#[allow(clippy::too_many_lines)]
 fn main() -> Result<()> {
     let mut advisory_outcomes = Vec::new();
 
@@ -83,6 +84,9 @@ fn main() -> Result<()> {
             output.stderr
         );
 
+        // smoelius: When I run `curl` on a GitLab repo locally, I get a page that says "Verifying
+        // that you are a human." For now, I am not giving those packages any special treatment in
+        // this test.
         let output = command_output(&mut cargo_unmaintained(advisory.metadata.package.as_str()))?;
         if output.status.code() == Some(0) {
             if is_leaf(advisory.metadata.package.as_str(), tempdir.path())? {

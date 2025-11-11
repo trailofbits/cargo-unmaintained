@@ -91,6 +91,21 @@ pub fn snapbox(real_github: bool) -> Result<()> {
             continue;
         }
 
+        if var("CI").is_ok() {
+            let contents = read_to_string(&stderr_path).unwrap();
+            if contents.contains("gitlab") {
+                #[allow(clippy::explicit_write)]
+                writeln!(
+                    stderr(),
+                    "skipping `{}`; its stderr file refers to GitLab which causes problems on \
+                     GitHub",
+                    input_path.display()
+                )
+                .unwrap();
+                continue;
+            }
+        }
+
         #[allow(clippy::explicit_write)]
         write!(stderr(), "running {}", input_path.display()).unwrap();
         #[allow(clippy::disallowed_methods)]
