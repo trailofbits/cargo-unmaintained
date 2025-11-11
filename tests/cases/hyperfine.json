@@ -75,6 +75,12 @@
     "version": "0.1.1"
   },
   {
+    "name": "rand_core",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.6.4"
+  },
+  {
     "name": "rand_os",
     "outdated_deps": [],
     "repo_status": "Unassociated",
@@ -94,6 +100,18 @@
       "Age": null
     },
     "version": "0.4.0"
+  },
+  {
+    "name": "redox_syscall",
+    "outdated_deps": [],
+    "repo_status": "Uncloneable",
+    "version": "0.3.5"
+  },
+  {
+    "name": "seahash",
+    "outdated_deps": [],
+    "repo_status": "Uncloneable",
+    "version": "4.1.0"
   },
   {
     "name": "statistical",
