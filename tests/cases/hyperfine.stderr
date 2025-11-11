@@ -3,3 +3,11 @@ warning: failed to clone `https://fuchsia.googlesource.com/fuchsia/+/master/garn
     "fatal: repository 'https://fuchsia.googlesource.com/fuchsia/+/master/garnet/public/rust/fuchsia-cprng/' not found/n",
     "fatal: repository 'https://fuchsia.googlesource.com/fuchsia/+/' not found/n",
 ]
+warning: failed to determine `redox_syscall` existence: unexpected response code: 403
+warning: failed to clone `https://gitlab.redox-os.org/redox-os/syscall`: [
+    "fatal: unable to access 'https://gitlab.redox-os.org/redox-os/syscall/': The requested URL returned error: 403/n",
+]
+warning: failed to determine `seahash` existence: unexpected response code: 403
+warning: failed to clone `https://gitlab.redox-os.org/redox-os/seahash`: [
+    "fatal: unable to access 'https://gitlab.redox-os.org/redox-os/seahash/': The requested URL returned error: 403/n",
+]

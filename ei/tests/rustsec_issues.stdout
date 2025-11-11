@@ -225,6 +225,7 @@ unic-ucd-core...found
 unic-ucd-utils...not found
 unic-utils...found
 ignoring `https://gist.github.com/lewismosciski/57ac3b8b7a861abdd0d7ae6f39de5a9d` from `https://github.com/rustsec/advisory-db/issues/2428`
+tandem...found
 not found (139)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
@@ -365,7 +366,7 @@ not found (139)
     rust-unic                https://github.com/rustsec/advisory-db/issues/2414
     icu                      https://github.com/rustsec/advisory-db/issues/2424
     unic-ucd-utils           https://github.com/rustsec/advisory-db/issues/2424
-found (60)
+found (61)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -426,3 +427,4 @@ found (60)
     patch-rs                 https://github.com/rustsec/advisory-db/issues/2280
     unic-ucd-core            https://github.com/rustsec/advisory-db/issues/2424
     unic-utils               https://github.com/rustsec/advisory-db/issues/2424
+    tandem                   https://github.com/rustsec/advisory-db/issues/2454
