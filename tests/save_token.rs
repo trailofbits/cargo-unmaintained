@@ -18,7 +18,7 @@ fn save_token() {
         #[allow(clippy::explicit_write)]
         writeln!(
             stderr(),
-            "Skipping `save_token` test as `GTIHUB_TOKEN` is unset"
+            "Skipping `save_token` test as `GITHUB_TOKEN` is unset"
         )
         .unwrap();
         return;
