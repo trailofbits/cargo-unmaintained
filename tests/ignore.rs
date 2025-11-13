@@ -2,7 +2,7 @@
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
 use anyhow::{Result, ensure};
-use snapbox::cmd::cargo_bin;
+use assert_cmd::cargo;
 use std::{fs::OpenOptions, io::Write, path::Path, process::Command};
 use tempfile::{TempDir, tempdir};
 
@@ -88,7 +88,7 @@ fn cargo_unmaintained(dir: &Path) -> Command {
     )]
     // smoelius: `Command::new(cargo_bin!(..))` because this function's return type is
     // `std::process::Command`, not `assert_cmd::Command`.
-    let mut command = Command::new(cargo_bin!("cargo-unmaintained"));
+    let mut command = Command::new(cargo::cargo_bin!("cargo-unmaintained"));
     command
         .args(["unmaintained", "--fail-fast"])
         .current_dir(dir);

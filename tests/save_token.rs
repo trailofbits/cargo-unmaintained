@@ -1,4 +1,4 @@
-use snapbox::cmd::cargo_bin;
+use assert_cmd::cargo;
 use std::{
     env::{remove_var, var},
     io::{Write, stderr},
@@ -26,7 +26,7 @@ fn save_token() {
 
     #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
     // smoelius: `cargo_bin_cmd!` returns `assert_cmd::Command`, which could not be used here.
-    let mut command = Command::new(cargo_bin!("cargo-unmaintained"));
+    let mut command = Command::new(cargo::cargo_bin!("cargo-unmaintained"));
     command.args(["unmaintained", "--save-token"]);
     command.stdin(Stdio::piped());
     let mut child = command.spawn().unwrap();
@@ -36,7 +36,7 @@ fn save_token() {
     assert!(exit_status.success());
 
     #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
-    let mut command = Command::new(cargo_bin!("cargo-unmaintained"));
+    let mut command = Command::new(cargo::cargo_bin!("cargo-unmaintained"));
     command
         .args(["unmaintained", "--color=never"])
         .env_remove("GITHUB_TOKEN")
