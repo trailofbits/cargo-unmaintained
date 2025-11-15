@@ -3,6 +3,7 @@
 
 use anyhow::{Result, ensure};
 use assert_cmd::cargo;
+use elaborate::std::{fs::OpenOptionsContext, process::CommandContext};
 use std::{fs::OpenOptions, io::Write, path::Path, process::Command};
 use tempfile::{TempDir, tempdir};
 
@@ -14,12 +15,12 @@ fn ignore() -> Result<()> {
 
     add_dependency(tempdir.path(), NAME)?;
 
-    let status = cargo_unmaintained(tempdir.path()).status()?;
+    let status = cargo_unmaintained(tempdir.path()).status_wc()?;
     ensure!(!status.success());
 
     ignore_package(tempdir.path(), NAME)?;
 
-    let status = cargo_unmaintained(tempdir.path()).status()?;
+    let status = cargo_unmaintained(tempdir.path()).status_wc()?;
     ensure!(status.success());
 
     Ok(())
@@ -31,7 +32,7 @@ fn warn_not_depended_upon() -> Result<()> {
 
     ignore_package(tempdir.path(), NAME)?;
 
-    let output = cargo_unmaintained(tempdir.path()).output()?;
+    let output = cargo_unmaintained(tempdir.path()).output_wc()?;
     ensure!(output.status.success());
 
     let stderr = String::from_utf8(output.stderr).unwrap();
@@ -53,7 +54,7 @@ fn create_test_package() -> Result<TempDir> {
     let status = Command::new("cargo")
         .args(["init", "--name=test-package"])
         .current_dir(&tempdir)
-        .status()?;
+        .status_wc()?;
     ensure!(status.success());
 
     Ok(tempdir)
@@ -62,7 +63,7 @@ fn create_test_package() -> Result<TempDir> {
 fn add_dependency(dir: &Path, name: &str) -> Result<()> {
     let mut manifest = OpenOptions::new()
         .append(true)
-        .open(dir.join("Cargo.toml"))?;
+        .open_wc(dir.join("Cargo.toml"))?;
     writeln!(manifest, r#"{name} = "*""#)?;
     Ok(())
 }
@@ -70,7 +71,7 @@ fn add_dependency(dir: &Path, name: &str) -> Result<()> {
 fn ignore_package(dir: &Path, name: &str) -> Result<()> {
     let mut manifest = OpenOptions::new()
         .append(true)
-        .open(dir.join("Cargo.toml"))?;
+        .open_wc(dir.join("Cargo.toml"))?;
     writeln!(
         manifest,
         r#"
