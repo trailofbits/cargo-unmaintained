@@ -3,6 +3,7 @@
 
 use anyhow::{Result, ensure};
 use assert_cmd::cargo;
+use elaborate::std::{fs::OpenOptionsContext, process::CommandContext};
 use std::{fs::OpenOptions, io::Write, path::Path, process::Command};
 use tempfile::{TempDir, tempdir};
 
@@ -14,12 +15,12 @@ fn ignore() -> Result<()> {
 
     add_dependency(tempdir.path(), NAME)?;
 
-    let status = cargo_unmaintained(tempdir.path()).status()?;
+    let status = cargo_unmaintained(tempdir.path()).status_wc()?;
     ensure!(!status.success());
 
     ignore_package(tempdir.path(), NAME)?;
 
-    let status = cargo_unmaintained(tempdir.path()).status()?;
+    let status = cargo_unmaintained(tempdir.path()).status_wc()?;
     ensure!(status.success());
 
     Ok(())
@@ -31,7 +32,7 @@ fn warn_not_depended_upon() -> Result<()> {
 
     ignore_package(tempdir.path(), NAME)?;
 
-    let output = cargo_unmaintained(tempdir.path()).output()?;
+    let output = cargo_unmaintained(tempdir.path()).output_wc()?;
     ensure!(output.status.success());
 
     let stderr = String::from_utf8(output.stderr).unwrap();
@@ -53,7 +54,7 @@ fn create_test_package(name: Option<&str>) -> Result<TempDir> {
     let status = Command::new("cargo")
         .args(["init", "--lib", "--name", name.unwrap_or("test-package")])
         .current_dir(&tempdir)
-        .status()?;
+        .status_wc()?;
     ensure!(status.success());
 
     Ok(tempdir)
@@ -62,7 +63,7 @@ fn create_test_package(name: Option<&str>) -> Result<TempDir> {
 fn add_dependency(dir: &Path, name: &str) -> Result<()> {
     let mut manifest = OpenOptions::new()
         .append(true)
-        .open(dir.join("Cargo.toml"))?;
+        .open_wc(dir.join("Cargo.toml"))?;
     writeln!(manifest, r#"{name} = "*""#)?;
     Ok(())
 }
@@ -70,7 +71,7 @@ fn add_dependency(dir: &Path, name: &str) -> Result<()> {
 fn ignore_package(dir: &Path, name: &str) -> Result<()> {
     let mut manifest = OpenOptions::new()
         .append(true)
-        .open(dir.join("Cargo.toml"))?;
+        .open_wc(dir.join("Cargo.toml"))?;
     writeln!(
         manifest,
         r#"
@@ -98,7 +99,10 @@ fn cargo_unmaintained(dir: &Path) -> Command {
 #[cfg(not(windows))]
 mod not_windows {
     use super::*;
-    use std::fs::{read_to_string, write};
+    use elaborate::std::{
+        fs::{read_to_string_wc, write_wc},
+        path::PathContext,
+    };
 
     #[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
     #[test]
@@ -115,7 +119,7 @@ mod not_windows {
         let status = cargo_unmaintained(tempdir.path())
             .arg("--max-age=0")
             .env("CARGO_UNMAINTAINED_CACHE", cache_dir.path())
-            .status()?;
+            .status_wc()?;
         ensure!(!status.success());
 
         rename_master_to_main(test_dependency.path());
@@ -123,7 +127,7 @@ mod not_windows {
         let status = cargo_unmaintained(tempdir.path())
             .arg("--max-age=0")
             .env("CARGO_UNMAINTAINED_CACHE", cache_dir.path())
-            .status()?;
+            .status_wc()?;
         ensure!(!status.success());
 
         assert_all_repositories_use_main(cache_dir.path());
@@ -134,13 +138,13 @@ mod not_windows {
     /// Hack. Set `repository = "{dir}"` for the Cargo.toml file in dir.
     fn set_repository_to_self(dir: &Path) -> Result<()> {
         let manifest_path = dir.join("Cargo.toml");
-        let manifest = read_to_string(&manifest_path)?;
+        let manifest = read_to_string_wc(&manifest_path)?;
         let mut lines = manifest.lines().map(ToOwned::to_owned).collect::<Vec<_>>();
         let last = lines.pop().unwrap();
         assert_eq!("[dependencies]", last);
         lines.push(format!(r#"repository = "{}""#, dir.display()));
         lines.push(last);
-        write(
+        write_wc(
             manifest_path,
             lines
                 .into_iter()
@@ -153,7 +157,7 @@ mod not_windows {
     fn add_local_dependency(dir: &Path, name: &str, path: &Path) -> Result<()> {
         let mut manifest = OpenOptions::new()
             .append(true)
-            .open(dir.join("Cargo.toml"))?;
+            .open_wc(dir.join("Cargo.toml"))?;
         writeln!(manifest, r#"{name} = {{ path = "{}" }}"#, path.display())?;
         Ok(())
     }
@@ -164,7 +168,7 @@ mod not_windows {
         let mut command = Command::new("git");
         command.args(["branch", "-m", "master", "main"]);
         command.current_dir(path);
-        let status = command.status().unwrap();
+        let status = command.status_wc().unwrap();
         assert!(status.success());
 
         assert_eq!("main", branch_name(path));
@@ -172,7 +176,7 @@ mod not_windows {
 
     fn assert_all_repositories_use_main(cache_dir: &Path) {
         let repositories = cache_dir.join("v2/repositories");
-        let read_dir = repositories.read_dir().unwrap();
+        let read_dir = repositories.read_dir_wc().unwrap();
         let results = read_dir.into_iter().collect::<Vec<_>>();
         assert_eq!(1, results.len());
         let entry = results[0].as_ref().unwrap();
@@ -183,7 +187,7 @@ mod not_windows {
         let mut command = Command::new("git");
         command.args(["branch", "--show-current"]);
         command.current_dir(dir);
-        let output = command.output().unwrap();
+        let output = command.output_wc().unwrap();
         assert!(output.status.success());
         let stdout = std::str::from_utf8(&output.stdout).unwrap();
         stdout.trim_end().to_owned()

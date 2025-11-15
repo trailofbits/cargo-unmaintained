@@ -1,6 +1,7 @@
 use anyhow::{Context, Result};
+use elaborate::std::{env::var_wc, path::PathContext, process::CommandContext};
 use std::{
-    env::{consts::EXE_SUFFIX, var},
+    env::consts::EXE_SUFFIX,
     path::PathBuf,
     process::{Command, ExitStatus},
     sync::LazyLock,
@@ -84,7 +85,7 @@ static CARGO_UNMAINTAINED: LazyLock<PathBuf> = LazyLock::new(|| {
     assert!(output.status.success());
 
     PathBuf::from(format!("target/debug/cargo-unmaintained{EXE_SUFFIX}"))
-        .canonicalize()
+        .canonicalize_wc()
         .unwrap()
 });
 
@@ -98,7 +99,7 @@ pub fn cargo_unmaintained(name: &str) -> Command {
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 pub fn command_output(command: &mut Command) -> Result<Output> {
     let output = command
-        .output()
+        .output_wc()
         .with_context(|| format!("failed to execute command: {command:?}"))?;
     let status = output.status;
     let stdout = String::from_utf8(output.stdout)?;
@@ -117,5 +118,5 @@ pub fn command_output(command: &mut Command) -> Result<Output> {
 }
 
 fn enabled(key: &str) -> bool {
-    var(key).is_ok_and(|value| value != "0")
+    var_wc(key).is_ok_and(|value| value != "0")
 }

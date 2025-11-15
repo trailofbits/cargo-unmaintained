@@ -1,8 +1,13 @@
 use anyhow::{Context, Result, anyhow};
+use elaborate::std::{
+    env::var_wc,
+    fs::{OpenOptionsContext, create_dir_all_wc, read_to_string_wc},
+    io::{StdinContext, WriteContext},
+    path::PathContext,
+};
 use std::{
-    env::var,
-    fs::{File, OpenOptions, create_dir_all, read_to_string},
-    io::{Write, stdin},
+    fs::{File, OpenOptions},
+    io::stdin,
     path::PathBuf,
     sync::{LazyLock, OnceLock},
 };
@@ -18,7 +23,7 @@ static CONFIG_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
     }
     #[cfg(windows)]
     {
-        let local_app_data = var("LOCALAPPDATA").unwrap();
+        let local_app_data = var_wc("LOCALAPPDATA").unwrap();
         PathBuf::from(local_app_data).join("cargo-unmaintained")
     }
 });
@@ -28,11 +33,11 @@ static TOKEN_PATH: LazyLock<PathBuf> = LazyLock::new(|| CONFIG_DIRECTORY.join("t
 pub(super) static PERSONAL_TOKEN: OnceLock<String> = OnceLock::new();
 
 pub fn load_token(f: impl FnOnce(&str) -> Result<()>) -> Result<bool> {
-    let token_untrimmed = if let Ok(path) = var("GITHUB_TOKEN_PATH") {
-        read_to_string(&path).with_context(|| format!("failed to read {path:?}"))?
-    } else if let Ok(token) = var("GITHUB_TOKEN") {
+    let token_untrimmed = if let Ok(path) = var_wc("GITHUB_TOKEN_PATH") {
+        read_to_string_wc(&path).with_context(|| format!("failed to read {path:?}"))?
+    } else if let Ok(token) = var_wc("GITHUB_TOKEN") {
         // smoelius: Suppress warning if `CI` is set, i.e., if running on GitHub.
-        if var("CI").is_err() {
+        if var_wc("CI").is_err() {
             #[cfg(__warnings)]
             crate::warn!(
                 "found a token in `GITHUB_TOKEN`; consider using the more secure method of \
@@ -40,13 +45,13 @@ pub fn load_token(f: impl FnOnce(&str) -> Result<()>) -> Result<bool> {
             );
         }
         token
-    } else if TOKEN_PATH.try_exists().with_context(|| {
+    } else if TOKEN_PATH.try_exists_wc().with_context(|| {
         format!(
             "failed to determine whether `{}` exists",
             TOKEN_PATH.display()
         )
     })? {
-        read_to_string(&*TOKEN_PATH).with_context(|| format!("failed to read {TOKEN_PATH:?}"))?
+        read_to_string_wc(&*TOKEN_PATH).with_context(|| format!("failed to read {TOKEN_PATH:?}"))?
     } else {
         #[cfg(__warnings)]
         crate::warn!(
@@ -71,21 +76,21 @@ pub(crate) fn save_token() -> Result<()> {
 
     {
         let n = stdin()
-            .read_line(&mut buf)
+            .read_line_wc(&mut buf)
             .with_context(|| "failed to read stdin")?;
         assert_eq!(buf.len(), n);
     }
 
-    create_dir_all(&*CONFIG_DIRECTORY).with_context(|| "failed to create config directory")?;
+    create_dir_all_wc(&*CONFIG_DIRECTORY).with_context(|| "failed to create config directory")?;
 
     let mut file = OpenOptions::new()
         .create(true)
         .truncate(true)
         .write(true)
-        .open(&*TOKEN_PATH)
+        .open_wc(&*TOKEN_PATH)
         .with_context(|| format!("failed to open `{}`", TOKEN_PATH.display()))?;
     set_permissions(&file, 0o600)?;
-    file.write_all(buf.as_bytes())
+    file.write_all_wc(buf.as_bytes())
         .with_context(|| format!("failed to write `{}`", TOKEN_PATH.display()))?;
 
     println!(
@@ -102,6 +107,7 @@ type CargoResult<T> = Result<T>;
 // https://github.com/rust-lang/cargo/blob/1e6828485eea0f550ed7be46ef96107b46aeb162/src/cargo/util/config.rs#L1010-L1024
 #[cfg(unix)]
 #[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
+#[allow(clippy::disallowed_methods)]
 fn set_permissions(file: &File, mode: u32) -> CargoResult<()> {
     use std::os::unix::fs::PermissionsExt;
 
@@ -112,7 +118,7 @@ fn set_permissions(file: &File, mode: u32) -> CargoResult<()> {
 }
 
 #[cfg(not(unix))]
-#[allow(unused, clippy::unnecessary_wraps)]
+#[allow(unused, clippy::disallowed_methods, clippy::unnecessary_wraps)]
 fn set_permissions(file: &File, mode: u32) -> CargoResult<()> {
     Ok(())
 }

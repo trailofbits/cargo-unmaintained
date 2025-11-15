@@ -1,9 +1,10 @@
 #![allow(dead_code)]
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
+use anyhow::Result;
+use elaborate::std::fs::{FileContext, OpenOptionsContext};
 use std::{
     fs::{File, OpenOptions},
-    io::Result,
     path::Path,
 };
 
@@ -25,9 +26,9 @@ fn open_lockable_file(path: &Path) -> Result<File> {
             .create(true)
             .truncate(true)
             .write(true)
-            .open(path.join("CARGO_UNMAINTAINED_LOCK"))
+            .open_wc(path.join("CARGO_UNMAINTAINED_LOCK"))
     } else {
-        File::open(path)
+        File::open_wc(path)
     }
 }
 

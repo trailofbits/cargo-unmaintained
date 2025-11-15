@@ -1,4 +1,5 @@
-use std::{env::var, fs::write, path::PathBuf};
+use elaborate::std::{env::var_wc, fs::write_wc};
+use std::path::PathBuf;
 
 const TOKEN_PATH: &str = if cfg!(not(windows)) {
     "$HOME/.config/cargo-unmaintained/token.txt"
@@ -12,7 +13,7 @@ fn main() {
     #[cfg(all(feature = "cache-repositories", not(feature = "on-disk-cache")))]
     println!("cargo:warning=Feature `cache-repositories` has been renamed to `on-disk-cache`");
 
-    let out_dir = var("OUT_DIR").unwrap();
+    let out_dir = var_wc("OUT_DIR").unwrap();
     let path_buf = PathBuf::from(out_dir).join("after_help.rs");
     let contents = format!(
         r#"const AFTER_HELP: &str = "\
@@ -31,5 +32,5 @@ no irrecoverable errors occurred, 1 if unmaintained packages were found, and 2 i
 error occurred.";
 "#,
     );
-    write(path_buf, contents).unwrap();
+    write_wc(path_buf, contents).unwrap();
 }

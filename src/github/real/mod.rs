@@ -1,7 +1,8 @@
 use crate::{RepoStatus, Url, curl};
 use anyhow::{Result, bail};
+use elaborate::std::io::ReadContext;
 use regex::Regex;
-use std::{cell::RefCell, collections::HashMap, io::Read, rc::Rc, sync::LazyLock};
+use std::{cell::RefCell, collections::HashMap, rc::Rc, sync::LazyLock};
 
 mod map_ext;
 use map_ext::MapExt;
@@ -125,7 +126,7 @@ fn call_api(
         let mut transfer = handle.transfer();
         transfer.read_function(|buf| {
             #[allow(clippy::unwrap_used)]
-            let len = data.read(buf).unwrap();
+            let len = data.read_wc(buf).unwrap();
             Ok(len)
         })?;
         transfer.write_function(|other| {

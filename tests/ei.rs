@@ -1,14 +1,15 @@
-use std::{env::var, process::Command};
+use elaborate::std::{env::var_wc, process::CommandContext};
+use std::process::Command;
 
 #[test]
 fn ei() {
-    if var("CI").is_ok() {
+    if var_wc("CI").is_ok() {
         return;
     }
 
     let status = Command::new("cargo")
         .args(["test", "-p", "ei"])
-        .status()
+        .status_wc()
         .unwrap();
     assert!(status.success());
 }
