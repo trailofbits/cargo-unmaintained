@@ -25,11 +25,17 @@ use super::{SECS_PER_DAY, USER_AGENT, urls};
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::{Package, PackageName};
 use crates_io_api::{SyncClient, Version};
+use elaborate::std::{
+    fs::{create_dir_all_wc, read_to_string_wc, remove_dir_all_wc, write_wc},
+    path::PathContext,
+    process::CommandContext,
+    time::SystemTimeContext,
+};
 use serde::{Deserialize, Serialize};
 use std::{
     cell::{OnceCell, RefCell},
     collections::HashMap,
-    fs::{File, create_dir_all, read_to_string, write},
+    fs::File,
     path::{Path, PathBuf},
     process::{Command, Stdio},
     str::FromStr,
@@ -198,7 +204,7 @@ impl Cache {
                 .env("GIT_TERMINAL_PROMPT", "0")
                 .stderr(Stdio::piped());
             let output = command
-                .output()
+                .output_wc()
                 .with_context(|| format!("failed to run command: {command:?}"))?;
             if output.status.success() {
                 return Ok((url.as_str().to_owned(), repo_dir));
@@ -214,7 +220,7 @@ impl Cache {
     fn entry(&mut self, pkg: &Package) -> Result<Entry> {
         if !self.entries.contains_key(&pkg.name) {
             let path_buf = self.entries_dir().join(pkg.name.as_str());
-            let contents = read_to_string(&path_buf)
+            let contents = read_to_string_wc(&path_buf)
                 .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let entry = serde_json::from_str::<Entry>(&contents)?;
             ensure!(
@@ -229,7 +235,7 @@ impl Cache {
 
     fn repository_is_current(&mut self, url: &str) -> Result<bool> {
         self.repository_timestamp(url).and_then(|timestamp| {
-            let duration = SystemTime::now().duration_since(timestamp)?;
+            let duration = SystemTime::now().duration_since_wc(timestamp)?;
             Ok(duration.as_secs() < self.refresh_age * SECS_PER_DAY)
         })
     }
@@ -238,7 +244,7 @@ impl Cache {
         let digest = url_digest(url);
         if !self.repository_timestamps.contains_key(&digest) {
             let path_buf = self.repository_timestamps_dir().join(url_digest(url));
-            let contents = read_to_string(&path_buf)
+            let contents = read_to_string_wc(&path_buf)
                 .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let secs = u64::from_str(&contents)?;
             let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
@@ -273,7 +279,7 @@ impl Cache {
     fn versions(&mut self, name: &str) -> Result<Vec<Version>> {
         if !self.versions.contains_key(name) {
             let path_buf = self.versions_dir().join(name);
-            let contents = read_to_string(&path_buf)
+            let contents = read_to_string_wc(&path_buf)
                 .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let versions = serde_json::from_str::<Vec<Version>>(&contents)?;
             self.versions.insert(name.to_owned(), versions);
@@ -284,7 +290,7 @@ impl Cache {
 
     fn versions_are_current(&mut self, url: &str) -> Result<bool> {
         self.versions_timestamp(url).and_then(|timestamp| {
-            let duration = SystemTime::now().duration_since(timestamp)?;
+            let duration = SystemTime::now().duration_since_wc(timestamp)?;
             Ok(duration.as_secs() < self.refresh_age * SECS_PER_DAY)
         })
     }
@@ -292,7 +298,7 @@ impl Cache {
     fn versions_timestamp(&mut self, name: &str) -> Result<SystemTime> {
         if !self.versions_timestamps.contains_key(name) {
             let path_buf = self.versions_timestamps_dir().join(name);
-            let contents = read_to_string(&path_buf)
+            let contents = read_to_string_wc(&path_buf)
                 .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let secs = u64::from_str(&contents)?;
             let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
@@ -303,40 +309,41 @@ impl Cache {
     }
 
     fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
-        create_dir_all(self.entries_dir()).with_context(|| "failed to create entries directory")?;
+        create_dir_all_wc(self.entries_dir())
+            .with_context(|| "failed to create entries directory")?;
         let path_buf = self.entries_dir().join(pkg_name);
         let json = serde_json::to_string_pretty(entry)?;
-        write(&path_buf, json)
+        write_wc(&path_buf, json)
             .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
 
     fn write_repository_timestamp(&self, digest: &str, timestamp: SystemTime) -> Result<()> {
-        create_dir_all(self.repository_timestamps_dir())
+        create_dir_all_wc(self.repository_timestamps_dir())
             .with_context(|| "failed to create repository timestamps directory")?;
         let path_buf = self.repository_timestamps_dir().join(digest);
-        let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
-        write(&path_buf, duration.as_secs().to_string())
+        let duration = timestamp.duration_since_wc(SystemTime::UNIX_EPOCH)?;
+        write_wc(&path_buf, duration.as_secs().to_string())
             .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
 
     fn write_versions(&self, name: &str, versions: &[Version]) -> Result<()> {
-        create_dir_all(self.versions_dir())
+        create_dir_all_wc(self.versions_dir())
             .with_context(|| "failed to create versions directory")?;
         let path_buf = self.versions_dir().join(name);
         let json = serde_json::to_string_pretty(versions)?;
-        write(&path_buf, json)
+        write_wc(&path_buf, json)
             .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
 
     fn write_versions_timestamp(&self, name: &str, timestamp: SystemTime) -> Result<()> {
-        create_dir_all(self.versions_timestamps_dir())
+        create_dir_all_wc(self.versions_timestamps_dir())
             .with_context(|| "failed to create versions timestamps directory")?;
         let path_buf = self.versions_timestamps_dir().join(name);
-        let duration = timestamp.duration_since(SystemTime::UNIX_EPOCH)?;
-        write(&path_buf, duration.as_secs().to_string())
+        let duration = timestamp.duration_since_wc(SystemTime::UNIX_EPOCH)?;
+        write_wc(&path_buf, duration.as_secs().to_string())
             .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
         Ok(())
     }
@@ -381,7 +388,7 @@ fn url_digest(url: &str) -> String {
 }
 
 fn repository_existence(repo_dir: &Path) -> Result<bool> {
-    repo_dir.try_exists().with_context(|| {
+    repo_dir.try_exists_wc().with_context(|| {
         format!(
             "failed to determine whether `{}` exists",
             repo_dir.display()
@@ -394,7 +401,7 @@ fn branch_name(repo_dir: &Path) -> Result<String> {
     command.args(["rev-parse", "--abbrev-ref", "HEAD"]);
     command.current_dir(repo_dir);
     let output = command
-        .output()
+        .output_wc()
         .with_context(|| format!("failed to run command: {command:?}"))?;
     if !output.status.success() {
         let error = String::from_utf8(output.stderr)?;
@@ -413,9 +420,7 @@ fn branch_name(repo_dir: &Path) -> Result<String> {
 /// It removes the entire cache directory at $HOME/.cache/cargo-unmaintained.
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 pub fn purge_cache() -> Result<()> {
-    use std::fs::remove_dir_all;
-
-    if CACHE_DIRECTORY.try_exists().with_context(|| {
+    if CACHE_DIRECTORY.try_exists_wc().with_context(|| {
         format!(
             "failed to determine whether `{}` exists",
             CACHE_DIRECTORY.display()
@@ -427,7 +432,7 @@ pub fn purge_cache() -> Result<()> {
             .with_context(|| format!("failed to lock `{}`", CACHE_DIRECTORY.display()))?;
 
         // Remove the entire cache directory
-        remove_dir_all(&*CACHE_DIRECTORY).with_context(|| {
+        remove_dir_all_wc(&*CACHE_DIRECTORY).with_context(|| {
             format!(
                 "failed to remove cache directory at `{}`",
                 CACHE_DIRECTORY.display()

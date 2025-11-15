@@ -2,8 +2,12 @@
 #![allow(dead_code)]
 
 use anyhow::{Context, Result};
+use elaborate::std::{
+    env::var_wc,
+    io::ReadContext,
+    process::{ChildContext, CommandContext},
+};
 use std::{
-    env::var,
     io::Read,
     process::{Command, ExitStatus, Stdio},
 };
@@ -34,10 +38,10 @@ pub fn tee(mut command: Command, which: Tee) -> Result<Output> {
     }
 
     let mut child = command
-        .spawn()
+        .spawn_wc()
         .with_context(|| format!("command failed: {command:?}"))?;
 
-    let stream: &mut dyn Read = match which {
+    let mut stream: &mut dyn Read = match which {
         Tee::Stdout => child.stdout.as_mut().unwrap(),
         Tee::Stderr => child.stderr.as_mut().unwrap(),
     };
@@ -46,7 +50,7 @@ pub fn tee(mut command: Command, which: Tee) -> Result<Output> {
 
     loop {
         let mut buf = [0u8; BUF_SIZE];
-        let size = stream.read(&mut buf).with_context(|| "`read` failed")?;
+        let size = stream.read_wc(&mut buf)?;
         if size == 0 {
             break;
         }
@@ -55,14 +59,14 @@ pub fn tee(mut command: Command, which: Tee) -> Result<Output> {
         captured.extend_from_slice(&buf[..size]);
     }
 
-    let status = child.wait().with_context(|| "`wait` failed")?;
+    let status = child.wait_wc().with_context(|| "`wait` failed")?;
 
     Ok(Output { status, captured })
 }
 
 #[must_use]
 pub fn enabled(key: &str) -> bool {
-    var(key).is_ok_and(|value| value != "0")
+    var_wc(key).is_ok_and(|value| value != "0")
 }
 
 #[must_use]

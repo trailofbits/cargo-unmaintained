@@ -15,6 +15,7 @@ clap = { version = "4.5", features = ["cargo", "derive", "wrap_help"] }
 crates-index = { version = "3.11", features = ["git-https-reqwest"] }
 crates_io_api = "0.12.0"
 curl = "0.4"
+elaborate = "0.1"
 env_logger = "0.11"
 home = "0.5"
 log = "0.4"
@@ -39,6 +40,9 @@ strum = "0.27"
 strum_macros = "0.27"
 testing = { path = "testing" }
 tokio = "1.48"
+
+[build-dependencies]
+elaborate = "0.1"
 
 [features]
 default = ["on-disk-cache", "lock-index"]
