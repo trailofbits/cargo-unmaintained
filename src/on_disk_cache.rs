@@ -53,6 +53,8 @@ pub(crate) struct Cache {
     refresh_age: u64, // days
     entries: HashMap<PackageName, Entry>,
     repository_timestamps: HashMap<String, SystemTime>,
+    // smoelius: `versions` and `versions_timestamps` have the same keys. Should they be combined
+    // into a single hashmap?
     versions: HashMap<String, Vec<Version>>,
     versions_timestamps: HashMap<String, SystemTime>,
 }
