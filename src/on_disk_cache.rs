@@ -29,7 +29,7 @@ use serde::{Deserialize, Serialize};
 use std::{
     cell::{OnceCell, RefCell},
     collections::HashMap,
-    fs::{File, create_dir_all, read_to_string, write},
+    fs::{File, create_dir_all, read_to_string, remove_dir_all, remove_file, write},
     path::{Path, PathBuf},
     process::{Command, Stdio},
     str::FromStr,
@@ -66,10 +66,15 @@ thread_local! {
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 #[allow(clippy::unwrap_used)]
 static CACHE_DIRECTORY: LazyLock<PathBuf> = LazyLock::new(|| {
-    let base_directories = xdg::BaseDirectories::new();
-    base_directories
-        .create_cache_directory("cargo-unmaintained")
-        .unwrap()
+    std::env::var("CARGO_UNMAINTAINED_CACHE").map_or_else(
+        |_| {
+            let base_directories = xdg::BaseDirectories::new();
+            base_directories
+                .create_cache_directory("cargo-unmaintained")
+                .unwrap()
+        },
+        PathBuf::from,
+    )
 });
 
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
@@ -153,7 +158,7 @@ impl Cache {
         Ok(url_and_dir)
     }
 
-    fn clone_repository_uncached(&self, pkg: &Package) -> Result<(String, PathBuf)> {
+    fn clone_repository_uncached(&mut self, pkg: &Package) -> Result<(String, PathBuf)> {
         // smoelius: The next `lock_path` locks the entire cache. This is needed for the `snapbox`
         // tests, because they run concurrently. I am not sure how much contention this locking
         // causes.
@@ -165,7 +170,8 @@ impl Cache {
         }
 
         let mut errors = Vec::new();
-        for url in urls(pkg) {
+        let mut urls = urls(pkg).into_iter().peekable();
+        while let Some(url) = urls.peek() {
             let repo_dir = self.repositories_dir().join(url_digest(url.as_str()));
             let exists = repository_existence(&repo_dir)?;
             let mut command = if exists {
@@ -204,11 +210,56 @@ impl Cache {
                 return Ok((url.as_str().to_owned(), repo_dir));
             }
             let error = String::from_utf8(output.stderr)?;
+            if exists && error.starts_with("fatal: couldn't find remote ref ") {
+                self.purge_one_entry(pkg)?;
+                // smoelius: Verify repository no longer exists and retry with same url.
+                debug_assert!(!repository_existence(&repo_dir)?);
+                continue;
+            }
             errors.push(error);
+            let _: Option<crate::url::Url> = urls.next();
         }
         // smoelius: Don't emit duplicate errors.
         errors.dedup();
         Err(anyhow!("{errors:#?}"))
+    }
+
+    pub fn purge_one_entry(&mut self, pkg: &Package) -> Result<()> {
+        // smoelius: `versions` and `versions_timestamps` will exist only if `fetch_versions` was
+        // called.
+        if self.versions.contains_key(pkg.name.as_str()) {
+            let path_buf = self.versions_dir().join(pkg.name.as_str());
+            remove_file(&path_buf)
+                .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+            self.versions.remove(pkg.name.as_str());
+        }
+
+        if self.versions_timestamps.contains_key(pkg.name.as_str()) {
+            let path_buf = self.versions_timestamps_dir().join(pkg.name.as_str());
+            remove_file(&path_buf)
+                .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+            self.versions_timestamps.remove(pkg.name.as_str());
+        }
+
+        let entry = self.entry(pkg)?;
+        let digest = url_digest(&entry.cloned_url);
+
+        let path_buf = self.repository_timestamps_dir().join(&digest);
+        remove_file(&path_buf)
+            .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+        self.repository_timestamps.remove(&digest);
+
+        let path_buf = self.entries_dir().join(pkg.name.as_str());
+        remove_file(&path_buf)
+            .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+        self.entries.remove(&pkg.name);
+
+        // smoelius: Finally, remove the cloned repository.
+        let path_buf = self.repositories_dir().join(digest);
+        remove_dir_all(&path_buf)
+            .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+
+        Ok(())
     }
 
     fn entry(&mut self, pkg: &Package) -> Result<Entry> {
@@ -391,7 +442,7 @@ fn repository_existence(repo_dir: &Path) -> Result<bool> {
 
 fn branch_name(repo_dir: &Path) -> Result<String> {
     let mut command = Command::new("git");
-    command.args(["rev-parse", "--abbrev-ref", "HEAD"]);
+    command.args(["branch", "--show-current"]);
     command.current_dir(repo_dir);
     let output = command
         .output()
@@ -443,4 +494,22 @@ pub fn purge_cache() -> Result<()> {
     }
 
     Ok(())
+}
+
+#[cfg(all(test, not(windows)))]
+mod tests {
+    use super::{Cache, DEFAULT_REFRESH_AGE};
+    use cargo_metadata::MetadataCommand;
+
+    #[test]
+    fn purge_one_entry() {
+        let mut cache = Cache::new(false, DEFAULT_REFRESH_AGE).unwrap();
+        let metadata = MetadataCommand::new().exec().unwrap();
+        // smoelius: Any package will do. Use the first one that `cargo-unmaintained` relies on.
+        let pkg = metadata.packages.first().unwrap();
+        cache.clone_repository(pkg).unwrap();
+        // smoelius: Ensure `versions` and `version_timestamps` exist.
+        cache.fetch_versions(&pkg.name).unwrap();
+        cache.purge_one_entry(pkg).unwrap();
+    }
 }
