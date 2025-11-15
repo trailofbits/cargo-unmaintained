@@ -53,6 +53,21 @@ fn dylint() {
 }
 
 #[test]
+fn elaborate_disallowed_methods() {
+    Command::new("cargo")
+        .args([
+            "+nightly",
+            "clippy",
+            "--all-targets",
+            "--",
+            "--deny=warnings",
+        ])
+        .env("CLIPPY_CONF_DIR", "assets/elaborate")
+        .assert()
+        .success();
+}
+
+#[test]
 fn fmt() {
     Command::new("rustup")
         .args(["run", "nightly", "cargo", "fmt", "--check"])

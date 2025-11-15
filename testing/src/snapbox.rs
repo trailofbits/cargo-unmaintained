@@ -3,12 +3,16 @@
 
 use super::{Tee, enabled, tee};
 use anyhow::{Context, Result, bail};
+use elaborate::std::{
+    env::var_wc,
+    fs::{read_dir_wc, read_to_string_wc, write_wc},
+    path::PathContext,
+    process::CommandContext,
+};
 use serde::Deserialize;
 use snapbox::{Data, assert_data_eq, cmd::Command as SnapboxCommand};
 use std::{
-    env::var,
     ffi::OsStr,
-    fs::{read_dir, read_to_string, write},
     io::{Write, stderr},
     path::{Path, PathBuf},
     process::Command,
@@ -46,15 +50,15 @@ pub fn snapbox(real_github: bool) -> Result<()> {
 
     let test_cases = Path::new("tests/cases");
 
-    let test_paths = if let Ok(testname) = var("TESTNAME") {
+    let test_paths = if let Ok(testname) = var_wc("TESTNAME") {
         vec![test_cases.join(testname).with_extension("toml")]
     } else {
-        let mut read_dir = read_dir(test_cases)?;
+        let mut read_dir = read_dir_wc(test_cases)?;
 
         read_dir.try_fold(Vec::new(), |mut url_paths, entry| {
             let entry = entry?;
             let path = entry.path();
-            if path.extension() == Some(OsStr::new("toml")) {
+            if path.extension_wc().is_ok_and(|s| s == OsStr::new("toml")) {
                 url_paths.push(path);
             }
             Result::<_>::Ok(url_paths)
@@ -65,7 +69,7 @@ pub fn snapbox(real_github: bool) -> Result<()> {
         let stderr_path = input_path.with_extension("stderr");
         let json_path = input_path.with_extension("json");
 
-        let raw = read_to_string(&input_path)?;
+        let raw = read_to_string_wc(&input_path)?;
 
         let test: Test = toml::from_str(&raw).unwrap();
 
@@ -75,8 +79,8 @@ pub fn snapbox(real_github: bool) -> Result<()> {
             continue;
         }
 
-        if var("CI").is_ok() {
-            let contents = read_to_string(&stderr_path).unwrap();
+        if var_wc("CI").is_ok() {
+            let contents = read_to_string_wc(&stderr_path).unwrap();
             if contents.contains("gitlab") {
                 #[allow(clippy::explicit_write)]
                 writeln!(
@@ -128,7 +132,7 @@ pub fn snapbox(real_github: bool) -> Result<()> {
 
         let path_buf = dir.join("Cargo.lock");
         assert!(
-            path_buf.try_exists().is_ok_and(std::convert::identity),
+            path_buf.try_exists_wc().is_ok_and(std::convert::identity),
             "`{}` does not exist",
             path_buf.display()
         );
@@ -162,14 +166,14 @@ pub fn snapbox(real_github: bool) -> Result<()> {
 
             output.captured
         } else {
-            let output = command.output()?;
+            let output = command.output_wc()?;
 
             let stderr_actual = String::from_utf8(output.stderr)?;
 
             // smoelius: Compare stderr before stdout so that you can see any errors that
             // occurred.
-            if var("BLESS").is_ok() {
-                write(stderr_path, stderr_actual.replace("\\n", "/n")).unwrap();
+            if var_wc("BLESS").is_ok() {
+                write_wc(stderr_path, stderr_actual.replace("\\n", "/n")).unwrap();
             } else {
                 assert_data_eq!(stderr_actual, Data::read_from(&stderr_path, None));
             }
@@ -181,8 +185,8 @@ pub fn snapbox(real_github: bool) -> Result<()> {
         visit_key_value_pairs(&mut json, &mut redact);
         let json_pretty = serde_json::to_string_pretty(&json).unwrap() + "\n";
 
-        if var("BLESS").is_ok() {
-            write(json_path, json_pretty).unwrap();
+        if var_wc("BLESS").is_ok() {
+            write_wc(json_path, json_pretty).unwrap();
         } else {
             assert_data_eq!(json_pretty, Data::read_from(&json_path, None));
         }
@@ -218,7 +222,7 @@ fn checkout(repo_dir: &Path, rev: Option<&str>) -> Result<()> {
         }
         command.current_dir(repo_dir);
         let output = command
-            .output()
+            .output_wc()
             .with_context(|| format!("failed to run command: {command:?}"))?;
         if !output.status.success() {
             let error = String::from_utf8(output.stderr)?;

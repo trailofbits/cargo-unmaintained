@@ -2,6 +2,7 @@ use anyhow::{Context, Result, ensure};
 use cargo_metadata::MetadataCommand;
 use cargo_unmaintained::{flush::Flush, packaging::temp_package};
 use chrono::Utc;
+use elaborate::std::process::ExitStatusContext;
 use regex::Regex;
 use rustsec::{Advisory, Database, advisory::Informational};
 use std::{path::Path, process::Command, sync::LazyLock};
@@ -88,7 +89,7 @@ fn main() -> Result<()> {
         // that you are a human." For now, I am not giving those packages any special treatment in
         // this test.
         let output = command_output(&mut cargo_unmaintained(advisory.metadata.package.as_str()))?;
-        if output.status.code() == Some(0) {
+        if output.status.code_wc().is_ok_and(|code| code == 0) {
             if is_leaf(advisory.metadata.package.as_str(), tempdir.path())? {
                 println!("leaf");
                 advisory_outcomes.push((advisory, Outcome::NotFound(Reason::Leaf)));
@@ -97,22 +98,22 @@ fn main() -> Result<()> {
 
             let mut command = cargo_unmaintained(advisory.metadata.package.as_str());
             let output = command_output(command.arg("--max-age=0"))?;
-            if output.status.code() == Some(1) {
+            if output.status.code_wc().is_ok_and(|code| code == 1) {
                 println!("recently updated");
                 advisory_outcomes.push((advisory, Outcome::NotFound(Reason::RecentlyUpdated)));
                 continue;
             }
         }
-        match output.status.code() {
-            Some(0) => {
+        match output.status.code_wc() {
+            Ok(0) => {
                 println!("not found");
                 advisory_outcomes.push((advisory, Outcome::NotFound(Reason::Other)));
             }
-            Some(1) => {
+            Ok(1) => {
                 println!("found");
                 advisory_outcomes.push((advisory, Outcome::Found));
             }
-            Some(2) => {
+            Ok(2) => {
                 println!("error:\n```\n{}\n```", output.stderr.trim_end());
                 advisory_outcomes.push((advisory, Outcome::NotFound(Reason::Error)));
             }

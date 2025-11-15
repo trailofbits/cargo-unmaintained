@@ -294,6 +294,7 @@ dependencies = [
  "crates_io_api",
  "ctor",
  "curl",
+ "elaborate",
  "env_logger",
  "home",
  "libc",
@@ -723,6 +724,15 @@ name = "either"
 version = "1.15.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "48c757948c5ede0e46177b7add2e67155f70e33c07fea8284df6576da70b3719"
+
+[[package]]
+name = "elaborate"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7be532131e43b399e289765d3a429fc6422f62b14c1cfcb784635053c188c9d1"
+dependencies = [
+ "anyhow",
+]
 
 [[package]]
 name = "encode_unicode"
@@ -4137,6 +4147,7 @@ name = "testing"
 version = "0.1.0"
 dependencies = [
  "anyhow",
+ "elaborate",
  "serde",
  "serde_json",
  "snapbox",

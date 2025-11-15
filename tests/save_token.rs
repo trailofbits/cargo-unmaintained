@@ -1,6 +1,10 @@
 use assert_cmd::cargo;
+use elaborate::std::{
+    env::var_wc,
+    process::{ChildContext, CommandContext},
+};
 use std::{
-    env::{remove_var, var},
+    env::remove_var,
     io::{Write, stderr},
     process::{Command, Stdio},
 };
@@ -14,7 +18,7 @@ fn initialize() {
 
 #[test]
 fn save_token() {
-    let Ok(github_token) = var("GITHUB_TOKEN") else {
+    let Ok(github_token) = var_wc("GITHUB_TOKEN") else {
         #[allow(clippy::explicit_write)]
         writeln!(
             stderr(),
@@ -29,10 +33,10 @@ fn save_token() {
     let mut command = Command::new(cargo::cargo_bin!("cargo-unmaintained"));
     command.args(["unmaintained", "--save-token"]);
     command.stdin(Stdio::piped());
-    let mut child = command.spawn().unwrap();
+    let mut child = command.spawn_wc().unwrap();
     let mut stdin = child.stdin.take().unwrap();
     writeln!(stdin, "{github_token}").unwrap();
-    let exit_status = child.wait().unwrap();
+    let exit_status = child.wait_wc().unwrap();
     assert!(exit_status.success());
 
     #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
@@ -41,7 +45,7 @@ fn save_token() {
         .args(["unmaintained", "--color=never"])
         .env_remove("GITHUB_TOKEN")
         .current_dir("fixtures/archived");
-    let output = command.output().unwrap();
+    let output = command.output_wc().unwrap();
     let stdout = String::from_utf8(output.stdout).unwrap();
     let stderr = String::from_utf8(output.stderr).unwrap();
     assert_eq!(

@@ -1,5 +1,6 @@
 use anyhow::{Context, Result};
 use cargo_unmaintained::{flush::Flush, github::util as github_util};
+use elaborate::std::{process::ExitStatusContext, time::SystemTimeContext};
 use log::debug;
 use regex::Regex;
 use std::{
@@ -127,14 +128,14 @@ async fn retry<T, F: Future<Output = octocrab::Result<T>>, G: Fn() -> F>(f: G) -
 
     // smoelius: Add one extra second in the interest of caution.
     let reset = UNIX_EPOCH + Duration::from_secs(rate_limit.rate.reset + 1);
-    let duration = reset.duration_since(SystemTime::now())?;
+    let duration = reset.duration_since_wc(SystemTime::now())?;
     eprintln!("Sleeping for {} secs.", duration.as_secs());
     tokio::time::sleep_until(tokio::time::Instant::now() + duration).await;
 
     let result = f().await;
 
     if let Err(error) = &result {
-        let _: Result<_, _> = dbg!(SystemTime::now().duration_since(reset));
+        let _: Result<_, _> = dbg!(SystemTime::now().duration_since_wc(reset));
         if let Ok(rate_limit) = octocrab.ratelimit().get().await {
             dbg!(&rate_limit.rate);
         }
@@ -181,9 +182,9 @@ fn extract_package_name<'a>(url: &'a str, advisory_url: &str) -> Option<&'a str>
 fn is_unmaintained(name: &str) -> Result<bool> {
     let output = command_output(&mut cargo_unmaintained(name))?;
 
-    match output.status.code() {
-        Some(0) => Ok(false),
-        Some(1) => Ok(true),
+    match output.status.code_wc() {
+        Ok(0) => Ok(false),
+        Ok(1) => Ok(true),
         _ => {
             debug!("{output:#?}");
             Ok(false)

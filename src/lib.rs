@@ -16,6 +16,7 @@ use cargo_metadata::{
 };
 use clap::{Parser, crate_version};
 use crates_index::{Error, GitIndex};
+use elaborate::std::{path::PathContext, process::CommandContext, time::SystemTimeContext};
 use home::cargo_home;
 use std::{
     cell::RefCell,
@@ -644,7 +645,8 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
                     if init {
                         return Ok(true);
                     }
-                    let duration = SystemTime::now().duration_since(version.created_at.into())?;
+                    let duration =
+                        SystemTime::now().duration_since_wc(version.created_at.into())?;
                     let version_num = Version::parse(&version.num)?;
                     Ok(duration.as_secs() >= opts::get().max_age * SECS_PER_DAY
                         && dep_pkg.version <= version_num
@@ -724,7 +726,7 @@ fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
 
     repo_status
         .map(|timestamp| {
-            let duration = SystemTime::now().duration_since(timestamp)?;
+            let duration = SystemTime::now().duration_since_wc(timestamp)?;
 
             Ok(duration.as_secs())
         })
@@ -788,7 +790,7 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
         .args(["log", "-1", "--pretty=format:%ct"])
         .current_dir(repo_dir);
     let output = command
-        .output()
+        .output_wc()
         .with_context(|| format!("failed to run command: {command:?}"))?;
     ensure!(output.status.success(), "command failed: {command:?}");
 
@@ -881,7 +883,7 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     command.current_dir(repo_dir);
     command.stdout(Stdio::piped());
     let mut child = command
-        .spawn()
+        .spawn_wc()
         .with_context(|| format!("command failed: {command:?}"))?;
     #[allow(clippy::unwrap_used)]
     let stdout = child.stdout.take().unwrap();
@@ -893,7 +895,8 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
             || panic!("cache is corrupt at `{}`", repo_dir.display()),
             Path::new,
         );
-        if path.file_name() != Some(OsStr::new("Cargo.toml")) {
+        let filename = path.file_name_wc();
+        if filename.is_err() || filename.is_ok_and(|s| s != OsStr::new("Cargo.toml")) {
             continue;
         }
         let contents = show(repo_dir, path)?;
@@ -929,7 +932,7 @@ fn show(repo_dir: &Path, path: &Path) -> Result<String> {
     command.current_dir(repo_dir);
     command.stdout(Stdio::piped());
     let output = command
-        .output()
+        .output_wc()
         .with_context(|| format!("failed to run command: {command:?}"))?;
     if !output.status.success() {
         let error = String::from_utf8(output.stderr)?;
@@ -1015,7 +1018,7 @@ fn display_path(name: &str, version: &Version) -> Result<bool> {
     let mut command = Command::new("cargo");
     command.args(["tree", "--workspace", "--target=all", "--invert", &spec]);
     let output = command
-        .output()
+        .output_wc()
         .with_context(|| format!("failed to run command: {command:?}"))?;
     // smoelius: Hack. It appears that `cargo tree` does not print proc-macros used by proc-macros.
     // For now, check whether stdout begins as expected. If not, ignore it and ultimately emit a
