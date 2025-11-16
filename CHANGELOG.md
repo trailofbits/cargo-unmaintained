@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.9.0
+
+- FEATURE: Reclone repository when default branch name changes ([#694](https://github.com/trailofbits/cargo-unmaintained/pull/694))
+- FEATURE: Allow specification of `cargo-unmaintained` cache directory via `CARGO_UNMAINTAINED_CACHE` environment variable (part of [#694](https://github.com/trailofbits/cargo-unmaintained/pull/694))
+- FEATURE: Use `elaborate` for better error reporting ([#697](https://github.com/trailofbits/cargo-unmaintained/pull/697))
+
 ## 1.8.4
 
 - Update `crates_io_api` to version 0.12 ([#630](https://github.com/trailofbits/cargo-unmaintained/pull/630))
