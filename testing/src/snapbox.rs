@@ -2,7 +2,7 @@
 #![cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 
 use super::{Tee, enabled, tee};
-use anyhow::{Context, Result, bail};
+use anyhow::{Result, bail};
 use elaborate::std::{
     env::var_wc,
     fs::{read_dir_wc, read_to_string_wc, write_wc},
@@ -221,9 +221,7 @@ fn checkout(repo_dir: &Path, rev: Option<&str>) -> Result<()> {
             command.env("GIT_CONFIG_GLOBAL", GIT_CONFIG.path());
         }
         command.current_dir(repo_dir);
-        let output = command
-            .output_wc()
-            .with_context(|| format!("failed to run command: {command:?}"))?;
+        let output = command.output_wc()?;
         if !output.status.success() {
             let error = String::from_utf8(output.stderr)?;
             let msg = format!(

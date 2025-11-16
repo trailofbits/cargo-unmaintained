@@ -789,9 +789,7 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     command
         .args(["log", "-1", "--pretty=format:%ct"])
         .current_dir(repo_dir);
-    let output = command
-        .output_wc()
-        .with_context(|| format!("failed to run command: {command:?}"))?;
+    let output = command.output_wc()?;
     ensure!(output.status.success(), "command failed: {command:?}");
 
     let stdout = std::str::from_utf8(&output.stdout)?;
@@ -882,9 +880,7 @@ fn membership_in_clone(pkg: &Package, repo_dir: &Path) -> Result<bool> {
     command.args(["status", "--porcelain"]);
     command.current_dir(repo_dir);
     command.stdout(Stdio::piped());
-    let mut child = command
-        .spawn_wc()
-        .with_context(|| format!("command failed: {command:?}"))?;
+    let mut child = command.spawn_wc()?;
     #[allow(clippy::unwrap_used)]
     let stdout = child.stdout.take().unwrap();
     let reader = std::io::BufReader::new(stdout);
@@ -931,9 +927,7 @@ fn show(repo_dir: &Path, path: &Path) -> Result<String> {
     command.args(["show", &format!("HEAD:{}", path.display())]);
     command.current_dir(repo_dir);
     command.stdout(Stdio::piped());
-    let output = command
-        .output_wc()
-        .with_context(|| format!("failed to run command: {command:?}"))?;
+    let output = command.output_wc()?;
     if !output.status.success() {
         let error = String::from_utf8(output.stderr)?;
         bail!(
@@ -1017,9 +1011,7 @@ fn display_path(name: &str, version: &Version) -> Result<bool> {
     let spec = format!("{name}@{version}");
     let mut command = Command::new("cargo");
     command.args(["tree", "--workspace", "--target=all", "--invert", &spec]);
-    let output = command
-        .output_wc()
-        .with_context(|| format!("failed to run command: {command:?}"))?;
+    let output = command.output_wc()?;
     // smoelius: Hack. It appears that `cargo tree` does not print proc-macros used by proc-macros.
     // For now, check whether stdout begins as expected. If not, ignore it and ultimately emit a
     // warning.

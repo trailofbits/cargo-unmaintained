@@ -16,15 +16,11 @@ pub fn temp_package(name: &str) -> Result<TempDir> {
             "--vcs=none",
         ])
         .current_dir(&tempdir)
-        .status_wc()
-        .with_context(|| "failed to create temporary package")?;
+        .status_wc()?;
     ensure!(status.success());
 
     let path_buf = tempdir.path().join("Cargo.toml");
-    let mut manifest = OpenOptions::new()
-        .append(true)
-        .open_wc(&path_buf)
-        .with_context(|| format!("failed to open `{}`", path_buf.display()))?;
+    let mut manifest = OpenOptions::new().append(true).open_wc(&path_buf)?;
     writeln!(manifest, r#"{name} = "*""#)
         .with_context(|| format!("failed to write to `{}`", path_buf.display()))?;
 

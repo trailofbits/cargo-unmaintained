@@ -1,4 +1,4 @@
-use anyhow::{Context, Result, anyhow};
+use anyhow::{Result, anyhow};
 use elaborate::std::{
     env::var_wc,
     fs::{OpenOptionsContext, create_dir_all_wc, read_to_string_wc},
@@ -34,7 +34,7 @@ pub(super) static PERSONAL_TOKEN: OnceLock<String> = OnceLock::new();
 
 pub fn load_token(f: impl FnOnce(&str) -> Result<()>) -> Result<bool> {
     let token_untrimmed = if let Ok(path) = var_wc("GITHUB_TOKEN_PATH") {
-        read_to_string_wc(&path).with_context(|| format!("failed to read {path:?}"))?
+        read_to_string_wc(&path)?
     } else if let Ok(token) = var_wc("GITHUB_TOKEN") {
         // smoelius: Suppress warning if `CI` is set, i.e., if running on GitHub.
         if var_wc("CI").is_err() {
@@ -45,13 +45,8 @@ pub fn load_token(f: impl FnOnce(&str) -> Result<()>) -> Result<bool> {
             );
         }
         token
-    } else if TOKEN_PATH.try_exists_wc().with_context(|| {
-        format!(
-            "failed to determine whether `{}` exists",
-            TOKEN_PATH.display()
-        )
-    })? {
-        read_to_string_wc(&*TOKEN_PATH).with_context(|| format!("failed to read {TOKEN_PATH:?}"))?
+    } else if TOKEN_PATH.try_exists_wc()? {
+        read_to_string_wc(&*TOKEN_PATH)?
     } else {
         #[cfg(__warnings)]
         crate::warn!(
@@ -75,23 +70,19 @@ pub(crate) fn save_token() -> Result<()> {
     let mut buf = String::new();
 
     {
-        let n = stdin()
-            .read_line_wc(&mut buf)
-            .with_context(|| "failed to read stdin")?;
+        let n = stdin().read_line_wc(&mut buf)?;
         assert_eq!(buf.len(), n);
     }
 
-    create_dir_all_wc(&*CONFIG_DIRECTORY).with_context(|| "failed to create config directory")?;
+    create_dir_all_wc(&*CONFIG_DIRECTORY)?;
 
     let mut file = OpenOptions::new()
         .create(true)
         .truncate(true)
         .write(true)
-        .open_wc(&*TOKEN_PATH)
-        .with_context(|| format!("failed to open `{}`", TOKEN_PATH.display()))?;
+        .open_wc(&*TOKEN_PATH)?;
     set_permissions(&file, 0o600)?;
-    file.write_all_wc(buf.as_bytes())
-        .with_context(|| format!("failed to write `{}`", TOKEN_PATH.display()))?;
+    file.write_all_wc(buf.as_bytes())?;
 
     println!(
         "Personal access token written to `{}`",

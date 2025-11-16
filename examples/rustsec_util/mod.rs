@@ -1,4 +1,4 @@
-use anyhow::{Context, Result};
+use anyhow::Result;
 use elaborate::std::{env::var_wc, path::PathContext, process::CommandContext};
 use std::{
     env::consts::EXE_SUFFIX,
@@ -98,9 +98,7 @@ pub fn cargo_unmaintained(name: &str) -> Command {
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 pub fn command_output(command: &mut Command) -> Result<Output> {
-    let output = command
-        .output_wc()
-        .with_context(|| format!("failed to execute command: {command:?}"))?;
+    let output = command.output_wc()?;
     let status = output.status;
     let stdout = String::from_utf8(output.stdout)?;
     if enabled("VERBOSE") {

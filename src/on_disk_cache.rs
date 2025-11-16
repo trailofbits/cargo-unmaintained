@@ -205,9 +205,7 @@ impl Cache {
                 .env("GIT_ASKPASS", "echo")
                 .env("GIT_TERMINAL_PROMPT", "0")
                 .stderr(Stdio::piped());
-            let output = command
-                .output_wc()
-                .with_context(|| format!("failed to run command: {command:?}"))?;
+            let output = command.output_wc()?;
             if output.status.success() {
                 return Ok((url.as_str().to_owned(), repo_dir));
             }
@@ -234,12 +232,10 @@ impl Cache {
             .contains_key(pkg.name.as_str())
         {
             let path_buf = self.versions_dir().join(pkg.name.as_str());
-            remove_file_wc(&path_buf)
-                .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+            remove_file_wc(&path_buf)?;
 
             let path_buf = self.versions_timestamps_dir().join(pkg.name.as_str());
-            remove_file_wc(&path_buf)
-                .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+            remove_file_wc(&path_buf)?;
 
             self.versions_with_timestamps.remove(pkg.name.as_str());
         }
@@ -248,19 +244,16 @@ impl Cache {
         let digest = url_digest(&entry.cloned_url);
 
         let path_buf = self.repository_timestamps_dir().join(&digest);
-        remove_file_wc(&path_buf)
-            .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+        remove_file_wc(&path_buf)?;
         self.repository_timestamps.remove(&digest);
 
         let path_buf = self.entries_dir().join(pkg.name.as_str());
-        remove_file_wc(&path_buf)
-            .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+        remove_file_wc(&path_buf)?;
         self.entries.remove(&pkg.name);
 
         // smoelius: Finally, remove the cloned repository.
         let path_buf = self.repositories_dir().join(digest);
-        remove_dir_all_wc(&path_buf)
-            .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
+        remove_dir_all_wc(&path_buf)?;
 
         Ok(())
     }
@@ -268,8 +261,7 @@ impl Cache {
     fn entry(&mut self, pkg: &Package) -> Result<Entry> {
         if !self.entries.contains_key(&pkg.name) {
             let path_buf = self.entries_dir().join(pkg.name.as_str());
-            let contents = read_to_string_wc(&path_buf)
-                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
+            let contents = read_to_string_wc(&path_buf)?;
             let entry = serde_json::from_str::<Entry>(&contents)?;
             ensure!(
                 pkg.repository.as_ref() == Some(&entry.named_url),
@@ -292,8 +284,7 @@ impl Cache {
         let digest = url_digest(url);
         if !self.repository_timestamps.contains_key(&digest) {
             let path_buf = self.repository_timestamps_dir().join(url_digest(url));
-            let contents = read_to_string_wc(&path_buf)
-                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
+            let contents = read_to_string_wc(&path_buf)?;
             let secs = u64::from_str(&contents)?;
             let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
             self.repository_timestamps.insert(digest.clone(), timestamp);
@@ -345,8 +336,7 @@ impl Cache {
     fn versions_with_timestamp(&mut self, name: &str) -> Result<(Vec<Version>, SystemTime)> {
         if !self.versions_with_timestamps.contains_key(name) {
             let path_buf = self.versions_timestamps_dir().join(name);
-            let contents = read_to_string_wc(&path_buf)
-                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
+            let contents = read_to_string_wc(&path_buf)?;
             let versions = serde_json::from_str::<Vec<Version>>(&contents)?;
             self.versions_with_timestamps
                 .insert(name.to_owned(), (versions, SystemTime::now()));
@@ -356,42 +346,34 @@ impl Cache {
     }
 
     fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
-        create_dir_all_wc(self.entries_dir())
-            .with_context(|| "failed to create entries directory")?;
+        create_dir_all_wc(self.entries_dir())?;
         let path_buf = self.entries_dir().join(pkg_name);
         let json = serde_json::to_string_pretty(entry)?;
-        write_wc(&path_buf, json)
-            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
+        write_wc(&path_buf, json)?;
         Ok(())
     }
 
     fn write_repository_timestamp(&self, digest: &str, timestamp: SystemTime) -> Result<()> {
-        create_dir_all_wc(self.repository_timestamps_dir())
-            .with_context(|| "failed to create repository timestamps directory")?;
+        create_dir_all_wc(self.repository_timestamps_dir())?;
         let path_buf = self.repository_timestamps_dir().join(digest);
         let duration = timestamp.duration_since_wc(SystemTime::UNIX_EPOCH)?;
-        write_wc(&path_buf, duration.as_secs().to_string())
-            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
+        write_wc(&path_buf, duration.as_secs().to_string())?;
         Ok(())
     }
 
     fn write_versions(&self, name: &str, versions: &[Version]) -> Result<()> {
-        create_dir_all_wc(self.versions_dir())
-            .with_context(|| "failed to create versions directory")?;
+        create_dir_all_wc(self.versions_dir())?;
         let path_buf = self.versions_dir().join(name);
         let json = serde_json::to_string_pretty(versions)?;
-        write_wc(&path_buf, json)
-            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
+        write_wc(&path_buf, json)?;
         Ok(())
     }
 
     fn write_versions_timestamp(&self, name: &str, timestamp: SystemTime) -> Result<()> {
-        create_dir_all_wc(self.versions_timestamps_dir())
-            .with_context(|| "failed to create versions timestamps directory")?;
+        create_dir_all_wc(self.versions_timestamps_dir())?;
         let path_buf = self.versions_timestamps_dir().join(name);
         let duration = timestamp.duration_since_wc(SystemTime::UNIX_EPOCH)?;
-        write_wc(&path_buf, duration.as_secs().to_string())
-            .with_context(|| format!("failed to write `{}`", path_buf.display()))?;
+        write_wc(&path_buf, duration.as_secs().to_string())?;
         Ok(())
     }
 
@@ -435,21 +417,14 @@ fn url_digest(url: &str) -> String {
 }
 
 fn repository_existence(repo_dir: &Path) -> Result<bool> {
-    repo_dir.try_exists_wc().with_context(|| {
-        format!(
-            "failed to determine whether `{}` exists",
-            repo_dir.display()
-        )
-    })
+    repo_dir.try_exists_wc()
 }
 
 fn branch_name(repo_dir: &Path) -> Result<String> {
     let mut command = Command::new("git");
     command.args(["branch", "--show-current"]);
     command.current_dir(repo_dir);
-    let output = command
-        .output_wc()
-        .with_context(|| format!("failed to run command: {command:?}"))?;
+    let output = command.output_wc()?;
     if !output.status.success() {
         let error = String::from_utf8(output.stderr)?;
         bail!(
@@ -467,24 +442,14 @@ fn branch_name(repo_dir: &Path) -> Result<String> {
 /// It removes the entire cache directory at $HOME/.cache/cargo-unmaintained.
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 pub fn purge_cache() -> Result<()> {
-    if CACHE_DIRECTORY.try_exists_wc().with_context(|| {
-        format!(
-            "failed to determine whether `{}` exists",
-            CACHE_DIRECTORY.display()
-        )
-    })? {
+    if CACHE_DIRECTORY.try_exists_wc()? {
         // Attempt to get a lock before removing
         #[cfg(feature = "lock-index")]
         let _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
             .with_context(|| format!("failed to lock `{}`", CACHE_DIRECTORY.display()))?;
 
         // Remove the entire cache directory
-        remove_dir_all_wc(&*CACHE_DIRECTORY).with_context(|| {
-            format!(
-                "failed to remove cache directory at `{}`",
-                CACHE_DIRECTORY.display()
-            )
-        })?;
+        remove_dir_all_wc(&*CACHE_DIRECTORY)?;
 
         eprintln!("Cache directory removed: {}", CACHE_DIRECTORY.display());
     } else {
