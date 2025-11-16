@@ -53,10 +53,7 @@ pub(crate) struct Cache {
     refresh_age: u64, // days
     entries: HashMap<PackageName, Entry>,
     repository_timestamps: HashMap<String, SystemTime>,
-    // smoelius: `versions` and `versions_timestamps` have the same keys. Should they be combined
-    // into a single hashmap?
-    versions: HashMap<String, Vec<Version>>,
-    versions_timestamps: HashMap<String, SystemTime>,
+    versions_with_timestamps: HashMap<String, (Vec<Version>, SystemTime)>,
 }
 
 thread_local! {
@@ -123,8 +120,7 @@ impl Cache {
             refresh_age,
             entries: HashMap::new(),
             repository_timestamps: HashMap::new(),
-            versions: HashMap::new(),
-            versions_timestamps: HashMap::new(),
+            versions_with_timestamps: HashMap::new(),
         })
     }
 
@@ -227,18 +223,19 @@ impl Cache {
     pub fn purge_one_entry(&mut self, pkg: &Package) -> Result<()> {
         // smoelius: `versions` and `versions_timestamps` will exist only if `fetch_versions` was
         // called.
-        if self.versions.contains_key(pkg.name.as_str()) {
+        if self
+            .versions_with_timestamps
+            .contains_key(pkg.name.as_str())
+        {
             let path_buf = self.versions_dir().join(pkg.name.as_str());
             remove_file(&path_buf)
                 .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
-            self.versions.remove(pkg.name.as_str());
-        }
 
-        if self.versions_timestamps.contains_key(pkg.name.as_str()) {
             let path_buf = self.versions_timestamps_dir().join(pkg.name.as_str());
             remove_file(&path_buf)
                 .with_context(|| format!("failed to remove `{}`", path_buf.display()))?;
-            self.versions_timestamps.remove(pkg.name.as_str());
+
+            self.versions_with_timestamps.remove(pkg.name.as_str());
         }
 
         let entry = self.entry(pkg)?;
@@ -312,13 +309,19 @@ impl Cache {
         // avoid using `crate_data`. The same data should be available in the crates.io index.
         let versions = crate_response.versions;
         self.write_versions(name, &versions)?;
-        self.versions.insert(name.to_owned(), versions.clone());
 
         let timestamp = SystemTime::now();
         self.write_versions_timestamp(name, timestamp)?;
-        self.versions_timestamps.insert(name.to_owned(), timestamp);
+
+        self.versions_with_timestamps
+            .insert(name.to_owned(), (versions.clone(), timestamp));
 
         Ok(versions)
+    }
+
+    fn versions(&mut self, name: &str) -> Result<Vec<Version>> {
+        self.versions_with_timestamp(name)
+            .map(|(versions, _)| versions)
     }
 
     fn versions_are_current(&mut self, url: &str) -> Result<bool> {
@@ -329,28 +332,21 @@ impl Cache {
     }
 
     fn versions_timestamp(&mut self, name: &str) -> Result<SystemTime> {
-        if !self.versions_timestamps.contains_key(name) {
-            let path_buf = self.versions_timestamps_dir().join(name);
-            let contents = read_to_string(&path_buf)
-                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
-            let secs = u64::from_str(&contents)?;
-            let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
-            self.versions_timestamps.insert(name.to_owned(), timestamp);
-        }
-        #[allow(clippy::unwrap_used)]
-        Ok(*self.versions_timestamps.get(name).unwrap())
+        self.versions_with_timestamp(name)
+            .map(|(_, timestamp)| timestamp)
     }
 
-    fn versions(&mut self, name: &str) -> Result<Vec<Version>> {
-        if !self.versions.contains_key(name) {
+    fn versions_with_timestamp(&mut self, name: &str) -> Result<(Vec<Version>, SystemTime)> {
+        if !self.versions_with_timestamps.contains_key(name) {
             let path_buf = self.versions_dir().join(name);
             let contents = read_to_string(&path_buf)
                 .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
             let versions = serde_json::from_str::<Vec<Version>>(&contents)?;
-            self.versions.insert(name.to_owned(), versions);
+            self.versions_with_timestamps
+                .insert(name.to_owned(), (versions, SystemTime::now()));
         }
         #[allow(clippy::unwrap_used)]
-        Ok(self.versions.get(name).cloned().unwrap())
+        Ok(self.versions_with_timestamps.get(name).cloned().unwrap())
     }
 
     fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
