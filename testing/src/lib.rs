@@ -1,7 +1,7 @@
 #![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
 #![allow(dead_code)]
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use elaborate::std::{
     env::var_wc,
     io::ReadContext,
@@ -37,9 +37,7 @@ pub fn tee(mut command: Command, which: Tee) -> Result<Output> {
         }
     }
 
-    let mut child = command
-        .spawn_wc()
-        .with_context(|| format!("command failed: {command:?}"))?;
+    let mut child = command.spawn_wc()?;
 
     let mut stream: &mut dyn Read = match which {
         Tee::Stdout => child.stdout.as_mut().unwrap(),
@@ -59,7 +57,7 @@ pub fn tee(mut command: Command, which: Tee) -> Result<Output> {
         captured.extend_from_slice(&buf[..size]);
     }
 
-    let status = child.wait_wc().with_context(|| "`wait` failed")?;
+    let status = child.wait_wc()?;
 
     Ok(Output { status, captured })
 }
