@@ -22,14 +22,6 @@
         "name": null
       }
     ],
-    "ahash": [
-      {
-        "id": 25353,
-        "kind": "user",
-        "login": "tkaitchuck",
-        "name": "Tom Kaitchuck"
-      }
-    ],
     "aho-corasick": [
       {
         "id": 189,
@@ -1028,6 +1020,20 @@
         "kind": "user",
         "login": "alexcrichton",
         "name": "Alex Crichton"
+      }
+    ],
+    "find-msvc-tools": [
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "flate2": [
@@ -3330,6 +3336,14 @@
         "name": "Fenhl"
       }
     ],
+    "simd-adler32": [
+      {
+        "id": 100904,
+        "kind": "user",
+        "login": "mcountryman",
+        "name": "Marvin Countryman"
+      }
+    ],
     "similar": [
       {
         "id": 39,
@@ -4164,21 +4178,21 @@
         "name": "Dan Gohman"
       }
     ],
-    "wasm-bindgen": [
+    "wasip2": [
       {
-        "id": 34642,
+        "id": 1,
         "kind": "user",
-        "login": "daxpedda",
-        "name": null
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
       },
       {
-        "id": 145038,
+        "id": 73222,
         "kind": "user",
-        "login": "guybedford",
-        "name": "Guy Bedford"
+        "login": "wasmtime-publish",
+        "name": null
       }
     ],
-    "wasm-bindgen-backend": [
+    "wasm-bindgen": [
       {
         "id": 34642,
         "kind": "user",
