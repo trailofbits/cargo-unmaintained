@@ -321,18 +321,6 @@ impl Cache {
         Ok(versions)
     }
 
-    fn versions(&mut self, name: &str) -> Result<Vec<Version>> {
-        if !self.versions.contains_key(name) {
-            let path_buf = self.versions_dir().join(name);
-            let contents = read_to_string(&path_buf)
-                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
-            let versions = serde_json::from_str::<Vec<Version>>(&contents)?;
-            self.versions.insert(name.to_owned(), versions);
-        }
-        #[allow(clippy::unwrap_used)]
-        Ok(self.versions.get(name).cloned().unwrap())
-    }
-
     fn versions_are_current(&mut self, url: &str) -> Result<bool> {
         self.versions_timestamp(url).and_then(|timestamp| {
             let duration = SystemTime::now().duration_since(timestamp)?;
@@ -351,6 +339,18 @@ impl Cache {
         }
         #[allow(clippy::unwrap_used)]
         Ok(*self.versions_timestamps.get(name).unwrap())
+    }
+
+    fn versions(&mut self, name: &str) -> Result<Vec<Version>> {
+        if !self.versions.contains_key(name) {
+            let path_buf = self.versions_dir().join(name);
+            let contents = read_to_string(&path_buf)
+                .with_context(|| format!("failed to read `{}`", path_buf.display()))?;
+            let versions = serde_json::from_str::<Vec<Version>>(&contents)?;
+            self.versions.insert(name.to_owned(), versions);
+        }
+        #[allow(clippy::unwrap_used)]
+        Ok(self.versions.get(name).cloned().unwrap())
     }
 
     fn write_entry(&self, pkg_name: &str, entry: &Entry) -> Result<()> {
