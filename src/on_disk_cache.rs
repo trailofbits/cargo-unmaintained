@@ -464,6 +464,10 @@ pub fn purge_cache() -> Result<()> {
 
 #[cfg(all(test, not(windows)))]
 mod tests {
+    // smoelius: The clippy.toml that the `elaborate_disallowed_methods` test uses doesn't have
+    // `allow-unwrap-in-tests = true`.
+    #![allow(clippy::unwrap_used)]
+
     use super::{Cache, DEFAULT_REFRESH_AGE};
     use cargo_metadata::MetadataCommand;
 
