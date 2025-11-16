@@ -233,6 +233,7 @@ dependencies = [
  "crates-index",
  "crates_io_api",
  "curl",
+ "elaborate",
  "env_logger",
  "home",
  "libc",
@@ -514,6 +515,15 @@ name = "dunce"
 version = "1.0.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "92773504d58c093f6de2459af4af33faa518c13451eb8f2b5698ed3d36e7c813"
+
+[[package]]
+name = "elaborate"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7be532131e43b399e289765d3a429fc6422f62b14c1cfcb784635053c188c9d1"
+dependencies = [
+ "anyhow",
+]
 
 [[package]]
 name = "encoding_rs"
