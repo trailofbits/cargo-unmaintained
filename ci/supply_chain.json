@@ -562,6 +562,20 @@
         "name": "Jiahao XU"
       }
     ],
+    "const-oid": [
+      {
+        "id": 267,
+        "kind": "user",
+        "login": "tarcieri",
+        "name": "Tony Arcieri"
+      },
+      {
+        "id": 4457,
+        "kind": "team",
+        "login": "github:rustcrypto:formats",
+        "name": "formats"
+      }
+    ],
     "core-foundation": [
       {
         "id": 5,
@@ -2226,6 +2240,26 @@
         "kind": "user",
         "login": "JohnTitor",
         "name": "Yuki Okushi"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
+    "libm": [
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 246,
+        "kind": "user",
+        "login": "japaric",
+        "name": "Jorge Aparicio"
       },
       {
         "id": 55123,
