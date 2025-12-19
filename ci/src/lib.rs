@@ -25,6 +25,24 @@ fn initialize() {
 }
 
 #[test]
+fn clippy() {
+    Command::new("cargo")
+        // smoelius: Remove `CARGO` environment variable to work around:
+        // https://github.com/rust-lang/rust/pull/131729
+        .env_remove("CARGO")
+        .args([
+            "+nightly",
+            "clippy",
+            "--all-features",
+            "--all-targets",
+            "--",
+            "--deny=warnings",
+        ])
+        .assert()
+        .success();
+}
+
+#[test]
 fn dylint() {
     let assert = Command::new("cargo")
         .args(["dylint", "--all", "--", "--all-features", "--all-targets"])
@@ -32,6 +50,15 @@ fn dylint() {
         .assert();
     let stderr = String::from_utf8(assert.get_output().stderr.clone()).unwrap();
     assert!(assert.try_success().is_ok(), "{}", stderr);
+}
+
+#[test]
+fn elaborate_disallowed_methods() {
+    elaborate::disallowed_methods()
+        .args(["--all-features", "--all-targets"])
+        .env("RUSTUP_TOOLCHAIN", "nightly")
+        .assert()
+        .success();
 }
 
 #[test]
