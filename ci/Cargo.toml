@@ -7,6 +7,7 @@ publish = false
 [dev-dependencies]
 assert_cmd = "2.1"
 ctor = "0.6"
+elaborate = "0.2"
 regex = "1.12"
 serde_json = "1.0"
 similar-asserts = "1.7"
