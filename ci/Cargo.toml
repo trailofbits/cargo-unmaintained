@@ -11,7 +11,7 @@ elaborate = "0.2"
 regex = "1.12"
 serde_json = "1.0"
 similar-asserts = "1.7"
-tempfile = "3.23"
+tempfile = "3.24"
 toml_edit = "0.24"
 walkdir = "2.5"
 
