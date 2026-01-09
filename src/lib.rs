@@ -223,10 +223,12 @@ fn create_index() -> GitIndex {
     let mut index = match GitIndex::new_cargo_default() {
         Ok(index) => index,
         Err(error) => {
-            let mut msg = format!("failed to create index: {error}");
+            let mut msg = format!("failed to create index: {error:?}");
             // smoelius: I once saw a recommendation to delete a corrupt crates.io index, but I
             // cannot remember where. Maybe the following?
             // https://github.com/rust-lang/cargo/issues/2403#issuecomment-186874266
+            // smoelius: I think it may have been here:
+            // https://github.com/frewsxcv/rust-crates-index/blob/04c8db58001595e43ed3b97a104d7a093fa85ec8/src/error.rs#L10
             if let Error::MissingHead { repo_path, .. } = &error {
                 write!(
                     msg,
