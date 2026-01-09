@@ -3422,16 +3422,16 @@
     ],
     "smol_str": [
       {
-        "id": 1014,
-        "kind": "team",
-        "login": "github:rust-analyzer:review",
-        "name": "review"
-      },
-      {
         "id": 2699,
         "kind": "user",
         "login": "matklad",
         "name": "Alex Kladov"
+      },
+      {
+        "id": 13682,
+        "kind": "team",
+        "login": "github:rust-lang:rust-analyzer",
+        "name": "rust-analyzer"
       },
       {
         "id": 16374,
