@@ -118,3 +118,6 @@ ignore = [
     # https://github.com/wasm-bindgen/wasm-bindgen/blob/8f2792238edbe808ba9e1eecc1c44032f28a66b1/CHANGELOG.md?plain=1#L13
     "wasm-bindgen-backend",
 ]
+
+[patch.crates-io]
+gix-transport = { path = "gix-transport" }
