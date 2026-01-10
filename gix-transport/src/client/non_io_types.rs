@@ -1,4 +1,4 @@
-/// Configure how the [`RequestWriter`][crate::client::RequestWriter] behaves when writing bytes.
+/// Configure how a `RequestWriter` behaves when writing bytes.
 #[derive(Default, PartialEq, Eq, Debug, Hash, Ord, PartialOrd, Clone, Copy)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum WriteMode {
@@ -15,8 +15,9 @@ pub enum WriteMode {
     OneLfTerminatedLinePerWriteCall,
 }
 
-/// The kind of packet line to write when transforming a [`RequestWriter`][crate::client::RequestWriter] into an
-/// [`ExtendedBufRead`][crate::client::ExtendedBufRead].
+/// The kind of packet line to write when transforming a `RequestWriter` into an `ExtendedBufRead`.
+///
+/// Both the type and the trait have different implementations for blocking vs async I/O.
 #[derive(PartialEq, Eq, Debug, Hash, Ord, PartialOrd, Clone, Copy)]
 #[cfg_attr(feature = "serde", derive(serde::Serialize, serde::Deserialize))]
 pub enum MessageKind {
@@ -39,12 +40,14 @@ pub(crate) mod connect {
         pub version: crate::Protocol,
         #[cfg(feature = "blocking-client")]
         /// Options to use if the scheme of the URL is `ssh`.
-        pub ssh: crate::client::ssh::connect::Options,
+        pub ssh: crate::client::blocking_io::ssh::connect::Options,
         /// If `true`, all packetlines received or sent will be passed to the facilities of the `gix-trace` crate.
         pub trace: bool,
     }
 
-    /// The error used in [`connect()`][crate::connect()].
+    /// The error used in `connect()`.
+    ///
+    /// (Both blocking and async I/O use the same error type.)
     #[derive(Debug, thiserror::Error)]
     #[allow(missing_docs)]
     pub enum Error {
@@ -74,7 +77,7 @@ pub(crate) mod connect {
             match self {
                 Error::Connection(err) => {
                     #[cfg(feature = "blocking-client")]
-                    if let Some(err) = err.downcast_ref::<crate::client::git::connect::Error>() {
+                    if let Some(err) = err.downcast_ref::<crate::client::git::blocking_io::connect::Error>() {
                         return err.is_spurious();
                     }
                     if let Some(err) = err.downcast_ref::<crate::client::Error>() {
@@ -93,11 +96,11 @@ mod error {
 
     use bstr::BString;
 
-    use crate::client::capabilities;
     #[cfg(feature = "http-client")]
-    use crate::client::http;
+    use crate::client::blocking_io::http;
     #[cfg(feature = "blocking-client")]
-    use crate::client::ssh;
+    use crate::client::blocking_io::ssh;
+    use crate::client::capabilities;
 
     #[cfg(feature = "http-client")]
     type HttpError = http::Error;

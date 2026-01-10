@@ -1,6 +1,6 @@
 mod options {
     mod ssh_command {
-        use crate::client::ssh::{connect::Options, ProgramKind};
+        use crate::client::blocking_io::ssh::{connect::Options, ProgramKind};
 
         #[test]
         fn no_field_means_ssh() {
@@ -46,7 +46,7 @@ mod program_kind {
     mod from_os_str {
         use std::ffi::OsStr;
 
-        use crate::client::ssh::ProgramKind;
+        use crate::client::blocking_io::ssh::ProgramKind;
 
         #[test]
         fn known_variants_are_derived_from_basename() {
@@ -100,7 +100,7 @@ mod program_kind {
         use std::ffi::OsStr;
 
         use crate::{
-            client::{ssh, ssh::ProgramKind},
+            client::blocking_io::ssh::{self, ProgramKind},
             Protocol,
         };
 
@@ -280,7 +280,7 @@ mod program_kind {
     mod line_to_err {
         use std::io::ErrorKind;
 
-        use crate::client::ssh::ProgramKind;
+        use crate::client::blocking_io::ssh::ProgramKind;
 
         #[test]
         fn all() {

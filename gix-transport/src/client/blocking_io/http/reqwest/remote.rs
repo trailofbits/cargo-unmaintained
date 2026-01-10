@@ -7,7 +7,9 @@ use std::{
 
 use gix_features::io::pipe;
 
-use crate::client::http::{self, options::FollowRedirects, redirect, reqwest::Remote, traits::PostBodyDataKind};
+use crate::client::blocking_io::http::{
+    self, options::FollowRedirects, redirect, reqwest::Remote, traits::PostBodyDataKind,
+};
 
 /// The error returned by the 'remote' helper, a purely internal construct to perform http requests.
 #[derive(Debug, thiserror::Error)]

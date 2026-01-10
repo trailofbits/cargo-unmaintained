@@ -5,7 +5,7 @@ use std::{
 
 use gix_features::io;
 
-use crate::client::{blocking_io::http, http::traits::PostBodyDataKind};
+use crate::client::blocking_io::http::{self, traits::PostBodyDataKind};
 
 mod remote;
 

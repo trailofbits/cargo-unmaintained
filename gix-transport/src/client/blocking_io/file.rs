@@ -10,7 +10,12 @@ use std::{
 use bstr::{io::BufReadExt, BStr, BString, ByteSlice};
 
 use crate::{
-    client::{self, git, ssh, MessageKind, RequestWriter, SetServiceResponse, WriteMode},
+    client::{
+        self,
+        blocking_io::{ssh, RequestWriter, SetServiceResponse},
+        git::blocking_io::Connection,
+        MessageKind, WriteMode,
+    },
     Protocol, Service,
 };
 
@@ -36,7 +41,7 @@ const ENV_VARS_TO_REMOVE: &[&str] = &[
 
 /// A utility to spawn a helper process to actually transmit data, possibly over `ssh`.
 ///
-/// It can only be instantiated using the local [`connect()`] or [ssh connect][crate::client::ssh::connect()].
+/// It can only be instantiated using the local [`connect()`] or [ssh connect][super::ssh::connect()].
 pub struct SpawnProcessOnDemand {
     desired_version: Protocol,
     url: gix_url::Url,
@@ -45,7 +50,7 @@ pub struct SpawnProcessOnDemand {
     /// The environment variables to set in the invoked command.
     envs: Vec<(&'static str, String)>,
     ssh_disallow_shell: bool,
-    connection: Option<git::Connection<Box<dyn std::io::Read + Send>, process::ChildStdin>>,
+    connection: Option<Connection<Box<dyn std::io::Read + Send>, process::ChildStdin>>,
     child: Option<process::Child>,
     trace: bool,
 }
@@ -101,18 +106,6 @@ impl client::TransportWithoutIO for SpawnProcessOnDemand {
         } else {
             Err(client::Error::AuthenticationUnsupported)
         }
-    }
-
-    fn request(
-        &mut self,
-        write_mode: WriteMode,
-        on_into_read: MessageKind,
-        trace: bool,
-    ) -> Result<RequestWriter<'_>, client::Error> {
-        self.connection
-            .as_mut()
-            .ok_or(client::Error::MissingHandshake)?
-            .request(write_mode, on_into_read, trace)
     }
 
     fn to_url(&self) -> Cow<'_, BStr> {
@@ -209,7 +202,7 @@ fn supervise_stderr(
     ReadStdoutFailOnError { read: stdout, recv }
 }
 
-impl client::Transport for SpawnProcessOnDemand {
+impl client::blocking_io::Transport for SpawnProcessOnDemand {
     fn handshake<'a>(
         &mut self,
         service: Service,
@@ -263,7 +256,7 @@ impl client::Transport for SpawnProcessOnDemand {
             )),
             None => Box::new(child.stdout.take().expect("stdout configured")),
         };
-        self.connection = Some(git::Connection::new_for_spawned_process(
+        self.connection = Some(Connection::new_for_spawned_process(
             stdout,
             child.stdin.take().expect("stdin configured"),
             self.desired_version,
@@ -275,6 +268,18 @@ impl client::Transport for SpawnProcessOnDemand {
             .as_mut()
             .expect("connection to be there right after setting it")
             .handshake(service, extra_parameters)
+    }
+
+    fn request(
+        &mut self,
+        write_mode: WriteMode,
+        on_into_read: MessageKind,
+        trace: bool,
+    ) -> Result<RequestWriter<'_>, client::Error> {
+        self.connection
+            .as_mut()
+            .ok_or(client::Error::MissingHandshake)?
+            .request(write_mode, on_into_read, trace)
     }
 }
 

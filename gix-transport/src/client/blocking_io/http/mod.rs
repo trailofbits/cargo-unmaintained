@@ -8,22 +8,23 @@ use std::{
 
 use base64::Engine;
 use bstr::BStr;
-use gix_packetline::PacketLineRef;
 pub use traits::{Error, GetResponse, Http, PostBodyDataKind, PostResponse};
 
 use crate::{
     client::{
         self,
-        blocking_io::bufread_ext::ReadlineBufRead,
-        capabilities,
-        http::options::{HttpVersion, SslVersionRangeInclusive},
-        Capabilities, ExtendedBufRead, HandleProgress, MessageKind, RequestWriter,
+        blocking_io::{
+            self,
+            bufread_ext::ReadlineBufRead,
+            http::options::{HttpVersion, SslVersionRangeInclusive},
+            ExtendedBufRead, HandleProgress, RequestWriter, SetServiceResponse,
+        },
+        capabilities::blocking_recv::Handshake,
+        MessageKind,
     },
+    packetline::{blocking_io::StreamingPeekableIter, PacketLineRef},
     Protocol, Service,
 };
-
-#[cfg(all(feature = "http-client-reqwest", feature = "http-client-curl"))]
-compile_error!("Cannot set both 'http-client-reqwest' and 'http-client-curl' features as they are mutually exclusive");
 
 #[cfg(feature = "http-client-curl")]
 ///
@@ -212,13 +213,6 @@ impl Default for Options {
     }
 }
 
-/// The actual http client implementation, using curl
-#[cfg(feature = "http-client-curl")]
-pub type Impl = curl::Curl;
-/// The actual http client implementation, using reqwest
-#[cfg(feature = "http-client-reqwest")]
-pub type Impl = reqwest::Remote;
-
 /// A transport for supporting arbitrary http clients by abstracting interactions with them into the [Http] trait.
 pub struct Transport<H: Http> {
     url: String,
@@ -227,7 +221,7 @@ pub struct Transport<H: Http> {
     actual_version: Protocol,
     http: H,
     service: Option<Service>,
-    line_provider: Option<gix_packetline::StreamingPeekableIter<H::ResponseBody>>,
+    line_provider: Option<StreamingPeekableIter<H::ResponseBody>>,
     identity: Option<gix_sec::identity::Account>,
     trace: bool,
 }
@@ -267,13 +261,13 @@ impl<H: Http> Transport<H> {
 }
 
 #[cfg(any(feature = "http-client-curl", feature = "http-client-reqwest"))]
-impl Transport<Impl> {
+impl<H: Http + Default> Transport<H> {
     /// Create a new instance to communicate to `url` using the given `desired_version` of the `git` protocol.
     /// If `trace` is `true`, all packetlines received or sent will be passed to the facilities of the `gix-trace` crate.
     ///
     /// Note that the actual implementation depends on feature toggles.
     pub fn new(url: gix_url::Url, desired_version: Protocol, trace: bool) -> Self {
-        Self::new_http(Impl::default(), url, desired_version, trace)
+        Self::new_http(H::default(), url, desired_version, trace)
     }
 }
 
@@ -333,6 +327,96 @@ impl<H: Http> client::TransportWithoutIO for Transport<H> {
         Ok(())
     }
 
+    fn to_url(&self) -> Cow<'_, BStr> {
+        Cow::Borrowed(self.url.as_str().into())
+    }
+
+    fn connection_persists_across_multiple_requests(&self) -> bool {
+        false
+    }
+
+    fn configure(&mut self, config: &dyn Any) -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
+        self.http.configure(config)
+    }
+}
+
+impl<H: Http> blocking_io::Transport for Transport<H> {
+    fn handshake<'a>(
+        &mut self,
+        service: Service,
+        extra_parameters: &'a [(&'a str, Option<&'a str>)],
+    ) -> Result<SetServiceResponse<'_>, client::Error> {
+        let url = append_url(self.url.as_ref(), &format!("info/refs?service={}", service.as_str()));
+        let static_headers = [Cow::Borrowed(self.user_agent_header)];
+        let mut dynamic_headers = Vec::<Cow<'_, str>>::new();
+        if self.desired_version != Protocol::V1 || !extra_parameters.is_empty() {
+            let mut parameters = if self.desired_version != Protocol::V1 {
+                let mut p = format!("version={}", self.desired_version as usize);
+                if !extra_parameters.is_empty() {
+                    p.push(':');
+                }
+                p
+            } else {
+                String::new()
+            };
+            parameters.push_str(
+                &extra_parameters
+                    .iter()
+                    .map(|(key, value)| match value {
+                        Some(value) => format!("{key}={value}"),
+                        None => key.to_string(),
+                    })
+                    .collect::<Vec<_>>()
+                    .join(":"),
+            );
+            dynamic_headers.push(format!("Git-Protocol: {parameters}").into());
+        }
+        self.add_basic_auth_if_present(&mut dynamic_headers)?;
+        let GetResponse { headers, body } =
+            self.http
+                .get(url.as_ref(), &self.url, static_headers.iter().chain(&dynamic_headers))?;
+        <Transport<H>>::check_content_type(service, "advertisement", headers)?;
+
+        let line_reader = self
+            .line_provider
+            .get_or_insert_with(|| StreamingPeekableIter::new(body, &[PacketLineRef::Flush], self.trace));
+
+        // the service announcement is only sent sometimes depending on the exact server/protocol version/used protocol (http?)
+        // eat the announcement when its there to avoid errors later (and check that the correct service was announced).
+        // Ignore the announcement otherwise.
+        let line_ = line_reader
+            .peek_line()
+            .ok_or(client::Error::ExpectedLine("capabilities, version or service"))???;
+        let line = line_.as_text().ok_or(client::Error::ExpectedLine("text"))?;
+
+        if let Some(announced_service) = line.as_bstr().strip_prefix(b"# service=") {
+            if announced_service != service.as_str().as_bytes() {
+                return Err(client::Error::Http(Error::Detail {
+                    description: format!(
+                        "Expected to see service {:?}, but got {:?}",
+                        service.as_str(),
+                        announced_service
+                    ),
+                }));
+            }
+
+            line_reader.as_read().read_to_end(&mut Vec::new())?;
+        }
+
+        let Handshake {
+            capabilities,
+            refs,
+            protocol: actual_protocol,
+        } = Handshake::from_lines_with_version_detection(line_reader)?;
+        self.actual_version = actual_protocol;
+        self.service = Some(service);
+        Ok(SetServiceResponse {
+            actual_protocol,
+            capabilities,
+            refs,
+        })
+    }
+
     fn request(
         &mut self,
         write_mode: client::WriteMode,
@@ -382,96 +466,6 @@ impl<H: Http> client::TransportWithoutIO for Transport<H> {
             trace,
         ))
     }
-
-    fn to_url(&self) -> Cow<'_, BStr> {
-        Cow::Borrowed(self.url.as_str().into())
-    }
-
-    fn connection_persists_across_multiple_requests(&self) -> bool {
-        false
-    }
-
-    fn configure(&mut self, config: &dyn Any) -> Result<(), Box<dyn std::error::Error + Send + Sync + 'static>> {
-        self.http.configure(config)
-    }
-}
-
-impl<H: Http> client::Transport for Transport<H> {
-    fn handshake<'a>(
-        &mut self,
-        service: Service,
-        extra_parameters: &'a [(&'a str, Option<&'a str>)],
-    ) -> Result<client::SetServiceResponse<'_>, client::Error> {
-        let url = append_url(self.url.as_ref(), &format!("info/refs?service={}", service.as_str()));
-        let static_headers = [Cow::Borrowed(self.user_agent_header)];
-        let mut dynamic_headers = Vec::<Cow<'_, str>>::new();
-        if self.desired_version != Protocol::V1 || !extra_parameters.is_empty() {
-            let mut parameters = if self.desired_version != Protocol::V1 {
-                let mut p = format!("version={}", self.desired_version as usize);
-                if !extra_parameters.is_empty() {
-                    p.push(':');
-                }
-                p
-            } else {
-                String::new()
-            };
-            parameters.push_str(
-                &extra_parameters
-                    .iter()
-                    .map(|(key, value)| match value {
-                        Some(value) => format!("{key}={value}"),
-                        None => key.to_string(),
-                    })
-                    .collect::<Vec<_>>()
-                    .join(":"),
-            );
-            dynamic_headers.push(format!("Git-Protocol: {parameters}").into());
-        }
-        self.add_basic_auth_if_present(&mut dynamic_headers)?;
-        let GetResponse { headers, body } =
-            self.http
-                .get(url.as_ref(), &self.url, static_headers.iter().chain(&dynamic_headers))?;
-        <Transport<H>>::check_content_type(service, "advertisement", headers)?;
-
-        let line_reader = self.line_provider.get_or_insert_with(|| {
-            gix_packetline::StreamingPeekableIter::new(body, &[PacketLineRef::Flush], self.trace)
-        });
-
-        // the service announcement is only sent sometimes depending on the exact server/protocol version/used protocol (http?)
-        // eat the announcement when its there to avoid errors later (and check that the correct service was announced).
-        // Ignore the announcement otherwise.
-        let line_ = line_reader
-            .peek_line()
-            .ok_or(client::Error::ExpectedLine("capabilities, version or service"))???;
-        let line = line_.as_text().ok_or(client::Error::ExpectedLine("text"))?;
-
-        if let Some(announced_service) = line.as_bstr().strip_prefix(b"# service=") {
-            if announced_service != service.as_str().as_bytes() {
-                return Err(client::Error::Http(Error::Detail {
-                    description: format!(
-                        "Expected to see service {:?}, but got {:?}",
-                        service.as_str(),
-                        announced_service
-                    ),
-                }));
-            }
-
-            line_reader.as_read().read_to_end(&mut Vec::new())?;
-        }
-
-        let capabilities::recv::Outcome {
-            capabilities,
-            refs,
-            protocol: actual_protocol,
-        } = Capabilities::from_lines_with_version_detection(line_reader)?;
-        self.actual_version = actual_protocol;
-        self.service = Some(service);
-        Ok(client::SetServiceResponse {
-            actual_protocol,
-            capabilities,
-            refs,
-        })
-    }
 }
 
 struct HeadersThenBody<H: Http, B: Unpin> {
@@ -483,8 +477,7 @@ struct HeadersThenBody<H: Http, B: Unpin> {
 impl<H: Http, B: Unpin> HeadersThenBody<H, B> {
     fn handle_headers(&mut self) -> std::io::Result<()> {
         if let Some(headers) = self.headers.take() {
-            <Transport<H>>::check_content_type(self.service, "result", headers)
-                .map_err(|err| std::io::Error::new(std::io::ErrorKind::Other, err))?;
+            <Transport<H>>::check_content_type(self.service, "result", headers).map_err(std::io::Error::other)?;
         }
         Ok(())
     }
@@ -553,7 +546,7 @@ pub fn connect_http<H: Http>(http: H, url: gix_url::Url, desired_version: Protoc
 /// Connect to the given `url` via HTTP/S using the `desired_version` of the `git` protocol.
 /// If `trace` is `true`, all packetlines received or sent will be passed to the facilities of the `gix-trace` crate.
 #[cfg(any(feature = "http-client-curl", feature = "http-client-reqwest"))]
-pub fn connect(url: gix_url::Url, desired_version: Protocol, trace: bool) -> Transport<Impl> {
+pub fn connect<H: Http + Default>(url: gix_url::Url, desired_version: Protocol, trace: bool) -> Transport<H> {
     Transport::new(url, desired_version, trace)
 }
 

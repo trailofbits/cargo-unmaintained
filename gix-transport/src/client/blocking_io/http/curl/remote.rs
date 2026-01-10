@@ -9,13 +9,13 @@ use std::{
 use curl::easy::{Auth, Easy2};
 use gix_features::io::pipe;
 
-use crate::client::{
-    blocking_io::http::{self, curl::Error, redirect},
-    http::{
-        curl::curl_is_spurious,
-        options::{FollowRedirects, HttpVersion, ProxyAuthMethod, SslVersion},
-        traits::PostBodyDataKind,
-    },
+use crate::client::blocking_io::http::{
+    self,
+    curl::curl_is_spurious,
+    curl::Error,
+    options::{FollowRedirects, HttpVersion, ProxyAuthMethod, SslVersion},
+    redirect,
+    traits::PostBodyDataKind,
 };
 
 enum StreamOrBuffer {

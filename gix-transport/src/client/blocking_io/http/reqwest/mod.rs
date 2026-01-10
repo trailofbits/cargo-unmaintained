@@ -7,7 +7,7 @@ pub struct Remote {
     /// A channel to receive the result of the prior request.
     response: std::sync::mpsc::Receiver<remote::Response>,
     /// A mechanism for configuring the remote.
-    config: crate::client::http::Options,
+    config: crate::client::blocking_io::http::Options,
 }
 
 /// A function to configure a single request prior to sending it, support most complex configuration beyond what's possible with
