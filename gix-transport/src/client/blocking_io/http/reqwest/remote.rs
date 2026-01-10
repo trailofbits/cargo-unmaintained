@@ -38,7 +38,7 @@ impl Default for Remote {
     fn default() -> Self {
         let (req_send, req_recv) = std::sync::mpsc::sync_channel(0);
         let (res_send, res_recv) = std::sync::mpsc::sync_channel(0);
-        let handle = std::thread::spawn(move || -> Result<(), Error> {
+        let handle = std::thread::spawn(move || -> Result<(), Error> {dbg!({
             let mut follow = None;
             let mut redirected_base_url = None::<String>;
             let allow_redirects = Arc::new(atomic::AtomicBool::new(false));
@@ -77,14 +77,15 @@ impl Default for Remote {
                 }))
                 .build()?;
 
-            for Request {
+            for (i, Request {
                 url,
                 base_url,
                 headers,
                 upload_body_kind,
                 config,
-            } in req_recv
+            }) in dbg!(req_recv.into_iter().enumerate())
             {
+                dbg!(i);
                 let effective_url = redirect::swap_tails(redirected_base_url.as_deref(), &base_url, url.clone());
                 let mut req_builder = if upload_body_kind.is_some() {
                     client.post(&effective_url)
@@ -191,7 +192,7 @@ impl Default for Remote {
                 }
             }
             Ok(())
-        });
+        })});
 
         Remote {
             handle: Some(handle),
@@ -313,6 +314,17 @@ pub(crate) struct Request {
     pub headers: reqwest::header::HeaderMap,
     pub upload_body_kind: Option<PostBodyDataKind>,
     pub config: http::Options,
+}
+
+impl std::fmt::Debug for Request {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Request")
+            .field("url", &self.url)
+            .field("base_url", &self.base_url)
+            .field("headers", &self.headers)
+            .field("upload_body_kind", &self.upload_body_kind)
+            .finish_non_exhaustive()
+    }
 }
 
 /// A link to a thread who provides data for the contained readers.
