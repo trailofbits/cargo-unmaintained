@@ -16,13 +16,11 @@ use cargo_metadata::{
 };
 use clap::{Parser, crate_version};
 use elaborate::std::{path::PathContext, process::CommandContext, time::SystemTimeContext};
-use home::cargo_home;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
     env::args,
     ffi::OsStr,
-    fs::File,
     io::{BufRead, IsTerminal},
     path::{Path, PathBuf},
     process::{Command, Stdio, exit},
@@ -36,7 +34,7 @@ use std::{
 use tame_index::{
     IndexLocation, KrateName,
     index::{IndexUrl, RemoteSparseIndex, sparse::SparseIndex},
-    utils::flock::FileLock,
+    utils::flock::LockOptions,
 };
 use tempfile::TempDir;
 use termcolor::{ColorChoice, ColorSpec, StandardStream, WriteColor};
@@ -52,9 +50,6 @@ mod opts;
 mod progress;
 mod serialize;
 mod verbose;
-
-#[cfg(feature = "lock-index")]
-mod flock;
 
 use github::{Github as _, Impl as Github};
 
@@ -219,9 +214,8 @@ macro_rules! warn {
     };
 }
 
-#[allow(clippy::expect_used, clippy::unwrap_used)]
+#[allow(clippy::expect_used)]
 fn create_index() -> RemoteSparseIndex {
-    let _lock = lock_index().unwrap();
     let index_url =
         IndexUrl::crates_io(None, None, None).expect("failed to get crates.io index URL");
     let index_location = IndexLocation::new(index_url);
@@ -680,10 +674,13 @@ fn latest_version(name: &str) -> Result<Version> {
             || {
                 let krate_name = KrateName::crates_io(name)
                     .map_err(|e| anyhow!("invalid crate name `{name}`: {e}"))?;
-                let lock = FileLock::unlocked();
+                let lock_options = LockOptions::cargo_package_lock(None)
+                    .map_err(|e| anyhow!("failed to create cargo package lock: {e}"))?;
+                let lock = lock_options
+                    .lock(|_| None)
+                    .map_err(|e| anyhow!("failed to acquire cargo package lock: {e}"))?;
                 let krate = INDEX.with(|index| {
                     let _ = LazyLock::force(index);
-                    let _lock = lock_index()?;
                     let krate = index
                         .krate(krate_name, true, &lock)
                         .map_err(|e| anyhow!("failed to fetch `{name}` from index: {e}"))?;
@@ -1016,23 +1013,6 @@ fn display_path(name: &str, version: &Version) -> Result<bool> {
     } else {
         Ok(true)
     }
-}
-
-static INDEX_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
-    #[allow(clippy::unwrap_used)]
-    let cargo_home = cargo_home().unwrap();
-    cargo_home.join("registry/index")
-});
-
-#[cfg(feature = "lock-index")]
-fn lock_index() -> Result<File> {
-    flock::lock_path(&INDEX_PATH)
-        .with_context(|| format!("failed to lock `{}`", INDEX_PATH.display()))
-}
-
-#[cfg(not(feature = "lock-index"))]
-fn lock_index() -> Result<File> {
-    File::open(&*INDEX_PATH).with_context(|| format!("failed to open `{}`", INDEX_PATH.display()))
 }
 
 #[cfg(test)]
