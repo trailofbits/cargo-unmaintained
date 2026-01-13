@@ -100,7 +100,7 @@ multipart...found
 parity-wasm...found
 wyz...not found
 http-types...found
-surf...not found
+surf...found
 hyper...not found
 rusoto...found
 rustc-hex...not found
@@ -144,7 +144,7 @@ conrod...found
 generational-arena...found
 yaml-rust...not found
 serde-yaml...not found
-toolbox...found
+toolbox...not found
 ignoring `https://arxiv.org/pdf/2108.04600.pdf` from `https://github.com/rustsec/advisory-db/issues/1933`
 cargo-asm...not found
 cargo-show-asm...not found
@@ -227,6 +227,8 @@ unic-utils...found
 ignoring `https://gist.github.com/lewismosciski/57ac3b8b7a861abdd0d7ae6f39de5a9d` from `https://github.com/rustsec/advisory-db/issues/2428`
 tandem...found
 Parser...not found
+ignoring `https://sr.ht/~stygianentity/bincode/` from `https://github.com/rustsec/advisory-db/issues/2514`
+ignoring `https://www.reddit.com/r/rust/s/CgvzHQPqUZ.` from `https://github.com/rustsec/advisory-db/issues/2514`
 not found (140)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
@@ -290,7 +292,6 @@ not found (140)
     rust-typemap             https://github.com/rustsec/advisory-db/issues/1406
     num-format               https://github.com/rustsec/advisory-db/issues/1416
     wyz                      https://github.com/rustsec/advisory-db/issues/1447
-    surf                     https://github.com/rustsec/advisory-db/issues/1471
     hyper                    https://github.com/rustsec/advisory-db/issues/1482
     rustc-hex                https://github.com/rustsec/advisory-db/issues/1514
     rust-claim               https://github.com/rustsec/advisory-db/issues/1521
@@ -317,6 +318,7 @@ not found (140)
     filesystem-rs            https://github.com/rustsec/advisory-db/issues/1870
     yaml-rust                https://github.com/rustsec/advisory-db/issues/1921
     serde-yaml               https://github.com/rustsec/advisory-db/issues/1925
+    toolbox                  https://github.com/rustsec/advisory-db/issues/1927
     cargo-asm                https://github.com/rustsec/advisory-db/issues/1935
     cargo-show-asm           https://github.com/rustsec/advisory-db/issues/1935
     openslide_rs             https://github.com/rustsec/advisory-db/issues/1937
@@ -394,6 +396,7 @@ found (61)
     multipart                https://github.com/rustsec/advisory-db/issues/1438
     parity-wasm              https://github.com/rustsec/advisory-db/issues/1441
     http-types               https://github.com/rustsec/advisory-db/issues/1471
+    surf                     https://github.com/rustsec/advisory-db/issues/1471
     rusoto                   https://github.com/rustsec/advisory-db/issues/1494
     buf_redux                https://github.com/rustsec/advisory-db/issues/1602
     kuchiki                  https://github.com/rustsec/advisory-db/issues/1611
@@ -409,7 +412,6 @@ found (61)
     loopdev                  https://github.com/rustsec/advisory-db/issues/1821
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
-    toolbox                  https://github.com/rustsec/advisory-db/issues/1927
     openslide                https://github.com/rustsec/advisory-db/issues/1937
     isahc                    https://github.com/rustsec/advisory-db/issues/1954
     servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
