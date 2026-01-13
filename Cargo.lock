@@ -318,8 +318,6 @@ dependencies = [
  "curl",
  "elaborate",
  "env_logger",
- "home",
- "libc",
  "log",
  "octocrab",
  "predicates",
@@ -341,7 +339,6 @@ dependencies = [
  "testing",
  "tokio",
  "toml",
- "windows-sys 0.61.2",
  "xdg",
 ]
 

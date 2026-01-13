@@ -16,7 +16,6 @@ crates_io_api = "0.12.0"
 curl = "0.4"
 elaborate = "0.2"
 env_logger = "0.11"
-home = "0.5"
 log = "0.4"
 regex = "1.12"
 remain = "0.2"
@@ -49,31 +48,23 @@ tokio = "1.49"
 elaborate = "0.2"
 
 [features]
-default = ["on-disk-cache", "lock-index"]
+default = ["on-disk-cache"]
 on-disk-cache = []
-lock-index = ["libc", "windows-sys"]
 __mock_github = []
 __real_github = []
 
 # smoelius: Old feature that was renamed.
 cache-repositories = ["on-disk-cache"]
 
-# smoelius: Old feature that is no longer used.
+# smoelius: Old features that are no longer used.
 ei = []
+lock-index = []
 
 [lints]
 workspace = true
 
 [target.'cfg(unix)'.dependencies]
-libc = { version = "0.2", optional = true }
 xdg = { version = "3.0" }
-
-[target.'cfg(windows)'.dependencies]
-windows-sys = { version = "0.61", features = [
-    "Win32_Storage_FileSystem",
-    "Win32_Foundation",
-    "Win32_System_IO",
-], optional = true }
 
 [workspace]
 # smoelius: `mock_github` must not be a workspace member. If it were, it would enable the
