@@ -79,6 +79,7 @@ fn hack_feature_powerset_udeps() {
             "cargo",
             "hack",
             "--feature-powerset",
+            "--at-least-one-of=crates-index,tame-index",
             "--exclude=cache-repositories,ei",
             "udeps",
         ])
