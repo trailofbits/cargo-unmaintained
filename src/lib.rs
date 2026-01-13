@@ -9,22 +9,27 @@
 #![cfg_attr(dylint_lib = "general", allow(crate_wide_allow))]
 #![cfg_attr(dylint_lib = "supplementary", allow(nonexistent_path_in_comment))]
 
+#[cfg(not(any(feature = "crates-index", feature = "tame-index")))]
+compile_error!("At least one of the `crates-index` or `tame-index` features must be enabled");
+
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::{
     Dependency, DependencyKind, Metadata, MetadataCommand, Package, PackageName,
     semver::{Version, VersionReq},
 };
 use clap::{Parser, crate_version};
+#[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
 use crates_index::{Error, GitIndex};
 use elaborate::std::{path::PathContext, process::CommandContext, time::SystemTimeContext};
+#[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
 use home::cargo_home;
+#[cfg(feature = "tame-index")]
+use std::mem::ManuallyDrop;
 use std::{
     cell::RefCell,
     collections::{HashMap, HashSet},
     env::args,
     ffi::OsStr,
-    fmt::Write,
-    fs::File,
     io::{BufRead, IsTerminal},
     path::{Path, PathBuf},
     process::{Command, Stdio, exit},
@@ -34,6 +39,14 @@ use std::{
         atomic::{AtomicBool, Ordering},
     },
     time::{Duration, SystemTime},
+};
+#[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
+use std::{fmt::Write, fs::File};
+#[cfg(feature = "tame-index")]
+use tame_index::{
+    IndexLocation, KrateName,
+    index::{IndexUrl, RemoteSparseIndex, sparse::SparseIndex},
+    utils::flock::LockOptions,
 };
 use tempfile::TempDir;
 use termcolor::{ColorChoice, ColorSpec, StandardStream, WriteColor};
@@ -50,7 +63,7 @@ mod progress;
 mod serialize;
 mod verbose;
 
-#[cfg(feature = "lock-index")]
+#[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
 mod flock;
 
 use github::{Github as _, Impl as Github};
@@ -216,6 +229,7 @@ macro_rules! warn {
     };
 }
 
+#[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
 #[allow(clippy::unwrap_used)]
 fn create_index() -> GitIndex {
     let _lock = lock_index().unwrap();
@@ -244,8 +258,28 @@ fn create_index() -> GitIndex {
     index
 }
 
+#[cfg(feature = "tame-index")]
+#[allow(clippy::expect_used)]
+fn create_index() -> RemoteSparseIndex {
+    let index_url =
+        IndexUrl::crates_io(None, None, None).expect("failed to get crates.io index URL");
+    let index_location = IndexLocation::new(index_url);
+    let sparse_index = SparseIndex::new(index_location).expect("failed to create sparse index");
+    let client = reqwest::blocking::Client::builder()
+        .user_agent(USER_AGENT)
+        .build()
+        .expect("failed to build HTTP client");
+    RemoteSparseIndex::new(sparse_index, client)
+}
+
 thread_local! {
+    #[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
     static INDEX: LazyLock<GitIndex> = LazyLock::new(create_index);
+    // smoelius: Use `ManuallyDrop` to prevent the destructor from running during process exit. On
+    // Windows, `std::process::exit` triggers thread-local destructors, and the `RemoteSparseIndex`
+    // destructor can panic during shutdown.
+    #[cfg(feature = "tame-index")]
+    static INDEX: ManuallyDrop<LazyLock<RemoteSparseIndex>> = ManuallyDrop::new(LazyLock::new(create_index));
     static PROGRESS: RefCell<Option<progress::Progress>> = const { RefCell::new(None) };
     // smoelius: The next four statics are "in-memory" caches.
     // smoelius: Note that repositories are (currently) stored in both an in-memory cache and an
@@ -689,17 +723,41 @@ fn latest_version(name: &str) -> Result<Version> {
         }
         verbose::wrap!(
             || {
-                let krate = INDEX.with(|index| {
-                    let _ = LazyLock::force(index);
-                    let _lock = lock_index()?;
-                    index
-                        .crate_(name)
-                        .ok_or_else(|| anyhow!("failed to find `{name}` in index"))
-                })?;
-                let latest_version_index = krate
-                    .highest_normal_version()
-                    .ok_or_else(|| anyhow!("`{name}` has no normal version"))?;
-                let latest_version = Version::from_str(latest_version_index.version())?;
+                #[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
+                let latest_version = {
+                    let krate = INDEX.with(|index| {
+                        let _ = LazyLock::force(index);
+                        let _lock = lock_index()?;
+                        index
+                            .crate_(name)
+                            .ok_or_else(|| anyhow!("failed to find `{name}` in index"))
+                    })?;
+                    let latest_version_index = krate
+                        .highest_normal_version()
+                        .ok_or_else(|| anyhow!("`{name}` has no normal version"))?;
+                    Version::from_str(latest_version_index.version())?
+                };
+                #[cfg(feature = "tame-index")]
+                let latest_version = {
+                    let krate_name = KrateName::crates_io(name)
+                        .map_err(|e| anyhow!("invalid crate name `{name}`: {e}"))?;
+                    let lock_options = LockOptions::cargo_package_lock(None)
+                        .map_err(|e| anyhow!("failed to create cargo package lock: {e}"))?;
+                    let lock = lock_options
+                        .lock(|_| None)
+                        .map_err(|e| anyhow!("failed to acquire cargo package lock: {e}"))?;
+                    let krate = INDEX.with(|index| {
+                        let _ = LazyLock::force(index);
+                        let krate = index
+                            .krate(krate_name, true, &lock)
+                            .map_err(|e| anyhow!("failed to fetch `{name}` from index: {e}"))?;
+                        krate.ok_or_else(|| anyhow!("failed to find `{name}` in index"))
+                    })?;
+                    let latest_version_index = krate
+                        .highest_normal_version()
+                        .ok_or_else(|| anyhow!("`{name}` has no normal version"))?;
+                    Version::from_str(&latest_version_index.version)?
+                };
                 latest_version_cache.insert(name.to_owned(), latest_version.clone());
                 Ok(latest_version)
             },
@@ -1025,21 +1083,17 @@ fn display_path(name: &str, version: &Version) -> Result<bool> {
     }
 }
 
+#[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
 static INDEX_PATH: LazyLock<PathBuf> = LazyLock::new(|| {
     #[allow(clippy::unwrap_used)]
     let cargo_home = cargo_home().unwrap();
     cargo_home.join("registry/index")
 });
 
-#[cfg(feature = "lock-index")]
+#[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
 fn lock_index() -> Result<File> {
     flock::lock_path(&INDEX_PATH)
         .with_context(|| format!("failed to lock `{}`", INDEX_PATH.display()))
-}
-
-#[cfg(not(feature = "lock-index"))]
-fn lock_index() -> Result<File> {
-    File::open(&*INDEX_PATH).with_context(|| format!("failed to open `{}`", INDEX_PATH.display()))
 }
 
 #[cfg(test)]

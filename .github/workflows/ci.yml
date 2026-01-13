@@ -37,6 +37,7 @@ jobs:
       fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
         environment: [ubuntu-latest, macos-latest, windows-latest]
+        index: [crates-index, tame-index]
 
     runs-on: ${{ matrix.environment }}
 
