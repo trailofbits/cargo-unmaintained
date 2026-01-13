@@ -1,4 +1,4 @@
-186 advisories for unmaintained packages
+193 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -247,7 +247,7 @@ backoff...found
 resolve...found
 rustc-serialize...found
 registry...found
-surf...recently updated
+surf...found
 tsify-next...not found
 async-std...recently updated
 adler...found
@@ -293,7 +293,17 @@ tandem_http_client...found
 tandem_http_server...found
 tandem_garble_interop...found
 tandem...found
-not found - error (11)
+number_prefix...leaf
+gcc...found
+cargo-asm...error:
+```
+Error: found no packages matching `cargo-asm`
+```
+opentelemetry-jaeger...found
+rand_os...found
+rustls-pemfile...found
+bincode...found
+not found - error (12)
     block-cipher-trait     https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher           https://rustsec.org/advisories/RUSTSEC-2020-0057.html
     stream-cipher          https://rustsec.org/advisories/RUSTSEC-2020-0058.html
@@ -305,13 +315,14 @@ not found - error (11)
     cargo-download         https://rustsec.org/advisories/RUSTSEC-2021-0133.html
     cosmwasm               https://rustsec.org/advisories/RUSTSEC-2024-0004.html
     puccinier              https://rustsec.org/advisories/RUSTSEC-2024-0331.html
-not found - leaf (4)
+    cargo-asm              https://rustsec.org/advisories/RUSTSEC-2025-0122.html
+not found - leaf (5)
     anymap                 https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject            https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                   https://rustsec.org/advisories/RUSTSEC-2022-0081.html
     unic-common            https://rustsec.org/advisories/RUSTSEC-2025-0080.html
-not found - recently-updated (2)
-    surf                   https://rustsec.org/advisories/RUSTSEC-2025-0036.html
+    number_prefix          https://rustsec.org/advisories/RUSTSEC-2025-0119.html
+not found - recently-updated (1)
     async-std              https://rustsec.org/advisories/RUSTSEC-2025-0052.html
 not found - other (50)
     serial                 https://rustsec.org/advisories/RUSTSEC-2017-0008.html
@@ -364,7 +375,7 @@ not found - other (50)
     unic-ucd-common        https://rustsec.org/advisories/RUSTSEC-2025-0101.html
     unic-ucd-age           https://rustsec.org/advisories/RUSTSEC-2025-0102.html
     unic-ucd-segment       https://rustsec.org/advisories/RUSTSEC-2025-0104.html
-found (119)
+found (125)
     lz4-compress           https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce              https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -472,6 +483,7 @@ found (119)
     resolve                https://rustsec.org/advisories/RUSTSEC-2025-0013.html
     rustc-serialize        https://rustsec.org/advisories/RUSTSEC-2025-0025.html
     registry               https://rustsec.org/advisories/RUSTSEC-2025-0026.html
+    surf                   https://rustsec.org/advisories/RUSTSEC-2025-0036.html
     adler                  https://rustsec.org/advisories/RUSTSEC-2025-0056.html
     custom_derive          https://rustsec.org/advisories/RUSTSEC-2025-0058.html
     servo-fontconfig       https://rustsec.org/advisories/RUSTSEC-2025-0059.html
@@ -484,11 +496,16 @@ found (119)
     tandem_http_server     https://rustsec.org/advisories/RUSTSEC-2025-0115.html
     tandem_garble_interop  https://rustsec.org/advisories/RUSTSEC-2025-0116.html
     tandem                 https://rustsec.org/advisories/RUSTSEC-2025-0117.html
+    gcc                    https://rustsec.org/advisories/RUSTSEC-2025-0121.html
+    opentelemetry-jaeger   https://rustsec.org/advisories/RUSTSEC-2025-0123.html
+    rand_os                https://rustsec.org/advisories/RUSTSEC-2025-0124.html
+    rustls-pemfile         https://rustsec.org/advisories/RUSTSEC-2025-0134.html
+    bincode                https://rustsec.org/advisories/RUSTSEC-2025-0141.html
 ---
-As of 2025-11-12, the RustSec Advisory Database contains 186 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 119 (63%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-01-13, the RustSec Advisory Database contains 193 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 125 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 67 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
-  - 11 do not build
-  - 4 are existent, unarchived leaves
-  - 2 were updated within the past 365 days
+- Of the 68 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+  - 12 do not build
+  - 5 are existent, unarchived leaves
+  - 1 were updated within the past 365 days
   - 50 were not identified for other reasons
