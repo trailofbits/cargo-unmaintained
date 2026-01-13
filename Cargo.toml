@@ -105,6 +105,7 @@ pattern = [
 
 [workspace.metadata.unmaintained]
 ignore = [
+    "cexpr",
     "foreign-types",
     # smoelius: Removed by: https://github.com/GitoxideLabs/gitoxide/pull/2220
     "gix-packetline-blocking",
