@@ -12,18 +12,19 @@ anyhow = { version = "1.0", features = ["backtrace"] }
 cargo_metadata = "0.23"
 chrono = "0.4"
 clap = { version = "4.5", features = ["cargo", "derive", "wrap_help"] }
-crates-index = { version = "3.12", features = ["git-https-reqwest"] }
+crates-index = { version = "3.12", features = ["git-https-reqwest"], optional = true }
 crates_io_api = "0.12.0"
 curl = "0.4"
 elaborate = "0.2"
 env_logger = "0.11"
-home = "0.5"
+home = { version = "0.5", optional = true }
 log = "0.4"
 regex = "1.12"
 remain = "0.2"
 serde = "1.0"
 serde_json = "1.0"
 sha1_smol = { version = "1.0", features = ["std"] }
+tame-index = { version = "0.26", features = ["sparse"], optional = true }
 tempfile = "3.26"
 termcolor = "1.4"
 toml = "0.9"
@@ -55,14 +56,18 @@ tokio = "1.50"
 elaborate = "0.2"
 
 [features]
-default = ["on-disk-cache", "lock-index"]
+default = ["on-disk-cache", "crates-index"]
 on-disk-cache = []
-lock-index = ["libc", "windows-sys"]
+crates-index = ["dep:crates-index", "dep:home", "libc", "windows-sys"]
+tame-index = ["dep:tame-index", "reqwest/blocking"]
 __mock_github = []
 __real_github = []
 
 # smoelius: Old feature that was renamed.
 cache-repositories = ["on-disk-cache"]
+
+# smoelius: Old feature that was renamed.
+lock-index = ["crates-index"]
 
 # smoelius: Old feature that is no longer used.
 ei = []
