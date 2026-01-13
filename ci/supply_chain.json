@@ -124,20 +124,6 @@
         "name": "David Tolnay"
       }
     ],
-    "arc-swap": [
-      {
-        "id": 362,
-        "kind": "team",
-        "login": "github:rust-bus:maintainers",
-        "name": "maintainers"
-      },
-      {
-        "id": 5906,
-        "kind": "user",
-        "login": "vorner",
-        "name": "Michal 'vorner' Vaner"
-      }
-    ],
     "arrayvec": [
       {
         "id": 356,
@@ -176,14 +162,6 @@
         "kind": "user",
         "login": "NobodyXu",
         "name": "Jiahao XU"
-      }
-    ],
-    "async-trait": [
-      {
-        "id": 3618,
-        "kind": "user",
-        "login": "dtolnay",
-        "name": "David Tolnay"
       }
     ],
     "atomic-waker": [
@@ -560,14 +538,6 @@
         "name": "Ed Page"
       }
     ],
-    "clru": [
-      {
-        "id": 95730,
-        "kind": "user",
-        "login": "marmeladema",
-        "name": "Élie ROUDNINSKI"
-      }
-    ],
     "cmake": [
       {
         "id": 11,
@@ -716,32 +686,6 @@
         "kind": "team",
         "login": "github:rustcrypto:utils",
         "name": "utils"
-      }
-    ],
-    "crates-index": [
-      {
-        "id": 8,
-        "kind": "user",
-        "login": "steveklabnik",
-        "name": "Steve Klabnik"
-      },
-      {
-        "id": 227,
-        "kind": "user",
-        "login": "frewsxcv",
-        "name": "Corey Farwell"
-      },
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      },
-      {
-        "id": 988,
-        "kind": "user",
-        "login": "kornelski",
-        "name": "Kornel"
       }
     ],
     "crates_io_api": [
@@ -1070,32 +1014,6 @@
         "name": "Dan Gohman"
       }
     ],
-    "faster-hex": [
-      {
-        "id": 31789,
-        "kind": "user",
-        "login": "zhangsoledad",
-        "name": "zhangsoledad"
-      },
-      {
-        "id": 35751,
-        "kind": "user",
-        "login": "jjyr",
-        "name": "jjy"
-      },
-      {
-        "id": 36018,
-        "kind": "user",
-        "login": "quake",
-        "name": "Quake Wang"
-      },
-      {
-        "id": 230478,
-        "kind": "user",
-        "login": "eval-exec",
-        "name": "Eval Exec"
-      }
-    ],
     "fastrand": [
       {
         "id": 3341,
@@ -1398,382 +1316,6 @@
         "name": "Philip Craig"
       }
     ],
-    "gix": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-actor": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-attributes": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-bitmap": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-chunk": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-command": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-commitgraph": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-config": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-config-value": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-credentials": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-date": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-diff": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-discover": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-features": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-filter": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-fs": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-glob": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-hash": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-hashtable": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-ignore": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-index": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-lock": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-negotiate": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-object": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-odb": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-pack": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-packetline": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-path": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-pathspec": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-prompt": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-protocol": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-quote": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-ref": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-refspec": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-revision": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-revwalk": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-sec": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-shallow": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-submodule": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-tempfile": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-trace": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-transport": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-traverse": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-url": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-utils": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-validate": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-worktree": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
     "h2": [
       {
         "id": 10,
@@ -1866,14 +1408,6 @@
         "kind": "user",
         "login": "jplatte",
         "name": "Jonas Platte"
-      }
-    ],
-    "hex": [
-      {
-        "id": 36,
-        "kind": "user",
-        "login": "KokaKiwi",
-        "name": "KokaKiwi"
       }
     ],
     "home": [
@@ -2332,14 +1866,6 @@
         "name": "Guy Bedford"
       }
     ],
-    "kstring": [
-      {
-        "id": 6743,
-        "kind": "user",
-        "login": "epage",
-        "name": "Ed Page"
-      }
-    ],
     "libc": [
       {
         "id": 3,
@@ -2524,14 +2050,6 @@
         "kind": "user",
         "login": "Ralith",
         "name": "Benjamin Saunders"
-      }
-    ],
-    "maybe-async": [
-      {
-        "id": 28057,
-        "kind": "user",
-        "login": "fMeow",
-        "name": "fMeow"
       }
     ],
     "memchr": [
@@ -2876,14 +2394,6 @@
         "kind": "user",
         "login": "dtolnay",
         "name": "David Tolnay"
-      }
-    ],
-    "prodash": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
       }
     ],
     "quinn": [
@@ -3468,40 +2978,6 @@
         "name": "Anthony Ramine"
       }
     ],
-    "sha1": [
-      {
-        "id": 267,
-        "kind": "user",
-        "login": "tarcieri",
-        "name": "Tony Arcieri"
-      },
-      {
-        "id": 2369,
-        "kind": "team",
-        "login": "github:rustcrypto:hashes",
-        "name": "hashes"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
-      }
-    ],
-    "sha1-checked": [
-      {
-        "id": 2369,
-        "kind": "team",
-        "login": "github:rustcrypto:hashes",
-        "name": "hashes"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
-      }
-    ],
     "sha1_smol": [
       {
         "id": 39,
@@ -3528,14 +3004,6 @@
         "kind": "user",
         "login": "newpavlov",
         "name": "Artyom Pavlov"
-      }
-    ],
-    "shell-words": [
-      {
-        "id": 62153,
-        "kind": "user",
-        "login": "tmiasko",
-        "name": "Tomasz Miąsko"
       }
     ],
     "shlex": [
@@ -3690,14 +3158,6 @@
         "name": "Robert Grosse"
       }
     ],
-    "static_assertions": [
-      {
-        "id": 3832,
-        "kind": "user",
-        "login": "nvzqz",
-        "name": "Nikolai Vazquez"
-      }
-    ],
     "strsim": [
       {
         "id": 952,
@@ -3782,6 +3242,14 @@
         "kind": "team",
         "login": "github:mullvad:appteam-crates-io",
         "name": "appteam-crates.io"
+      }
+    ],
+    "tame-index": [
+      {
+        "id": 52553,
+        "kind": "user",
+        "login": "embark-studios",
+        "name": null
       }
     ],
     "tempfile": [
@@ -3966,6 +3434,14 @@
         "name": "Maintainers"
       }
     ],
+    "toml-span": [
+      {
+        "id": 52553,
+        "kind": "user",
+        "login": "embark-studios",
+        "name": null
+      }
+    ],
     "toml_datetime": [
       {
         "id": 6743,
@@ -4148,66 +3624,12 @@
         "name": "Paho Lurie-Gregg"
       }
     ],
-    "uluru": [
-      {
-        "id": 5,
-        "kind": "team",
-        "login": "github:servo:cargo-publish",
-        "name": "cargo publish"
-      },
-      {
-        "id": 3788,
-        "kind": "user",
-        "login": "emilio",
-        "name": "Emilio Cobos Álvarez"
-      }
-    ],
-    "unicode-bom": [
-      {
-        "id": 30471,
-        "kind": "user",
-        "login": "philbooth",
-        "name": "Phil Booth"
-      }
-    ],
     "unicode-ident": [
       {
         "id": 3618,
         "kind": "user",
         "login": "dtolnay",
         "name": "David Tolnay"
-      }
-    ],
-    "unicode-normalization": [
-      {
-        "id": 3,
-        "kind": "user",
-        "login": "huonw",
-        "name": "Huon Wilson"
-      },
-      {
-        "id": 7,
-        "kind": "user",
-        "login": "SimonSapin",
-        "name": "Simon Sapin"
-      },
-      {
-        "id": 1139,
-        "kind": "user",
-        "login": "Manishearth",
-        "name": "Manish Goregaokar"
-      },
-      {
-        "id": 1458,
-        "kind": "user",
-        "login": "kwantam",
-        "name": "Riad S. Wahby"
-      },
-      {
-        "id": 21056,
-        "kind": "user",
-        "login": "sujayakar",
-        "name": "Sujay Jayakar"
       }
     ],
     "unicode-segmentation": [
