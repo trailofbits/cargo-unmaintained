@@ -15,7 +15,6 @@ use cargo_metadata::{
     semver::{Version, VersionReq},
 };
 use clap::{Parser, crate_version};
-use crates_index::{Error, GitIndex};
 use elaborate::std::{path::PathContext, process::CommandContext, time::SystemTimeContext};
 use home::cargo_home;
 use std::{
@@ -23,7 +22,6 @@ use std::{
     collections::{HashMap, HashSet},
     env::args,
     ffi::OsStr,
-    fmt::Write,
     fs::File,
     io::{BufRead, IsTerminal},
     path::{Path, PathBuf},
@@ -34,6 +32,11 @@ use std::{
         atomic::{AtomicBool, Ordering},
     },
     time::{Duration, SystemTime},
+};
+use tame_index::{
+    IndexLocation, KrateName,
+    index::{IndexUrl, RemoteSparseIndex, sparse::SparseIndex},
+    utils::flock::FileLock,
 };
 use tempfile::TempDir;
 use termcolor::{ColorChoice, ColorSpec, StandardStream, WriteColor};
@@ -216,36 +219,22 @@ macro_rules! warn {
     };
 }
 
-#[allow(clippy::unwrap_used)]
-fn create_index() -> GitIndex {
+#[allow(clippy::expect_used, clippy::unwrap_used)]
+fn create_index() -> RemoteSparseIndex {
     let _lock = lock_index().unwrap();
-    #[allow(clippy::panic)]
-    let mut index = match GitIndex::new_cargo_default() {
-        Ok(index) => index,
-        Err(error) => {
-            let mut msg = format!("failed to create index: {error}");
-            // smoelius: I once saw a recommendation to delete a corrupt crates.io index, but I
-            // cannot remember where. Maybe the following?
-            // https://github.com/rust-lang/cargo/issues/2403#issuecomment-186874266
-            if let Error::MissingHead { repo_path, .. } = &error {
-                write!(
-                    msg,
-                    "\n\nIf the problem persists, consider deleting this directory: {}",
-                    repo_path.display()
-                )
-                .unwrap();
-            }
-            panic!("{msg}");
-        }
-    };
-    if let Err(error) = index.update() {
-        warn!("failed to update index: {}", error);
-    }
-    index
+    let index_url =
+        IndexUrl::crates_io(None, None, None).expect("failed to get crates.io index URL");
+    let index_location = IndexLocation::new(index_url);
+    let sparse_index = SparseIndex::new(index_location).expect("failed to create sparse index");
+    let client = reqwest::blocking::Client::builder()
+        .user_agent(USER_AGENT)
+        .build()
+        .expect("failed to build HTTP client");
+    RemoteSparseIndex::new(sparse_index, client)
 }
 
 thread_local! {
-    static INDEX: LazyLock<GitIndex> = LazyLock::new(create_index);
+    static INDEX: LazyLock<RemoteSparseIndex> = LazyLock::new(create_index);
     static PROGRESS: RefCell<Option<progress::Progress>> = const { RefCell::new(None) };
     // smoelius: The next four statics are "in-memory" caches.
     // smoelius: Note that repositories are (currently) stored in both an in-memory cache and an
@@ -689,17 +678,21 @@ fn latest_version(name: &str) -> Result<Version> {
         }
         verbose::wrap!(
             || {
+                let krate_name = KrateName::crates_io(name)
+                    .map_err(|e| anyhow!("invalid crate name `{name}`: {e}"))?;
+                let lock = FileLock::unlocked();
                 let krate = INDEX.with(|index| {
                     let _ = LazyLock::force(index);
                     let _lock = lock_index()?;
-                    index
-                        .crate_(name)
-                        .ok_or_else(|| anyhow!("failed to find `{name}` in index"))
+                    let krate = index
+                        .krate(krate_name, true, &lock)
+                        .map_err(|e| anyhow!("failed to fetch `{name}` from index: {e}"))?;
+                    krate.ok_or_else(|| anyhow!("failed to find `{name}` in index"))
                 })?;
                 let latest_version_index = krate
                     .highest_normal_version()
                     .ok_or_else(|| anyhow!("`{name}` has no normal version"))?;
-                let latest_version = Version::from_str(latest_version_index.version())?;
+                let latest_version = Version::from_str(&latest_version_index.version)?;
                 latest_version_cache.insert(name.to_owned(), latest_version.clone());
                 Ok(latest_version)
             },
