@@ -22,6 +22,7 @@ use std::{
     env::args,
     ffi::OsStr,
     io::{BufRead, IsTerminal},
+    mem::ManuallyDrop,
     path::{Path, PathBuf},
     process::{Command, Stdio, exit},
     str::FromStr,
@@ -228,7 +229,10 @@ fn create_index() -> RemoteSparseIndex {
 }
 
 thread_local! {
-    static INDEX: LazyLock<RemoteSparseIndex> = LazyLock::new(create_index);
+    // smoelius: Use `ManuallyDrop` to prevent the destructor from running during process exit. On
+    // Windows, `std::process::exit` triggers thread-local destructors, and the `RemoteSparseIndex`
+    // destructor can panic during shutdown.
+    static INDEX: ManuallyDrop<LazyLock<RemoteSparseIndex>> = ManuallyDrop::new(LazyLock::new(create_index));
     static PROGRESS: RefCell<Option<progress::Progress>> = const { RefCell::new(None) };
     // smoelius: The next four statics are "in-memory" caches.
     // smoelius: Note that repositories are (currently) stored in both an in-memory cache and an
