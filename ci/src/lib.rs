@@ -163,7 +163,12 @@ fn mock_github_lockfile_is_up_to_date() {
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn prettier() {
-    const ARGS: &[&str] = &["{}/**/*.md", "{}/**/*.yml", "!{}/target/**"];
+    const ARGS: &[&str] = &[
+        "{}/**/*.md",
+        "{}/**/*.yml",
+        "!{}/target/**",
+        "!{}/mock_github/target/**",
+    ];
 
     // smoelius: Copied from Necessist:
     // Prettier's handling of `..` seems to have changed between versions 3.4 and 3.5.
