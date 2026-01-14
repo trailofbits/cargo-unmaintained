@@ -87,12 +87,6 @@
     "version": "0.6.4"
   },
   {
-    "name": "redox_syscall",
-    "outdated_deps": [],
-    "repo_status": "Uncloneable",
-    "version": "0.4.1"
-  },
-  {
     "name": "serde-value",
     "outdated_deps": [
       {

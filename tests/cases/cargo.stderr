@@ -5,7 +5,3 @@ warning: failed to clone `https://sr.ht/~icefox/oorandom/`: [
 warning: failed to clone `https://hg.sr.ht/~icefox/oorandom`: [
     "fatal: repository 'https://hg.sr.ht/~icefox/oorandom/' not found/n",
 ]
-warning: failed to determine `redox_syscall` existence: unexpected response code: 403
-warning: failed to clone `https://gitlab.redox-os.org/redox-os/syscall`: [
-    "fatal: unable to access 'https://gitlab.redox-os.org/redox-os/syscall/': The requested URL returned error: 403/n",
-]
