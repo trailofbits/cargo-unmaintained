@@ -110,11 +110,10 @@ ignore = [
     "libredox",
     "rand_core",
     "redox_syscall",
+    "simple_asn1",
     "smol_str",
-    # https://github.com/toml-rs/toml/blob/5a029b03dda8fa4d58e1c9a76af4d44eeaa68cc1/crates/toml_writer/CHANGELOG.md?plain=1#L12
-    "toml_write",
+    "subtle",
     # https://github.com/alacritty/vte/pull/122#issuecomment-2579278540
     "utf8parse",
-    # https://github.com/wasm-bindgen/wasm-bindgen/blob/8f2792238edbe808ba9e1eecc1c44032f28a66b1/CHANGELOG.md?plain=1#L13
-    "wasm-bindgen-backend",
+    "web-time",
 ]
