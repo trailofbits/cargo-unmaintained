@@ -88,7 +88,8 @@ fn hack_feature_powerset_udeps() {
 
 #[test]
 fn license() {
-    let re = Regex::new(r"^[^:]*\b(Apache-2.0|BSD-3-Clause|ISC|MIT|Zlib)\b").unwrap();
+    let re = Regex::new(r"^[^:]*\b(Apache-2.0|BSD-3-Clause|CDLA-Permissive-2.0|ISC|MIT|Zlib)\b")
+        .unwrap();
 
     for line in std::str::from_utf8(
         &Command::new("cargo")

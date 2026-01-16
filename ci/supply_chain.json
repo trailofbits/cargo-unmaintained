@@ -214,6 +214,58 @@
         "name": "Alex Kladov"
       }
     ],
+    "aws-lc-rs": [
+      {
+        "id": 7883,
+        "kind": "team",
+        "login": "github:aws:aws-lc-rs-team",
+        "name": "aws-lc-rs-team"
+      },
+      {
+        "id": 156764,
+        "kind": "user",
+        "login": "justsmth",
+        "name": "Justin W Smith"
+      },
+      {
+        "id": 184010,
+        "kind": "user",
+        "login": "skmcgrail",
+        "name": "Sean McGrail"
+      },
+      {
+        "id": 220328,
+        "kind": "user",
+        "login": "crypto-alg",
+        "name": null
+      }
+    ],
+    "aws-lc-sys": [
+      {
+        "id": 7883,
+        "kind": "team",
+        "login": "github:aws:aws-lc-rs-team",
+        "name": "aws-lc-rs-team"
+      },
+      {
+        "id": 156764,
+        "kind": "user",
+        "login": "justsmth",
+        "name": "Justin W Smith"
+      },
+      {
+        "id": 184010,
+        "kind": "user",
+        "login": "skmcgrail",
+        "name": "Sean McGrail"
+      },
+      {
+        "id": 220328,
+        "kind": "user",
+        "login": "crypto-alg",
+        "name": null
+      }
+    ],
     "backtrace": [
       {
         "id": 55123,
@@ -384,6 +436,14 @@
         "name": null
       }
     ],
+    "cesu8": [
+      {
+        "id": 110,
+        "kind": "user",
+        "login": "emk",
+        "name": "Eric Kidd"
+      }
+    ],
     "cfg-if": [
       {
         "id": 11,
@@ -508,6 +568,20 @@
         "name": "Élie ROUDNINSKI"
       }
     ],
+    "cmake": [
+      {
+        "id": 11,
+        "kind": "team",
+        "login": "github:rust-lang:libs",
+        "name": "libs"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
+      }
+    ],
     "colorchoice": [
       {
         "id": 460,
@@ -520,6 +594,14 @@
         "kind": "user",
         "login": "epage",
         "name": "Ed Page"
+      }
+    ],
+    "combine": [
+      {
+        "id": 987,
+        "kind": "user",
+        "login": "Marwes",
+        "name": "Markus Westerlind"
       }
     ],
     "compression-codecs": [
@@ -1128,6 +1210,14 @@
         "name": "rust-url"
       }
     ],
+    "fs_extra": [
+      {
+        "id": 5882,
+        "kind": "user",
+        "login": "webdesus",
+        "name": "Denis Kurilenko"
+      }
+    ],
     "futures": [
       {
         "id": 1,
@@ -1517,14 +1607,6 @@
       }
     ],
     "gix-packetline": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-packetline-blocking": [
       {
         "id": 980,
         "kind": "user",
@@ -2180,6 +2262,60 @@
         "kind": "user",
         "login": "BurntSushi",
         "name": "Andrew Gallant"
+      }
+    ],
+    "jni": [
+      {
+        "id": 2419,
+        "kind": "user",
+        "login": "jrobsonchase",
+        "name": "Josh Robson Chase"
+      },
+      {
+        "id": 3750,
+        "kind": "user",
+        "login": "stanislav-tkach",
+        "name": "Stanislav Tkach"
+      },
+      {
+        "id": 28471,
+        "kind": "user",
+        "login": "dmitry-timofeev",
+        "name": "Dmitry Timofeev"
+      },
+      {
+        "id": 68864,
+        "kind": "user",
+        "login": "rib",
+        "name": "Robert Bragg"
+      }
+    ],
+    "jni-sys": [
+      {
+        "id": 5,
+        "kind": "user",
+        "login": "sfackler",
+        "name": "Steven Fackler"
+      },
+      {
+        "id": 68864,
+        "kind": "user",
+        "login": "rib",
+        "name": "Robert Bragg"
+      }
+    ],
+    "jobserver": [
+      {
+        "id": 1094,
+        "kind": "user",
+        "login": "petrochenkov",
+        "name": "Vadim Petrochenkov"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "js-sys": [
@@ -3112,6 +3248,46 @@
         "name": "publishers"
       }
     ],
+    "rustls-platform-verifier": [
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      },
+      {
+        "id": 146896,
+        "kind": "user",
+        "login": "complexspaces",
+        "name": "ComplexSpaces"
+      }
+    ],
+    "rustls-platform-verifier-android": [
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      },
+      {
+        "id": 146896,
+        "kind": "user",
+        "login": "complexspaces",
+        "name": "ComplexSpaces"
+      }
+    ],
     "rustls-webpki": [
       {
         "id": 2751,
@@ -3346,6 +3522,26 @@
         "kind": "user",
         "login": "mitsuhiko",
         "name": "Armin Ronacher"
+      }
+    ],
+    "sha2": [
+      {
+        "id": 267,
+        "kind": "user",
+        "login": "tarcieri",
+        "name": "Tony Arcieri"
+      },
+      {
+        "id": 2369,
+        "kind": "team",
+        "login": "github:rustcrypto:hashes",
+        "name": "hashes"
+      },
+      {
+        "id": 5059,
+        "kind": "user",
+        "login": "newpavlov",
+        "name": "Artyom Pavlov"
       }
     ],
     "shell-words": [
@@ -4316,6 +4512,32 @@
         "kind": "user",
         "login": "daxpedda",
         "name": null
+      }
+    ],
+    "webpki-root-certs": [
+      {
+        "id": 2751,
+        "kind": "user",
+        "login": "ctz",
+        "name": "Joe Birr-Pixton"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
+      },
+      {
+        "id": 209038,
+        "kind": "user",
+        "login": "cpu",
+        "name": "Daniel McCarney"
       }
     ],
     "winapi-util": [
