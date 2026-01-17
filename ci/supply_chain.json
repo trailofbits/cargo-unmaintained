@@ -2418,20 +2418,6 @@
         "name": "4lDO2"
       }
     ],
-    "libz-rs-sys": [
-      {
-        "id": 1303,
-        "kind": "user",
-        "login": "rnijveld",
-        "name": "Ruben Nijveld"
-      },
-      {
-        "id": 256011,
-        "kind": "user",
-        "login": "folkertdev",
-        "name": "Folkert de Vries"
-      }
-    ],
     "libz-sys": [
       {
         "id": 1,
