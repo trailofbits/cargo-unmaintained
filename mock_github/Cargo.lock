@@ -246,7 +246,7 @@ dependencies = [
 
 [[package]]
 name = "cargo-unmaintained"
-version = "1.9.0"
+version = "1.9.1"
 dependencies = [
  "anyhow",
  "cargo_metadata",

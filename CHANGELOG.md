@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.9.1
+
+- Enable TLS for `reqwest`. Previously, `cargo-unmaintained` used only one version of `reqwest`, and TLS was enabled for it through feature unification. However, because of a dependency update, `cargo-unmaintained` now uses two versions of `reqwest`. TLS must be explicitly enabled for the version that `cargo-unmaintained` uses to connect to crates.io. ([#723](https://github.com/trailofbits/cargo-unmaintained/pull/723))
+
 ## 1.9.0
 
 - FEATURE: Reclone repository when default branch name changes ([#694](https://github.com/trailofbits/cargo-unmaintained/pull/694))
