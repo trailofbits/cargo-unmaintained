@@ -40,6 +40,9 @@ assert_cmd = "2.1"
 ctor = "0.6"
 octocrab = "0.49"
 predicates = "3.1"
+rustls = { version = "0.23", default-features = false, features = [
+    "aws_lc_rs",
+] }
 rustsec = "0.31"
 similar-asserts = "1.7"
 snapbox = "0.6"

@@ -327,6 +327,7 @@ dependencies = [
  "regex",
  "remain",
  "reqwest 0.13.1",
+ "rustls",
  "rustsec",
  "serde",
  "serde_json",
