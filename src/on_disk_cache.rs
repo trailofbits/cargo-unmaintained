@@ -35,7 +35,6 @@ use serde::{Deserialize, Serialize};
 use std::{
     cell::{OnceCell, RefCell},
     collections::HashMap,
-    fs::File,
     path::{Path, PathBuf},
     process::{Command, Stdio},
     str::FromStr,
@@ -161,16 +160,6 @@ impl Cache {
     }
 
     fn clone_repository_uncached(&mut self, pkg: &Package) -> Result<(String, PathBuf)> {
-        // smoelius: The next `lock_path` locks the entire cache. This is needed for the `snapbox`
-        // tests, because they run concurrently. I am not sure how much contention this locking
-        // causes.
-        let _lock: File;
-        #[cfg(all(feature = "on-disk-cache", feature = "lock-index", not(windows)))]
-        if self.tempdir.is_none() {
-            _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
-                .with_context(|| format!("failed to lock `{}`", CACHE_DIRECTORY.display()))?;
-        }
-
         let mut errors = Vec::new();
         let mut urls = urls(pkg).into_iter().peekable();
         while let Some(url) = urls.peek() {
@@ -443,11 +432,6 @@ fn branch_name(repo_dir: &Path) -> Result<String> {
 #[cfg(all(feature = "on-disk-cache", not(windows)))]
 pub fn purge_cache() -> Result<()> {
     if CACHE_DIRECTORY.try_exists_wc()? {
-        // Attempt to get a lock before removing
-        #[cfg(feature = "lock-index")]
-        let _lock = crate::flock::lock_path(&CACHE_DIRECTORY)
-            .with_context(|| format!("failed to lock `{}`", CACHE_DIRECTORY.display()))?;
-
         // Remove the entire cache directory
         remove_dir_all_wc(&*CACHE_DIRECTORY)?;
 
