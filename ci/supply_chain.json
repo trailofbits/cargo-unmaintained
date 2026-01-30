@@ -178,14 +178,6 @@
         "name": "Jiahao XU"
       }
     ],
-    "async-trait": [
-      {
-        "id": 3618,
-        "kind": "user",
-        "login": "dtolnay",
-        "name": "David Tolnay"
-      }
-    ],
     "atomic-waker": [
       {
         "id": 3341,
@@ -786,58 +778,6 @@
         "name": "Taiki Endo"
       }
     ],
-    "crossbeam-deque": [
-      {
-        "id": 2347,
-        "kind": "user",
-        "login": "jeehoonkang",
-        "name": "Jeehoon Kang"
-      },
-      {
-        "id": 2356,
-        "kind": "team",
-        "login": "github:crossbeam-rs:admins",
-        "name": "admins"
-      },
-      {
-        "id": 2915,
-        "kind": "user",
-        "login": "Amanieu",
-        "name": "Amanieu d'Antras"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      }
-    ],
-    "crossbeam-epoch": [
-      {
-        "id": 2347,
-        "kind": "user",
-        "login": "jeehoonkang",
-        "name": "Jeehoon Kang"
-      },
-      {
-        "id": 2356,
-        "kind": "team",
-        "login": "github:crossbeam-rs:admins",
-        "name": "admins"
-      },
-      {
-        "id": 2915,
-        "kind": "user",
-        "login": "Amanieu",
-        "name": "Amanieu d'Antras"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      }
-    ],
     "crossbeam-utils": [
       {
         "id": 2347,
@@ -952,26 +892,6 @@
         "kind": "user",
         "login": "kornelski",
         "name": "Kornel"
-      }
-    ],
-    "either": [
-      {
-        "id": 356,
-        "kind": "user",
-        "login": "bluss",
-        "name": "bluss"
-      },
-      {
-        "id": 539,
-        "kind": "user",
-        "login": "cuviper",
-        "name": "Josh Stone"
-      },
-      {
-        "id": 1442,
-        "kind": "user",
-        "login": "jswrenn",
-        "name": "Jack Wrenn"
       }
     ],
     "elaborate": [
@@ -2620,22 +2540,6 @@
         "name": "Richard Dodd"
       }
     ],
-    "num-bigint": [
-      {
-        "id": 539,
-        "kind": "user",
-        "login": "cuviper",
-        "name": "Josh Stone"
-      }
-    ],
-    "num-integer": [
-      {
-        "id": 539,
-        "kind": "user",
-        "login": "cuviper",
-        "name": "Josh Stone"
-      }
-    ],
     "num-traits": [
       {
         "id": 539,
@@ -2714,6 +2618,12 @@
         "kind": "user",
         "login": "djc",
         "name": "Dirkjan Ochtman"
+      },
+      {
+        "id": 7807,
+        "kind": "team",
+        "login": "github:rustls:publishers",
+        "name": "publishers"
       }
     ],
     "openssl-sys": [
@@ -2867,7 +2777,7 @@
         "id": 12840,
         "kind": "user",
         "login": "kazcw",
-        "name": "Kaz Wesley"
+        "name": "Keziah Wesley"
       }
     ],
     "proc-macro2": [
@@ -2996,34 +2906,6 @@
         "kind": "user",
         "login": "dhardy",
         "name": "Diggory Hardy"
-      }
-    ],
-    "rayon": [
-      {
-        "id": 539,
-        "kind": "user",
-        "login": "cuviper",
-        "name": "Josh Stone"
-      },
-      {
-        "id": 1386,
-        "kind": "user",
-        "login": "nikomatsakis",
-        "name": "Niko Matsakis"
-      }
-    ],
-    "rayon-core": [
-      {
-        "id": 539,
-        "kind": "user",
-        "login": "cuviper",
-        "name": "Josh Stone"
-      },
-      {
-        "id": 1386,
-        "kind": "user",
-        "login": "nikomatsakis",
-        "name": "Niko Matsakis"
       }
     ],
     "redox_syscall": [
@@ -3508,26 +3390,6 @@
         "kind": "user",
         "login": "mitsuhiko",
         "name": "Armin Ronacher"
-      }
-    ],
-    "sha2": [
-      {
-        "id": 267,
-        "kind": "user",
-        "login": "tarcieri",
-        "name": "Tony Arcieri"
-      },
-      {
-        "id": 2369,
-        "kind": "team",
-        "login": "github:rustcrypto:hashes",
-        "name": "hashes"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
       }
     ],
     "shell-words": [
@@ -4132,14 +3994,6 @@
         "name": "Sean McArthur"
       }
     ],
-    "twox-hash": [
-      {
-        "id": 1060,
-        "kind": "user",
-        "login": "shepmaster",
-        "name": "Jake Goulding"
-      }
-    ],
     "typenum": [
       {
         "id": 243,
@@ -4354,14 +4208,6 @@
         "kind": "user",
         "login": "SergioBenitez",
         "name": "Sergio Benitez"
-      }
-    ],
-    "wait-timeout": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
       }
     ],
     "walkdir": [
