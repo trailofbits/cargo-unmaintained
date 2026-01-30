@@ -57,11 +57,7 @@ impl Progress {
 
     fn draw(&mut self, msg: &str) -> Result<()> {
         let width_n = self.width_n;
-        let percent = if self.n == 0 {
-            100
-        } else {
-            self.i * 100 / self.n
-        };
+        let percent = (self.i * 100).checked_div(self.n).unwrap_or(100);
         let formatted_msg = format!("{:>width_n$}/{} ({percent}%) {msg}", self.i, self.n,);
         let width_to_overwrite = self.width_prev.saturating_sub(formatted_msg.len());
         eprint!("{formatted_msg}{:width_to_overwrite$}\r", "");
