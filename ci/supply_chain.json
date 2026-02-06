@@ -3612,34 +3612,6 @@
         "name": "Nika Layzell"
       }
     ],
-    "system-configuration": [
-      {
-        "id": 1459,
-        "kind": "user",
-        "login": "faern",
-        "name": "Linus Färnstrand"
-      },
-      {
-        "id": 12822,
-        "kind": "team",
-        "login": "github:mullvad:appteam-crates-io",
-        "name": "appteam-crates.io"
-      }
-    ],
-    "system-configuration-sys": [
-      {
-        "id": 1459,
-        "kind": "user",
-        "login": "faern",
-        "name": "Linus Färnstrand"
-      },
-      {
-        "id": 12822,
-        "kind": "team",
-        "login": "github:mullvad:appteam-crates-io",
-        "name": "appteam-crates.io"
-      }
-    ],
     "tempfile": [
       {
         "id": 280,
@@ -4399,14 +4371,6 @@
       }
     ],
     "windows-link": [
-      {
-        "id": 64539,
-        "kind": "user",
-        "login": "kennykerr",
-        "name": "Kenny Kerr"
-      }
-    ],
-    "windows-registry": [
       {
         "id": 64539,
         "kind": "user",
