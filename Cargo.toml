@@ -43,7 +43,7 @@ predicates = "3.1"
 rustls = { version = "0.23", default-features = false, features = [
     "aws_lc_rs",
 ] }
-rustsec = "0.31"
+rustsec = "0.32"
 similar-asserts = "1.7"
 snapbox = "0.6"
 strum = "0.27"
