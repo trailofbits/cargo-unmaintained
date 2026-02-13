@@ -115,9 +115,8 @@ pattern = [
 [workspace.metadata.unmaintained]
 ignore = [
     "foreign-types",
-    # smoelius: Removed by: https://github.com/GitoxideLabs/gitoxide/pull/2220
-    "gix-packetline-blocking",
     "libredox",
+    "rand_chacha",
     "rand_core",
     "redox_syscall",
     "simple_asn1",
