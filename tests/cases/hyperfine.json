@@ -75,10 +75,10 @@
     "version": "0.1.1"
   },
   {
-    "name": "rand_core",
+    "name": "rand_chacha",
     "outdated_deps": [],
     "repo_status": "Unassociated",
-    "version": "0.6.4"
+    "version": "0.3.1"
   },
   {
     "name": "rand_os",

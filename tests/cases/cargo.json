@@ -48,6 +48,12 @@
         "version_used": "0.6.4"
       },
       {
+        "name": "rand_xoshiro",
+        "req": "^0.6",
+        "version_latest": null,
+        "version_used": "0.6.0"
+      },
+      {
         "name": "sized-chunks",
         "req": "^0.6.4",
         "version_latest": null,
@@ -81,10 +87,10 @@
     "version": "0.3.3"
   },
   {
-    "name": "rand_core",
+    "name": "rand_chacha",
     "outdated_deps": [],
     "repo_status": "Unassociated",
-    "version": "0.6.4"
+    "version": "0.3.1"
   },
   {
     "name": "serde-value",
