@@ -1,19 +1,5 @@
 {
   "crates_io_crates": {
-    "addr2line": [
-      {
-        "id": 696,
-        "kind": "user",
-        "login": "fitzgen",
-        "name": "Nick Fitzgerald"
-      },
-      {
-        "id": 4415,
-        "kind": "user",
-        "login": "philipc",
-        "name": "Philip Craig"
-      }
-    ],
     "adler2": [
       {
         "id": 4968,
@@ -255,14 +241,6 @@
         "id": 220328,
         "kind": "user",
         "login": "crypto-alg",
-        "name": null
-      }
-    ],
-    "backtrace": [
-      {
-        "id": 55123,
-        "kind": "user",
-        "login": "rust-lang-owner",
         "name": null
       }
     ],
@@ -1290,20 +1268,6 @@
         "kind": "user",
         "login": "dhardy",
         "name": "Diggory Hardy"
-      }
-    ],
-    "gimli": [
-      {
-        "id": 696,
-        "kind": "user",
-        "login": "fitzgen",
-        "name": "Nick Fitzgerald"
-      },
-      {
-        "id": 4415,
-        "kind": "user",
-        "login": "philipc",
-        "name": "Philip Craig"
       }
     ],
     "gix": [
@@ -2542,20 +2506,6 @@
         "name": "Josh Stone"
       }
     ],
-    "object": [
-      {
-        "id": 696,
-        "kind": "user",
-        "login": "fitzgen",
-        "name": "Nick Fitzgerald"
-      },
-      {
-        "id": 4415,
-        "kind": "user",
-        "login": "philipc",
-        "name": "Philip Craig"
-      }
-    ],
     "once_cell": [
       {
         "id": 2699,
@@ -2980,26 +2930,6 @@
         "kind": "user",
         "login": "briansmith",
         "name": "Brian Smith"
-      }
-    ],
-    "rustc-demangle": [
-      {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
-      {
-        "id": 408,
-        "kind": "team",
-        "login": "github:rust-lang:compiler",
-        "name": "compiler"
-      },
-      {
-        "id": 55123,
-        "kind": "user",
-        "login": "rust-lang-owner",
-        "name": null
       }
     ],
     "rustc-hash": [
