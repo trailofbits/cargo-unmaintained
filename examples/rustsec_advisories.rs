@@ -181,7 +181,7 @@ fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
     println!("  - {error} do not build");
     println!("  - {leaf} are existent, unarchived leaves");
     println!("  - {recently_updated} were updated within the past 365 days");
-    println!("  - {other} were not identified for other reasons",);
+    println!("  - {other} were not identified for other reasons");
 }
 
 fn advisory_url(advisory: &Advisory) -> String {
