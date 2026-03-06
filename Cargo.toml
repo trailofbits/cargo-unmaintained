@@ -49,7 +49,7 @@ snapbox = "1.0"
 strum = "0.28"
 strum_macros = "0.28"
 testing = { path = "testing" }
-tokio = "1.49"
+tokio = "1.50"
 
 [build-dependencies]
 elaborate = "0.2"
