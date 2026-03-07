@@ -13,6 +13,12 @@ fn main() {
     #[cfg(all(feature = "cache-repositories", not(feature = "on-disk-cache")))]
     println!("cargo:warning=Feature `cache-repositories` has been renamed to `on-disk-cache`");
 
+    #[cfg(all(feature = "crates-index", feature = "tame-index"))]
+    println!(
+        "cargo:warning=Both `crates-index` and `tame-index` features are enabled; using \
+         `tame-index`"
+    );
+
     let out_dir = var_wc("OUT_DIR").unwrap();
     let path_buf = PathBuf::from(out_dir).join("after_help.rs");
     let contents = format!(
