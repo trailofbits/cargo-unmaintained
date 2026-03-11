@@ -37,7 +37,7 @@ jobs:
       fail-fast: ${{ github.event_name == 'merge_group' }}
       matrix:
         environment: [ubuntu-latest, macos-latest, windows-latest]
-        test: [with-token-0, with-token-1, without-token, ci]
+        index: [crates-index, tame-index]
 
     runs-on: ${{ matrix.environment }}
 
@@ -47,6 +47,7 @@ jobs:
 
     env:
       RUST_BACKTRACE: 1
+      GIT_LFS_SKIP_SMUDGE: 1
       GROUP_RUNNER: target.'cfg(all())'.runner = 'group-runner'
 
     steps:
@@ -90,40 +91,26 @@ jobs:
         run: cargo test --workspace --no-run
 
       - name: Test
+        run: cargo test --config "$GROUP_RUNNER" -- --nocapture
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Test `ei`
+        if: matrix.environment == 'ubuntu-latest'
         run: |
-          EI0='-p ei --lib'
-          EI1='-p ei --lib'
+          EI='-p ei --lib'
           if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]] ||
             git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'ei' >/dev/null
           then
-            EI0="$EI0 --test dogfood --test rustsec_advisories"
-            EI1="$EI1 --test rustsec_issues --test snapbox_real_github"
+            EI="$EI --test dogfood --test rustsec_advisories --test rustsec_issues --test snapbox_real_github"
           fi
-          case '${{ matrix.test }}' in
-            with-token-0)
-              export GITHUB_TOKEN='${{ github.token }}'
-              cargo test --config "$GROUP_RUNNER" \
-                $EI0 \
-                -- --nocapture
-              ;;
-            with-token-1)
-              export GITHUB_TOKEN='${{ github.token }}'
-              cargo test --config "$GROUP_RUNNER" \
-                $EI1 \
-                -- --nocapture
-              ;;
-            without-token)
-              cargo test --config "$GROUP_RUNNER" -- --nocapture
-              ;;
-            ci)
-              cargo test --config "$GROUP_RUNNER" -p ci -- --nocapture
-              ;;
-            *)
-              exit 1
-              ;;
-          esac
+          cargo test --config "$GROUP_RUNNER" $EI -- --nocapture
         env:
-          GIT_LFS_SKIP_SMUDGE: 1
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Test `ci`
+        if: matrix.environment == 'ubuntu-latest'
+        run: cargo test --config "$GROUP_RUNNER" -p ci -- --nocapture
 
   all-checks:
     needs: [test]
