@@ -5,10 +5,10 @@ edition = "2024"
 publish = false
 
 [dev-dependencies]
-assert_cmd = "2.1"
+assert_cmd = "2.2"
 ctor = "0.6"
 regex = "1.12"
-snapbox = "1.0"
+snapbox = "1.1"
 
 testing = { path = "../testing" }
 
