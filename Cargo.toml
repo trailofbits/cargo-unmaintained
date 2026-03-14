@@ -114,6 +114,7 @@ pattern = [
 
 [workspace.metadata.unmaintained]
 ignore = [
+    "ff",
     "foreign-types",
     "libredox",
     "rand_chacha",

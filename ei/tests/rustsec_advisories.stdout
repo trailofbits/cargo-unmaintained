@@ -502,7 +502,7 @@ found (125)
     rustls-pemfile         https://rustsec.org/advisories/RUSTSEC-2025-0134.html
     bincode                https://rustsec.org/advisories/RUSTSEC-2025-0141.html
 ---
-As of 2026-01-13, the RustSec Advisory Database contains 193 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 125 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-03-14, the RustSec Advisory Database contains 193 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 125 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 68 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 12 do not build
