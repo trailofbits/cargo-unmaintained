@@ -27,6 +27,27 @@
     "version": "0.3.5"
   },
   {
+    "name": "ff",
+    "outdated_deps": [
+      {
+        "name": "rand_core",
+        "req": "^0.6",
+        "version_latest": null,
+        "version_used": "0.6.4"
+      },
+      {
+        "name": "rand",
+        "req": "^0.8",
+        "version_latest": null,
+        "version_used": "0.8.5"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.13.0"
+  },
+  {
     "name": "gix-packetline-blocking",
     "outdated_deps": [],
     "repo_status": "Unassociated",
