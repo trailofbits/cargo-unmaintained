@@ -70,7 +70,7 @@ fn fmt() {
 }
 
 #[test]
-fn hack_each_feature_udeps() {
+fn hack_feature_powerset_udeps() {
     Command::new("rustup")
         .env("RUSTFLAGS", "-D warnings")
         .args([
@@ -78,7 +78,7 @@ fn hack_each_feature_udeps() {
             "nightly",
             "cargo",
             "hack",
-            "--each-feature",
+            "--feature-powerset",
             "--exclude=cache-repositories,ei",
             "udeps",
         ])
