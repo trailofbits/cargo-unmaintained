@@ -12,7 +12,7 @@ anyhow = { version = "1.0", features = ["backtrace"] }
 cargo_metadata = "0.23"
 chrono = "0.4"
 clap = { version = "4.6", features = ["cargo", "derive", "wrap_help"] }
-crates-index = { version = "3.12", features = [
+crates-index = { version = "3.13", features = [
     "git-https-reqwest",
 ], optional = true }
 crates_io_api = "0.12.0"
@@ -29,7 +29,7 @@ sha1_smol = { version = "1.0", features = ["std"] }
 tame-index = { version = "0.26", features = ["sparse"], optional = true }
 tempfile = "3.27"
 termcolor = "1.4"
-toml = "0.9"
+toml = "1.1"
 
 # smoelius: Ensure `reqwest` 0.13 has TLS enabled. `reqwest`'s default features would enable TLS.
 # However, `crates-index` uses `reqwest` via `gix` via `gix-transport`. And, as of this writing,
@@ -48,7 +48,7 @@ rustls = { version = "0.23", default-features = false, features = [
 ] }
 rustsec = "0.32"
 similar-asserts = "1.7"
-snapbox = "1.1"
+snapbox = "1.2"
 strum = "0.28"
 strum_macros = "0.28"
 testing = { path = "testing" }
