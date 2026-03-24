@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.10.0
+
+- FEATURE: Allow users to install with `tame-index` ([6c2cbe7](https://github.com/trailofbits/cargo-unmaintained/commit/6c2cbe77f8d212329411c2b3523aa8a48da2dfec))
+- Dependency upgrades
+  - `elaborate` upgraded to version 0.2
+  - `toml` upgraded to version 1.1
+
 ## 1.9.1
 
 - Enable TLS for `reqwest`. Previously, `cargo-unmaintained` used only one version of `reqwest`, and TLS was enabled for it through feature unification. However, because of a dependency update, `cargo-unmaintained` now uses two versions of `reqwest`. TLS must be explicitly enabled for the version that `cargo-unmaintained` uses to connect to crates.io. ([#723](https://github.com/trailofbits/cargo-unmaintained/pull/723))
