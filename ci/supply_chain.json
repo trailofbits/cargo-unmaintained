@@ -1374,6 +1374,14 @@
         "name": "Sebastian Thiel"
       }
     ],
+    "gix-error": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
     "gix-features": [
       {
         "id": 980,
@@ -2018,6 +2026,26 @@
         "name": "Zibi Braniecki"
       }
     ],
+    "id-arena": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 696,
+        "kind": "user",
+        "login": "fitzgen",
+        "name": "Nick Fitzgerald"
+      },
+      {
+        "id": 2699,
+        "kind": "user",
+        "login": "matklad",
+        "name": "Alex Kladov"
+      }
+    ],
     "idna": [
       {
         "id": 5,
@@ -2176,6 +2204,14 @@
         "name": "Robert Bragg"
       }
     ],
+    "jni-sys-macros": [
+      {
+        "id": 68864,
+        "kind": "user",
+        "login": "rib",
+        "name": "Robert Bragg"
+      }
+    ],
     "jobserver": [
       {
         "id": 1094,
@@ -2210,6 +2246,14 @@
         "kind": "user",
         "login": "epage",
         "name": "Ed Page"
+      }
+    ],
+    "leb128fmt": [
+      {
+        "id": 35113,
+        "kind": "user",
+        "login": "bluk",
+        "name": "Bryant Luk"
       }
     ],
     "libc": [
@@ -2680,6 +2724,14 @@
         "name": null
       }
     ],
+    "plain": [
+      {
+        "id": 6236,
+        "kind": "user",
+        "login": "le-jzr",
+        "name": "Jiří Zárevúcky"
+      }
+    ],
     "portable-atomic": [
       {
         "id": 33035,
@@ -2722,6 +2774,14 @@
         "kind": "user",
         "login": "kazcw",
         "name": "Keziah Wesley"
+      }
+    ],
+    "prettyplease": [
+      {
+        "id": 3618,
+        "kind": "user",
+        "login": "dtolnay",
+        "name": "David Tolnay"
       }
     ],
     "proc-macro2": [
@@ -3992,6 +4052,44 @@
         "name": "Sujay Jayakar"
       }
     ],
+    "unicode-xid": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 1458,
+        "kind": "user",
+        "login": "kwantam",
+        "name": "Riad S. Wahby"
+      },
+      {
+        "id": 21056,
+        "kind": "user",
+        "login": "sujayakar",
+        "name": "Sujay Jayakar"
+      }
+    ],
     "untrusted": [
       {
         "id": 2342,
@@ -4144,6 +4242,20 @@
         "name": null
       }
     ],
+    "wasip3": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
     "wasm-bindgen": [
       {
         "id": 34642,
@@ -4212,6 +4324,30 @@
         "kind": "user",
         "login": "guybedford",
         "name": "Guy Bedford"
+      }
+    ],
+    "wasm-encoder": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
+    "wasm-metadata": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
+    "wasmparser": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
       }
     ],
     "web-sys": [
@@ -4407,6 +4543,46 @@
       }
     ],
     "wit-bindgen": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
+    "wit-bindgen-core": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
+    "wit-bindgen-rust": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
+    "wit-bindgen-rust-macro": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
+    "wit-component": [
+      {
+        "id": 73222,
+        "kind": "user",
+        "login": "wasmtime-publish",
+        "name": null
+      }
+    ],
+    "wit-parser": [
       {
         "id": 73222,
         "kind": "user",
