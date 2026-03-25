@@ -230,7 +230,8 @@ Parser...not found
 ignoring `https://sr.ht/~stygianentity/bincode/` from `https://github.com/rustsec/advisory-db/issues/2514`
 ignoring `https://www.reddit.com/r/rust/s/CgvzHQPqUZ.` from `https://github.com/rustsec/advisory-db/issues/2514`
 audiopus_sys...not found
-not found (141)
+tokio...not found
+not found (142)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -372,6 +373,7 @@ not found (141)
     unic-ucd-utils           https://github.com/rustsec/advisory-db/issues/2424
     Parser                   https://github.com/rustsec/advisory-db/issues/2456
     audiopus_sys             https://github.com/rustsec/advisory-db/issues/2704
+    tokio                    https://github.com/rustsec/advisory-db/issues/2731
 found (61)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
