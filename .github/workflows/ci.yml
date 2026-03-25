@@ -91,7 +91,7 @@ jobs:
         run: cargo test --workspace --no-run
 
       - name: Test
-        run: cargo test --config "$GROUP_RUNNER" -- --nocapture
+        run: cargo test --config "$GROUP_RUNNER"
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
@@ -104,13 +104,13 @@ jobs:
           then
             EI="$EI --test dogfood --test rustsec_advisories --test rustsec_issues --test snapbox_real_github"
           fi
-          cargo test --config "$GROUP_RUNNER" $EI -- --nocapture
+          cargo test --config "$GROUP_RUNNER" $EI
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
       - name: Test `ci`
         if: matrix.environment == 'ubuntu-latest'
-        run: cargo test --config "$GROUP_RUNNER" -p ci -- --nocapture
+        run: cargo test --config "$GROUP_RUNNER" -p ci
 
   all-checks:
     needs: [test]
