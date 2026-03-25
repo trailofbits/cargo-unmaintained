@@ -56,7 +56,7 @@ fn rustsec_advisories() {
 fn update_readme(stdout: &str) {
     let (_, middle, bottom) = split_at_cut_lines(stdout).unwrap();
 
-    let readme = read_to_string("../README.md").unwrap();
+    let readme = read_to_string("README.md").unwrap();
 
     let updated_with_as_of = replace_section(
         &readme,
@@ -72,7 +72,7 @@ fn update_readme(stdout: &str) {
         &format!("\n\n{}\n\n", bottom.trim()),
     );
 
-    write("../README.md", readme_with_as_of_and_not_identified).unwrap();
+    write("README.md", readme_with_as_of_and_not_identified).unwrap();
 }
 
 fn replace_section(content: &str, start_marker: &str, end_marker: &str, insertion: &str) -> String {
