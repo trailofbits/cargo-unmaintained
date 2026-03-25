@@ -23,7 +23,6 @@ fn dogfood() {
         "--",
         "unmaintained",
         "--color=never",
-        "--verbose",
     ]);
 
     let output = tee(command, Tee::Stdout).unwrap();
