@@ -1,4 +1,4 @@
-193 advisories for unmaintained packages
+209 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -248,7 +248,7 @@ resolve...found
 rustc-serialize...found
 registry...found
 surf...found
-tsify-next...not found
+tsify-next...recently updated
 async-std...recently updated
 adler...found
 fxhash...not found
@@ -303,6 +303,22 @@ opentelemetry-jaeger...found
 rand_os...found
 rustls-pemfile...found
 bincode...found
+tokio-uds...found
+tokio-threadpool...found
+tokio-sync...found
+tokio-tls...found
+tokio-current-thread...found
+tokio-process...found
+tokio-codec...found
+tokio-reactor...found
+tokio-io...found
+tokio-tcp...found
+tokio-timer...found
+tokio-fs...found
+tokio-compat...found
+tokio-executor...found
+tokio-udp...found
+tokio-signal...found
 not found - error (12)
     block-cipher-trait     https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher           https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -322,9 +338,10 @@ not found - leaf (5)
     json                   https://rustsec.org/advisories/RUSTSEC-2022-0081.html
     unic-common            https://rustsec.org/advisories/RUSTSEC-2025-0080.html
     number_prefix          https://rustsec.org/advisories/RUSTSEC-2025-0119.html
-not found - recently-updated (1)
+not found - recently-updated (2)
+    tsify-next             https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     async-std              https://rustsec.org/advisories/RUSTSEC-2025-0052.html
-not found - other (50)
+not found - other (49)
     serial                 https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap                https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype           https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -344,7 +361,6 @@ not found - other (50)
     instant                https://rustsec.org/advisories/RUSTSEC-2024-0384.html
     chrono-english         https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     get-size               https://rustsec.org/advisories/RUSTSEC-2024-0425.html
-    tsify-next             https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     fxhash                 https://rustsec.org/advisories/RUSTSEC-2025-0057.html
     google-apis-common     https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     daemonize              https://rustsec.org/advisories/RUSTSEC-2025-0069.html
@@ -375,7 +391,7 @@ not found - other (50)
     unic-ucd-common        https://rustsec.org/advisories/RUSTSEC-2025-0101.html
     unic-ucd-age           https://rustsec.org/advisories/RUSTSEC-2025-0102.html
     unic-ucd-segment       https://rustsec.org/advisories/RUSTSEC-2025-0104.html
-found (125)
+found (141)
     lz4-compress           https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce              https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -501,11 +517,27 @@ found (125)
     rand_os                https://rustsec.org/advisories/RUSTSEC-2025-0124.html
     rustls-pemfile         https://rustsec.org/advisories/RUSTSEC-2025-0134.html
     bincode                https://rustsec.org/advisories/RUSTSEC-2025-0141.html
+    tokio-uds              https://rustsec.org/advisories/RUSTSEC-2026-0050.html
+    tokio-threadpool       https://rustsec.org/advisories/RUSTSEC-2026-0051.html
+    tokio-sync             https://rustsec.org/advisories/RUSTSEC-2026-0052.html
+    tokio-tls              https://rustsec.org/advisories/RUSTSEC-2026-0053.html
+    tokio-current-thread   https://rustsec.org/advisories/RUSTSEC-2026-0054.html
+    tokio-process          https://rustsec.org/advisories/RUSTSEC-2026-0055.html
+    tokio-codec            https://rustsec.org/advisories/RUSTSEC-2026-0056.html
+    tokio-reactor          https://rustsec.org/advisories/RUSTSEC-2026-0057.html
+    tokio-io               https://rustsec.org/advisories/RUSTSEC-2026-0058.html
+    tokio-tcp              https://rustsec.org/advisories/RUSTSEC-2026-0059.html
+    tokio-timer            https://rustsec.org/advisories/RUSTSEC-2026-0060.html
+    tokio-fs               https://rustsec.org/advisories/RUSTSEC-2026-0061.html
+    tokio-compat           https://rustsec.org/advisories/RUSTSEC-2026-0062.html
+    tokio-executor         https://rustsec.org/advisories/RUSTSEC-2026-0063.html
+    tokio-udp              https://rustsec.org/advisories/RUSTSEC-2026-0064.html
+    tokio-signal           https://rustsec.org/advisories/RUSTSEC-2026-0065.html
 ---
-As of 2026-03-14, the RustSec Advisory Database contains 193 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 125 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-03-25, the RustSec Advisory Database contains 209 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 141 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 68 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 12 do not build
   - 5 are existent, unarchived leaves
-  - 1 were updated within the past 365 days
-  - 50 were not identified for other reasons
+  - 2 were updated within the past 365 days
+  - 49 were not identified for other reasons
