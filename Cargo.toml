@@ -121,6 +121,7 @@ pattern = [
 ignore = [
     "ff",
     "foreign-types",
+    "lazy_static",
     "libredox",
     "rand_chacha",
     "rand_core",
