@@ -40,19 +40,19 @@ reqwest = { version = "0.13", default-features = false, features = [
 
 [dev-dependencies]
 assert_cmd = "2.2"
-ctor = "0.6"
+ctor = "0.9"
 octocrab = "0.49"
 predicates = "3.1"
 rustls = { version = "0.23", default-features = false, features = [
     "aws_lc_rs",
 ] }
 rustsec = "0.32"
-similar-asserts = "1.7"
+similar-asserts = "2.0"
 snapbox = "1.2"
 strum = "0.28"
 strum_macros = "0.28"
 testing = { path = "testing" }
-tokio = "1.50"
+tokio = "1.51"
 
 [build-dependencies]
 elaborate = "0.2"
