@@ -155,7 +155,7 @@ openslide-rs...not found
 ignoring `https://github.com/ojskrede` from `https://github.com/rustsec/advisory-db/issues/1937`
 openslide-rust...not found
 google-apis-rs...not found
-isahc...found
+isahc...not found
 zip...not found
 zip-old...not found
 zip2...not found
@@ -231,7 +231,7 @@ ignoring `https://sr.ht/~stygianentity/bincode/` from `https://github.com/rustse
 ignoring `https://www.reddit.com/r/rust/s/CgvzHQPqUZ.` from `https://github.com/rustsec/advisory-db/issues/2514`
 audiopus_sys...not found
 tokio...not found
-not found (142)
+not found (143)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -327,6 +327,7 @@ not found (142)
     openslide-rs             https://github.com/rustsec/advisory-db/issues/1937
     openslide-rust           https://github.com/rustsec/advisory-db/issues/1937
     google-apis-rs           https://github.com/rustsec/advisory-db/issues/1945
+    isahc                    https://github.com/rustsec/advisory-db/issues/1954
     zip                      https://github.com/rustsec/advisory-db/issues/1956
     zip-old                  https://github.com/rustsec/advisory-db/issues/1956
     zip2                     https://github.com/rustsec/advisory-db/issues/1956
@@ -374,7 +375,7 @@ not found (142)
     Parser                   https://github.com/rustsec/advisory-db/issues/2456
     audiopus_sys             https://github.com/rustsec/advisory-db/issues/2704
     tokio                    https://github.com/rustsec/advisory-db/issues/2731
-found (61)
+found (60)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -417,7 +418,6 @@ found (61)
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     openslide                https://github.com/rustsec/advisory-db/issues/1937
-    isahc                    https://github.com/rustsec/advisory-db/issues/1954
     servo-fontconfig         https://github.com/rustsec/advisory-db/issues/1998
     proc-macro-error         https://github.com/rustsec/advisory-db/issues/2011
     async-priority-channel   https://github.com/rustsec/advisory-db/issues/2020
