@@ -1,4 +1,4 @@
-209 advisories for unmaintained packages
+211 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -319,6 +319,8 @@ tokio-compat...found
 tokio-executor...found
 tokio-udp...found
 tokio-signal...found
+zantetsu-ffi...found
+zantetsu-trainer...found
 not found - error (12)
     block-cipher-trait     https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher           https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -391,7 +393,7 @@ not found - other (49)
     unic-ucd-common        https://rustsec.org/advisories/RUSTSEC-2025-0101.html
     unic-ucd-age           https://rustsec.org/advisories/RUSTSEC-2025-0102.html
     unic-ucd-segment       https://rustsec.org/advisories/RUSTSEC-2025-0104.html
-found (141)
+found (143)
     lz4-compress           https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce              https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -533,8 +535,10 @@ found (141)
     tokio-executor         https://rustsec.org/advisories/RUSTSEC-2026-0063.html
     tokio-udp              https://rustsec.org/advisories/RUSTSEC-2026-0064.html
     tokio-signal           https://rustsec.org/advisories/RUSTSEC-2026-0065.html
+    zantetsu-ffi           https://rustsec.org/advisories/RUSTSEC-2026-0082.html
+    zantetsu-trainer       https://rustsec.org/advisories/RUSTSEC-2026-0083.html
 ---
-As of 2026-03-25, the RustSec Advisory Database contains 209 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 141 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-04-11, the RustSec Advisory Database contains 211 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 143 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 68 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 12 do not build
