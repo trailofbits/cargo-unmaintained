@@ -4014,44 +4014,6 @@
         "name": "Sujay Jayakar"
       }
     ],
-    "unicode-segmentation": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
-      {
-        "id": 3,
-        "kind": "user",
-        "login": "huonw",
-        "name": "Huon Wilson"
-      },
-      {
-        "id": 7,
-        "kind": "user",
-        "login": "SimonSapin",
-        "name": "Simon Sapin"
-      },
-      {
-        "id": 1139,
-        "kind": "user",
-        "login": "Manishearth",
-        "name": "Manish Goregaokar"
-      },
-      {
-        "id": 1458,
-        "kind": "user",
-        "login": "kwantam",
-        "name": "Riad S. Wahby"
-      },
-      {
-        "id": 21056,
-        "kind": "user",
-        "login": "sujayakar",
-        "name": "Sujay Jayakar"
-      }
-    ],
     "unicode-xid": [
       {
         "id": 1,
