@@ -8,7 +8,7 @@ updates:
   - package-ecosystem: cargo
     directory: /
     groups:
-      rust:
+      cargo:
         patterns:
           - "*"
     schedule:
