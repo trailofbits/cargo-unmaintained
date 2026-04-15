@@ -231,7 +231,16 @@ ignoring `https://sr.ht/~stygianentity/bincode/` from `https://github.com/rustse
 ignoring `https://www.reddit.com/r/rust/s/CgvzHQPqUZ.` from `https://github.com/rustsec/advisory-db/issues/2514`
 audiopus_sys...not found
 tokio...not found
-not found (143)
+k256...not found
+libsecp256k1...found
+libsecp256k1...found
+num-primes...found
+embedded-io...not found
+no-std-io2...not found
+core2...not found
+ignoring `https://hachyderm.io/@piecritic/116404790999620656` from `https://github.com/rustsec/advisory-db/issues/2788`
+ignoring `https://www.reddit.com/r/rust/comments/1slnga4/core2_yanked_millions_effected/` from `https://github.com/rustsec/advisory-db/issues/2788`
+not found (147)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -375,7 +384,11 @@ not found (143)
     Parser                   https://github.com/rustsec/advisory-db/issues/2456
     audiopus_sys             https://github.com/rustsec/advisory-db/issues/2704
     tokio                    https://github.com/rustsec/advisory-db/issues/2731
-found (60)
+    k256                     https://github.com/rustsec/advisory-db/issues/2780
+    embedded-io              https://github.com/rustsec/advisory-db/issues/2788
+    no-std-io2               https://github.com/rustsec/advisory-db/issues/2788
+    core2                    https://github.com/rustsec/advisory-db/issues/2788
+found (63)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -436,3 +449,6 @@ found (60)
     unic-ucd-core            https://github.com/rustsec/advisory-db/issues/2424
     unic-utils               https://github.com/rustsec/advisory-db/issues/2424
     tandem                   https://github.com/rustsec/advisory-db/issues/2454
+    libsecp256k1             https://github.com/rustsec/advisory-db/issues/2780
+    libsecp256k1             https://github.com/rustsec/advisory-db/issues/2783
+    num-primes               https://github.com/rustsec/advisory-db/issues/2787
