@@ -40,7 +40,7 @@ reqwest = { version = "0.13", default-features = false, features = [
 
 [dev-dependencies]
 assert_cmd = "2.2"
-ctor = "0.9"
+ctor = "0.10"
 octocrab = "0.49"
 predicates = "3.1"
 rustls = { version = "0.23", default-features = false, features = [
@@ -52,7 +52,7 @@ snapbox = "1.2"
 strum = "0.28"
 strum_macros = "0.28"
 testing = { path = "testing" }
-tokio = "1.51"
+tokio = "1.52"
 
 [build-dependencies]
 elaborate = "0.2"
