@@ -1,8 +1,8 @@
+use super::GithubRepo;
 use crate::{RepoStatus, Url, curl};
 use anyhow::{Result, bail};
 use elaborate::std::io::ReadContext;
-use regex::Regex;
-use std::{cell::RefCell, collections::HashMap, rc::Rc, sync::LazyLock};
+use std::{cell::RefCell, collections::HashMap, rc::Rc, time::SystemTime};
 
 mod map_ext;
 use map_ext::MapExt;
@@ -10,10 +10,6 @@ use map_ext::MapExt;
 pub mod util;
 
 const OK: u32 = 200;
-
-#[allow(clippy::unwrap_used)]
-static RE: LazyLock<Regex> =
-    LazyLock::new(|| Regex::new(r"^https://github\.com/(([^/]*)/([^/]*))").unwrap());
 
 thread_local! {
     static REPOSITORY_CACHE: RefCell<HashMap<String, Option<Rc<serde_json::Value>>>> = RefCell::new(HashMap::new());
@@ -31,9 +27,9 @@ impl super::Github for Impl {
     }
 
     fn archival_status(url: Url) -> Result<RepoStatus<()>> {
-        let (url, owner_slash_repo, owner, repo) = match_github_url(url)?;
+        let (url, owner, repo) = match_github_url(url)?;
 
-        let Some(repository) = repository(owner_slash_repo, owner, repo)? else {
+        let Some(repository) = repository(owner, repo)? else {
             return Ok(RepoStatus::Nonexistent(url));
         };
 
@@ -47,28 +43,28 @@ impl super::Github for Impl {
             Ok(RepoStatus::Success(url, ()))
         }
     }
+
+    fn prefetch<'a>(_repos: &'a [GithubRepo<'a>]) -> Result<Vec<RepoStatus<'a, SystemTime>>> {
+        Ok(Vec::new())
+    }
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
-// smoelius: `owner_slash_repo` is a hack to avoid calling `to_owned` on `owner` and `repo` just to
-// perform a cache lookup.
-fn repository(
-    owner_slash_repo: &str,
-    owner: &str,
-    repo: &str,
-) -> Result<Option<Rc<serde_json::Value>>> {
+fn repository(owner: &str, repo: &str) -> Result<Option<Rc<serde_json::Value>>> {
     REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
-        if let Some(repo) = repository_cache.get(owner_slash_repo) {
+        let key = format!("{owner}/{repo}");
+
+        if let Some(repo) = repository_cache.get(&key) {
             return Ok(repo.clone());
         }
 
         match repository_uncached(owner, repo) {
             Ok(repository) => Ok(repository_cache
-                .entry(owner_slash_repo.to_owned())
+                .entry(key)
                 .or_insert(Some(Rc::new(repository)))
                 .clone()),
             Err(error) => {
-                repository_cache.insert(owner_slash_repo.to_owned(), None);
+                repository_cache.insert(key, None);
                 Err(error)
             }
         }
@@ -79,25 +75,12 @@ fn repository_uncached(owner: &str, repo: &str) -> Result<serde_json::Value> {
     call_api(owner, repo, None, &[])
 }
 
-fn match_github_url(url: Url<'_>) -> Result<(Url<'_>, &str, &str, &str)> {
-    let (url_string, owner_slash_repo, owner, repo) = {
-        #[allow(clippy::unwrap_used)]
-        if let Some(captures) = RE.captures(url.as_str()) {
-            assert_eq!(4, captures.len());
-            (
-                captures.get(0).unwrap().as_str(),
-                captures.get(1).unwrap().as_str(),
-                captures.get(2).unwrap().as_str(),
-                captures.get(3).unwrap().as_str(),
-            )
-        } else {
-            bail!("failed to match GitHub url: {url}");
-        }
+fn match_github_url(url: Url<'_>) -> Result<(Url<'_>, &str, &str)> {
+    let Some(github_repo) = GithubRepo::from_url(url) else {
+        bail!("failed to match GitHub url: {url}");
     };
 
-    let repo = repo.strip_suffix(".git").unwrap_or(repo);
-
-    Ok((url_string.into(), owner_slash_repo, owner, repo))
+    Ok((github_repo.url, github_repo.owner, github_repo.repo))
 }
 
 fn call_api(
