@@ -1,5 +1,7 @@
+use super::GithubRepo;
 use crate::{RepoStatus, Url};
 use anyhow::Result;
+use std::time::SystemTime;
 
 pub struct Impl;
 
@@ -34,6 +36,12 @@ impl super::Github for Impl {
 
             Ok(RepoStatus::Success(url, ()))
         }
+    }
+
+    fn prefetch<'a>(_repos: &'a [GithubRepo<'a>]) -> Result<Vec<RepoStatus<'a, SystemTime>>> {
+        // Mock prefetch returns empty results. Existing per-package mock logic
+        // (ARCHIVAL_STATUS_* env vars) handles archival status on cache miss.
+        Ok(Vec::new())
     }
 }
 
