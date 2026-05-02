@@ -99,6 +99,7 @@ check-cfg = ["cfg(dylint_lib, values(any()))", "cfg(__warnings)"]
 [workspace.lints.clippy]
 pedantic = { level = "warn", priority = -1 }
 format-collect = "allow"
+format-push-string = "allow"
 missing-errors-doc = "allow"
 missing-panics-doc = "allow"
 
