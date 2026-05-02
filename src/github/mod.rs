@@ -66,3 +66,77 @@ mod real;
 pub use real::Impl;
 #[cfg(any(not(feature = "__mock_github"), feature = "__real_github"))]
 pub use real::util;
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn parse_github_url_accepts_common_forms() {
+        assert_eq!(
+            parse_github_url("https://github.com/owner/repo"),
+            Some(("owner", "repo"))
+        );
+        assert_eq!(
+            parse_github_url("https://github.com/owner/repo.git"),
+            Some(("owner", "repo"))
+        );
+        assert_eq!(
+            parse_github_url("https://github.com/owner/repo/"),
+            Some(("owner", "repo"))
+        );
+    }
+
+    #[test]
+    fn parse_github_url_stops_at_query() {
+        assert_eq!(
+            parse_github_url("https://github.com/owner/repo?tab=readme"),
+            Some(("owner", "repo"))
+        );
+    }
+
+    #[test]
+    fn parse_github_url_stops_at_fragment() {
+        assert_eq!(
+            parse_github_url("https://github.com/owner/repo#readme"),
+            Some(("owner", "repo"))
+        );
+    }
+
+    #[test]
+    fn parse_github_url_rejects_incomplete_or_non_github_urls() {
+        assert_eq!(parse_github_url("https://github.com/"), None);
+        assert_eq!(parse_github_url("https://github.com/owner"), None);
+        assert_eq!(parse_github_url("https://example.com/owner/repo"), None);
+    }
+
+    #[test]
+    fn canonical_github_url_normalizes_aliases() {
+        assert_eq!(
+            canonical_github_url("https://github.com/owner/repo.git".into()).as_str(),
+            "https://github.com/owner/repo"
+        );
+        assert_eq!(
+            canonical_github_url("https://github.com/owner/repo/tree/main".into()).as_str(),
+            "https://github.com/owner/repo"
+        );
+        assert_eq!(
+            canonical_github_url("https://github.com/owner/repo.git/tree/main".into()).as_str(),
+            "https://github.com/owner/repo"
+        );
+    }
+
+    #[test]
+    fn github_repo_from_url_returns_parts_and_canonical_url() {
+        let github_repo =
+            GithubRepo::from_url("https://github.com/owner/repo.git/tree/main".into());
+        assert!(github_repo.is_some());
+        let Some(github_repo) = github_repo else {
+            return;
+        };
+
+        assert_eq!(github_repo.url.as_str(), "https://github.com/owner/repo");
+        assert_eq!(github_repo.owner, "owner");
+        assert_eq!(github_repo.repo, "repo");
+    }
+}
