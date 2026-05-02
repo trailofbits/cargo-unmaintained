@@ -54,6 +54,7 @@ fn save_token() {
     );
     assert_eq!(
         stderr,
-        "Scanning 1 packages and their dependencies (pass --verbose for more information)\n"
+        "Prefetching GitHub data for 1 repositories\nScanning 1 packages and their dependencies \
+         (pass --verbose for more information)\n"
     );
 }

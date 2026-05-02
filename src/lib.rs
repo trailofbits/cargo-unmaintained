@@ -66,7 +66,7 @@ mod verbose;
 #[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
 mod flock;
 
-use github::{Github as _, Impl as Github};
+use github::{Github as _, GithubRepo, Impl as Github};
 
 mod repo_status;
 use repo_status::RepoStatus;
@@ -336,6 +336,10 @@ fn unmaintained() -> Result<bool> {
 
     let packages = packages(&metadata)?;
 
+    if TOKEN_FOUND.load(Ordering::SeqCst) {
+        prefetch_github_data(&packages);
+    }
+
     eprintln!(
         "Scanning {} packages and their dependencies{}",
         packages.len(),
@@ -511,6 +515,114 @@ fn build_metadata_latest_version_map(metadata: &Metadata) -> HashMap<PackageName
     }
 
     map
+}
+
+fn prefetch_github_data(packages: &[&Package]) {
+    let mut repo_aliases = HashMap::new();
+    let mut seen_repos = HashSet::new();
+    let mut repos = Vec::new();
+
+    for pkg in packages {
+        let Some(github_repo) = github_repo_for_package(pkg) else {
+            continue;
+        };
+
+        let key = format!("{}/{}", github_repo.owner, github_repo.repo);
+        let aliases = repo_aliases.entry(key.clone()).or_insert_with(Vec::new);
+        for alias in urls(pkg) {
+            push_repo_alias(aliases, alias);
+        }
+        push_repo_alias(aliases, github_repo.url);
+
+        if seen_repos.insert(key) {
+            repos.push(github_repo);
+        }
+    }
+
+    if repos.is_empty() {
+        return;
+    }
+
+    eprintln!("Prefetching GitHub data for {} repositories", repos.len());
+
+    let repo_statuses = match Github::prefetch(&repos) {
+        Ok(repo_statuses) => repo_statuses,
+        Err(error) => {
+            warn!(
+                "failed to prefetch Github data; falling back to per-package queries: {}",
+                error
+            );
+            return;
+        }
+    };
+
+    for repo_status in repo_statuses {
+        let Some(url) = repo_status_url(&repo_status) else {
+            continue;
+        };
+        let Some(github_repo) = GithubRepo::from_url(url) else {
+            continue;
+        };
+        let key = format!("{}/{}", github_repo.owner, github_repo.repo);
+        if let Some(aliases) = repo_aliases.get(&key) {
+            for &alias in aliases {
+                cache_prefetched_github_data(repo_status, alias);
+            }
+        } else {
+            cache_prefetched_github_data(repo_status, url);
+        }
+    }
+}
+
+fn github_repo_for_package(pkg: &Package) -> Option<GithubRepo<'_>> {
+    let url_string = pkg.repository.as_ref()?;
+    let url = Url::from(url_string.as_str()).trim_trailing_slash();
+    GithubRepo::from_url(url)
+}
+
+fn push_repo_alias<'a>(aliases: &mut Vec<Url<'a>>, alias: Url<'a>) {
+    if !aliases.contains(&alias) {
+        aliases.push(alias);
+    }
+}
+
+fn repo_status_url<'a, T>(repo_status: &RepoStatus<'a, T>) -> Option<Url<'a>> {
+    match repo_status {
+        RepoStatus::Uncloneable(url)
+        | RepoStatus::Success(url, _)
+        | RepoStatus::Unassociated(url)
+        | RepoStatus::Nonexistent(url)
+        | RepoStatus::Archived(url) => Some(*url),
+        RepoStatus::Unnamed => None,
+    }
+}
+
+fn cache_prefetched_github_data(repo_status: RepoStatus<'_, SystemTime>, url: Url<'_>) {
+    match repo_status {
+        RepoStatus::Success(_, timestamp) => {
+            let url = url.leak();
+            GENERAL_STATUS_CACHE
+                .with_borrow_mut(|cache| cache.insert(url, RepoStatus::Success(url, ())));
+            TIMESTAMP_CACHE.with_borrow_mut(|cache| {
+                // The repository has not been cloned yet, so using the canonical GitHub URL as the
+                // timestamp cache key is optimistic. A later `clone_repository` call must still
+                // succeed before this timestamp is used.
+                let url = GithubRepo::from_url(url).map_or(url, |github_repo| github_repo.url);
+                cache.insert(url, RepoStatus::Success(url, timestamp));
+            });
+        }
+        RepoStatus::Archived(_) => {
+            let url = url.leak();
+            GENERAL_STATUS_CACHE
+                .with_borrow_mut(|cache| cache.insert(url, RepoStatus::Archived(url)));
+        }
+        RepoStatus::Nonexistent(_) => {
+            let url = url.leak();
+            GENERAL_STATUS_CACHE
+                .with_borrow_mut(|cache| cache.insert(url, RepoStatus::Nonexistent(url)));
+        }
+        RepoStatus::Uncloneable(_) | RepoStatus::Unnamed | RepoStatus::Unassociated(_) => {}
+    }
 }
 
 fn newer_version_is_available(pkg: &Package) -> Result<bool> {
