@@ -120,8 +120,11 @@ pattern = [
 
 [workspace.metadata.unmaintained]
 ignore = [
+    "ctor-proc-macro",
+    "dtor-proc-macro",
     "ff",
     "foreign-types",
+    "group",
     "lazy_static",
     "libredox",
     "rand_chacha",
