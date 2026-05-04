@@ -394,14 +394,6 @@
         "name": null
       }
     ],
-    "cesu8": [
-      {
-        "id": 110,
-        "kind": "user",
-        "login": "emk",
-        "name": "Eric Kidd"
-      }
-    ],
     "cfg-if": [
       {
         "id": 11,
@@ -2190,6 +2182,14 @@
         "name": "Robert Bragg"
       }
     ],
+    "jni-macros": [
+      {
+        "id": 68864,
+        "kind": "user",
+        "login": "rib",
+        "name": "Robert Bragg"
+      }
+    ],
     "jni-sys": [
       {
         "id": 5,
@@ -2702,20 +2702,6 @@
         "name": "Taiki Endo"
       }
     ],
-    "pin-utils": [
-      {
-        "id": 462,
-        "kind": "team",
-        "login": "github:rust-lang-nursery:futures",
-        "name": "futures"
-      },
-      {
-        "id": 25248,
-        "kind": "user",
-        "login": "MajorBreakfast",
-        "name": "Josef Brandl"
-      }
-    ],
     "pkg-config": [
       {
         "id": 3623,
@@ -3042,6 +3028,20 @@
         "kind": "user",
         "login": "rust-lang-owner",
         "name": null
+      }
+    ],
+    "rustc_version": [
+      {
+        "id": 394,
+        "kind": "user",
+        "login": "Kimundi",
+        "name": "Marvin Löbel"
+      },
+      {
+        "id": 4556,
+        "kind": "user",
+        "login": "djc",
+        "name": "Dirkjan Ochtman"
       }
     ],
     "rustix": [
@@ -3410,6 +3410,22 @@
         "kind": "user",
         "login": "mcountryman",
         "name": "Marvin Countryman"
+      }
+    ],
+    "simd_cesu8": [
+      {
+        "id": 117705,
+        "kind": "user",
+        "login": "seancroach",
+        "name": "Sean C. Roach"
+      }
+    ],
+    "simdutf8": [
+      {
+        "id": 119326,
+        "kind": "user",
+        "login": "hkratz",
+        "name": "Hans Kratz"
       }
     ],
     "similar": [
