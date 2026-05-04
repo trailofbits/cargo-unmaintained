@@ -9,7 +9,7 @@ use std::{
     process::{Command, Stdio},
 };
 
-#[ctor::ctor]
+#[ctor::ctor(unsafe)]
 fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");

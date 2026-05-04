@@ -7,7 +7,7 @@ use std::{
 };
 use testing::{Tee, tee};
 
-#[ctor::ctor]
+#[ctor::ctor(unsafe)]
 fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");

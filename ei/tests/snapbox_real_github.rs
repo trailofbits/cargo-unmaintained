@@ -1,6 +1,6 @@
 use std::env::set_current_dir;
 
-#[ctor::ctor]
+#[ctor::ctor(unsafe)]
 fn initialize() {
     set_current_dir("..");
 }
