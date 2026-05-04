@@ -6,6 +6,12 @@
     "version": "1.0.2"
   },
   {
+    "name": "bitmaps",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "2.1.0"
+  },
+  {
     "name": "color-print-proc-macro",
     "outdated_deps": [
       {
@@ -54,13 +60,13 @@
     "version": "0.17.0"
   },
   {
-    "name": "im-rc",
+    "name": "group",
     "outdated_deps": [
       {
-        "name": "bitmaps",
-        "req": "^2",
+        "name": "rand",
+        "req": "^0.8",
         "version_latest": null,
-        "version_used": "2.1.0"
+        "version_used": "0.8.5"
       },
       {
         "name": "rand_core",
@@ -69,27 +75,21 @@
         "version_used": "0.6.4"
       },
       {
-        "name": "rand_xoshiro",
-        "req": "^0.6",
+        "name": "rand_xorshift",
+        "req": "^0.3",
         "version_latest": null,
-        "version_used": "0.6.0"
-      },
-      {
-        "name": "sized-chunks",
-        "req": "^0.6.4",
-        "version_latest": null,
-        "version_used": "0.6.5"
-      },
-      {
-        "name": "rand",
-        "req": "^0.8",
-        "version_latest": null,
-        "version_used": "0.8.5"
+        "version_used": "0.3.0"
       }
     ],
     "repo_status": {
       "Age": null
     },
+    "version": "0.13.0"
+  },
+  {
+    "name": "im-rc",
+    "outdated_deps": [],
+    "repo_status": "Archived",
     "version": "15.1.0"
   },
   {
@@ -127,6 +127,12 @@
       "Age": null
     },
     "version": "0.7.0"
+  },
+  {
+    "name": "sized-chunks",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "0.6.5"
   },
   {
     "name": "utf8parse",

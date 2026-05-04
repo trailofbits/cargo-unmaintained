@@ -87,21 +87,6 @@
     "version": "0.1.3"
   },
   {
-    "name": "rdrand",
-    "outdated_deps": [
-      {
-        "name": "rand_core",
-        "req": "^0.3",
-        "version_latest": null,
-        "version_used": "0.3.1"
-      }
-    ],
-    "repo_status": {
-      "Age": null
-    },
-    "version": "0.4.0"
-  },
-  {
     "name": "statistical",
     "outdated_deps": [
       {
