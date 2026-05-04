@@ -16,7 +16,7 @@ use tempfile::tempdir;
 use testing::split_at_cut_lines;
 use walkdir::WalkDir;
 
-#[ctor::ctor]
+#[ctor::ctor(unsafe)]
 fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");

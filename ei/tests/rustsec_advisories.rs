@@ -14,7 +14,7 @@ const PATH_STDOUT: &str = concat!(
     "/tests/rustsec_advisories.stdout"
 );
 
-#[ctor::ctor]
+#[ctor::ctor(unsafe)]
 fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
