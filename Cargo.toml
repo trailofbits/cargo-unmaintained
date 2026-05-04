@@ -105,7 +105,7 @@ missing-panics-doc = "allow"
 
 # smoelius: Enabling `__mock_github` causes `xdg` to appear unused.
 [workspace.metadata.cargo-udeps.ignore]
-normal = ["crates-index", "reqwest", "xdg"]
+normal = ["crates-index", "home", "reqwest", "xdg"]
 
 [[workspace.metadata.dylint.libraries]]
 git = "https://github.com/trailofbits/dylint"
