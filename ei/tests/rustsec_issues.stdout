@@ -138,7 +138,7 @@ ignoring `https://doc.rust-lang.org/cargo/reference/overriding-dependencies.html
 loopdev-erikh...found
 loopdev...found
 rust-cpython...not found
-smartstring...not found
+smartstring...found
 filesystem-rs...not found
 conrod...found
 generational-arena...found
@@ -193,7 +193,6 @@ pretty_yaml...not found
 serde-yaml-ok...not found
 serde-yaml-core...not found
 serde_yml...found
-fast-xml...found
 Corundum...not found
 rust-phf...not found
 fxhash...not found
@@ -231,7 +230,16 @@ ignoring `https://sr.ht/~stygianentity/bincode/` from `https://github.com/rustse
 ignoring `https://www.reddit.com/r/rust/s/CgvzHQPqUZ.` from `https://github.com/rustsec/advisory-db/issues/2514`
 audiopus_sys...not found
 tokio...not found
-not found (143)
+k256...not found
+libsecp256k1...found
+libsecp256k1...found
+num-primes...found
+embedded-io...not found
+no-std-io2...not found
+core2...not found
+ignoring `https://hachyderm.io/@piecritic/116404790999620656` from `https://github.com/rustsec/advisory-db/issues/2788`
+ignoring `https://www.reddit.com/r/rust/comments/1slnga4/core2_yanked_millions_effected/` from `https://github.com/rustsec/advisory-db/issues/2788`
+not found (146)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -316,7 +324,6 @@ not found (143)
     syn                      https://github.com/rustsec/advisory-db/issues/1735
     teams                    https://github.com/rustsec/advisory-db/issues/1756
     rust-cpython             https://github.com/rustsec/advisory-db/issues/1822
-    smartstring              https://github.com/rustsec/advisory-db/issues/1854
     filesystem-rs            https://github.com/rustsec/advisory-db/issues/1870
     yaml-rust                https://github.com/rustsec/advisory-db/issues/1921
     serde-yaml               https://github.com/rustsec/advisory-db/issues/1925
@@ -375,7 +382,11 @@ not found (143)
     Parser                   https://github.com/rustsec/advisory-db/issues/2456
     audiopus_sys             https://github.com/rustsec/advisory-db/issues/2704
     tokio                    https://github.com/rustsec/advisory-db/issues/2731
-found (60)
+    k256                     https://github.com/rustsec/advisory-db/issues/2780
+    embedded-io              https://github.com/rustsec/advisory-db/issues/2788
+    no-std-io2               https://github.com/rustsec/advisory-db/issues/2788
+    core2                    https://github.com/rustsec/advisory-db/issues/2788
+found (63)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -415,6 +426,7 @@ found (60)
     hpack-patched            https://github.com/rustsec/advisory-db/issues/1784
     loopdev-erikh            https://github.com/rustsec/advisory-db/issues/1821
     loopdev                  https://github.com/rustsec/advisory-db/issues/1821
+    smartstring              https://github.com/rustsec/advisory-db/issues/1854
     conrod                   https://github.com/rustsec/advisory-db/issues/1871
     generational-arena       https://github.com/rustsec/advisory-db/issues/1883
     openslide                https://github.com/rustsec/advisory-db/issues/1937
@@ -427,7 +439,6 @@ found (60)
     libyml                   https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
     serde_yml                https://github.com/rustsec/advisory-db/issues/2132
-    fast-xml                 https://github.com/rustsec/advisory-db/issues/2134
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
     custom_derive            https://github.com/rustsec/advisory-db/issues/2199
     paste                    https://github.com/rustsec/advisory-db/issues/2203
@@ -436,3 +447,6 @@ found (60)
     unic-ucd-core            https://github.com/rustsec/advisory-db/issues/2424
     unic-utils               https://github.com/rustsec/advisory-db/issues/2424
     tandem                   https://github.com/rustsec/advisory-db/issues/2454
+    libsecp256k1             https://github.com/rustsec/advisory-db/issues/2780
+    libsecp256k1             https://github.com/rustsec/advisory-db/issues/2783
+    num-primes               https://github.com/rustsec/advisory-db/issues/2787
