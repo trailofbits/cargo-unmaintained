@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.11.0
+
+- FEATURE: Batch fetching GitHub data using GraphQL API. Speed up will vary depending on how many of a project's dependencies reside on GitHub. But in some of our experiments, we saw speed up of about 20%. ([#767](https://github.com/trailofbits/cargo-unmaintained/pull/767))
+
 ## 1.10.0
 
 - FEATURE: Allow users to install with `tame-index` ([6c2cbe7](https://github.com/trailofbits/cargo-unmaintained/commit/6c2cbe77f8d212329411c2b3523aa8a48da2dfec))
