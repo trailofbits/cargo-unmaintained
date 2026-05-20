@@ -120,8 +120,6 @@ pattern = [
 
 [workspace.metadata.unmaintained]
 ignore = [
-    "ctor-proc-macro",
-    "dtor-proc-macro",
     "ff",
     "foreign-types",
     "group",
@@ -132,6 +130,7 @@ ignore = [
     "redox_syscall",
     "simple_asn1",
     "smol_str",
+    "spin",
     "subtle",
     # https://github.com/alacritty/vte/pull/122#issuecomment-2579278540
     "utf8parse",
