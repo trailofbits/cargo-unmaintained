@@ -129,7 +129,6 @@ impl RepoStatus<'_, u64> {
         ))
     }
 
-    #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
     #[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
     pub fn write(&self, stream: &mut impl WriteColor) -> std::io::Result<()> {
         match self {
@@ -199,7 +198,6 @@ impl RepoStatus<'_, PathBuf> {
     }
 }
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 #[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 fn write_url(stream: &mut impl WriteColor, url: Url) -> std::io::Result<()> {
     stream.set_color(ColorSpec::new().set_fg(Some(Color::Blue)))?;

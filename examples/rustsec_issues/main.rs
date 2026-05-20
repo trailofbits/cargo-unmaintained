@@ -18,7 +18,6 @@ use rustsec_util::{
     Outcome, cargo_unmaintained, command_output, display_advisory_outcomes, maybe_to_string,
 };
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn main() -> Result<()> {
     github_util::load_token(octocrab_util::load_token)?;
 

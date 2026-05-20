@@ -96,7 +96,6 @@ pub fn cargo_unmaintained(name: &str) -> Command {
     command
 }
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 pub fn command_output(command: &mut Command) -> Result<Output> {
     let output = command.output_wc()?;
     let status = output.status;

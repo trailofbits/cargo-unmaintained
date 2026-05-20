@@ -827,7 +827,6 @@ fn find_packages<'a>(
         .filter(move |pkg| dep_req.matches(pkg))
 }
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn latest_version(name: &str) -> Result<Version> {
     LATEST_VERSION_CACHE.with_borrow_mut(|latest_version_cache| {
         if let Some(version) = latest_version_cache.get(name) {
@@ -903,7 +902,6 @@ fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
         .transpose()
 }
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
         // smoelius: Check both the regular and the shortened url.
@@ -969,7 +967,7 @@ fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
     Ok(RepoStatus::Success(url, timestamp))
 }
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_unhandled_error))]
 #[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
 fn clone_repository(pkg: &Package) -> Result<RepoStatus<'_, PathBuf>> {
     let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
@@ -1136,7 +1134,6 @@ fn display_unmaintained_pkgs(unmaintained_pkgs: &[UnmaintainedPkg]) -> Result<()
     Ok(())
 }
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 #[cfg_attr(dylint_lib = "try_io_result", allow(try_io_result))]
 fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> {
     use std::io::Write;
