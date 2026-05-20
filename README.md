@@ -20,7 +20,7 @@
 
 <!-- as-of start -->
 
-As of 2026-05-04, the RustSec Advisory Database contains 214 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 144 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-05-20, the RustSec Advisory Database contains 214 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 144 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 
 <!-- as-of end -->
 

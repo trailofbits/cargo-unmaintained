@@ -556,7 +556,7 @@ found (144)
     zantetsu-ffi           https://rustsec.org/advisories/RUSTSEC-2026-0082.html
     zantetsu-trainer       https://rustsec.org/advisories/RUSTSEC-2026-0083.html
 ---
-As of 2026-05-04, the RustSec Advisory Database contains 214 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 144 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-05-20, the RustSec Advisory Database contains 214 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 144 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 70 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 13 do not build
