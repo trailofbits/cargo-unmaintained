@@ -78,7 +78,6 @@ impl super::Github for Impl {
     }
 }
 
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
 fn repository(owner: &str, repo: &str) -> Result<Option<Rc<serde_json::Value>>> {
     REPOSITORY_CACHE.with_borrow_mut(|repository_cache| {
         let key = format!("{owner}/{repo}");

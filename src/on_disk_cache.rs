@@ -130,7 +130,7 @@ impl Cache {
         })
     }
 
-    #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_error_return))]
+    #[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_unhandled_error))]
     pub fn clone_repository(&mut self, pkg: &Package) -> Result<(String, PathBuf)> {
         // smoelius: Ignore any errors that may occur while reading/deserializing.
         if let Ok(entry) = self.entry(pkg)
