@@ -1,7 +1,5 @@
-use std::{
-    env::{remove_var, set_current_dir},
-    process::Command,
-};
+use elaborate::std::env::set_current_dir_wc;
+use std::{env::remove_var, process::Command};
 use testing::{Tee, tee};
 
 #[ctor::ctor(unsafe)]
@@ -9,7 +7,7 @@ fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
     }
-    set_current_dir("..");
+    let _ = set_current_dir_wc("..");
 }
 
 #[test]

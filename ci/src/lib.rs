@@ -1,12 +1,17 @@
 #![cfg(test)]
 
 use assert_cmd::assert::OutputAssertExt;
+use elaborate::std::{
+    env::{set_current_dir_wc, var_wc},
+    fs::{read_to_string_wc, write_wc},
+    path::PathContext,
+    process::CommandContext,
+};
 use regex::Regex;
 use similar_asserts::SimpleDiff;
 use std::{
-    env::{remove_var, set_current_dir, var},
+    env::remove_var,
     ffi::OsStr,
-    fs::{read_to_string, write},
     ops::Range,
     path::Path,
     process::{Command, ExitStatus},
@@ -21,7 +26,7 @@ fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
     }
-    set_current_dir("..");
+    let _ = set_current_dir_wc("..");
 }
 
 #[test]
@@ -55,7 +60,7 @@ fn dylint() {
 #[test]
 fn elaborate_disallowed_methods() {
     elaborate::disallowed_methods()
-        .args(["--all-features", "--all-targets"])
+        .args(["--workspace", "--all-features", "--all-targets"])
         .env("RUSTUP_TOOLCHAIN", "nightly")
         .assert()
         .success();
@@ -174,7 +179,7 @@ fn prettier() {
     // smoelius: Copied from Necessist:
     // Prettier's handling of `..` seems to have changed between versions 3.4 and 3.5.
     // Manually collapsing the `..` avoids the problem.
-    let parent = Path::new(env!("CARGO_MANIFEST_DIR")).parent().unwrap();
+    let parent = Path::new(env!("CARGO_MANIFEST_DIR")).parent_wc().unwrap();
 
     let tempdir = tempdir().unwrap();
 
@@ -197,10 +202,10 @@ fn prettier() {
 
 #[test]
 fn readme_contains_expected_contents() {
-    let contents = read_to_string("ei/tests/rustsec_advisories.stdout").unwrap();
+    let contents = read_to_string_wc("ei/tests/rustsec_advisories.stdout").unwrap();
     let (_, middle_expected, bottom_expected) = split_at_cut_lines(&contents).unwrap();
 
-    let readme = read_to_string("README.md").unwrap();
+    let readme = read_to_string_wc("README.md").unwrap();
     let lines = readme.lines();
 
     let mut lines = lines.skip_while(|&line| line != "<!-- as-of start -->");
@@ -225,7 +230,7 @@ fn readme_contains_expected_contents() {
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn readme_contains_usage() {
-    let readme = read_to_string("README.md").unwrap();
+    let readme = read_to_string_wc("README.md").unwrap();
 
     let assert = Command::new("cargo")
         .args([
@@ -256,7 +261,7 @@ fn readme_contains_usage() {
 #[test]
 fn readme_reference_links_are_sorted() {
     let re = Regex::new(r"^\[[^\]]*\]:").unwrap();
-    let readme = read_to_string("README.md").unwrap();
+    let readme = read_to_string_wc("README.md").unwrap();
     let links = readme
         .lines()
         .filter(|line| re.is_match(line))
@@ -269,7 +274,7 @@ fn readme_reference_links_are_sorted() {
 #[test]
 fn readme_reference_links_are_used() {
     let re = Regex::new(r"(?m)^(\[[^\]]*\]):").unwrap();
-    let readme = read_to_string("README.md").unwrap();
+    let readme = read_to_string_wc("README.md").unwrap();
     for captures in re.captures_iter(&readme) {
         assert_eq!(2, captures.len());
         let m = captures.get(1).unwrap();
@@ -289,7 +294,7 @@ fn dependencies_are_sorted() {
         .filter(|e| e.file_name() == OsStr::new("Cargo.toml"))
     {
         let path = entry.path();
-        let contents = read_to_string(path).unwrap();
+        let contents = read_to_string_wc(path).unwrap();
         let document = contents.parse::<toml_edit::Document<_>>().unwrap();
         for table_name in ["dependencies", "dev-dependencies", "build-dependencies"] {
             let Some(span) = key_value_pair_span(&document, table_name) else {
@@ -366,7 +371,7 @@ fn group_starts<S: AsRef<str>>(
 fn supply_chain() {
     let mut command = Command::new("cargo");
     command.args(["supply-chain", "update", "--cache-max-age=0s"]);
-    let _: ExitStatus = command.status().unwrap();
+    let _: ExitStatus = command.status_wc().unwrap();
 
     let mut command = Command::new("cargo");
     command.args(["supply-chain", "json", "--no-dev"]);
@@ -380,9 +385,9 @@ fn supply_chain() {
     let path_buf = Path::new(env!("CARGO_MANIFEST_DIR")).join("supply_chain.json");
 
     if enabled("BLESS") {
-        write(path_buf, stdout_normalized).unwrap();
+        write_wc(path_buf, stdout_normalized).unwrap();
     } else {
-        let stdout_expected = read_to_string(&path_buf).unwrap();
+        let stdout_expected = read_to_string_wc(&path_buf).unwrap();
 
         assert!(
             stdout_expected == stdout_normalized,
@@ -416,5 +421,5 @@ fn remove_avatars(value: &mut serde_json::Value) {
 }
 
 fn enabled(key: &str) -> bool {
-    var(key).is_ok_and(|value| value != "0")
+    var_wc(key).is_ok_and(|value| value != "0")
 }

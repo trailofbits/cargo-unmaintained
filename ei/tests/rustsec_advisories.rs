@@ -1,8 +1,11 @@
+use elaborate::std::{
+    env::{set_current_dir_wc, var_wc},
+    fs::{read_to_string_wc, write_wc},
+};
 use regex::Regex;
 use snapbox::assert_data_eq;
 use std::{
-    env::{remove_var, set_current_dir, var},
-    fs::{read_to_string, write},
+    env::remove_var,
     io::{Write, stderr},
     process::Command,
     sync::LazyLock,
@@ -19,7 +22,7 @@ fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
     }
-    set_current_dir("..");
+    let _ = set_current_dir_wc("..");
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
@@ -32,11 +35,11 @@ fn rustsec_advisories() {
 
     let output = tee(command, Tee::Stdout).unwrap();
 
-    let stdout_expected = read_to_string(PATH_STDOUT).unwrap();
+    let stdout_expected = read_to_string_wc(PATH_STDOUT).unwrap();
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
-    if var("BLESS").is_ok() {
-        write(PATH_STDOUT, stdout_actual).unwrap();
+    if var_wc("BLESS").is_ok() {
+        write_wc(PATH_STDOUT, stdout_actual).unwrap();
         update_readme(stdout_actual);
 
         #[allow(clippy::explicit_write)]
@@ -56,7 +59,7 @@ fn rustsec_advisories() {
 fn update_readme(stdout: &str) {
     let (_, middle, bottom) = split_at_cut_lines(stdout).unwrap();
 
-    let readme = read_to_string("README.md").unwrap();
+    let readme = read_to_string_wc("README.md").unwrap();
 
     let updated_with_as_of = replace_section(
         &readme,
@@ -72,7 +75,7 @@ fn update_readme(stdout: &str) {
         &format!("\n\n{}\n\n", bottom.trim()),
     );
 
-    write("README.md", readme_with_as_of_and_not_identified).unwrap();
+    write_wc("README.md", readme_with_as_of_and_not_identified).unwrap();
 }
 
 fn replace_section(content: &str, start_marker: &str, end_marker: &str, insertion: &str) -> String {
@@ -95,7 +98,7 @@ static TMP_RE: LazyLock<Regex> = LazyLock::new(|| Regex::new(r"/tmp\b").unwrap()
 
 #[test]
 fn sanitary() {
-    let contents = read_to_string(PATH_STDOUT).unwrap();
+    let contents = read_to_string_wc(PATH_STDOUT).unwrap();
 
     for line in contents.lines() {
         assert!(
