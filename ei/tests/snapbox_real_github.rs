@@ -1,8 +1,8 @@
-use std::env::set_current_dir;
+use elaborate::std::env::set_current_dir_wc;
 
 #[ctor::ctor(unsafe)]
 fn initialize() {
-    set_current_dir("..");
+    let _ = set_current_dir_wc("..");
 }
 
 #[test]

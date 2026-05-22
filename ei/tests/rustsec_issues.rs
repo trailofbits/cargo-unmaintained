@@ -1,10 +1,9 @@
-use snapbox::{Data, assert_data_eq};
-use std::{
-    env::{remove_var, set_current_dir, var},
-    fs::write,
-    path::PathBuf,
-    process::Command,
+use elaborate::std::{
+    env::{set_current_dir_wc, var_wc},
+    fs::write_wc,
 };
+use snapbox::{Data, assert_data_eq};
+use std::{env::remove_var, path::PathBuf, process::Command};
 use testing::{Tee, tee};
 
 #[ctor::ctor(unsafe)]
@@ -12,7 +11,7 @@ fn initialize() {
     unsafe {
         remove_var("CARGO_TERM_COLOR");
     }
-    set_current_dir("..");
+    let _ = set_current_dir_wc("..");
 }
 
 #[test]
@@ -26,8 +25,8 @@ fn rustsec_issues() {
 
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
-    if var("BLESS").is_ok() {
-        write(PATH_STDOUT, stdout_actual).unwrap();
+    if var_wc("BLESS").is_ok() {
+        write_wc(PATH_STDOUT, stdout_actual).unwrap();
     } else {
         assert_data_eq!(
             stdout_actual,
