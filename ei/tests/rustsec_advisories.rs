@@ -1,11 +1,10 @@
 use elaborate::std::{
-    env::{set_current_dir_wc, var_wc},
+    env::var_wc,
     fs::{read_to_string_wc, write_wc},
 };
 use regex::Regex;
 use snapbox::assert_data_eq;
 use std::{
-    env::remove_var,
     io::{Write, stderr},
     process::Command,
     sync::LazyLock,
@@ -17,21 +16,15 @@ const PATH_STDOUT: &str = concat!(
     "/tests/rustsec_advisories.stdout"
 );
 
-#[ctor::ctor(unsafe)]
-fn initialize() {
-    unsafe {
-        remove_var("CARGO_TERM_COLOR");
-    }
-    let _ = set_current_dir_wc("..");
-}
-
 #[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
 #[test]
 fn rustsec_advisories() {
     let mut command = Command::new("cargo");
     command
         .args(["run", "--example=rustsec_advisories"])
-        .env("RUST_BACKTRACE", "0");
+        .env_remove("CARGO_TERM_COLOR")
+        .env("RUST_BACKTRACE", "0")
+        .current_dir("..");
 
     let output = tee(command, Tee::Stdout).unwrap();
 

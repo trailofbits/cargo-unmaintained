@@ -2,7 +2,7 @@
 
 use assert_cmd::assert::OutputAssertExt;
 use elaborate::std::{
-    env::{set_current_dir_wc, var_wc},
+    env::var_wc,
     fs::{read_to_string_wc, write_wc},
     path::PathContext,
     process::CommandContext,
@@ -10,7 +10,6 @@ use elaborate::std::{
 use regex::Regex;
 use similar_asserts::SimpleDiff;
 use std::{
-    env::remove_var,
     ffi::OsStr,
     ops::Range,
     path::Path,
@@ -20,14 +19,6 @@ use std::{
 use tempfile::tempdir;
 use testing::split_at_cut_lines;
 use walkdir::WalkDir;
-
-#[ctor::ctor(unsafe)]
-fn initialize() {
-    unsafe {
-        remove_var("CARGO_TERM_COLOR");
-    }
-    let _ = set_current_dir_wc("..");
-}
 
 #[test]
 fn clippy() {

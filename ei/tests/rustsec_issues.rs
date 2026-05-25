@@ -1,25 +1,17 @@
-use elaborate::std::{
-    env::{set_current_dir_wc, var_wc},
-    fs::write_wc,
-};
+use elaborate::std::{env::var_wc, fs::write_wc};
 use snapbox::{Data, assert_data_eq};
-use std::{env::remove_var, path::PathBuf, process::Command};
+use std::{path::PathBuf, process::Command};
 use testing::{Tee, tee};
-
-#[ctor::ctor(unsafe)]
-fn initialize() {
-    unsafe {
-        remove_var("CARGO_TERM_COLOR");
-    }
-    let _ = set_current_dir_wc("..");
-}
 
 #[test]
 fn rustsec_issues() {
     const PATH_STDOUT: &str = concat!(env!("CARGO_MANIFEST_DIR"), "/tests/rustsec_issues.stdout");
 
     let mut command = Command::new("cargo");
-    command.args(["run", "--example=rustsec_issues"]);
+    command
+        .args(["run", "--example=rustsec_issues"])
+        .env_remove("CARGO_TERM_COLOR")
+        .current_dir("..");
 
     let output = tee(command, Tee::Stdout).unwrap();
 

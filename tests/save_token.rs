@@ -4,17 +4,9 @@ use elaborate::std::{
     process::{ChildContext, CommandContext},
 };
 use std::{
-    env::remove_var,
     io::{Write, stderr},
     process::{Command, Stdio},
 };
-
-#[ctor::ctor(unsafe)]
-fn initialize() {
-    unsafe {
-        remove_var("CARGO_TERM_COLOR");
-    }
-}
 
 #[test]
 fn save_token() {
