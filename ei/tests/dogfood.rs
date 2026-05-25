@@ -1,14 +1,5 @@
-use elaborate::std::env::set_current_dir_wc;
-use std::{env::remove_var, process::Command};
+use std::process::Command;
 use testing::{Tee, tee};
-
-#[ctor::ctor(unsafe)]
-fn initialize() {
-    unsafe {
-        remove_var("CARGO_TERM_COLOR");
-    }
-    let _ = set_current_dir_wc("..");
-}
 
 #[test]
 fn dogfood() {
@@ -22,6 +13,8 @@ fn dogfood() {
         "unmaintained",
         "--color=never",
     ]);
+    command.env_remove("CARGO_TERM_COLOR");
+    command.current_dir("..");
 
     let output = tee(command, Tee::Stdout).unwrap();
 

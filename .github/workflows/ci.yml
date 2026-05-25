@@ -108,9 +108,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
-      - name: Test `ci`
+      - name: Run `ci` tests
         if: matrix.environment == 'ubuntu-latest'
-        run: cargo test --config "$GROUP_RUNNER" -p ci
+        run: cargo run -p ci
 
   all-checks:
     needs: [test]
