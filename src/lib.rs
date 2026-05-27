@@ -103,6 +103,12 @@ include!(concat!(env!("OUT_DIR"), "/after_help.rs"));
 struct Opts {
     #[clap(
         long,
+        help = "Whether all targets should be considered, rather than just the host"
+    )]
+    all_targets: bool,
+
+    #[clap(
+        long,
         help = "When to use color: always, auto, or never",
         default_value = "auto",
         value_name = "WHEN"
@@ -755,6 +761,19 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
     })
 }
 
+#[allow(clippy::panic, clippy::unwrap_used)]
+static HOST: LazyLock<String> = LazyLock::new(|| {
+    let mut command = Command::new("rustc");
+    command.arg("-Vv");
+    let output = command.output_wc().unwrap();
+    assert!(output.status.success(), "command failed: {command:?}");
+    let stdout = String::from_utf8(output.stdout).unwrap();
+    stdout
+        .lines()
+        .find_map(|line| line.strip_prefix("host: "))
+        .map_or_else(|| panic!("failed to determine host"), str::to_owned)
+});
+
 #[allow(clippy::unnecessary_wraps)]
 fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
@@ -762,6 +781,13 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
     }
     let mut deps = Vec::new();
     for dep in &pkg.dependencies {
+        // smoelius: Skip dependencies with specified platforms that are not the host.
+        if !opts::get().all_targets
+            && let Some(platform) = &dep.target
+            && !platform.matches(&HOST, &[])
+        {
+            continue;
+        }
         // smoelius: Don't check dependencies in private registries.
         if dep.registry.is_some() {
             continue;

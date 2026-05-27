@@ -66,6 +66,7 @@ cargo install cargo-unmaintained
 Usage: cargo unmaintained [OPTIONS]
 
 Options:
+      --all-targets     Whether all targets should be considered, rather than just the host
       --color <WHEN>    When to use color: always, auto, or never [default: auto]
       --fail-fast       Exit as soon as an unmaintained package is found
       --json            Output JSON (experimental)
