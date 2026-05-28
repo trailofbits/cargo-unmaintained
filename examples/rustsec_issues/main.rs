@@ -179,9 +179,7 @@ fn extract_package_name<'a>(url: &'a str, advisory_url: &str) -> Option<&'a str>
 }
 
 fn is_unmaintained(name: &str) -> Result<bool> {
-    let mut command = cargo_unmaintained(name);
-    command.arg("--all-targets");
-    let output = command_output(&mut command)?;
+    let output = command_output(&mut cargo_unmaintained(name))?;
 
     match output.status.code_wc() {
         Ok(0) => Ok(false),
