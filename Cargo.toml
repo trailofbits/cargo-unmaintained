@@ -112,11 +112,11 @@ pattern = [
 
 [workspace.metadata.unmaintained]
 ignore = [
+    "dashmap",
     "ff",
     "foreign-types",
     "group",
     "lazy_static",
-    "libredox",
     "rand_chacha",
     "rand_core",
     "redox_syscall",
