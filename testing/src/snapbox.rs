@@ -37,6 +37,10 @@ struct Test {
     #[serde(default)]
     use_real_github: bool,
 
+    /// Extra arguments to pass to `cargo unmaintained`
+    #[serde(default)]
+    args: Vec<String>,
+
     /// Environment variables
     #[serde(default)]
     env: Vec<(String, String)>,
@@ -104,7 +108,7 @@ pub fn snapbox(real_github: bool) -> Result<()> {
         // https://github.com/solana-labs/rbpf/blob/f52bfa0f4912d5f6eaa364de7c42b6ee6be50a88/src/elf.rs#L401
         let tempdir: tempfile::TempDir;
         let dir = match (test.path, test.url) {
-            (Some(path), None) => PathBuf::from(path),
+            (Some(path), None) => Some(PathBuf::from(path)),
             (None, Some(url)) => {
                 tempdir = tempfile::tempdir()?;
 
@@ -123,19 +127,13 @@ pub fn snapbox(real_github: bool) -> Result<()> {
 
                 checkout(tempdir.path(), test.rev.as_deref()).unwrap();
 
-                tempdir.path().to_owned()
+                Some(tempdir.path().to_owned())
             }
+            (None, None) => None,
             (_, _) => {
-                panic!("exactly one of `path` and `url` must be set");
+                panic!("at most one of `path` and `url` can be set");
             }
         };
-
-        let path_buf = dir.join("Cargo.lock");
-        assert!(
-            path_buf.try_exists_wc().is_ok_and(std::convert::identity),
-            "`{}` does not exist",
-            path_buf.display()
-        );
 
         let mut command = Command::new("cargo");
         command.args(["run", "--quiet"]);
@@ -154,8 +152,17 @@ pub fn snapbox(real_github: bool) -> Result<()> {
             ]);
         }
         command.args(["--", "unmaintained", "--color=never", "--json"]);
+        command.args(test.args);
         command.envs(test.env);
-        command.current_dir(dir);
+        if let Some(dir) = dir {
+            let path_buf = dir.join("Cargo.lock");
+            assert!(
+                path_buf.try_exists_wc().is_ok_and(std::convert::identity),
+                "`{}` does not exist",
+                path_buf.display()
+            );
+            command.current_dir(dir);
+        }
 
         let stdout_actual = if enabled("VERBOSE") {
             // smoelius If `VERBOSE` is enabled, don't bother comparing stderr, because it won't
