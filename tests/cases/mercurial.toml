@@ -1,1 +1,1 @@
-path = "fixtures/mercurial"
+args = ["-p", "oorandom"]
