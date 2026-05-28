@@ -10,9 +10,6 @@ const TOKEN_PATH: &str = if cfg!(not(windows)) {
 fn main() {
     println!("cargo:rustc-cfg=__warnings");
 
-    #[cfg(all(feature = "cache-repositories", not(feature = "on-disk-cache")))]
-    println!("cargo:warning=Feature `cache-repositories` has been renamed to `on-disk-cache`");
-
     #[cfg(all(feature = "crates-index", feature = "tame-index"))]
     println!(
         "cargo:warning=Both `crates-index` and `tame-index` features are enabled; using \
