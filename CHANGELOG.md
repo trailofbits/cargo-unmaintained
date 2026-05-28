@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.0.0
+
+- BREAKING: No longer consider the maintenance status of dependencies not applicable to the current host. That is, consider the maintenance status of host-applicable dependencies only. To restore the previous all-targets-considering behavior, pass `--all-targets`. ([#779](https://github.com/trailofbits/cargo-unmaintained/pull/779))
+- BREAKING: Remove old unused features `cache-repositories`, `ei`, and `lock-index` ([#781](https://github.com/trailofbits/cargo-unmaintained/pull/781))
+- Dependency updates
+  - `elaborate` upgraded to version 1.0
+
 ## 1.11.0
 
 - FEATURE: Batch fetching GitHub data using GraphQL API. Speed up will vary depending on how many of a project's dependencies reside on GitHub. But in some of our experiments, we saw speed up of about 20%. ([#767](https://github.com/trailofbits/cargo-unmaintained/pull/767))
