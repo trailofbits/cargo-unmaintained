@@ -92,7 +92,7 @@ static CARGO_UNMAINTAINED: LazyLock<PathBuf> = LazyLock::new(|| {
 #[must_use]
 pub fn cargo_unmaintained(name: &str) -> Command {
     let mut command = Command::new(&*CARGO_UNMAINTAINED);
-    command.args(["unmaintained", "--fail-fast", "-p", name]);
+    command.args(["unmaintained", "--all-targets", "--fail-fast", "-p", name]);
     command
 }
 
