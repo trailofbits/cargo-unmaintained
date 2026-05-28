@@ -7,11 +7,11 @@ publish = false
 [dependencies]
 anyhow = "1.0"
 cargo_metadata = "0.23"
-elaborate = "0.2"
+elaborate = "1.0"
 
 [dev-dependencies]
 assert_cmd = "2.2"
-elaborate = "0.2"
+elaborate = "1.0"
 regex = "1.12"
 serde_json = "1.0"
 similar-asserts = "2.0"
