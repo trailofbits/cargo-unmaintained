@@ -64,13 +64,6 @@ tame-index = ["dep:tame-index", "reqwest/blocking"]
 __mock_github = []
 __real_github = []
 
-# smoelius: Old features that were renamed.
-cache-repositories = ["on-disk-cache"]
-lock-index = ["crates-index"]
-
-# smoelius: Old feature that is no longer used.
-ei = []
-
 [lints]
 workspace = true
 
