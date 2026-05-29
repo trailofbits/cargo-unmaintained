@@ -178,7 +178,7 @@ users...not found
 atty...found
 ignoring `https://osv.dev/vulnerability/RUSTSEC-2021-0145` from `https://github.com/rustsec/advisory-db/issues/2087`
 atty...found
-libyml...found
+libyml...not found
 serde_norway...not found
 serde_yaml...found
 serde_yaml2...not found
@@ -240,7 +240,8 @@ core2...not found
 ignoring `https://hachyderm.io/@piecritic/116404790999620656` from `https://github.com/rustsec/advisory-db/issues/2788`
 ignoring `https://www.reddit.com/r/rust/comments/1slnga4/core2_yanked_millions_effected/` from `https://github.com/rustsec/advisory-db/issues/2788`
 cornucopia...not found
-not found (147)
+serde-regex...not found
+not found (149)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -347,6 +348,7 @@ not found (147)
     hwloc-rs                 https://github.com/rustsec/advisory-db/issues/2067
     get-size                 https://github.com/rustsec/advisory-db/issues/2078
     users                    https://github.com/rustsec/advisory-db/issues/2086
+    libyml                   https://github.com/rustsec/advisory-db/issues/2132
     serde_norway             https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml2              https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml_ng            https://github.com/rustsec/advisory-db/issues/2132
@@ -388,7 +390,8 @@ not found (147)
     no-std-io2               https://github.com/rustsec/advisory-db/issues/2788
     core2                    https://github.com/rustsec/advisory-db/issues/2788
     cornucopia               https://github.com/rustsec/advisory-db/issues/2841
-found (63)
+    serde-regex              https://github.com/rustsec/advisory-db/issues/2925
+found (62)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -438,7 +441,6 @@ found (63)
     strason                  https://github.com/rustsec/advisory-db/issues/2066
     atty                     https://github.com/rustsec/advisory-db/issues/2087
     atty                     https://github.com/rustsec/advisory-db/issues/2089
-    libyml                   https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
     serde_yml                https://github.com/rustsec/advisory-db/issues/2132
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
