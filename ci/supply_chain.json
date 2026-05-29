@@ -816,6 +816,14 @@
         "name": "Eric Huss"
       }
     ],
+    "dashmap": [
+      {
+        "id": 19646,
+        "kind": "user",
+        "login": "xacrimon",
+        "name": "Joel Wejdenstål"
+      }
+    ],
     "digest": [
       {
         "id": 2370,
@@ -1278,6 +1286,14 @@
         "name": "Sebastian Thiel"
       }
     ],
+    "gix-archive": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
     "gix-attributes": [
       {
         "id": 980,
@@ -1287,6 +1303,14 @@
       }
     ],
     "gix-bitmap": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-blame": [
       {
         "id": 980,
         "kind": "user",
@@ -1351,6 +1375,14 @@
       }
     ],
     "gix-diff": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-dir": [
       {
         "id": 980,
         "kind": "user",
@@ -1430,6 +1462,14 @@
         "name": "Sebastian Thiel"
       }
     ],
+    "gix-imara-diff": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
     "gix-index": [
       {
         "id": 980,
@@ -1439,6 +1479,14 @@
       }
     ],
     "gix-lock": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-merge": [
       {
         "id": 980,
         "kind": "user",
@@ -1574,6 +1622,14 @@
         "name": "Sebastian Thiel"
       }
     ],
+    "gix-status": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
     "gix-submodule": [
       {
         "id": 980,
@@ -1639,6 +1695,22 @@
       }
     ],
     "gix-worktree": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-worktree-state": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-worktree-stream": [
       {
         "id": 980,
         "kind": "user",
@@ -2092,20 +2164,20 @@
         "name": "Josh Stone"
       }
     ],
+    "io-close": [
+      {
+        "id": 58881,
+        "kind": "user",
+        "login": "wufz",
+        "name": null
+      }
+    ],
     "ipnet": [
       {
         "id": 8197,
         "kind": "user",
         "login": "krisprice",
         "name": null
-      }
-    ],
-    "iri-string": [
-      {
-        "id": 3198,
-        "kind": "user",
-        "login": "lo48576",
-        "name": "YOSHIOKA Takuma"
       }
     ],
     "is_terminal_polyfill": [
@@ -2332,20 +2404,6 @@
         "name": null
       }
     ],
-    "libredox": [
-      {
-        "id": 2668,
-        "kind": "user",
-        "login": "jackpot51",
-        "name": "Jeremy Soller"
-      },
-      {
-        "id": 42742,
-        "kind": "user",
-        "login": "4lDO2",
-        "name": "4lDO2"
-      }
-    ],
     "libz-sys": [
       {
         "id": 1,
@@ -2546,6 +2604,20 @@
         "name": "Kornel"
       }
     ],
+    "nonempty": [
+      {
+        "id": 57233,
+        "kind": "user",
+        "login": "cloudhead",
+        "name": "Alexis Sellier"
+      },
+      {
+        "id": 59918,
+        "kind": "user",
+        "login": "FintanH",
+        "name": "Fintan Halpenny"
+      }
+    ],
     "normalize-line-endings": [
       {
         "id": 4114,
@@ -2720,14 +2792,6 @@
         "kind": "user",
         "login": "rust-lang-owner",
         "name": null
-      }
-    ],
-    "plain": [
-      {
-        "id": 6236,
-        "kind": "user",
-        "login": "le-jzr",
-        "name": "Jiří Zárevúcky"
       }
     ],
     "portable-atomic": [
@@ -4036,6 +4100,44 @@
         "name": "Sujay Jayakar"
       }
     ],
+    "unicode-segmentation": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 3,
+        "kind": "user",
+        "login": "huonw",
+        "name": "Huon Wilson"
+      },
+      {
+        "id": 7,
+        "kind": "user",
+        "login": "SimonSapin",
+        "name": "Simon Sapin"
+      },
+      {
+        "id": 1139,
+        "kind": "user",
+        "login": "Manishearth",
+        "name": "Manish Goregaokar"
+      },
+      {
+        "id": 1458,
+        "kind": "user",
+        "login": "kwantam",
+        "name": "Riad S. Wahby"
+      },
+      {
+        "id": 21056,
+        "kind": "user",
+        "login": "sujayakar",
+        "name": "Sujay Jayakar"
+      }
+    ],
     "unicode-xid": [
       {
         "id": 1,
@@ -4448,12 +4550,36 @@
         "name": "Daniel McCarney"
       }
     ],
+    "winapi": [
+      {
+        "id": 63,
+        "kind": "user",
+        "login": "retep998",
+        "name": "Peter Atashian"
+      }
+    ],
+    "winapi-i686-pc-windows-gnu": [
+      {
+        "id": 63,
+        "kind": "user",
+        "login": "retep998",
+        "name": "Peter Atashian"
+      }
+    ],
     "winapi-util": [
       {
         "id": 189,
         "kind": "user",
         "login": "BurntSushi",
         "name": "Andrew Gallant"
+      }
+    ],
+    "winapi-x86_64-pc-windows-gnu": [
+      {
+        "id": 63,
+        "kind": "user",
+        "login": "retep998",
+        "name": "Peter Atashian"
       }
     ],
     "windows-core": [
@@ -4741,6 +4867,20 @@
       }
     ],
     "zeroize": [
+      {
+        "id": 267,
+        "kind": "user",
+        "login": "tarcieri",
+        "name": "Tony Arcieri"
+      },
+      {
+        "id": 2398,
+        "kind": "team",
+        "login": "github:rustcrypto:utils",
+        "name": "utils"
+      }
+    ],
+    "zeroize_derive": [
       {
         "id": 267,
         "kind": "user",
