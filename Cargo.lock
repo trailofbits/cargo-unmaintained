@@ -301,7 +301,7 @@ dependencies = [
  "remain",
  "reqwest 0.13.4",
  "rustls",
- "rustsec",
+ "rustsec 0.33.0",
  "serde",
  "serde_json",
  "sha1_smol",
@@ -4063,6 +4063,17 @@ dependencies = [
  "ring",
  "rustls-pki-types",
  "untrusted",
+]
+
+[[package]]
+name = "rustsec"
+version = "0.1.0"
+dependencies = [
+ "assert_cmd",
+ "elaborate",
+ "regex",
+ "snapbox",
+ "testing",
 ]
 
 [[package]]

@@ -98,13 +98,18 @@ jobs:
       - name: Test `ei`
         if: matrix.environment == 'ubuntu-latest'
         run: |
-          EI='-p ei --lib'
+          cargo test --config "$GROUP_RUNNER" -p ei
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Test `rustsec`
+        if: matrix.environment == 'ubuntu-latest'
+        run: |
           if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]] ||
-            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'ei' >/dev/null
+            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'rustsec' >/dev/null
           then
-            EI="$EI --test dogfood --test rustsec_advisories --test rustsec_issues --test snapbox_real_github"
+            cargo test --config "$GROUP_RUNNER" -p rustsec
           fi
-          cargo test --config "$GROUP_RUNNER" $EI
         env:
           GITHUB_TOKEN: ${{ github.token }}
 

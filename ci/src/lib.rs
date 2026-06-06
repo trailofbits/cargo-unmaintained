@@ -193,10 +193,13 @@ fn prettier() {
 
 #[test]
 fn readme_contains_expected_contents() {
-    let contents = read_to_string_wc("ei/tests/rustsec_advisories.stdout").unwrap();
+    let parent = Path::new(env!("CARGO_MANIFEST_DIR")).parent_wc().unwrap();
+
+    let contents =
+        read_to_string_wc(parent.join("rustsec/tests/rustsec_advisories.stdout")).unwrap();
     let (_, middle_expected, bottom_expected) = split_at_cut_lines(&contents).unwrap();
 
-    let readme = read_to_string_wc("README.md").unwrap();
+    let readme = read_to_string_wc(parent.join("README.md")).unwrap();
     let lines = readme.lines();
 
     let mut lines = lines.skip_while(|&line| line != "<!-- as-of start -->");

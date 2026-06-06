@@ -82,7 +82,7 @@ windows-sys = { version = "0.61", features = [
 # smoelius: `mock_github` must not be a workspace member. If it were, it would enable the
 # `__mock_github` feature for all workspace members.
 exclude = ["fixtures", "mock_github"]
-members = ["ci", "ei", "testing"]
+members = ["ci", "ei", "rustsec", "testing"]
 
 [workspace.lints.rust.unexpected_cfgs]
 level = "deny"
