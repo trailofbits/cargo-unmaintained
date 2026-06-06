@@ -4959,6 +4959,7 @@
       "cargo-unmaintained",
       "ci",
       "ei",
+      "rustsec",
       "testing"
     ]
   }
