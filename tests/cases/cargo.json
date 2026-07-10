@@ -6,6 +6,12 @@
     "version": "1.0.2"
   },
   {
+    "name": "bit-set",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.5.3"
+  },
+  {
     "name": "bitmaps",
     "outdated_deps": [],
     "repo_status": "Archived",
