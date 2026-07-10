@@ -1,0 +1,8 @@
+[
+  {
+    "name": "rand_chacha",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.3.1"
+  }
+]

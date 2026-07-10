@@ -74,6 +74,7 @@ Options:
                         repository to be considered current; 0 effectively disables this check,
                         though ages are still reported [default: 365]
       --no-cache        Do not cache data on disk for future runs
+      --no-dev          Do not consider dev-dependencies
       --no-exit-code    Do not set exit status when unmaintained packages are found
       --no-warnings     Do not show warnings
   -p, --package <NAME>  Check only whether package NAME is unmaintained
