@@ -139,6 +139,9 @@ struct Opts {
     #[clap(long, help = "Do not cache data on disk for future runs")]
     no_cache: bool,
 
+    #[clap(long, help = "Do not consider dev-dependencies")]
+    no_dev: bool,
+
     #[clap(
         long,
         help = "Do not set exit status when unmaintained packages are found",
@@ -794,6 +797,9 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
         }
         // smoelius: Don't check dependencies specified by path.
         if dep.path.is_some() {
+            continue;
+        }
+        if opts::get().no_dev && dep.kind == DependencyKind::Development {
             continue;
         }
         let Some(dep_pkg) = find_packages(metadata, dep.into()).next() else {
