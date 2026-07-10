@@ -40,7 +40,7 @@ reqwest = { version = "0.13", default-features = false, features = [
 
 [dev-dependencies]
 assert_cmd = "2.2"
-octocrab = "0.53"
+octocrab = "0.54"
 predicates = "3.1"
 rustls = { version = "0.23", default-features = false, features = [
     "aws_lc_rs",
