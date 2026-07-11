@@ -3056,12 +3056,6 @@
     ],
     "rustc-hash": [
       {
-        "id": 70,
-        "kind": "team",
-        "login": "github:rust-lang:core",
-        "name": "core"
-      },
-      {
         "id": 408,
         "kind": "team",
         "login": "github:rust-lang:compiler",
@@ -3072,6 +3066,12 @@
         "kind": "user",
         "login": "nikomatsakis",
         "name": "Niko Matsakis"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "rustc-stable-hash": [
