@@ -1822,28 +1822,10 @@
     ],
     "home": [
       {
-        "id": 443,
-        "kind": "user",
-        "login": "brson",
-        "name": "Brian Anderson"
-      },
-      {
-        "id": 3959,
-        "kind": "user",
-        "login": "LucioFranco",
-        "name": "Lucio Franco"
-      },
-      {
         "id": 6202,
         "kind": "user",
         "login": "ehuss",
         "name": "Eric Huss"
-      },
-      {
-        "id": 45329,
-        "kind": "user",
-        "login": "kinnison",
-        "name": "Daniel Silverstone"
       },
       {
         "id": 55123,
