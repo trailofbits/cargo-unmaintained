@@ -1271,9 +1271,10 @@ mod tests {
             ])
             .assert()
             .success()
-            .stdout(format!(
-                "cargo-unmaintained {}\n",
-                env!("CARGO_PKG_VERSION")
+            .stdout(concat!(
+                "cargo-unmaintained ",
+                env!("CARGO_PKG_VERSION"),
+                "\n"
             ));
     }
 
