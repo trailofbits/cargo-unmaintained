@@ -1828,6 +1828,12 @@
         "name": "Eric Huss"
       },
       {
+        "id": 11164,
+        "kind": "user",
+        "login": "weihanglo",
+        "name": "Weihang Lo"
+      },
+      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
