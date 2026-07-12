@@ -1,3 +1,0 @@
-path = "fixtures/dev-dependencies"
-
-args = ["--no-dev"]
