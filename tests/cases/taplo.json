@@ -141,21 +141,6 @@
     "version": "1.1.0"
   },
   {
-    "name": "tinytemplate",
-    "outdated_deps": [
-      {
-        "name": "criterion",
-        "req": "^0.3",
-        "version_latest": null,
-        "version_used": "0.3.6"
-      }
-    ],
-    "repo_status": {
-      "Age": null
-    },
-    "version": "1.2.1"
-  },
-  {
     "name": "tokio-rustls",
     "outdated_deps": [],
     "repo_status": "Unassociated",

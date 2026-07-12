@@ -1,0 +1,8 @@
+[package]
+name = "dev-dependencies-unresolvable"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+xz2 = "0.1"
+
