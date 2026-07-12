@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 rand = "0.8"
-xz2 = "0.1.7"
+xz2 = "0.1"
