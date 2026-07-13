@@ -422,6 +422,20 @@
         "name": "Zicklag"
       }
     ],
+    "chacha20": [
+      {
+        "id": 1266,
+        "kind": "team",
+        "login": "github:rustcrypto:stream-ciphers",
+        "name": "stream-ciphers"
+      },
+      {
+        "id": 5059,
+        "kind": "user",
+        "login": "newpavlov",
+        "name": "Artyom Pavlov"
+      }
+    ],
     "chrono": [
       {
         "id": 23,
@@ -822,6 +836,84 @@
         "kind": "user",
         "login": "xacrimon",
         "name": "Joel Wejdenstål"
+      }
+    ],
+    "defmt": [
+      {
+        "id": 246,
+        "kind": "user",
+        "login": "japaric",
+        "name": "Jorge Aparicio"
+      },
+      {
+        "id": 2769,
+        "kind": "team",
+        "login": "github:knurling-rs:crate-owners",
+        "name": "crate-owners"
+      },
+      {
+        "id": 84779,
+        "kind": "user",
+        "login": "jonathanpallant",
+        "name": "Jonathan Pallant"
+      },
+      {
+        "id": 336166,
+        "kind": "user",
+        "login": "knurling-infra",
+        "name": null
+      }
+    ],
+    "defmt-macros": [
+      {
+        "id": 246,
+        "kind": "user",
+        "login": "japaric",
+        "name": "Jorge Aparicio"
+      },
+      {
+        "id": 2769,
+        "kind": "team",
+        "login": "github:knurling-rs:crate-owners",
+        "name": "crate-owners"
+      },
+      {
+        "id": 84779,
+        "kind": "user",
+        "login": "jonathanpallant",
+        "name": "Jonathan Pallant"
+      },
+      {
+        "id": 336166,
+        "kind": "user",
+        "login": "knurling-infra",
+        "name": null
+      }
+    ],
+    "defmt-parser": [
+      {
+        "id": 246,
+        "kind": "user",
+        "login": "japaric",
+        "name": "Jorge Aparicio"
+      },
+      {
+        "id": 2769,
+        "kind": "team",
+        "login": "github:knurling-rs:crate-owners",
+        "name": "crate-owners"
+      },
+      {
+        "id": 84779,
+        "kind": "user",
+        "login": "jonathanpallant",
+        "name": "Jonathan Pallant"
+      },
+      {
+        "id": 336166,
+        "kind": "user",
+        "login": "knurling-infra",
+        "name": null
       }
     ],
     "digest": [
@@ -2078,26 +2170,6 @@
         "name": "Zibi Braniecki"
       }
     ],
-    "id-arena": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
-      {
-        "id": 696,
-        "kind": "user",
-        "login": "fitzgen",
-        "name": "Nick Fitzgerald"
-      },
-      {
-        "id": 2699,
-        "kind": "user",
-        "login": "matklad",
-        "name": "Alex Kladov"
-      }
-    ],
     "idna": [
       {
         "id": 5,
@@ -2318,14 +2390,6 @@
         "kind": "user",
         "login": "epage",
         "name": "Ed Page"
-      }
-    ],
-    "leb128fmt": [
-      {
-        "id": 35113,
-        "kind": "user",
-        "login": "bluk",
-        "name": "Bryant Luk"
       }
     ],
     "libc": [
@@ -2818,22 +2882,6 @@
         "name": "Shane F. Carr"
       }
     ],
-    "ppv-lite86": [
-      {
-        "id": 12840,
-        "kind": "user",
-        "login": "kazcw",
-        "name": "Keziah Wesley"
-      }
-    ],
-    "prettyplease": [
-      {
-        "id": 3618,
-        "kind": "user",
-        "login": "dtolnay",
-        "name": "David Tolnay"
-      }
-    ],
     "proc-macro2": [
       {
         "id": 3618,
@@ -2928,7 +2976,7 @@
         "name": "Diggory Hardy"
       }
     ],
-    "rand_chacha": [
+    "rand_core": [
       {
         "id": 563,
         "kind": "team",
@@ -2942,7 +2990,7 @@
         "name": "Diggory Hardy"
       }
     ],
-    "rand_core": [
+    "rand_pcg": [
       {
         "id": 563,
         "kind": "team",
@@ -4120,44 +4168,6 @@
         "name": "Sujay Jayakar"
       }
     ],
-    "unicode-xid": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
-      {
-        "id": 3,
-        "kind": "user",
-        "login": "huonw",
-        "name": "Huon Wilson"
-      },
-      {
-        "id": 7,
-        "kind": "user",
-        "login": "SimonSapin",
-        "name": "Simon Sapin"
-      },
-      {
-        "id": 1139,
-        "kind": "user",
-        "login": "Manishearth",
-        "name": "Manish Goregaokar"
-      },
-      {
-        "id": 1458,
-        "kind": "user",
-        "login": "kwantam",
-        "name": "Riad S. Wahby"
-      },
-      {
-        "id": 21056,
-        "kind": "user",
-        "login": "sujayakar",
-        "name": "Sujay Jayakar"
-      }
-    ],
     "untrusted": [
       {
         "id": 2342,
@@ -4296,34 +4306,6 @@
         "name": "Dan Gohman"
       }
     ],
-    "wasip2": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wasip3": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
     "wasm-bindgen": [
       {
         "id": 5799,
@@ -4446,30 +4428,6 @@
         "kind": "user",
         "login": "guybedford",
         "name": "Guy Bedford"
-      }
-    ],
-    "wasm-encoder": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wasm-metadata": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wasmparser": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
       }
     ],
     "web-sys": [
@@ -4700,54 +4658,6 @@
         "name": "Ed Page"
       }
     ],
-    "wit-bindgen": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wit-bindgen-core": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wit-bindgen-rust": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wit-bindgen-rust-macro": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wit-component": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
-    "wit-parser": [
-      {
-        "id": 73222,
-        "kind": "user",
-        "login": "wasmtime-publish",
-        "name": null
-      }
-    ],
     "writeable": [
       {
         "id": 3807,
@@ -4796,28 +4706,6 @@
         "kind": "team",
         "login": "github:unicode-org:icu4x-release",
         "name": "icu4x-release"
-      }
-    ],
-    "zerocopy": [
-      {
-        "id": 1442,
-        "kind": "user",
-        "login": "jswrenn",
-        "name": "Jack Wrenn"
-      },
-      {
-        "id": 7178,
-        "kind": "user",
-        "login": "joshlf",
-        "name": "Joshua Liebow-Feeser"
-      }
-    ],
-    "zerocopy-derive": [
-      {
-        "id": 7178,
-        "kind": "user",
-        "login": "joshlf",
-        "name": "Joshua Liebow-Feeser"
       }
     ],
     "zerofrom": [
