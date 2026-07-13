@@ -7,7 +7,7 @@ publish = false
 [dev-dependencies]
 assert_cmd = "2.2"
 elaborate = "1.2"
-regex = "1.12"
+regex = "1.13"
 snapbox = "1.2"
 
 testing = { path = "../testing" }
