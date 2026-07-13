@@ -12,7 +12,7 @@ elaborate = "1.2"
 [dev-dependencies]
 assert_cmd = "2.2"
 elaborate = "1.2"
-regex = "1.12"
+regex = "1.13"
 serde_json = "1.0"
 similar-asserts = "2.0"
 tempfile = "3.27"
