@@ -193,6 +193,7 @@ pretty_yaml...not found
 serde-yaml-ok...not found
 serde-yaml-core...not found
 serde_yml...found
+fast-xml...found
 Corundum...not found
 rust-phf...not found
 fxhash...not found
@@ -246,7 +247,14 @@ surf...found
 tide...found
 PQClean...not found
 pqcrypto...not found
-not found (150)
+proc-macro-error2...found
+proc-macro-error-2...not found
+structopt...found
+structopt...found
+ttf-parser...not found
+tree-sitter-perl-next...not found
+rustybuzz...not found
+not found (154)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -397,7 +405,11 @@ not found (150)
     serde-regex              https://github.com/rustsec/advisory-db/issues/2925
     PQClean                  https://github.com/rustsec/advisory-db/issues/2940
     pqcrypto                 https://github.com/rustsec/advisory-db/issues/2940
-found (65)
+    proc-macro-error-2       https://github.com/rustsec/advisory-db/issues/2948
+    ttf-parser               https://github.com/rustsec/advisory-db/issues/3011
+    tree-sitter-perl-next    https://github.com/rustsec/advisory-db/issues/3039
+    rustybuzz                https://github.com/rustsec/advisory-db/issues/3050
+found (69)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -450,6 +462,7 @@ found (65)
     libyml                   https://github.com/rustsec/advisory-db/issues/2132
     serde_yaml               https://github.com/rustsec/advisory-db/issues/2132
     serde_yml                https://github.com/rustsec/advisory-db/issues/2132
+    fast-xml                 https://github.com/rustsec/advisory-db/issues/2134
     backoff                  https://github.com/rustsec/advisory-db/issues/2187
     custom_derive            https://github.com/rustsec/advisory-db/issues/2199
     paste                    https://github.com/rustsec/advisory-db/issues/2203
@@ -463,3 +476,6 @@ found (65)
     num-primes               https://github.com/rustsec/advisory-db/issues/2787
     surf                     https://github.com/rustsec/advisory-db/issues/2935
     tide                     https://github.com/rustsec/advisory-db/issues/2935
+    proc-macro-error2        https://github.com/rustsec/advisory-db/issues/2948
+    structopt                https://github.com/rustsec/advisory-db/issues/2975
+    structopt                https://github.com/rustsec/advisory-db/issues/2983
