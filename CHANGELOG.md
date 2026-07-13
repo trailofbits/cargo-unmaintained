@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.1
+
+- Fix a bug where dev-dependencies were being conditionally flagged depending on the context in which they were used. Thanks very much to [@dharimarzouq](https://github.com/dharimarzouq) for the thorough investigation. ([#791](https://github.com/trailofbits/cargo-unmaintained/pull/791))
+
 ## 2.0.0
 
 - BREAKING: No longer consider the maintenance status of dependencies not applicable to the current host. That is, consider the maintenance status of host-applicable dependencies only. To restore the previous all-targets-considering behavior, pass `--all-targets`. ([#779](https://github.com/trailofbits/cargo-unmaintained/pull/779))
