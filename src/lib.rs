@@ -14,8 +14,7 @@ compile_error!("At least one of the `crates-index` or `tame-index` features must
 
 use anyhow::{Context, Result, anyhow, bail, ensure};
 use cargo_metadata::{
-    Dependency, DependencyKind, Metadata, MetadataCommand, Package, PackageName,
-    semver::{Version, VersionReq},
+    Dependency, DependencyKind, Metadata, MetadataCommand, Package, PackageName, semver::Version,
 };
 use clap::{Parser, crate_version};
 #[cfg(all(feature = "crates-index", not(feature = "tame-index")))]
@@ -195,31 +194,6 @@ struct OutdatedDep<'a> {
     dep: &'a Dependency,
     version_used: &'a Version,
     version_latest: Version,
-}
-
-struct DepReq<'a> {
-    name: &'a str,
-    req: VersionReq,
-}
-
-impl<'a> DepReq<'a> {
-    #[allow(dead_code)]
-    fn new(name: &'a str, req: VersionReq) -> Self {
-        Self { name, req }
-    }
-
-    fn matches(&self, pkg: &Package) -> bool {
-        self.name == pkg.name.as_str() && self.req.matches(&pkg.version)
-    }
-}
-
-impl<'a> From<&'a Dependency> for DepReq<'a> {
-    fn from(value: &'a Dependency) -> Self {
-        Self {
-            name: &value.name,
-            req: value.req.clone(),
-        }
-    }
 }
 
 #[macro_export]
@@ -799,7 +773,7 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
         if dep.kind == DependencyKind::Development {
             continue;
         }
-        let Some(dep_pkg) = find_packages(metadata, dep.into()).next() else {
+        let Some(dep_pkg) = resolved_package(metadata, pkg, dep) else {
             debug_assert!(dep.optional);
             continue;
         };
@@ -846,14 +820,28 @@ fn published(pkg: &Package) -> bool {
     pkg.publish.as_deref() != Some(&[])
 }
 
-fn find_packages<'a>(
+fn resolved_package<'a>(
     metadata: &'a Metadata,
-    dep_req: DepReq<'a>,
-) -> impl Iterator<Item = &'a Package> {
-    metadata
-        .packages
+    pkg: &Package,
+    dep: &Dependency,
+) -> Option<&'a Package> {
+    let resolve = metadata.resolve.as_ref()?;
+    let node = resolve.nodes.iter().find(|node| pkg.id == node.id)?;
+    node.deps
         .iter()
-        .filter(move |pkg| dep_req.matches(pkg))
+        .filter(|node_dep| {
+            node_dep
+                .dep_kinds
+                .iter()
+                .any(|dep_kind| dep.kind == dep_kind.kind && dep.target == dep_kind.target)
+        })
+        .find_map(|node_dep| {
+            metadata.packages.iter().find(|dep_pkg| {
+                node_dep.pkg == dep_pkg.id
+                    && dep.name.as_str() == dep_pkg.name.as_str()
+                    && dep.req.matches(&dep_pkg.version)
+            })
+        })
 }
 
 fn latest_version(name: &str) -> Result<Version> {
