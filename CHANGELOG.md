@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.2
+
+- Fix a bug involving optional dependencies, similar to [#791](https://github.com/trailofbits/cargo-unmaintained/pull/791)&mdash;thanks to [@dharimarzouq](https://github.com/dharimarzouq) for the [suggestion](https://github.com/trailofbits/cargo-unmaintained/pull/791#discussion_r3569858990). ([17fdcd7](https://github.com/trailofbits/cargo-unmaintained/commit/17fdcd7579bb129db9c2144b5649da2da5a9c744))
+
 ## 2.0.1
 
 - Fix a bug where dev-dependencies were being conditionally flagged depending on the context in which they were used. Thanks very much to [@dharimarzouq](https://github.com/dharimarzouq) for the thorough investigation. ([#791](https://github.com/trailofbits/cargo-unmaintained/pull/791))
