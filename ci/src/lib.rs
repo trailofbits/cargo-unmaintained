@@ -31,6 +31,7 @@ fn clippy() {
             "clippy",
             "--all-features",
             "--all-targets",
+            "--workspace",
             "--",
             "--deny=warnings",
         ])
@@ -41,7 +42,14 @@ fn clippy() {
 #[test]
 fn dylint() {
     let assert = Command::new("cargo")
-        .args(["dylint", "--all", "--", "--all-features", "--all-targets"])
+        .args([
+            "dylint",
+            "--all",
+            "--",
+            "--all-features",
+            "--all-targets",
+            "--workspace",
+        ])
         .env("DYLINT_RUSTFLAGS", "--deny warnings")
         .assert();
     let stderr = String::from_utf8(assert.get_output().stderr.clone()).unwrap();
@@ -221,6 +229,7 @@ fn readme_contains_expected_contents() {
     assert_eq!(bottom_expected.to_owned() + "\n", bottom_actual);
 }
 
+#[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
 #[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn readme_contains_usage() {

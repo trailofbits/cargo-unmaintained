@@ -11,6 +11,7 @@ use std::{
 };
 use testing::{Tee, split_at_cut_lines, split_at_first_cut_line, tee};
 
+#[cfg(test)]
 const PATH_STDOUT: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/tests/rustsec_advisories.stdout"

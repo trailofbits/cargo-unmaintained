@@ -82,11 +82,9 @@ ignore = ["{name}"]
     Ok(())
 }
 
+#[cfg(test)]
 fn cargo_unmaintained(dir: &Path) -> Command {
-    #[cfg_attr(
-        dylint_lib = "general",
-        allow(abs_home_path, unnecessary_conversion_for_trait)
-    )]
+    #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
     // smoelius: `Command::new(cargo_bin!(..))` because this function's return type is
     // `std::process::Command`, not `assert_cmd::Command`.
     let mut command = Command::new(cargo::cargo_bin!("cargo-unmaintained"));
