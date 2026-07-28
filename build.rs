@@ -36,4 +36,6 @@ error occurred.";
 "#,
     );
     write_wc(path_buf, contents).unwrap();
+
+    nested_workspace::build().unwrap();
 }

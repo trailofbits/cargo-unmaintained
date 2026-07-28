@@ -80,12 +80,16 @@ jobs:
           export CARGO_TARGET_DIR="$(mktemp -d)"
           cargo install cargo-dylint dylint-link || true
           cargo install cargo-license            || true
+          cargo install cargo-nested             || true
           cargo install cargo-supply-chain       || true
           cargo install group-runner             || true
 
       - name: Enable verbose logging
         if: ${{ runner.debug == 1 }}
         run: echo 'VERBOSE=1' >> "$GITHUB_ENV"
+
+      - name: Fetch dependencies
+        run: cargo nested fetch
 
       - name: Build
         run: cargo test --workspace --no-run
