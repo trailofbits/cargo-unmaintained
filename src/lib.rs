@@ -382,7 +382,7 @@ fn unmaintained() -> Result<bool> {
 }
 
 fn metadata() -> Result<Metadata> {
-    let mut command = MetadataCommand::new();
+    let mut command = metadata_command();
 
     // smoelius: See tests/snapbox.rs for another use of this conditional initialization trick.
     let tempdir: TempDir;
@@ -622,7 +622,7 @@ fn newer_version_is_available(pkg: &Package) -> Result<bool> {
 fn latest_version_is_unmaintained(name: &str) -> Result<bool> {
     let tempdir = packaging::temp_package(name)?;
 
-    let metadata = MetadataCommand::new().current_dir(tempdir.path()).exec()?;
+    let metadata = metadata_command().current_dir(tempdir.path()).exec()?;
 
     #[allow(clippy::panic)]
     let pkg = metadata
@@ -635,6 +635,29 @@ fn latest_version_is_unmaintained(name: &str) -> Result<bool> {
 
     Ok(unmaintained_package.is_some())
 }
+
+fn metadata_command() -> MetadataCommand {
+    let mut command = MetadataCommand::new();
+    // smoelius: Note that `other_options` replaces previous options; it does not add to them. So if
+    // additional options are needed, they must be added here.
+    if !opts::get().all_targets {
+        command.other_options(["--filter-platform".to_owned(), HOST.clone()]);
+    }
+    command
+}
+
+#[allow(clippy::panic, clippy::unwrap_used)]
+static HOST: LazyLock<String> = LazyLock::new(|| {
+    let mut command = Command::new("rustc");
+    command.arg("-Vv");
+    let output = command.output_wc().unwrap();
+    assert!(output.status.success(), "command failed: {command:?}");
+    let stdout = String::from_utf8(output.stdout).unwrap();
+    stdout
+        .lines()
+        .find_map(|line| line.strip_prefix("host: "))
+        .map_or_else(|| panic!("failed to determine host"), str::to_owned)
+});
 
 fn is_unmaintained_package<'a>(
     metadata: &'a Metadata,
@@ -735,19 +758,6 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
     })
 }
 
-#[allow(clippy::panic, clippy::unwrap_used)]
-static HOST: LazyLock<String> = LazyLock::new(|| {
-    let mut command = Command::new("rustc");
-    command.arg("-Vv");
-    let output = command.output_wc().unwrap();
-    assert!(output.status.success(), "command failed: {command:?}");
-    let stdout = String::from_utf8(output.stdout).unwrap();
-    stdout
-        .lines()
-        .find_map(|line| line.strip_prefix("host: "))
-        .map_or_else(|| panic!("failed to determine host"), str::to_owned)
-});
-
 #[allow(clippy::unnecessary_wraps)]
 fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
@@ -755,13 +765,6 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
     }
     let mut deps = Vec::new();
     for dep in &pkg.dependencies {
-        // smoelius: Skip dependencies with specified platforms that are not the host.
-        if !opts::get().all_targets
-            && let Some(platform) = &dep.target
-            && !platform.matches(&HOST, &[])
-        {
-            continue;
-        }
         // smoelius: Don't check dependencies in private registries.
         if dep.registry.is_some() {
             continue;
@@ -774,7 +777,14 @@ fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<Out
             continue;
         }
         let Some(dep_pkg) = resolved_package(metadata, pkg, dep) else {
-            debug_assert!(dep.optional);
+            // smoelius: An unresolved dependency must either be optional and disabled or have been
+            // excluded by `--filter-platform`. Note that this assertion does not flag
+            // platform-gated dependencies that apply to the host but fail to resolve. Flagging
+            // those would require the host's `cfg`s and use of, e.g., `Platform::matches`.
+            debug_assert!(
+                dep.optional || (!opts::get().all_targets && dep.target.is_some()),
+                "failed for: {dep:?}"
+            );
             continue;
         };
         let Ok(version_latest) = latest_version(&dep.name).map_err(|error| {
@@ -1194,7 +1204,13 @@ fn display_unmaintained_pkg(unmaintained_pkg: &UnmaintainedPkg) -> Result<bool> 
 fn display_path(name: &str, version: &Version) -> Result<bool> {
     let spec = format!("{name}@{version}");
     let mut command = Command::new("cargo");
-    command.args(["tree", "--workspace", "--target=all", "--invert", &spec]);
+    command.args(["tree", "--workspace"]);
+    if opts::get().all_targets {
+        command.arg("--target=all");
+    } else {
+        command.args(["--target", HOST.as_str()]);
+    }
+    command.args(["--invert", &spec]);
     let output = command.output_wc()?;
     // smoelius: Hack. It appears that `cargo tree` does not print proc-macros used by proc-macros.
     // For now, check whether stdout begins as expected. If not, ignore it and ultimately emit a
