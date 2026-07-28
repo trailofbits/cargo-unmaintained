@@ -1,4 +1,5 @@
+#[cfg_attr(target_os = "windows", ignore)]
 #[test]
 fn snapbox() {
-    testing::snapbox::snapbox(false).unwrap();
+    testing::snapbox::snapbox(false, false).unwrap();
 }

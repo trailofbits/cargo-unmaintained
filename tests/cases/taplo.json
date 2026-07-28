@@ -6,6 +6,21 @@
     "version": "1.0.2"
   },
   {
+    "name": "atty",
+    "outdated_deps": [
+      {
+        "name": "hermit-abi",
+        "req": "^0.1.6",
+        "version_latest": null,
+        "version_used": "0.1.19"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.2.14"
+  },
+  {
     "name": "bit-set",
     "outdated_deps": [],
     "repo_status": "Unassociated",
@@ -87,6 +102,33 @@
     "version": "1.0.4"
   },
   {
+    "name": "rowan",
+    "outdated_deps": [
+      {
+        "name": "hashbrown",
+        "req": "^0.12",
+        "version_latest": null,
+        "version_used": "0.12.3"
+      },
+      {
+        "name": "memoffset",
+        "req": "^0.6",
+        "version_latest": null,
+        "version_used": "0.6.5"
+      },
+      {
+        "name": "rustc-hash",
+        "req": "^1.0.1",
+        "version_latest": null,
+        "version_used": "1.1.0"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.15.10"
+  },
+  {
     "name": "rustls-pemfile",
     "outdated_deps": [],
     "repo_status": "Archived",
@@ -151,5 +193,47 @@
     "outdated_deps": [],
     "repo_status": "Unassociated",
     "version": "0.2.83"
+  },
+  {
+    "name": "windows_aarch64_gnullvm",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.42.0"
+  },
+  {
+    "name": "windows_aarch64_msvc",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.42.0"
+  },
+  {
+    "name": "windows_i686_gnu",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.42.0"
+  },
+  {
+    "name": "windows_i686_msvc",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.42.0"
+  },
+  {
+    "name": "windows_x86_64_gnu",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.42.0"
+  },
+  {
+    "name": "windows_x86_64_gnullvm",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.42.0"
+  },
+  {
+    "name": "windows_x86_64_msvc",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.42.0"
   }
 ]

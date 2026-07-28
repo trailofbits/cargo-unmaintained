@@ -205,5 +205,53 @@
     "outdated_deps": [],
     "repo_status": "Unassociated",
     "version": "0.2.89"
+  },
+  {
+    "name": "windows-targets",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
+  },
+  {
+    "name": "windows_aarch64_gnullvm",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
+  },
+  {
+    "name": "windows_aarch64_msvc",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
+  },
+  {
+    "name": "windows_i686_gnu",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
+  },
+  {
+    "name": "windows_i686_msvc",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
+  },
+  {
+    "name": "windows_x86_64_gnu",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
+  },
+  {
+    "name": "windows_x86_64_gnullvm",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
+  },
+  {
+    "name": "windows_x86_64_msvc",
+    "outdated_deps": [],
+    "repo_status": "Unassociated",
+    "version": "0.52.0"
   }
 ]

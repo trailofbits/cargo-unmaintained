@@ -48,7 +48,7 @@ struct Test {
 
 #[allow(clippy::too_many_lines)]
 #[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
-pub fn snapbox(real_github: bool) -> Result<()> {
+pub fn snapbox(real_github: bool, all_targets: bool) -> Result<()> {
     // #[cfg(not(feature = "lock-index"))]
     // panic!("the `snapbox` test requires the `lock-index` feature");
 
@@ -152,6 +152,9 @@ pub fn snapbox(real_github: bool) -> Result<()> {
             ]);
         }
         command.args(["--", "unmaintained", "--color=never", "--json"]);
+        if all_targets {
+            command.arg("--all-targets");
+        }
         command.args(test.args);
         command.envs(test.env);
         if let Some(dir) = dir {
