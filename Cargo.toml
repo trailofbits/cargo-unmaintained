@@ -55,6 +55,7 @@ tokio = "1.53"
 
 [build-dependencies]
 elaborate = "1.2"
+nested_workspace = "0.8"
 
 [features]
 default = ["on-disk-cache", "crates-index"]
@@ -109,6 +110,9 @@ pattern = [
     "examples/restriction/suboptimal_pattern",
     "examples/restriction/try_io_result",
 ]
+
+[package.metadata.nested_workspace]
+roots = [{ path = "mock_github", dependent = true }]
 
 [workspace.metadata.unmaintained]
 ignore = [
