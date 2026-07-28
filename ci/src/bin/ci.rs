@@ -1,4 +1,4 @@
-use anyhow::{Result, anyhow, bail};
+use anyhow::{Context, Result, anyhow, bail};
 use cargo_metadata::{Message, camino::Utf8PathBuf};
 use elaborate::std::process::CommandContext;
 use std::process::Command;
@@ -17,8 +17,9 @@ fn test_executable() -> Result<Utf8PathBuf> {
     if !output.status.success() {
         bail!("command failed: {command:?}");
     }
-    let messages =
-        Message::parse_stream(output.stdout.as_slice()).collect::<Result<Vec<_>, _>>()?;
+    let messages = Message::parse_stream(output.stdout.as_slice())
+        .collect::<Result<Vec<_>, _>>()
+        .with_context(|| format!("failed to parse metadata from: {command:?}"))?;
     let executables = messages
         .into_iter()
         .filter_map(|message| {
