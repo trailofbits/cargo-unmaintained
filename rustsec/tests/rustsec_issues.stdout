@@ -73,7 +73,7 @@ maligned...not found
 chrono...not found
 toml-rs...not found
 sass-rs...found
-grass...not found
+grass...found
 rsass...not found
 static_type_map...found
 erased_set...not found
@@ -253,8 +253,9 @@ structopt...found
 structopt...found
 ttf-parser...not found
 tree-sitter-perl-next...not found
-rustybuzz...not found
-not found (154)
+rustybuzz...found
+users...not found
+not found (153)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -299,7 +300,6 @@ not found (154)
     maligned                 https://github.com/rustsec/advisory-db/issues/1209
     chrono                   https://github.com/rustsec/advisory-db/issues/1216
     toml-rs                  https://github.com/rustsec/advisory-db/issues/1221
-    grass                    https://github.com/rustsec/advisory-db/issues/1228
     rsass                    https://github.com/rustsec/advisory-db/issues/1228
     erased_set               https://github.com/rustsec/advisory-db/issues/1236
     double-checked-cell      https://github.com/rustsec/advisory-db/issues/1239
@@ -408,8 +408,8 @@ not found (154)
     proc-macro-error-2       https://github.com/rustsec/advisory-db/issues/2948
     ttf-parser               https://github.com/rustsec/advisory-db/issues/3011
     tree-sitter-perl-next    https://github.com/rustsec/advisory-db/issues/3039
-    rustybuzz                https://github.com/rustsec/advisory-db/issues/3050
-found (69)
+    users                    https://github.com/rustsec/advisory-db/issues/3066
+found (71)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -428,6 +428,7 @@ found (69)
     lmdb-rs                  https://github.com/rustsec/advisory-db/issues/1142
     prettytable-rs           https://github.com/rustsec/advisory-db/issues/1173
     sass-rs                  https://github.com/rustsec/advisory-db/issues/1228
+    grass                    https://github.com/rustsec/advisory-db/issues/1228
     static_type_map          https://github.com/rustsec/advisory-db/issues/1236
     wee_alloc                https://github.com/rustsec/advisory-db/issues/1394
     badge                    https://github.com/rustsec/advisory-db/issues/1401
@@ -479,3 +480,4 @@ found (69)
     proc-macro-error2        https://github.com/rustsec/advisory-db/issues/2948
     structopt                https://github.com/rustsec/advisory-db/issues/2975
     structopt                https://github.com/rustsec/advisory-db/issues/2983
+    rustybuzz                https://github.com/rustsec/advisory-db/issues/3050

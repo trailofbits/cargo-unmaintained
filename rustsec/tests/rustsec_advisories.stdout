@@ -1,4 +1,4 @@
-232 advisories for unmaintained packages
+235 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -224,7 +224,7 @@ derivative...found
 openslide...found
 minitrace...found
 mmap...found
-chrono-english...not found
+chrono-english...recently updated
 conrod_core...found
 conrod...found
 gdkwayland...found
@@ -257,7 +257,7 @@ custom_derive...found
 servo-fontconfig...found
 crypto-hash...found
 iron...found
-google-apis-common...not found
+google-apis-common...recently updated
 daemonize...not found
 unic-segment...not found
 unic-char-range...not found
@@ -361,7 +361,10 @@ error: failed to select a version for the requirement `tree-sitter-perl-next = "
 location searched: crates.io index
 required by package `tree-sitter-perl-next-temp-package v0.1.0 ([..])`
 ```
-rustybuzz...not found
+rustybuzz...found
+libcrux-aesgcm...found
+gumdrop...not found
+smallstr...not found
 not found - error (14)
     block-cipher-trait        https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher              https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -384,12 +387,14 @@ not found - leaf (6)
     unic-common               https://rustsec.org/advisories/RUSTSEC-2025-0080.html
     number_prefix             https://rustsec.org/advisories/RUSTSEC-2025-0119.html
     bare-metal                https://rustsec.org/advisories/RUSTSEC-2026-0110.html
-not found - recently-updated (4)
+not found - recently-updated (6)
+    chrono-english            https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     tsify-next                https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     async-std                 https://rustsec.org/advisories/RUSTSEC-2025-0052.html
+    google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     unic-cli                  https://rustsec.org/advisories/RUSTSEC-2025-0087.html
     pqcrypto-internals        https://rustsec.org/advisories/RUSTSEC-2026-0163.html
-not found - other (59)
+not found - other (58)
     serial                    https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap                   https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype              https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -407,10 +412,8 @@ not found - other (59)
     cpython                   https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     yaml-rust                 https://rustsec.org/advisories/RUSTSEC-2024-0320.html
     instant                   https://rustsec.org/advisories/RUSTSEC-2024-0384.html
-    chrono-english            https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     get-size                  https://rustsec.org/advisories/RUSTSEC-2024-0425.html
     fxhash                    https://rustsec.org/advisories/RUSTSEC-2025-0057.html
-    google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     daemonize                 https://rustsec.org/advisories/RUSTSEC-2025-0069.html
     unic-segment              https://rustsec.org/advisories/RUSTSEC-2025-0074.html
     unic-char-range           https://rustsec.org/advisories/RUSTSEC-2025-0075.html
@@ -448,8 +451,9 @@ not found - other (59)
     pqcrypto-classicmceliece  https://rustsec.org/advisories/RUSTSEC-2026-0167.html
     pqcrypto-hqc              https://rustsec.org/advisories/RUSTSEC-2026-0168.html
     ttf-parser                https://rustsec.org/advisories/RUSTSEC-2026-0192.html
-    rustybuzz                 https://rustsec.org/advisories/RUSTSEC-2026-0206.html
-found (149)
+    gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
+    smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
+found (151)
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce                 https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -599,11 +603,13 @@ found (149)
     tide                      https://rustsec.org/advisories/RUSTSEC-2026-0170.html
     proc-macro-error2         https://rustsec.org/advisories/RUSTSEC-2026-0173.html
     cgmath                    https://rustsec.org/advisories/RUSTSEC-2026-0196.html
+    rustybuzz                 https://rustsec.org/advisories/RUSTSEC-2026-0206.html
+    libcrux-aesgcm            https://rustsec.org/advisories/RUSTSEC-2026-0210.html
 ---
-As of 2026-07-13, the RustSec Advisory Database contains 232 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 149 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-07-29, the RustSec Advisory Database contains 235 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 151 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 83 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 84 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
   - 6 are existent, unarchived leaves
-  - 4 were updated within the past 365 days
-  - 59 were not identified for other reasons
+  - 6 were updated within the past 365 days
+  - 58 were not identified for other reasons
