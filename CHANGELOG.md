@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.0.3
+
+- Fix a bug in [#779](https://github.com/trailofbits/cargo-unmaintained/pull/779) that caused unnecessary warnings. The old behavior fetched all metadata and filtered (based on the host) just the outdated dependencies. The new behavior filters all dependencies when the metadata is fetched. ([0a32a26](https://github.com/trailofbits/cargo-unmaintained/commit/0a32a2611ebf73bd4c1e049640b1587357e37357))
+
 ## 2.0.2
 
 - Fix a bug involving optional dependencies, similar to [#791](https://github.com/trailofbits/cargo-unmaintained/pull/791)&mdash;thanks to [@dharimarzouq](https://github.com/dharimarzouq) for the [suggestion](https://github.com/trailofbits/cargo-unmaintained/pull/791#discussion_r3569858990). ([17fdcd7](https://github.com/trailofbits/cargo-unmaintained/commit/17fdcd7579bb129db9c2144b5649da2da5a9c744))
