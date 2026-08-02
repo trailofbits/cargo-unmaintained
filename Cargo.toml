@@ -91,10 +91,10 @@ check-cfg = ["cfg(dylint_lib, values(any()))", "cfg(__warnings)"]
 
 [workspace.lints.clippy]
 pedantic = { level = "warn", priority = -1 }
-format-collect = "allow"
-format-push-string = "allow"
-missing-errors-doc = "allow"
-missing-panics-doc = "allow"
+format_collect = "allow"
+format_push_string = "allow"
+missing_errors_doc = "allow"
+missing_panics_doc = "allow"
 
 # smoelius: Enabling `__mock_github` causes `xdg` to appear unused.
 [workspace.metadata.cargo-udeps.ignore]
