@@ -96,6 +96,16 @@ jobs:
           # `crates-index` is a default feature, so `--no-default-features` is needed for the
           # `tame-index` leg to actually use `tame-index`.
           FEATURES="--no-default-features --features=on-disk-cache,${{ matrix.index }}"
+          # The externally influenced tests are slow and depend on the network. Running them on
+          # just one platform is sufficient.
+          if [[ '${{ matrix.environment }}' = 'ubuntu-latest' ]]; then
+            FEATURES="$FEATURES --features=test-ei"
+            if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]] ||
+              git diff --name-only ${{ github.event.pull_request.base.sha }} | grep 'rustsec' >/dev/null
+            then
+              FEATURES="$FEATURES --features=test-rustsec"
+            fi
+          fi
           echo "FEATURES=$FEATURES" >> "$GITHUB_ENV"
 
       - name: Build
@@ -103,24 +113,6 @@ jobs:
 
       - name: Test
         run: cargo test --config "$GROUP_RUNNER" $FEATURES
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Test `ei`
-        if: matrix.environment == 'ubuntu-latest'
-        run: |
-          cargo test --config "$GROUP_RUNNER" -p ei
-        env:
-          GITHUB_TOKEN: ${{ github.token }}
-
-      - name: Test `rustsec`
-        if: matrix.environment == 'ubuntu-latest'
-        run: |
-          if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]] ||
-            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep 'rustsec' >/dev/null
-          then
-            cargo test --config "$GROUP_RUNNER" -p rustsec
-          fi
         env:
           GITHUB_TOKEN: ${{ github.token }}
 

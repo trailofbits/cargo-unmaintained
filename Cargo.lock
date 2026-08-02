@@ -297,7 +297,8 @@ dependencies = [
  "crates-index",
  "crates_io_api",
  "curl",
- "elaborate",
+ "elaborate 1.2.0",
+ "elaborate 2.0.0",
  "env_logger",
  "home",
  "libc",
@@ -309,11 +310,10 @@ dependencies = [
  "remain",
  "reqwest 0.13.4",
  "rustls",
- "rustsec 0.33.0",
+ "rustsec",
  "serde",
  "serde_json",
  "sha1_smol",
- "similar-asserts",
  "snapbox",
  "strum",
  "strum_macros",
@@ -395,7 +395,7 @@ name = "ci"
 version = "0.1.0"
 dependencies = [
  "assert_cmd",
- "elaborate",
+ "elaborate 1.2.0",
  "regex",
  "serde_json",
  "similar-asserts",
@@ -867,17 +867,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ei"
-version = "0.1.0"
-dependencies = [
- "assert_cmd",
- "elaborate",
- "regex",
- "snapbox",
- "testing",
-]
-
-[[package]]
 name = "either"
 version = "1.17.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -888,6 +877,15 @@ name = "elaborate"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "364647699002e13a22fea1aeec23441e46d9c14cf1e0a53bdb08a5460a92f015"
+dependencies = [
+ "anyhow",
+]
+
+[[package]]
+name = "elaborate"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ebccd51c5c9671251371078938192e3b0a51d5a2f22c754a372fc0477fcd4fa6"
 dependencies = [
  "anyhow",
 ]
@@ -3262,7 +3260,7 @@ dependencies = [
  "anyhow",
  "cargo_metadata",
  "dunce",
- "elaborate",
+ "elaborate 1.2.0",
  "env_logger",
  "glob",
  "log",
@@ -4175,17 +4173,6 @@ dependencies = [
 
 [[package]]
 name = "rustsec"
-version = "0.1.0"
-dependencies = [
- "assert_cmd",
- "elaborate",
- "regex",
- "snapbox",
- "testing",
-]
-
-[[package]]
-name = "rustsec"
 version = "0.33.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "6c60fd662f245fd3d6ae7ee2371f59042c4e9dc00a02183c0b1735f4da2aa5ed"
@@ -4744,7 +4731,7 @@ name = "testing"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "elaborate",
+ "elaborate 1.2.0",
  "serde",
  "serde_json",
  "snapbox",

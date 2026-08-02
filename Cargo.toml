@@ -46,7 +46,6 @@ rustls = { version = "0.23", default-features = false, features = [
     "aws_lc_rs",
 ] }
 rustsec = "0.33"
-similar-asserts = "2.0"
 snapbox = "1.2"
 strum = "0.28"
 strum_macros = "0.28"
@@ -54,7 +53,7 @@ testing = { path = "testing" }
 tokio = "1.53"
 
 [build-dependencies]
-elaborate = "1.2"
+elaborate = "2.0"
 nested_workspace = "0.8"
 
 [features]
@@ -62,6 +61,10 @@ default = ["on-disk-cache", "crates-index"]
 on-disk-cache = []
 crates-index = ["dep:crates-index", "dep:home", "libc", "windows-sys"]
 tame-index = ["dep:tame-index", "reqwest/blocking"]
+
+# smoelius: Unstable features used for testing.
+test-ei = []       # Enable "externally influenced" tests
+test-rustsec = []  # Enable RustSec tests
 __mock_github = []
 __real_github = []
 
@@ -83,7 +86,7 @@ windows-sys = { version = "0.61", features = [
 # smoelius: `mock_github` must not be a workspace member. If it were, it would enable the
 # `__mock_github` feature for all workspace members.
 exclude = ["fixtures", "mock_github"]
-members = ["ci", "ei", "rustsec", "testing"]
+members = ["ci", "testing"]
 
 [workspace.lints.rust.unexpected_cfgs]
 level = "deny"

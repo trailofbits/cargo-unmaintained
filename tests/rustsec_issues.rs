@@ -1,3 +1,5 @@
+#![cfg(feature = "test-rustsec")]
+
 use elaborate::std::{env::var_wc, fs::write_wc};
 use snapbox::{Data, assert_data_eq};
 use std::{path::PathBuf, process::Command};
@@ -10,8 +12,7 @@ fn rustsec_issues() {
     let mut command = Command::new("cargo");
     command
         .args(["run", "--example=rustsec_issues"])
-        .env_remove("CARGO_TERM_COLOR")
-        .current_dir("..");
+        .env_remove("CARGO_TERM_COLOR");
 
     let output = tee(command, Tee::Stdout).unwrap();
 

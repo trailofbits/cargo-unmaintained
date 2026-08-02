@@ -5090,8 +5090,6 @@
     "local_crates": [
       "cargo-unmaintained",
       "ci",
-      "ei",
-      "rustsec",
       "testing"
     ]
   }
