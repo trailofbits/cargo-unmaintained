@@ -112,10 +112,11 @@ ignore = ["matchers"]
 
 ## Testing
 
-Running just `cargo test` will not run the "continuous integration" or "externally influenced" tests. To run those additional tests, add `--workspace`, i.e.:
+Running just `cargo test` will not run the "externally influenced" tests or the RustSec tests. To run those additional tests, add `--features=test-ei` and `--features=test-rustsec`, respectively, i.e.:
 
 ```sh
-cargo test --workspace
+cargo test --features=test-ei
+cargo test --features=test-rustsec
 ```
 
 ## Known problems

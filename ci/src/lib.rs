@@ -2,9 +2,8 @@
 
 use assert_cmd::assert::OutputAssertExt;
 use elaborate::std::{
-    env::var_wc,
+    env::{current_dir_wc, var_wc},
     fs::{read_to_string_wc, write_wc},
-    path::PathContext,
     process::CommandContext,
 };
 use regex::Regex;
@@ -84,7 +83,10 @@ fn hack_feature_powerset_udeps() {
             "hack",
             "--feature-powerset",
             "--at-least-one-of=crates-index,tame-index",
-            "--exclude=cache-repositories,ei",
+            // `test-ei` and `test-rustsec` gate only test files, and this check analyzes just the
+            // library and binary. So including those features would only increase the number of
+            // `udeps` runs.
+            "--exclude-features=test-ei,test-rustsec",
             "udeps",
         ])
         .assert()
@@ -147,10 +149,16 @@ fn markdown_link_check() {
     // smoelius: https://github.com/rust-lang/crates.io/issues/788
     let config = concat!(env!("CARGO_MANIFEST_DIR"), "/markdown_link_check.json");
 
-    let readme_md = concat!(env!("CARGO_MANIFEST_DIR"), "/../README.md");
+    let cwd = current_dir_wc().unwrap();
+    let readme_md = cwd.join("README.md");
 
     Command::new("npx")
-        .args(["markdown-link-check", "--config", config, readme_md])
+        .args([
+            "markdown-link-check",
+            "--config",
+            config,
+            &readme_md.to_string_lossy(),
+        ])
         .current_dir(&tempdir)
         .assert()
         .success();
@@ -175,10 +183,7 @@ fn prettier() {
         "!{}/mock_github/target/**",
     ];
 
-    // smoelius: Copied from Necessist:
-    // Prettier's handling of `..` seems to have changed between versions 3.4 and 3.5.
-    // Manually collapsing the `..` avoids the problem.
-    let parent = Path::new(env!("CARGO_MANIFEST_DIR")).parent_wc().unwrap();
+    let cwd = current_dir_wc().unwrap();
 
     let tempdir = tempdir().unwrap();
 
@@ -190,10 +195,7 @@ fn prettier() {
 
     Command::new("npx")
         .args(["prettier", "--check"])
-        .args(
-            ARGS.iter()
-                .map(|s| s.replace("{}", &parent.to_string_lossy())),
-        )
+        .args(ARGS.iter().map(|s| s.replace("{}", &cwd.to_string_lossy())))
         .current_dir(&tempdir)
         .assert()
         .success();
@@ -201,13 +203,10 @@ fn prettier() {
 
 #[test]
 fn readme_contains_expected_contents() {
-    let parent = Path::new(env!("CARGO_MANIFEST_DIR")).parent_wc().unwrap();
-
-    let contents =
-        read_to_string_wc(parent.join("rustsec/tests/rustsec_advisories.stdout")).unwrap();
+    let contents = read_to_string_wc("tests/rustsec_advisories.stdout").unwrap();
     let (_, middle_expected, bottom_expected) = split_at_cut_lines(&contents).unwrap();
 
-    let readme = read_to_string_wc(parent.join("README.md")).unwrap();
+    let readme = read_to_string_wc("README.md").unwrap();
     let lines = readme.lines();
 
     let mut lines = lines.skip_while(|&line| line != "<!-- as-of start -->");
@@ -239,8 +238,6 @@ fn readme_contains_usage() {
         .args([
             "run",
             "--bin=cargo-unmaintained",
-            "--manifest-path",
-            concat!(env!("CARGO_MANIFEST_DIR"), "/../Cargo.toml"),
             "--",
             "unmaintained",
             "--help",

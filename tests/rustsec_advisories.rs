@@ -1,3 +1,5 @@
+#![cfg(feature = "test-rustsec")]
+
 use elaborate::std::{
     env::var_wc,
     fs::{read_to_string_wc, write_wc},
@@ -11,7 +13,7 @@ use std::{
 };
 use testing::{Tee, split_at_cut_lines, split_at_first_cut_line, tee};
 
-#[cfg(test)]
+#[cfg_attr(dylint_lib = "general", allow(abs_home_path))]
 const PATH_STDOUT: &str = concat!(
     env!("CARGO_MANIFEST_DIR"),
     "/tests/rustsec_advisories.stdout"
@@ -24,8 +26,7 @@ fn rustsec_advisories() {
     command
         .args(["run", "--example=rustsec_advisories"])
         .env_remove("CARGO_TERM_COLOR")
-        .env("RUST_BACKTRACE", "0")
-        .current_dir("..");
+        .env("RUST_BACKTRACE", "0");
 
     let output = tee(command, Tee::Stdout).unwrap();
 
@@ -53,7 +54,7 @@ fn rustsec_advisories() {
 fn update_readme(stdout: &str) {
     let (_, middle, bottom) = split_at_cut_lines(stdout).unwrap();
 
-    let readme = read_to_string_wc("../README.md").unwrap();
+    let readme = read_to_string_wc("README.md").unwrap();
 
     let updated_with_as_of = replace_section(
         &readme,
@@ -69,7 +70,7 @@ fn update_readme(stdout: &str) {
         &format!("\n\n{}\n\n", bottom.trim()),
     );
 
-    write_wc("../README.md", readme_with_as_of_and_not_identified).unwrap();
+    write_wc("README.md", readme_with_as_of_and_not_identified).unwrap();
 }
 
 fn replace_section(content: &str, start_marker: &str, end_marker: &str, insertion: &str) -> String {

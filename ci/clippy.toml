@@ -1,0 +1,5 @@
+allow-unwrap-in-tests = true
+disallowed-methods = [
+    { path = "std::path::Path::parent", reason = "use of `Path::parent` in CI is fragile" },
+    { path = "elaborate::std::path::PathContext::parent_wc", reason = "use of `PathContext::parent_wc` in CI is fragile" },
+]

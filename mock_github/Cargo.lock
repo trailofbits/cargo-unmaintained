@@ -227,7 +227,8 @@ dependencies = [
  "crates-index",
  "crates_io_api",
  "curl",
- "elaborate",
+ "elaborate 1.2.0",
+ "elaborate 2.0.0",
  "env_logger",
  "home",
  "libc",
@@ -616,6 +617,15 @@ name = "elaborate"
 version = "1.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "364647699002e13a22fea1aeec23441e46d9c14cf1e0a53bdb08a5460a92f015"
+dependencies = [
+ "anyhow",
+]
+
+[[package]]
+name = "elaborate"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ebccd51c5c9671251371078938192e3b0a51d5a2f22c754a372fc0477fcd4fa6"
 dependencies = [
  "anyhow",
 ]
@@ -2448,7 +2458,7 @@ dependencies = [
  "anyhow",
  "cargo_metadata",
  "dunce",
- "elaborate",
+ "elaborate 1.2.0",
  "env_logger",
  "glob",
  "log",
