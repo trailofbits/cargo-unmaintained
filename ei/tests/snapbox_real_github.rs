@@ -1,6 +1,6 @@
 use elaborate::std::env::set_current_dir_wc;
 
-#[cfg_attr(target_os = "windows", ignore)]
+#[cfg_attr(target_os = "windows", ignore = "dependencies differ from Linux/macOS")]
 #[test]
 fn snapbox_real_github() {
     // smoelius: Since there are no other tests in this test executable, changing the current

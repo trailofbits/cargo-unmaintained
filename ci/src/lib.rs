@@ -131,7 +131,7 @@ fn license() {
     }
 }
 
-#[cfg_attr(target_os = "windows", ignore)]
+#[cfg_attr(target_os = "windows", ignore = "node.js is unavailable")]
 #[test]
 fn markdown_link_check() {
     let tempdir = tempdir().unwrap();
@@ -165,7 +165,7 @@ fn mock_github_lockfile_is_up_to_date() {
         .success();
 }
 
-#[cfg_attr(target_os = "windows", ignore)]
+#[cfg_attr(target_os = "windows", ignore = "node.js is unavailable")]
 #[test]
 fn prettier() {
     const ARGS: &[&str] = &[
@@ -230,7 +230,7 @@ fn readme_contains_expected_contents() {
 }
 
 #[cfg_attr(dylint_lib = "general", allow(non_thread_safe_call_in_test))]
-#[cfg_attr(target_os = "windows", ignore)]
+#[cfg_attr(target_os = "windows", ignore = "usage differs from Linux/macOS")]
 #[test]
 fn readme_contains_usage() {
     let readme = read_to_string_wc("README.md").unwrap();
@@ -369,7 +369,7 @@ fn group_starts<S: AsRef<str>>(
         .collect()
 }
 
-#[cfg_attr(target_os = "windows", ignore)]
+#[cfg_attr(target_os = "windows", ignore = "xdg does not work on Windows")]
 #[test]
 fn supply_chain() {
     let mut command = Command::new("cargo");

@@ -394,9 +394,7 @@ dependencies = [
 name = "ci"
 version = "0.1.0"
 dependencies = [
- "anyhow",
  "assert_cmd",
- "cargo_metadata",
  "elaborate",
  "regex",
  "serde_json",
