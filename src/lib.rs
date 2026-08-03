@@ -331,8 +331,12 @@ fn unmaintained() -> Result<bool> {
     );
 
     if std::io::stderr().is_terminal() && !opts::get().verbose {
-        PROGRESS
-            .with_borrow_mut(|progress| *progress = Some(progress::Progress::new(packages.len())));
+        let width_pkg = packages.iter().map(|pkg| pkg.name.len()).max().unwrap_or(0);
+        PROGRESS.with_borrow_mut(|progress| {
+            let mut p = progress::Progress::new(packages.len());
+            p.set_width_msg(width_pkg);
+            *progress = Some(p);
+        });
     }
 
     for pkg in packages {
@@ -354,6 +358,14 @@ fn unmaintained() -> Result<bool> {
                 if opts::get().fail_fast {
                     break;
                 }
+
+                PROGRESS.with_borrow_mut(|progress| {
+                    if let Some(progress) = progress.as_mut() {
+                        let count = unmaintained_pkgs.len();
+                        progress
+                            .set_suffix(Some(format!(" ({count} unmaintained packages found)")));
+                    }
+                });
             }
         }
     }
