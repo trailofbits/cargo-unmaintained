@@ -2,7 +2,9 @@ pub struct Progress {
     n: usize,
     i: usize,
     width_n: usize,
+    width_msg: usize,
     width_prev: usize,
+    suffix: Option<String>,
     newline_needed: bool,
     finished: bool,
 }
@@ -21,10 +23,20 @@ impl Progress {
             n,
             i: 0,
             width_n: n.to_string().len(),
+            width_msg: 0,
             width_prev: 0,
+            suffix: None,
             newline_needed: false,
             finished: false,
         }
+    }
+
+    pub fn set_width_msg(&mut self, width: usize) {
+        self.width_msg = width;
+    }
+
+    pub fn set_suffix(&mut self, suffix: Option<String>) {
+        self.suffix = suffix;
     }
 
     pub fn advance(&mut self, msg: &str) {
@@ -52,8 +64,13 @@ impl Progress {
 
     fn draw(&mut self, msg: &str) {
         let width_n = self.width_n;
+        let width_msg = self.width_msg;
         let percent = (self.i * 100).checked_div(self.n).unwrap_or(100);
-        let formatted_msg = format!("{:>width_n$}/{} ({percent}%) {msg}", self.i, self.n);
+        let suffix = self.suffix.as_deref().unwrap_or("");
+        let formatted_msg = format!(
+            "{:>width_n$}/{} ({percent}%) {msg:<width_msg$}{suffix}",
+            self.i, self.n,
+        );
         let width_to_overwrite = self.width_prev.saturating_sub(formatted_msg.len());
         eprint!("{formatted_msg}{:width_to_overwrite$}\r", "");
         self.width_prev = formatted_msg.len();
