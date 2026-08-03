@@ -63,19 +63,5 @@ macro_rules! wrap {
     }};
 }
 
-#[allow(unused_macros)]
-macro_rules! update {
-    ($fmt:expr) => {
-        if crate::opts::get().verbose {
-            $crate::verbose::__print!(concat!($fmt, "..."));
-        }
-    };
-    ($fmt:expr, $($arg:tt)*) => {
-        if crate::opts::get().verbose {
-            $crate::verbose::__print!(concat!($fmt, "..."), $($arg)*);
-        }
-    };
-}
-
 // smoelius: "The trick": https://stackoverflow.com/a/31749071
 pub(crate) use {__eprint, __eprintln, newline, wrap};
