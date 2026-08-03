@@ -91,11 +91,18 @@ jobs:
       - name: Fetch dependencies
         run: cargo nested fetch
 
+      - name: Compute features
+        run: |
+          # `crates-index` is a default feature, so `--no-default-features` is needed for the
+          # `tame-index` leg to actually use `tame-index`.
+          FEATURES="--no-default-features --features=on-disk-cache,${{ matrix.index }}"
+          echo "FEATURES=$FEATURES" >> "$GITHUB_ENV"
+
       - name: Build
-        run: cargo test --workspace --no-run
+        run: cargo test --workspace --no-run $FEATURES
 
       - name: Test
-        run: cargo test --config "$GROUP_RUNNER"
+        run: cargo test --config "$GROUP_RUNNER" $FEATURES
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
