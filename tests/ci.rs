@@ -1,18 +1,31 @@
 use anyhow::{Context, Result, anyhow, bail};
 use cargo_metadata::{Message, camino::Utf8PathBuf};
-use elaborate::std::process::CommandContext;
+use elaborate::std::{env::var_wc, process::CommandContext};
 use std::process::Command;
 
-fn main() {
+// This test runs the `ci` package's tests from the workspace root. An individual test can instead
+// be run with, e.g., `cargo test -p ci supply_chain`, so long as the test hardcodes its paths.
+//
+// A test that relies on the current directory works only when run through this one, because Cargo
+// sets a test executable's current directory to its package's root. Use `FILTER` to select such a
+// test; a filter on the command line would apply to this test rather than to the tests it runs.
+#[test]
+fn ci() {
     let executable = test_executable().unwrap();
-    let status = Command::new(executable).status_wc().unwrap();
+    let mut command = Command::new(executable);
+    if let Ok(filter) = var_wc("FILTER") {
+        command.arg(filter);
+    }
+    command.env_remove("CARGO_TERM_COLOR");
+    let status = command.status_wc().unwrap();
     assert!(status.success());
 }
 
 fn test_executable() -> Result<Utf8PathBuf> {
     let mut command = Command::new("cargo");
     let output = command
-        .args(["build", "--workspace", "--tests", "--message-format=json"])
+        .args(["build", "-p", "ci", "--tests", "--message-format=json"])
+        .env_remove("CARGO_TERM_COLOR")
         .output_wc()?;
     if !output.status.success() {
         bail!("command failed: {command:?}");
