@@ -100,6 +100,13 @@ pub fn snapbox(real_github: bool, all_targets: bool) -> Result<()> {
 
         #[allow(clippy::explicit_write)]
         write!(stderr(), "running {}", input_path.display()).unwrap();
+        // When `VERBOSE` is enabled, the command below inherits this process's stderr rather
+        // than having it captured. Terminate the line so the command's output starts on a line
+        // of its own.
+        if enabled("VERBOSE") {
+            #[allow(clippy::explicit_write)]
+            writeln!(stderr()).unwrap();
+        }
         let start = Instant::now();
 
         // smoelius: I learned this conditional initialization trick from Solana's source code:
@@ -170,6 +177,9 @@ pub fn snapbox(real_github: bool, all_targets: bool) -> Result<()> {
             // match.
             command.arg("--verbose");
 
+            // `Tee::Stdout` pipes only stdout, so the command inherits this process's stderr.
+            // This is why the `running ...` message above is terminated with a newline when
+            // `VERBOSE` is enabled.
             let output = tee(command, Tee::Stdout)?;
 
             output.captured
