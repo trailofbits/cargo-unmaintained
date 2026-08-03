@@ -337,10 +337,10 @@ fn unmaintained() -> Result<bool> {
 
     for pkg in packages {
         PROGRESS.with_borrow_mut(|progress| {
-            progress
-                .as_mut()
-                .map_or(Ok(()), |progress| progress.advance(&pkg.name))
-        })?;
+            if let Some(progress) = progress.as_mut() {
+                progress.advance(&pkg.name);
+            }
+        });
 
         if let Some(mut unmaintained_pkg) = is_unmaintained_package(&metadata, pkg)? {
             // smoelius: Before considering a package unmaintained, verify that its latest version
@@ -358,8 +358,11 @@ fn unmaintained() -> Result<bool> {
         }
     }
 
-    PROGRESS
-        .with_borrow_mut(|progress| progress.as_mut().map_or(Ok(()), progress::Progress::finish))?;
+    PROGRESS.with_borrow_mut(|progress| {
+        if let Some(progress) = progress.as_mut() {
+            progress.finish();
+        }
+    });
 
     if opts::get().json {
         unmaintained_pkgs.sort_by_key(|unmaintained| &unmaintained.pkg.id);
