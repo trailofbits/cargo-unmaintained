@@ -110,7 +110,7 @@ jobs:
         if: matrix.environment == 'ubuntu-latest'
         run: |
           if [[ '${{ github.event_name }}' = 'schedule' || '${{ github.event_name }}' = 'workflow_dispatch' ]] ||
-            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep -w 'rustsec' >/dev/null
+            git diff --name-only ${{ github.event.pull_request.base.sha }} | grep 'rustsec' >/dev/null
           then
             cargo test --config "$GROUP_RUNNER" -p rustsec
           fi
