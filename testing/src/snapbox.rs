@@ -100,8 +100,6 @@ pub fn snapbox(real_github: bool, all_targets: bool) -> Result<()> {
 
         #[allow(clippy::explicit_write)]
         write!(stderr(), "running {}", input_path.display()).unwrap();
-        #[allow(clippy::disallowed_methods)]
-        stderr().flush().unwrap();
         let start = Instant::now();
 
         // smoelius: I learned this conditional initialization trick from Solana's source code:
