@@ -1,5 +1,16 @@
 # Changelog
 
+## 2.1.0
+
+- FEATURE: Report number of unmaintained packages as they are found (sample output appears below) ([e891fae](https://github.com/trailofbits/cargo-unmaintained/commit/e891fae6f58a9e805981f18019a51a58ac56ba5d))
+
+  ```
+  134/341 (39%) lazy_static               (2 unmaintained packages found)
+  ```
+
+- Dependency updates
+  - `elaborate` upgraded to version 2.0
+
 ## 2.0.3
 
 - Fix a bug in [#779](https://github.com/trailofbits/cargo-unmaintained/pull/779) that caused unnecessary warnings. The old behavior fetched all metadata and filtered (based on the host) just the outdated dependencies. The new behavior filters all dependencies when the metadata is fetched. ([0a32a26](https://github.com/trailofbits/cargo-unmaintained/commit/0a32a2611ebf73bd4c1e049640b1587357e37357))
