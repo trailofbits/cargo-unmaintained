@@ -200,17 +200,21 @@ fn readme_contains_expected_contents() {
     let lines = readme.lines();
 
     let mut lines = lines.skip_while(|&line| line != "<!-- as-of start -->");
-    assert_eq!(lines.next(), Some("<!-- as-of start -->"));
-    assert_eq!(lines.next(), Some(""));
-    assert_eq!(lines.next(), Some(middle_expected.trim_end()));
-    assert_eq!(lines.next(), Some(""));
-    assert_eq!(lines.next(), Some("<!-- as-of end -->"));
+    #[rustfmt::skip] {
+        assert_eq!(Some("<!-- as-of start -->"),     lines.next());
+        assert_eq!(Some(""),                         lines.next());
+        assert_eq!(Some(middle_expected.trim_end()), lines.next());
+        assert_eq!(Some(""),                         lines.next());
+        assert_eq!(Some("<!-- as-of end -->"),       lines.next());
+    };
 
     let mut lines = lines
         .skip_while(|&line| line != "<!-- not-identified start -->")
         .peekable();
-    assert_eq!(lines.next(), Some("<!-- not-identified start -->"));
-    assert_eq!(lines.next(), Some(""));
+    #[rustfmt::skip] {
+        assert_eq!(Some("<!-- not-identified start -->"), lines.next());
+        assert_eq!(Some(""),                              lines.next());
+    };
     let bottom_actual = lines
         .take_while(|&line| line != "<!-- not-identified end -->")
         .map(|line| format!("{line}\n"))

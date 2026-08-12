@@ -74,55 +74,55 @@ mod tests {
     #[test]
     fn parse_github_url_accepts_common_forms() {
         assert_eq!(
-            parse_github_url("https://github.com/owner/repo"),
-            Some(("owner", "repo"))
+            Some(("owner", "repo")),
+            parse_github_url("https://github.com/owner/repo")
         );
         assert_eq!(
-            parse_github_url("https://github.com/owner/repo.git"),
-            Some(("owner", "repo"))
+            Some(("owner", "repo")),
+            parse_github_url("https://github.com/owner/repo.git")
         );
         assert_eq!(
-            parse_github_url("https://github.com/owner/repo/"),
-            Some(("owner", "repo"))
+            Some(("owner", "repo")),
+            parse_github_url("https://github.com/owner/repo/")
         );
     }
 
     #[test]
     fn parse_github_url_stops_at_query() {
         assert_eq!(
-            parse_github_url("https://github.com/owner/repo?tab=readme"),
-            Some(("owner", "repo"))
+            Some(("owner", "repo")),
+            parse_github_url("https://github.com/owner/repo?tab=readme")
         );
     }
 
     #[test]
     fn parse_github_url_stops_at_fragment() {
         assert_eq!(
-            parse_github_url("https://github.com/owner/repo#readme"),
-            Some(("owner", "repo"))
+            Some(("owner", "repo")),
+            parse_github_url("https://github.com/owner/repo#readme")
         );
     }
 
     #[test]
     fn parse_github_url_rejects_incomplete_or_non_github_urls() {
-        assert_eq!(parse_github_url("https://github.com/"), None);
-        assert_eq!(parse_github_url("https://github.com/owner"), None);
-        assert_eq!(parse_github_url("https://example.com/owner/repo"), None);
+        assert_eq!(None, parse_github_url("https://github.com/"));
+        assert_eq!(None, parse_github_url("https://github.com/owner"));
+        assert_eq!(None, parse_github_url("https://example.com/owner/repo"));
     }
 
     #[test]
     fn canonical_github_url_normalizes_aliases() {
         assert_eq!(
-            canonical_github_url("https://github.com/owner/repo.git".into()).as_str(),
-            "https://github.com/owner/repo"
+            "https://github.com/owner/repo",
+            canonical_github_url("https://github.com/owner/repo.git".into()).as_str()
         );
         assert_eq!(
-            canonical_github_url("https://github.com/owner/repo/tree/main".into()).as_str(),
-            "https://github.com/owner/repo"
+            "https://github.com/owner/repo",
+            canonical_github_url("https://github.com/owner/repo/tree/main".into()).as_str()
         );
         assert_eq!(
-            canonical_github_url("https://github.com/owner/repo.git/tree/main".into()).as_str(),
-            "https://github.com/owner/repo"
+            "https://github.com/owner/repo",
+            canonical_github_url("https://github.com/owner/repo.git/tree/main".into()).as_str()
         );
     }
 
@@ -135,8 +135,8 @@ mod tests {
             return;
         };
 
-        assert_eq!(github_repo.url.as_str(), "https://github.com/owner/repo");
-        assert_eq!(github_repo.owner, "owner");
-        assert_eq!(github_repo.repo, "repo");
+        assert_eq!("https://github.com/owner/repo", github_repo.url.as_str());
+        assert_eq!("owner", github_repo.owner);
+        assert_eq!("repo", github_repo.repo);
     }
 }

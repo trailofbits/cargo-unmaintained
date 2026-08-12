@@ -41,12 +41,12 @@ fn save_token() {
     let stdout = String::from_utf8(output.stdout).unwrap();
     let stderr = String::from_utf8(output.stderr).unwrap();
     assert_eq!(
-        stdout,
-        "adler (https://github.com/jonas-schievink/adler.git archived)\n"
+        "adler (https://github.com/jonas-schievink/adler.git archived)\n",
+        stdout
     );
     assert_eq!(
-        stderr,
         "Prefetching GitHub data for 1 repositories\nScanning 1 packages and their dependencies \
-         (pass --verbose for more information)\n"
+         (pass --verbose for more information)\n",
+        stderr
     );
 }
