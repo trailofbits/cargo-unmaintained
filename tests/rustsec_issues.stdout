@@ -255,7 +255,8 @@ ttf-parser...not found
 tree-sitter-perl-next...not found
 rustybuzz...found
 users...not found
-not found (153)
+nostr...not found
+not found (154)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -409,6 +410,7 @@ not found (153)
     ttf-parser               https://github.com/rustsec/advisory-db/issues/3011
     tree-sitter-perl-next    https://github.com/rustsec/advisory-db/issues/3039
     users                    https://github.com/rustsec/advisory-db/issues/3066
+    nostr                    https://github.com/rustsec/advisory-db/issues/3116
 found (71)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
