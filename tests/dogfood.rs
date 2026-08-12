@@ -18,5 +18,5 @@ fn dogfood() {
     let output = tee(command, Tee::Stdout).unwrap();
 
     assert!(output.status.success());
-    assert_eq!(output.captured, [] as [u8; 0]);
+    assert_eq!([] as [u8; 0], output.captured.as_slice());
 }
