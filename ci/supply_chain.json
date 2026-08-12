@@ -1218,12 +1218,6 @@
     ],
     "futures": [
       {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
-      {
         "id": 5149,
         "kind": "user",
         "login": "cramertj",
@@ -1303,12 +1297,6 @@
       }
     ],
     "futures-io": [
-      {
-        "id": 1,
-        "kind": "user",
-        "login": "alexcrichton",
-        "name": "Alex Crichton"
-      },
       {
         "id": 5149,
         "kind": "user",
