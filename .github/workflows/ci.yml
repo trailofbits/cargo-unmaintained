@@ -67,7 +67,7 @@ jobs:
             ~/.cargo/git/db/
           key: ${{ runner.os }}-cargo-${{ hashFiles('.github/workflows/ci.yml', 'tests/ci.rs') }}
 
-      - uses: taiki-e/install-action@v2.85.8
+      - uses: taiki-e/install-action@v2.85.11
         with:
           tool: cargo-audit, cargo-hack, cargo-udeps
 
