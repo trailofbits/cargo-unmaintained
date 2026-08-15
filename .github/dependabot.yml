@@ -13,5 +13,3 @@ updates:
           - "*"
     schedule:
       interval: weekly
-    allow:
-      - dependency-type: direct
