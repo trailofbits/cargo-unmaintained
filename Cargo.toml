@@ -111,6 +111,7 @@ pattern = [
     "examples/restriction/assert_eq_arg_misordering",
     "examples/restriction/inconsistent_qualification",
     "examples/restriction/misleading_variable_name",
+    "examples/restriction/non_topologically_sorted_functions",
     "examples/restriction/suboptimal_pattern",
     "examples/restriction/try_io_result",
 ]
