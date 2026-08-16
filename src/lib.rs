@@ -924,7 +924,6 @@ fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
     })
 }
 
-#[allow(clippy::unnecessary_wraps)]
 fn outdated_deps<'a>(metadata: &'a Metadata, pkg: &'a Package) -> Result<Vec<OutdatedDep<'a>>> {
     if !published(pkg) {
         return Ok(Vec::new());
