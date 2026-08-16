@@ -620,20 +620,6 @@ fn cache_prefetched_github_data(repo_status: RepoStatus<'_, SystemTime>, url: Ur
     }
 }
 
-fn newer_version_is_available(pkg: &Package) -> Result<bool> {
-    if pkg
-        .source
-        .as_ref()
-        .is_none_or(|source| !source.is_crates_io())
-    {
-        return Ok(false);
-    }
-
-    let latest_version = latest_version(&pkg.name)?;
-
-    Ok(pkg.version != latest_version)
-}
-
 fn latest_version_is_unmaintained(name: &str) -> Result<bool> {
     let tempdir = packaging::temp_package(name)?;
 
@@ -732,6 +718,171 @@ fn is_unmaintained_package<'a>(
         newer_version_is_available: false,
         outdated_deps,
     }))
+}
+
+fn newer_version_is_available(pkg: &Package) -> Result<bool> {
+    if pkg
+        .source
+        .as_ref()
+        .is_none_or(|source| !source.is_crates_io())
+    {
+        return Ok(false);
+    }
+
+    let latest_version = latest_version(&pkg.name)?;
+
+    Ok(pkg.version != latest_version)
+}
+
+fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
+    let repo_status = timestamp(pkg)?;
+
+    repo_status
+        .map(|timestamp| {
+            let duration = SystemTime::now().duration_since_wc(timestamp)?;
+
+            Ok(duration.as_secs())
+        })
+        .transpose()
+}
+
+fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
+    TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
+        // smoelius: Check both the regular and the shortened url.
+        for url in urls(pkg) {
+            if let Some(&repo_status) = timestamp_cache.get(&url) {
+                // smoelius: If a previous attempt to timestamp the repository failed (e.g., because
+                // of spurious network errors), then don't bother checking the repository cache.
+                let Some((url_timestamped, &timestamp)) = repo_status.as_success() else {
+                    return Ok(repo_status);
+                };
+                assert_eq!(url, url_timestamped);
+                // smoelius: `pkg`'s repository could contain other packages that were already
+                // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
+                // But in that case, we still need to verify that `pkg` appears in its repository.
+                let repo_status = clone_repository(pkg)?;
+                let Some((url_cloned, _)) = repo_status.as_success() else {
+                    return Ok(repo_status.map_failure());
+                };
+                assert_eq!(url, url_cloned);
+                return Ok(RepoStatus::Success(url, timestamp));
+            }
+        }
+        let repo_status = timestamp_uncached(pkg)?;
+        if let Some((url, _)) = repo_status.as_success() {
+            timestamp_cache.insert(url.leak(), repo_status.leak_url());
+        } else {
+            // smoelius: In the event of failure, set all urls associated with the
+            // repository.
+            for url in urls(pkg) {
+                timestamp_cache.insert(url.leak(), repo_status.leak_url());
+            }
+        }
+        Ok(repo_status)
+    })
+}
+
+fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
+    if pkg.repository.is_none() {
+        return Ok(RepoStatus::Unnamed);
+    }
+
+    timestamp_from_clone(pkg)
+}
+
+fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
+    let repo_status = clone_repository(pkg)?;
+
+    let Some((url, repo_dir)) = repo_status.as_success() else {
+        return Ok(repo_status.map_failure());
+    };
+
+    let mut command = Command::new("git");
+    command
+        .args(["log", "-1", "--pretty=format:%ct"])
+        .current_dir(repo_dir);
+    let output = command.output_wc()?;
+    ensure!(output.status.success(), "command failed: {command:?}");
+
+    let stdout = std::str::from_utf8(&output.stdout)?;
+    let secs = u64::from_str(stdout.trim_end())?;
+    let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
+
+    Ok(RepoStatus::Success(url, timestamp))
+}
+
+#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_unhandled_error))]
+#[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
+fn clone_repository(pkg: &Package) -> Result<RepoStatus<'_, PathBuf>> {
+    let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
+        on_disk_cache::with_cache(|cache| -> Result<_> {
+            // smoelius: Check all urls associated with the package.
+            for url in urls(pkg) {
+                if let Some(repo_status) = repository_cache.get(&url) {
+                    return Ok(repo_status.clone());
+                }
+            }
+            // smoelius: To make verbose printing easier, "membership" is printed regardless of the
+            // check's purpose, and the `Purpose` type was removed.
+            /* let what = match purpose {
+                Purpose::Membership => "membership",
+                Purpose::Timestamp => "timestamp",
+            }; */
+            verbose::wrap!(
+                || {
+                    let url_and_dir = cache.clone_repository(pkg);
+                    match url_and_dir {
+                        Ok((url_string, repo_dir)) => {
+                            // smoelius: Note the use of `leak` in the next line. But the url is
+                            // acting as a key in a global map, so it is not so bad.
+                            let url = Url::from(url_string.as_str()).leak();
+                            repository_cache
+                                .insert(url, RepoStatus::Success(url, repo_dir.clone()).leak_url());
+                            Ok(RepoStatus::Success(url, repo_dir))
+                        }
+                        Err(error) => {
+                            let repo_status = if let Some(url_string) = &pkg.repository {
+                                let url = url_string.as_str().into();
+                                // smoelius: If cloning failed because the repository does not
+                                // exist, adjust the repo status.
+                                let existence = general_status(&pkg.name, url)?;
+                                let repo_status = if existence.is_failure() {
+                                    existence.map_failure()
+                                } else {
+                                    RepoStatus::Uncloneable(url)
+                                };
+                                warn!("failed to clone `{}`: {}", url_string, error);
+                                repo_status
+                            } else {
+                                RepoStatus::Unnamed
+                            };
+                            // smoelius: In the event of failure, set all urls associated with
+                            // the repository.
+                            for url in urls(pkg) {
+                                repository_cache.insert(url.leak(), repo_status.clone().leak_url());
+                            }
+                            Ok(repo_status)
+                        }
+                    }
+                },
+                RepoStatus::to_membership_string,
+                "membership of `{}` using shallow clone",
+                pkg.name
+            )
+        })
+    })?;
+
+    let Some((url, repo_dir)) = repo_status.as_success() else {
+        return Ok(repo_status);
+    };
+
+    // smoelius: Even if `purpose` is `Purpose::Timestamp`, verify that `pkg` is a member of the
+    // repository.
+    if membership_in_clone(pkg, repo_dir)? {
+        Ok(repo_status)
+    } else {
+        Ok(RepoStatus::Unassociated(url))
+    }
 }
 
 fn general_status(name: &str, url: Url) -> Result<RepoStatus<'static, ()>> {
@@ -930,157 +1081,6 @@ fn versions(name: &str) -> Result<Vec<crates_io_api::Version>> {
             name
         )
     })
-}
-
-fn latest_commit_age(pkg: &Package) -> Result<RepoStatus<'_, u64>> {
-    let repo_status = timestamp(pkg)?;
-
-    repo_status
-        .map(|timestamp| {
-            let duration = SystemTime::now().duration_since_wc(timestamp)?;
-
-            Ok(duration.as_secs())
-        })
-        .transpose()
-}
-
-fn timestamp(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    TIMESTAMP_CACHE.with_borrow_mut(|timestamp_cache| {
-        // smoelius: Check both the regular and the shortened url.
-        for url in urls(pkg) {
-            if let Some(&repo_status) = timestamp_cache.get(&url) {
-                // smoelius: If a previous attempt to timestamp the repository failed (e.g., because
-                // of spurious network errors), then don't bother checking the repository cache.
-                let Some((url_timestamped, &timestamp)) = repo_status.as_success() else {
-                    return Ok(repo_status);
-                };
-                assert_eq!(url, url_timestamped);
-                // smoelius: `pkg`'s repository could contain other packages that were already
-                // timestamped. Thus, `pkg`'s repository could already be in the timestamp cache.
-                // But in that case, we still need to verify that `pkg` appears in its repository.
-                let repo_status = clone_repository(pkg)?;
-                let Some((url_cloned, _)) = repo_status.as_success() else {
-                    return Ok(repo_status.map_failure());
-                };
-                assert_eq!(url, url_cloned);
-                return Ok(RepoStatus::Success(url, timestamp));
-            }
-        }
-        let repo_status = timestamp_uncached(pkg)?;
-        if let Some((url, _)) = repo_status.as_success() {
-            timestamp_cache.insert(url.leak(), repo_status.leak_url());
-        } else {
-            // smoelius: In the event of failure, set all urls associated with the
-            // repository.
-            for url in urls(pkg) {
-                timestamp_cache.insert(url.leak(), repo_status.leak_url());
-            }
-        }
-        Ok(repo_status)
-    })
-}
-
-fn timestamp_uncached(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    if pkg.repository.is_none() {
-        return Ok(RepoStatus::Unnamed);
-    }
-
-    timestamp_from_clone(pkg)
-}
-
-fn timestamp_from_clone(pkg: &Package) -> Result<RepoStatus<'_, SystemTime>> {
-    let repo_status = clone_repository(pkg)?;
-
-    let Some((url, repo_dir)) = repo_status.as_success() else {
-        return Ok(repo_status.map_failure());
-    };
-
-    let mut command = Command::new("git");
-    command
-        .args(["log", "-1", "--pretty=format:%ct"])
-        .current_dir(repo_dir);
-    let output = command.output_wc()?;
-    ensure!(output.status.success(), "command failed: {command:?}");
-
-    let stdout = std::str::from_utf8(&output.stdout)?;
-    let secs = u64::from_str(stdout.trim_end())?;
-    let timestamp = SystemTime::UNIX_EPOCH + Duration::from_secs(secs);
-
-    Ok(RepoStatus::Success(url, timestamp))
-}
-
-#[cfg_attr(dylint_lib = "general", allow(non_local_effect_before_unhandled_error))]
-#[cfg_attr(dylint_lib = "supplementary", allow(commented_out_code))]
-fn clone_repository(pkg: &Package) -> Result<RepoStatus<'_, PathBuf>> {
-    let repo_status = REPOSITORY_CACHE.with_borrow_mut(|repository_cache| -> Result<_> {
-        on_disk_cache::with_cache(|cache| -> Result<_> {
-            // smoelius: Check all urls associated with the package.
-            for url in urls(pkg) {
-                if let Some(repo_status) = repository_cache.get(&url) {
-                    return Ok(repo_status.clone());
-                }
-            }
-            // smoelius: To make verbose printing easier, "membership" is printed regardless of the
-            // check's purpose, and the `Purpose` type was removed.
-            /* let what = match purpose {
-                Purpose::Membership => "membership",
-                Purpose::Timestamp => "timestamp",
-            }; */
-            verbose::wrap!(
-                || {
-                    let url_and_dir = cache.clone_repository(pkg);
-                    match url_and_dir {
-                        Ok((url_string, repo_dir)) => {
-                            // smoelius: Note the use of `leak` in the next line. But the url is
-                            // acting as a key in a global map, so it is not so bad.
-                            let url = Url::from(url_string.as_str()).leak();
-                            repository_cache
-                                .insert(url, RepoStatus::Success(url, repo_dir.clone()).leak_url());
-                            Ok(RepoStatus::Success(url, repo_dir))
-                        }
-                        Err(error) => {
-                            let repo_status = if let Some(url_string) = &pkg.repository {
-                                let url = url_string.as_str().into();
-                                // smoelius: If cloning failed because the repository does not
-                                // exist, adjust the repo status.
-                                let existence = general_status(&pkg.name, url)?;
-                                let repo_status = if existence.is_failure() {
-                                    existence.map_failure()
-                                } else {
-                                    RepoStatus::Uncloneable(url)
-                                };
-                                warn!("failed to clone `{}`: {}", url_string, error);
-                                repo_status
-                            } else {
-                                RepoStatus::Unnamed
-                            };
-                            // smoelius: In the event of failure, set all urls associated with
-                            // the repository.
-                            for url in urls(pkg) {
-                                repository_cache.insert(url.leak(), repo_status.clone().leak_url());
-                            }
-                            Ok(repo_status)
-                        }
-                    }
-                },
-                RepoStatus::to_membership_string,
-                "membership of `{}` using shallow clone",
-                pkg.name
-            )
-        })
-    })?;
-
-    let Some((url, repo_dir)) = repo_status.as_success() else {
-        return Ok(repo_status);
-    };
-
-    // smoelius: Even if `purpose` is `Purpose::Timestamp`, verify that `pkg` is a member of the
-    // repository.
-    if membership_in_clone(pkg, repo_dir)? {
-        Ok(repo_status)
-    } else {
-        Ok(RepoStatus::Unassociated(url))
-    }
 }
 
 const LINE_PREFIX: &str = "D  ";
