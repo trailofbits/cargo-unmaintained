@@ -144,18 +144,30 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-macro_rules! count {
-    ($outcomes:expr, $pat:pat) => {
-        $outcomes
-            .iter()
-            .filter(|outcome| matches!(outcome, $pat))
-            .count()
-    };
+fn is_leaf(name: &str, path: &Path) -> Result<bool> {
+    let metadata = MetadataCommand::new().current_dir(path).exec()?;
+    Ok(metadata.packages.iter().all(|pkg| {
+        pkg.name == format!("{name}-temp-package")
+            || pkg.dependencies.iter().all(|dep| dep.path.is_some())
+    }))
 }
 
-const CUT_LINE: &str = "---";
+fn advisory_url(advisory: &Advisory) -> String {
+    format!("https://rustsec.org/advisories/{}.html", advisory.id())
+}
 
 fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
+    macro_rules! count {
+        ($outcomes:expr, $pat:pat) => {
+            $outcomes
+                .iter()
+                .filter(|outcome| matches!(outcome, $pat))
+                .count()
+        };
+    }
+
+    const CUT_LINE: &str = "---";
+
     let today = Utc::now().date_naive();
     let count = outcomes.len();
     let found = count!(outcomes, Outcome::Found);
@@ -182,18 +194,6 @@ fn display_expected_readme_contents(outcomes: &[Outcome<Reason>]) {
     println!("  - {leaf} are existent, unarchived leaves");
     println!("  - {recently_updated} were updated within the past 365 days");
     println!("  - {other} were not identified for other reasons");
-}
-
-fn advisory_url(advisory: &Advisory) -> String {
-    format!("https://rustsec.org/advisories/{}.html", advisory.id())
-}
-
-fn is_leaf(name: &str, path: &Path) -> Result<bool> {
-    let metadata = MetadataCommand::new().current_dir(path).exec()?;
-    Ok(metadata.packages.iter().all(|pkg| {
-        pkg.name == format!("{name}-temp-package")
-            || pkg.dependencies.iter().all(|dep| dep.path.is_some())
-    }))
 }
 
 trait Sanitize {
