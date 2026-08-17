@@ -227,17 +227,17 @@ mmap...found
 chrono-english...recently updated
 conrod_core...found
 conrod...found
-gdkwayland...found
-gdkwayland-sys...found
-gdk...found
-atk...found
-gdkx11-sys...found
-gtk...found
-atk-sys...found
-gdkx11...found
-gdk-sys...found
-gtk3-macros...found
-gtk-sys...found
+gdkwayland...recently updated
+gdkwayland-sys...recently updated
+gdk...recently updated
+atk...recently updated
+gdkx11-sys...recently updated
+gtk...recently updated
+atk-sys...recently updated
+gdkx11...recently updated
+gdk-sys...recently updated
+gtk3-macros...recently updated
+gtk-sys...recently updated
 gtk-layer-shell...found
 gtk-layer-shell-sys...found
 get-size...not found
@@ -250,7 +250,7 @@ rustc-serialize...found
 registry...found
 surf...found
 tsify-next...recently updated
-async-std...recently updated
+async-std...found
 adler...found
 fxhash...not found
 custom_derive...found
@@ -396,10 +396,20 @@ not found - leaf (6)
     unic-common               https://rustsec.org/advisories/RUSTSEC-2025-0080.html
     number_prefix             https://rustsec.org/advisories/RUSTSEC-2025-0119.html
     bare-metal                https://rustsec.org/advisories/RUSTSEC-2026-0110.html
-not found - recently-updated (6)
+not found - recently-updated (16)
     chrono-english            https://rustsec.org/advisories/RUSTSEC-2024-0395.html
+    gdkwayland                https://rustsec.org/advisories/RUSTSEC-2024-0410.html
+    gdkwayland-sys            https://rustsec.org/advisories/RUSTSEC-2024-0411.html
+    gdk                       https://rustsec.org/advisories/RUSTSEC-2024-0412.html
+    atk                       https://rustsec.org/advisories/RUSTSEC-2024-0413.html
+    gdkx11-sys                https://rustsec.org/advisories/RUSTSEC-2024-0414.html
+    gtk                       https://rustsec.org/advisories/RUSTSEC-2024-0415.html
+    atk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0416.html
+    gdkx11                    https://rustsec.org/advisories/RUSTSEC-2024-0417.html
+    gdk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0418.html
+    gtk3-macros               https://rustsec.org/advisories/RUSTSEC-2024-0419.html
+    gtk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0420.html
     tsify-next                https://rustsec.org/advisories/RUSTSEC-2025-0048.html
-    async-std                 https://rustsec.org/advisories/RUSTSEC-2025-0052.html
     google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     unic-cli                  https://rustsec.org/advisories/RUSTSEC-2025-0087.html
     pqcrypto-internals        https://rustsec.org/advisories/RUSTSEC-2026-0163.html
@@ -462,7 +472,7 @@ not found - other (58)
     ttf-parser                https://rustsec.org/advisories/RUSTSEC-2026-0192.html
     gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
     smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
-found (160)
+found (150)
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce                 https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -551,17 +561,6 @@ found (160)
     mmap                      https://rustsec.org/advisories/RUSTSEC-2024-0394.html
     conrod_core               https://rustsec.org/advisories/RUSTSEC-2024-0396.html
     conrod                    https://rustsec.org/advisories/RUSTSEC-2024-0397.html
-    gdkwayland                https://rustsec.org/advisories/RUSTSEC-2024-0410.html
-    gdkwayland-sys            https://rustsec.org/advisories/RUSTSEC-2024-0411.html
-    gdk                       https://rustsec.org/advisories/RUSTSEC-2024-0412.html
-    atk                       https://rustsec.org/advisories/RUSTSEC-2024-0413.html
-    gdkx11-sys                https://rustsec.org/advisories/RUSTSEC-2024-0414.html
-    gtk                       https://rustsec.org/advisories/RUSTSEC-2024-0415.html
-    atk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0416.html
-    gdkx11                    https://rustsec.org/advisories/RUSTSEC-2024-0417.html
-    gdk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0418.html
-    gtk3-macros               https://rustsec.org/advisories/RUSTSEC-2024-0419.html
-    gtk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0420.html
     gtk-layer-shell           https://rustsec.org/advisories/RUSTSEC-2024-0422.html
     gtk-layer-shell-sys       https://rustsec.org/advisories/RUSTSEC-2024-0423.html
     get-size-derive           https://rustsec.org/advisories/RUSTSEC-2024-0427.html
@@ -572,6 +571,7 @@ found (160)
     rustc-serialize           https://rustsec.org/advisories/RUSTSEC-2025-0025.html
     registry                  https://rustsec.org/advisories/RUSTSEC-2025-0026.html
     surf                      https://rustsec.org/advisories/RUSTSEC-2025-0036.html
+    async-std                 https://rustsec.org/advisories/RUSTSEC-2025-0052.html
     adler                     https://rustsec.org/advisories/RUSTSEC-2025-0056.html
     custom_derive             https://rustsec.org/advisories/RUSTSEC-2025-0058.html
     servo-fontconfig          https://rustsec.org/advisories/RUSTSEC-2025-0059.html
@@ -624,10 +624,10 @@ found (160)
     im-rc                     https://rustsec.org/advisories/RUSTSEC-2026-0250.html
     sized-chunks              https://rustsec.org/advisories/RUSTSEC-2026-0251.html
 ---
-As of 2026-08-12, the RustSec Advisory Database contains 244 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 160 (65%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-08-17, the RustSec Advisory Database contains 244 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 150 (61%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 84 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 94 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
   - 6 are existent, unarchived leaves
-  - 6 were updated within the past 365 days
+  - 16 were updated within the past 365 days
   - 58 were not identified for other reasons
