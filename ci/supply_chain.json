@@ -382,12 +382,6 @@
     ],
     "cc": [
       {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -395,12 +389,6 @@
       }
     ],
     "cfg-if": [
-      {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
       {
         "id": 55123,
         "kind": "user",
@@ -533,12 +521,6 @@
       }
     ],
     "cmake": [
-      {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
       {
         "id": 55123,
         "kind": "user",
@@ -1028,12 +1010,6 @@
         "name": "log-owners"
       },
       {
-        "id": 51,
-        "kind": "team",
-        "login": "github:rust-lang-nursery:libs",
-        "name": "libs"
-      },
-      {
         "id": 2851,
         "kind": "team",
         "login": "github:env-logger-rs:publishers",
@@ -1044,6 +1020,12 @@
         "kind": "user",
         "login": "sebasmagri",
         "name": "Sebastián Magrí"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "equivalent": [
@@ -1117,12 +1099,6 @@
       }
     ],
     "find-msvc-tools": [
-      {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
       {
         "id": 55123,
         "kind": "user",
@@ -1874,18 +1850,6 @@
     ],
     "glob": [
       {
-        "id": 3,
-        "kind": "user",
-        "login": "huonw",
-        "name": "Huon Wilson"
-      },
-      {
-        "id": 51,
-        "kind": "team",
-        "login": "github:rust-lang-nursery:libs",
-        "name": "libs"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -2496,36 +2460,6 @@
     ],
     "libc": [
       {
-        "id": 3,
-        "kind": "user",
-        "login": "huonw",
-        "name": "Huon Wilson"
-      },
-      {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
-      {
-        "id": 4333,
-        "kind": "user",
-        "login": "joshtriplett",
-        "name": "Josh Triplett"
-      },
-      {
-        "id": 5725,
-        "kind": "user",
-        "login": "gnzlbg",
-        "name": "gnzlbg"
-      },
-      {
-        "id": 51017,
-        "kind": "user",
-        "login": "JohnTitor",
-        "name": "Yuki Okushi"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -2533,18 +2467,6 @@
       }
     ],
     "libm": [
-      {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
-      {
-        "id": 246,
-        "kind": "user",
-        "login": "japaric",
-        "name": "Jorge Aparicio"
-      },
       {
         "id": 55123,
         "kind": "user",
@@ -2632,12 +2554,6 @@
         "kind": "team",
         "login": "github:rust-lang-nursery:log-owners",
         "name": "log-owners"
-      },
-      {
-        "id": 51,
-        "kind": "team",
-        "login": "github:rust-lang-nursery:libs",
-        "name": "libs"
       },
       {
         "id": 3204,
@@ -3216,12 +3132,6 @@
     ],
     "regex": [
       {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
-      {
         "id": 19,
         "kind": "team",
         "login": "github:rust-lang-nursery:regex-owners",
@@ -3232,6 +3142,12 @@
         "kind": "user",
         "login": "BurntSushi",
         "name": "Andrew Gallant"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "regex-automata": [
@@ -3240,15 +3156,15 @@
         "kind": "user",
         "login": "BurntSushi",
         "name": "Andrew Gallant"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "regex-syntax": [
-      {
-        "id": 11,
-        "kind": "team",
-        "login": "github:rust-lang:libs",
-        "name": "libs"
-      },
       {
         "id": 19,
         "kind": "team",
@@ -3260,6 +3176,12 @@
         "kind": "user",
         "login": "BurntSushi",
         "name": "Andrew Gallant"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "remain": [
