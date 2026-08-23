@@ -12,9 +12,9 @@ use walkdir::WalkDir;
 #[test]
 fn clippy() {
     Command::new("cargo")
-        // smoelius: Remove `CARGO` environment variable to work around:
-        // https://github.com/rust-lang/rust/pull/131729
-        .env_remove("CARGO")
+        // smoelius: Disable the next-generation trait solver to work around:
+        // https://github.com/rust-lang/rust/issues/161495
+        .env("RUSTFLAGS", "-Znext-solver=no")
         .args([
             "+nightly",
             "clippy",
