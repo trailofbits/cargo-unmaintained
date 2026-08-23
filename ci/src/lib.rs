@@ -49,7 +49,6 @@ fn dylint() {
 fn elaborate_disallowed_methods() {
     elaborate::disallowed_methods()
         .args(["--workspace", "--all-features", "--all-targets"])
-        .env("RUSTUP_TOOLCHAIN", "nightly")
         .assert()
         .success();
 }
