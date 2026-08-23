@@ -119,6 +119,14 @@ cargo test --features=test-ei
 cargo test --features=test-rustsec
 ```
 
+The `ci` integration test runs the tests in the `ci` package from the workspace root. To run just one of those tests, set `FILTER` to its name (or another substring accepted by the Rust test harness). For example, the following runs only the supply-chain check:
+
+```sh
+FILTER=supply_chain cargo test --test ci
+```
+
+The available test names can be listed with `cargo test -p ci -- --list`. A command-line filter passed directly to `cargo test --test ci` would filter the outer integration test instead of the `ci` package tests that it runs.
+
 ## Known problems
 
 - If a package is renamed from X to Y, it is immediately considered unmaintained because the package's repository no longer contains a package named X. ([#441])
