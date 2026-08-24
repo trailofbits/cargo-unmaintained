@@ -7,6 +7,10 @@ use elaborate::std::{fs::OpenOptionsContext, process::CommandContext};
 use std::{fs::OpenOptions, io::Write, path::Path, process::Command};
 use tempfile::{TempDir, tempdir};
 
+mod no_cache;
+mod purge;
+mod save_token;
+
 const NAME: &str = "bigint";
 
 #[test]

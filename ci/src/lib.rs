@@ -1,6 +1,7 @@
 #![cfg(test)]
 
 use assert_cmd::assert::OutputAssertExt;
+use cargo_metadata::MetadataCommand;
 use elaborate::std::{env::current_dir_wc, fs::read_to_string_wc};
 use regex::Regex;
 use similar_asserts::SimpleDiff;
@@ -59,6 +60,46 @@ fn fmt() {
         .args(["run", "nightly", "cargo", "fmt", "--check"])
         .assert()
         .success();
+}
+
+#[test]
+fn github_tests() {
+    let metadata = MetadataCommand::new().no_deps().exec().unwrap();
+    let package = metadata
+        .packages
+        .into_iter()
+        .find(|package| package.name == "cargo-unmaintained")
+        .unwrap();
+    let mut metadata_tests = package
+        .targets
+        .into_iter()
+        .filter_map(|target| {
+            if target.is_test() {
+                Some(target.name)
+            } else {
+                None
+            }
+        })
+        .collect::<Vec<_>>();
+    metadata_tests.sort();
+
+    let contents = read_to_string_wc(".github/workflows/ci.yml").unwrap();
+    let document = yaml_serde::from_str::<yaml_serde::Value>(&contents).unwrap();
+    let test_sequence = document
+        .get("jobs")
+        .and_then(|value| value.get("test"))
+        .and_then(|value| value.get("strategy"))
+        .and_then(|value| value.get("matrix"))
+        .and_then(|value| value.get("test"))
+        .and_then(yaml_serde::Value::as_sequence)
+        .unwrap();
+    let ci_tests = test_sequence
+        .iter()
+        .map(|value| value.as_str())
+        .collect::<Option<Vec<_>>>()
+        .unwrap();
+
+    assert_eq!(metadata_tests, ci_tests);
 }
 
 #[test]
