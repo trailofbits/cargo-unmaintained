@@ -1,10 +1,14 @@
 #![cfg(all(feature = "on-disk-cache", not(windows)))]
 
-#[allow(clippy::disallowed_methods)]
 #[test]
 fn test_purge() {
-    use assert_cmd::cargo::cargo_bin_cmd;
-    use std::fs::{create_dir_all, write};
+    use assert_cmd::cargo::cargo_bin;
+    use elaborate::std::{
+        fs::{create_dir_all_wc, write_wc},
+        path::PathContext,
+        process::CommandContext,
+    };
+    use std::process::Command;
     use tempfile::tempdir;
 
     // The cache version (v2 currently, but could change in the future)
@@ -13,17 +17,18 @@ fn test_purge() {
     // Create a mock cache directory
     let dir = tempdir().unwrap();
     let cache_path = dir.path().join("cargo-unmaintained").join(CACHE_VERSION);
-    create_dir_all(&cache_path).unwrap();
+    create_dir_all_wc(&cache_path).unwrap();
 
     // Create a dummy file inside
     let test_file = cache_path.join("test.txt");
-    write(&test_file, "test").unwrap();
+    write_wc(&test_file, "test").unwrap();
 
     // Verify the file exists
-    assert!(test_file.exists());
+    assert!(test_file.try_exists_wc().unwrap());
 
     // Run the purge command
-    let mut cmd = cargo_bin_cmd!("cargo-unmaintained");
+    #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
+    let mut cmd = Command::new(cargo_bin!("cargo-unmaintained"));
 
     // Set environment variable for XDG_CACHE_HOME to our temp directory
     cmd.env("XDG_CACHE_HOME", dir.path());
@@ -32,7 +37,7 @@ fn test_purge() {
     cmd.arg("unmaintained").arg("--purge");
 
     // Execute and assert success
-    let output = cmd.output().unwrap();
+    let output = cmd.output_wc().unwrap();
     assert!(
         output.status.success(),
         "Command failed with: {}",
@@ -40,5 +45,8 @@ fn test_purge() {
     );
 
     // Verify the directory was removed
-    assert!(!cache_path.exists(), "Cache directory still exists");
+    assert!(
+        !cache_path.try_exists_wc().unwrap(),
+        "Cache directory still exists"
+    );
 }

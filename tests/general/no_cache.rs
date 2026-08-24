@@ -1,7 +1,8 @@
 #![cfg(all(feature = "on-disk-cache", not(windows)))]
 
-use assert_cmd::cargo::cargo_bin_cmd;
-use std::path::Path;
+use assert_cmd::cargo::cargo_bin;
+use elaborate::std::{path::PathContext, process::CommandContext};
+use std::{path::Path, process::Command};
 use tempfile::tempdir;
 
 /// The package to use for testing
@@ -14,7 +15,6 @@ const CACHE_VERSION: &str = "v2";
 ///
 /// The test verifies that running with --no-cache produces the same output
 /// as running after purging the cache completely.
-#[allow(clippy::disallowed_methods)]
 #[test]
 fn test_no_cache() {
     // Create a temporary directory for XDG_CACHE_HOME
@@ -28,7 +28,8 @@ fn test_no_cache() {
 
     // Helper function to run cargo-unmaintained with specified arguments
     let run_command = |args: &[&str]| {
-        let mut cmd = cargo_bin_cmd!("cargo-unmaintained");
+        #[cfg_attr(dylint_lib = "general", allow(unnecessary_conversion_for_trait))]
+        let mut cmd = Command::new(cargo_bin!("cargo-unmaintained"));
         cmd.arg("unmaintained");
         cmd.args(args);
         // Use our temporary directory as cache location
@@ -38,11 +39,11 @@ fn test_no_cache() {
         // Use JSON output for consistent comparison
         cmd.arg("--json");
         // Execute and ignore output (we'll check the cache directly)
-        cmd.output().unwrap();
+        cmd.output_wc().unwrap();
     };
 
     // Helper function to check if the package entry exists in the cache
-    let entry_exists = || Path::new(&package_entry_path).exists();
+    let entry_exists = || Path::new(&package_entry_path).try_exists_wc().unwrap();
 
     // Initial check - cache entry should not exist yet
     assert!(!entry_exists(), "Cache entry should not exist initially");
@@ -68,7 +69,7 @@ fn test_no_cache() {
     // Verify cache was purged
     assert!(!entry_exists(), "Cache entry should not exist after purge");
     assert!(
-        !cache_root_path.exists(),
+        !cache_root_path.try_exists_wc().unwrap(),
         "Cache directory should not exist after purge"
     );
 
