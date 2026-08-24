@@ -6,6 +6,12 @@
     "version": "1.0.2"
   },
   {
+    "name": "arrayref",
+    "outdated_deps": [],
+    "repo_status": "Nonexistent",
+    "version": "0.3.6"
+  },
+  {
     "name": "atty",
     "outdated_deps": [
       {
