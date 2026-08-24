@@ -109,7 +109,7 @@ fn set_permissions(file: &File, mode: u32) -> CargoResult<()> {
 }
 
 #[cfg(not(unix))]
-#[allow(unused, clippy::disallowed_methods, clippy::unnecessary_wraps)]
+#[allow(unused, clippy::unnecessary_wraps)]
 fn set_permissions(file: &File, mode: u32) -> CargoResult<()> {
     Ok(())
 }
