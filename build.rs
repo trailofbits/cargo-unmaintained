@@ -1,5 +1,5 @@
 use elaborate::std::{env::var_wc, fs::write_wc};
-use std::path::PathBuf;
+use std::{env::var_os, path::PathBuf};
 
 const TOKEN_PATH: &str = if cfg!(not(windows)) {
     "$HOME/.config/cargo-unmaintained/token.txt"
@@ -37,5 +37,10 @@ error occurred.";
     );
     write_wc(path_buf, contents).unwrap();
 
-    nested_workspace::build().arg("--locked").unwrap();
+    // smoelius: Clippy and Dylint both run `cargo check` with `RUSTC_WORKSPACE_WRAPPER` set. Do not
+    // run them on the nested workspace.
+    #[allow(clippy::disallowed_methods)]
+    if var_os("RUSTC_WORKSPACE_WRAPPER").is_none() {
+        nested_workspace::build().arg("--locked").unwrap();
+    }
 }
