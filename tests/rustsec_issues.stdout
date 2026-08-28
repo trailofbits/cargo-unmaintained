@@ -256,7 +256,11 @@ tree-sitter-perl-next...not found
 rustybuzz...found
 users...not found
 nostr...not found
-not found (154)
+color-thief-rs...not found
+procspawn...found
+ignoring `https://rustsec.org/advisories/RUSTSEC-2025-0141` from `https://github.com/rustsec/advisory-db/issues/3179`
+lasso...found
+not found (155)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -411,7 +415,8 @@ not found (154)
     tree-sitter-perl-next    https://github.com/rustsec/advisory-db/issues/3039
     users                    https://github.com/rustsec/advisory-db/issues/3066
     nostr                    https://github.com/rustsec/advisory-db/issues/3116
-found (71)
+    color-thief-rs           https://github.com/rustsec/advisory-db/issues/3168
+found (73)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -483,3 +488,5 @@ found (71)
     structopt                https://github.com/rustsec/advisory-db/issues/2975
     structopt                https://github.com/rustsec/advisory-db/issues/2983
     rustybuzz                https://github.com/rustsec/advisory-db/issues/3050
+    procspawn                https://github.com/rustsec/advisory-db/issues/3179
+    lasso                    https://github.com/rustsec/advisory-db/issues/3181
