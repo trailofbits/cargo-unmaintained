@@ -3169,9 +3169,9 @@ dependencies = [
 
 [[package]]
 name = "log"
-version = "0.4.33"
+version = "0.4.34"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0ceec5bc11778974d1bcb055b18002eba7f4b3518b6a0081b3af5f21666da9ad"
+checksum = "f9f8bd3e56ce4dfc153cf470fffbfa98c7620958b312ca5c3a4b8d5181fd13c6"
 
 [[package]]
 name = "lru-slab"
@@ -3251,9 +3251,9 @@ dependencies = [
 
 [[package]]
 name = "nested_workspace"
-version = "1.0.0"
+version = "2.0.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5d7d1703f070cee72d8dbcb3084782f3b437e7545db76a5eeb33d90818f30498"
+checksum = "f1935ee31d34aa445a64b1a3c50c88a4f8ace188aeb55e35c69947b5d432fee0"
 dependencies = [
  "anstyle",
  "anyhow",
