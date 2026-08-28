@@ -54,7 +54,7 @@ tokio = "1.53"
 
 [build-dependencies]
 elaborate = "2.0"
-nested_workspace = "1.0"
+nested_workspace = "2.0"
 
 [features]
 default = ["on-disk-cache", "crates-index"]
