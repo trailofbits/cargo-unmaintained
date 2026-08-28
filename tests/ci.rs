@@ -24,7 +24,7 @@ fn ci() {
 fn test_executable() -> Result<Utf8PathBuf> {
     let mut command = Command::new("cargo");
     let output = command
-        .args(["build", "-p", "ci", "--tests", "--message-format=json"])
+        .args(["build", "--message-format=json", "--package=ci", "--tests"])
         .env_remove("CARGO_TERM_COLOR")
         .output_wc()?;
     if !output.status.success() {
