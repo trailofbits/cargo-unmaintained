@@ -77,7 +77,7 @@ jobs:
             ~/.cargo/git/db/
           key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
-      - uses: taiki-e/install-action@v2.86.3
+      - uses: taiki-e/install-action@v2.86.7
         with:
           tool: cargo-audit, cargo-hack, cargo-udeps
 
