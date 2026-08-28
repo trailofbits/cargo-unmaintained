@@ -224,7 +224,7 @@ derivative...found
 openslide...found
 minitrace...found
 mmap...found
-chrono-english...recently updated
+chrono-english...not found
 conrod_core...found
 conrod...found
 gdkwayland...recently updated
@@ -396,8 +396,7 @@ not found - leaf (6)
     unic-common               https://rustsec.org/advisories/RUSTSEC-2025-0080.html
     number_prefix             https://rustsec.org/advisories/RUSTSEC-2025-0119.html
     bare-metal                https://rustsec.org/advisories/RUSTSEC-2026-0110.html
-not found - recently-updated (16)
-    chrono-english            https://rustsec.org/advisories/RUSTSEC-2024-0395.html
+not found - recently-updated (15)
     gdkwayland                https://rustsec.org/advisories/RUSTSEC-2024-0410.html
     gdkwayland-sys            https://rustsec.org/advisories/RUSTSEC-2024-0411.html
     gdk                       https://rustsec.org/advisories/RUSTSEC-2024-0412.html
@@ -413,7 +412,7 @@ not found - recently-updated (16)
     google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     unic-cli                  https://rustsec.org/advisories/RUSTSEC-2025-0087.html
     pqcrypto-internals        https://rustsec.org/advisories/RUSTSEC-2026-0163.html
-not found - other (58)
+not found - other (59)
     serial                    https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap                   https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype              https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -431,6 +430,7 @@ not found - other (58)
     cpython                   https://rustsec.org/advisories/RUSTSEC-2023-0076.html
     yaml-rust                 https://rustsec.org/advisories/RUSTSEC-2024-0320.html
     instant                   https://rustsec.org/advisories/RUSTSEC-2024-0384.html
+    chrono-english            https://rustsec.org/advisories/RUSTSEC-2024-0395.html
     get-size                  https://rustsec.org/advisories/RUSTSEC-2024-0425.html
     fxhash                    https://rustsec.org/advisories/RUSTSEC-2025-0057.html
     daemonize                 https://rustsec.org/advisories/RUSTSEC-2025-0069.html
@@ -624,10 +624,10 @@ found (150)
     im-rc                     https://rustsec.org/advisories/RUSTSEC-2026-0250.html
     sized-chunks              https://rustsec.org/advisories/RUSTSEC-2026-0251.html
 ---
-As of 2026-08-17, the RustSec Advisory Database contains 244 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 150 (61%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-08-28, the RustSec Advisory Database contains 244 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 150 (61%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 94 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
   - 6 are existent, unarchived leaves
-  - 16 were updated within the past 365 days
-  - 58 were not identified for other reasons
+  - 15 were updated within the past 365 days
+  - 59 were not identified for other reasons
