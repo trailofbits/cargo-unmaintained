@@ -3688,6 +3688,12 @@
         "kind": "user",
         "login": "Veykril",
         "name": "Lukas Wirth"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "snapbox": [
@@ -3736,6 +3742,12 @@
         "kind": "user",
         "login": "Thomasdezeeuw",
         "name": "Thomas de Zeeuw"
+      },
+      {
+        "id": 55123,
+        "kind": "user",
+        "login": "rust-lang-owner",
+        "name": null
       }
     ],
     "stable_deref_trait": [
