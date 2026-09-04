@@ -552,9 +552,9 @@ dependencies = [
 
 [[package]]
 name = "crates-index"
-version = "3.14.0"
+version = "3.14.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ed2cb0f9440838694b31ff3787148d329e02f03c16ff96c28790261563e82174"
+checksum = "8759756200ee0abc6f62374c5205af1528d3b0a851c83667a69f76de1e19836f"
 dependencies = [
  "gix 0.83.0",
  "hex",
@@ -4608,9 +4608,9 @@ checksum = "13c2bddecc57b384dee18652358fb23172facb8a2c51ccc10d74c157bdea3292"
 
 [[package]]
 name = "supply_chain"
-version = "0.1.1"
+version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "1e18c7619d13ca46c62abd2cc31786f4b86d264bfbf2c96ec8d043e5c0af469b"
+checksum = "281f578d5368f10a30805a842a16790697899d64f129c43947d2e90f8f133f95"
 dependencies = [
  "anyhow",
  "serde_json",
