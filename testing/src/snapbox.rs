@@ -190,7 +190,9 @@ pub fn snapbox(real_github: bool, all_targets: bool) -> Result<()> {
 
             // smoelius: Compare stderr before stdout so that you can see any errors that
             // occurred.
-            if var_wc("BLESS").is_ok() {
+            // smoelius: Do not bless stderr files because it overwrites wildcards.
+            #[allow(clippy::overly_complex_bool_expr)]
+            if false && var_wc("BLESS").is_ok() {
                 write_wc(stderr_path, stderr_actual.replace("\\n", "/n")).unwrap();
             } else {
                 assert_data_eq!(stderr_actual, Data::read_from(&stderr_path, None));
