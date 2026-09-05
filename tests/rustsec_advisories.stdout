@@ -1,4 +1,4 @@
-244 advisories for unmaintained packages
+246 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -305,6 +305,7 @@ rand_os...found
 rustls-pemfile...found
 bincode...found
 libsecp256k1...found
+zip-extract...found
 tokio-uds...found
 tokio-threadpool...found
 tokio-sync...found
@@ -374,6 +375,7 @@ im...found
 smartstring...found
 im-rc...found
 sized-chunks...found
+sp-sized-chunks...found
 not found - error (14)
     block-cipher-trait        https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher              https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -472,7 +474,7 @@ not found - other (59)
     ttf-parser                https://rustsec.org/advisories/RUSTSEC-2026-0192.html
     gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
     smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
-found (150)
+found (152)
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce                 https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -589,6 +591,7 @@ found (150)
     rustls-pemfile            https://rustsec.org/advisories/RUSTSEC-2025-0134.html
     bincode                   https://rustsec.org/advisories/RUSTSEC-2025-0141.html
     libsecp256k1              https://rustsec.org/advisories/RUSTSEC-2025-0161.html
+    zip-extract               https://rustsec.org/advisories/RUSTSEC-2025-0172.html
     tokio-uds                 https://rustsec.org/advisories/RUSTSEC-2026-0050.html
     tokio-threadpool          https://rustsec.org/advisories/RUSTSEC-2026-0051.html
     tokio-sync                https://rustsec.org/advisories/RUSTSEC-2026-0052.html
@@ -623,8 +626,9 @@ found (150)
     smartstring               https://rustsec.org/advisories/RUSTSEC-2026-0249.html
     im-rc                     https://rustsec.org/advisories/RUSTSEC-2026-0250.html
     sized-chunks              https://rustsec.org/advisories/RUSTSEC-2026-0251.html
+    sp-sized-chunks           https://rustsec.org/advisories/RUSTSEC-2026-0270.html
 ---
-As of 2026-08-28, the RustSec Advisory Database contains 244 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 150 (61%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-09-05, the RustSec Advisory Database contains 246 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 152 (61%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 94 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
