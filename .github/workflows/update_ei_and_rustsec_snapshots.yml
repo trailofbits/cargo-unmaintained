@@ -1,0 +1,54 @@
+name: Update ei and rustsec snapshots
+
+on:
+  schedule:
+    - cron: "0 3 * * tue" # 2 = Tuesday
+  workflow_dispatch:
+
+concurrency:
+  group: update-ei-and-rustsec-snapshots-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Update ei and rustsec snapshots
+        run: |
+          BLESS=1 cargo test --features=test-ei,test-rustsec \
+            --test dogfood \
+            --test rustsec_advisories \
+            --test rustsec_issues \
+            --test snapbox_mock_github \
+            --test snapbox_real_github
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+
+      - name: Require that a snapshot changed
+        id: snapshot
+        run: |
+          set +e
+          git diff --exit-code
+          status=$?
+          set -e
+          if [ "$status" -eq 1 ]; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          elif [ "$status" -ne 0 ]; then
+            exit "$status"
+          fi
+
+      - name: Create pull request
+        if: steps.snapshot.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v8
+        with:
+          title: "Update `ei` and `rustsec` snapshots"
+          body: "Clicking 'Ready for review' will run CI checks on this PR."
+          commit-message: "Update third-party tests"
+          branch-suffix: random
+          draft: true
