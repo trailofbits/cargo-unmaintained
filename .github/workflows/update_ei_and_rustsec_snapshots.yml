@@ -19,6 +19,11 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Fetch dependencies
+        run: |
+          cargo install cargo-nested
+          cargo nested fetch
+
       - name: Update ei and rustsec snapshots
         run: |
           BLESS=1 cargo test --features=test-ei,test-rustsec \
