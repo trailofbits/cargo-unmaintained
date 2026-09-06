@@ -2,7 +2,7 @@ name: Update ei and rustsec snapshots
 
 on:
   schedule:
-    - cron: "0 3 * * tue" # 2 = Tuesday
+    - cron: "0 3 * * tue"
   workflow_dispatch:
 
 concurrency:
