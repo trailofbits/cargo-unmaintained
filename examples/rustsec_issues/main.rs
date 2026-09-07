@@ -49,6 +49,9 @@ fn main() -> Result<()> {
     let mut issue_urls = issues
         .iter()
         .filter_map(|issue| {
+            if issue.pull_request.is_some() {
+                return None;
+            }
             if !issue.title.contains("unmaintained")
                 && !issue
                     .labels
