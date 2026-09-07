@@ -58,5 +58,5 @@ jobs:
         uses: peter-evans/create-pull-request@v8
         with:
           title: "Update `ei` and `rustsec` snapshots"
-          commit-message: "Update third-party tests"
+          commit-message: "Update `ei` and `rustsec` snapshots"
           branch-suffix: random
