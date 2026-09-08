@@ -1,4 +1,4 @@
-246 advisories for unmaintained packages
+235 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -227,17 +227,6 @@ mmap...found
 chrono-english...not found
 conrod_core...found
 conrod...found
-gdkwayland...recently updated
-gdkwayland-sys...recently updated
-gdk...recently updated
-atk...recently updated
-gdkx11-sys...recently updated
-gtk...recently updated
-atk-sys...recently updated
-gdkx11...recently updated
-gdk-sys...recently updated
-gtk3-macros...recently updated
-gtk-sys...recently updated
 gtk-layer-shell...found
 gtk-layer-shell-sys...found
 get-size...not found
@@ -398,18 +387,7 @@ not found - leaf (6)
     unic-common               https://rustsec.org/advisories/RUSTSEC-2025-0080.html
     number_prefix             https://rustsec.org/advisories/RUSTSEC-2025-0119.html
     bare-metal                https://rustsec.org/advisories/RUSTSEC-2026-0110.html
-not found - recently-updated (15)
-    gdkwayland                https://rustsec.org/advisories/RUSTSEC-2024-0410.html
-    gdkwayland-sys            https://rustsec.org/advisories/RUSTSEC-2024-0411.html
-    gdk                       https://rustsec.org/advisories/RUSTSEC-2024-0412.html
-    atk                       https://rustsec.org/advisories/RUSTSEC-2024-0413.html
-    gdkx11-sys                https://rustsec.org/advisories/RUSTSEC-2024-0414.html
-    gtk                       https://rustsec.org/advisories/RUSTSEC-2024-0415.html
-    atk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0416.html
-    gdkx11                    https://rustsec.org/advisories/RUSTSEC-2024-0417.html
-    gdk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0418.html
-    gtk3-macros               https://rustsec.org/advisories/RUSTSEC-2024-0419.html
-    gtk-sys                   https://rustsec.org/advisories/RUSTSEC-2024-0420.html
+not found - recently-updated (4)
     tsify-next                https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     unic-cli                  https://rustsec.org/advisories/RUSTSEC-2025-0087.html
@@ -628,10 +606,10 @@ found (152)
     sized-chunks              https://rustsec.org/advisories/RUSTSEC-2026-0251.html
     sp-sized-chunks           https://rustsec.org/advisories/RUSTSEC-2026-0270.html
 ---
-As of 2026-09-08, the RustSec Advisory Database contains 246 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 152 (61%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-09-08, the RustSec Advisory Database contains 235 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 152 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 94 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 83 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
   - 6 are existent, unarchived leaves
-  - 15 were updated within the past 365 days
+  - 4 were updated within the past 365 days
   - 59 were not identified for other reasons
