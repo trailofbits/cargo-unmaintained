@@ -5,7 +5,10 @@ use elaborate::std::{
     fs::{read_to_string_wc, write_wc},
 };
 use regex::Regex;
-use snapbox::assert_data_eq;
+use snapbox::{
+    assert::{Assert, DEFAULT_ACTION_ENV},
+    assert_data_eq,
+};
 use std::{
     io::{Write, stderr},
     process::Command,
@@ -34,6 +37,19 @@ fn rustsec_advisories() {
     let stdout_actual = std::str::from_utf8(&output.captured).unwrap();
 
     if var_wc("BLESS").is_ok() {
+        // smoelius: Do not update the snapshots if it would only change the "As of" date.
+        if Assert::new()
+            .action_env(DEFAULT_ACTION_ENV)
+            .try_eq(
+                None,
+                above_cut_line(stdout_actual).into(),
+                above_cut_line(&stdout_expected).into(),
+            )
+            .is_ok()
+        {
+            return;
+        }
+
         write_wc(PATH_STDOUT, stdout_actual).unwrap();
         update_readme(stdout_actual);
 
@@ -49,6 +65,10 @@ fn rustsec_advisories() {
             above_cut_line(&stdout_expected),
         );
     }
+}
+
+fn above_cut_line(s: &str) -> &str {
+    split_at_first_cut_line(s).map_or(s, |(above, _)| above)
 }
 
 fn update_readme(stdout: &str) {
@@ -81,10 +101,6 @@ fn replace_section(content: &str, start_marker: &str, end_marker: &str, insertio
     let after = &content[end..];
 
     format!("{before}{insertion}{after}")
-}
-
-fn above_cut_line(s: &str) -> &str {
-    split_at_first_cut_line(s).map_or(s, |(above, _)| above)
 }
 
 static CANDIDATE_VERSIONS_RE: LazyLock<Regex> =
