@@ -60,7 +60,7 @@ fn main() -> Result<()> {
             {
                 return None;
             }
-            let mut urls = issue.body.as_deref().map(extract_urls).unwrap_or_default();
+            let mut urls = issue.body.as_deref().map_or_default(extract_urls);
             if urls.is_empty() {
                 return None;
             }
