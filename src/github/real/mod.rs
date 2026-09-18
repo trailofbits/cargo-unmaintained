@@ -119,9 +119,7 @@ fn call_api(
 ) -> Result<serde_json::Value> {
     let url_string = format!(
         "https://api.github.com/repos/{owner}/{repo}{}",
-        endpoint
-            .map(|endpoint| String::from("/") + endpoint)
-            .unwrap_or_default(),
+        endpoint.map_or_default(|endpoint| String::from("/") + endpoint),
     );
 
     let mut list = ::curl::easy::List::new();

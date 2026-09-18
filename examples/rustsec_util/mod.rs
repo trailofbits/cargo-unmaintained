@@ -32,8 +32,7 @@ impl<T: MaybeToString> std::fmt::Display for Outcome<T> {
                 "not found{}",
                 reason
                     .maybe_to_string()
-                    .map(|s| format!(" - {s}"))
-                    .unwrap_or_default()
+                    .map_or_default(|s| format!(" - {s}"))
             ),
             Self::Found => write!(f, "found"),
         }
