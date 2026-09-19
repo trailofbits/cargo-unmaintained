@@ -122,6 +122,7 @@ roots = [{ path = "mock_github", dependent = true }]
 [workspace.metadata.unmaintained]
 ignore = [
     "dashmap",
+    "kstring",
     "lazy_static",
     "rand_chacha",
     # https://github.com/alacritty/vte/pull/122#issuecomment-2579278540
