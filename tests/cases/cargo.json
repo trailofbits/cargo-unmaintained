@@ -51,6 +51,12 @@
     "version": "15.1.0"
   },
   {
+    "name": "kstring",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "2.0.0"
+  },
+  {
     "name": "rand_chacha",
     "outdated_deps": [],
     "repo_status": "Unassociated",
