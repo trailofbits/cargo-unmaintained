@@ -1,4 +1,4 @@
-236 advisories for unmaintained packages
+238 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -328,15 +328,15 @@ required by package `core2-temp-package v0.1.0 ([..])`
 ```
 bare-metal...leaf
 audiopus_sys...not found
-pqcrypto-sphincsplus...not found
-pqcrypto-mlkem...not found
+pqcrypto-sphincsplus...found
+pqcrypto-mlkem...found
 pqcrypto-traits...found
-pqcrypto-internals...recently updated
-pqcrypto...not found
-pqcrypto-falcon...not found
-pqcrypto-mldsa...not found
-pqcrypto-classicmceliece...not found
-pqcrypto-hqc...not found
+pqcrypto-internals...found
+pqcrypto...found
+pqcrypto-falcon...found
+pqcrypto-mldsa...found
+pqcrypto-classicmceliece...found
+pqcrypto-hqc...found
 surf...found
 tide...found
 proc-macro-error2...found
@@ -366,6 +366,8 @@ im-rc...found
 sized-chunks...found
 sp-sized-chunks...found
 clear_on_drop...not found
+cosmian_kyber...found
+pqc_kyber...found
 not found - error (14)
     block-cipher-trait        https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher              https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -388,12 +390,11 @@ not found - leaf (6)
     unic-common               https://rustsec.org/advisories/RUSTSEC-2025-0080.html
     number_prefix             https://rustsec.org/advisories/RUSTSEC-2025-0119.html
     bare-metal                https://rustsec.org/advisories/RUSTSEC-2026-0110.html
-not found - recently-updated (4)
+not found - recently-updated (3)
     tsify-next                https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     unic-cli                  https://rustsec.org/advisories/RUSTSEC-2025-0087.html
-    pqcrypto-internals        https://rustsec.org/advisories/RUSTSEC-2026-0163.html
-not found - other (60)
+not found - other (53)
     serial                    https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap                   https://rustsec.org/advisories/RUSTSEC-2019-0039.html
     stb_truetype              https://rustsec.org/advisories/RUSTSEC-2020-0020.html
@@ -443,18 +444,11 @@ not found - other (60)
     unic-ucd-age              https://rustsec.org/advisories/RUSTSEC-2025-0102.html
     unic-ucd-segment          https://rustsec.org/advisories/RUSTSEC-2025-0104.html
     audiopus_sys              https://rustsec.org/advisories/RUSTSEC-2026-0150.html
-    pqcrypto-sphincsplus      https://rustsec.org/advisories/RUSTSEC-2026-0160.html
-    pqcrypto-mlkem            https://rustsec.org/advisories/RUSTSEC-2026-0161.html
-    pqcrypto                  https://rustsec.org/advisories/RUSTSEC-2026-0164.html
-    pqcrypto-falcon           https://rustsec.org/advisories/RUSTSEC-2026-0165.html
-    pqcrypto-mldsa            https://rustsec.org/advisories/RUSTSEC-2026-0166.html
-    pqcrypto-classicmceliece  https://rustsec.org/advisories/RUSTSEC-2026-0167.html
-    pqcrypto-hqc              https://rustsec.org/advisories/RUSTSEC-2026-0168.html
     ttf-parser                https://rustsec.org/advisories/RUSTSEC-2026-0192.html
     gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
     smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
     clear_on_drop             https://rustsec.org/advisories/RUSTSEC-2026-0283.html
-found (152)
+found (162)
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce                 https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -590,7 +584,15 @@ found (152)
     tokio-signal              https://rustsec.org/advisories/RUSTSEC-2026-0065.html
     zantetsu-ffi              https://rustsec.org/advisories/RUSTSEC-2026-0082.html
     zantetsu-trainer          https://rustsec.org/advisories/RUSTSEC-2026-0083.html
+    pqcrypto-sphincsplus      https://rustsec.org/advisories/RUSTSEC-2026-0160.html
+    pqcrypto-mlkem            https://rustsec.org/advisories/RUSTSEC-2026-0161.html
     pqcrypto-traits           https://rustsec.org/advisories/RUSTSEC-2026-0162.html
+    pqcrypto-internals        https://rustsec.org/advisories/RUSTSEC-2026-0163.html
+    pqcrypto                  https://rustsec.org/advisories/RUSTSEC-2026-0164.html
+    pqcrypto-falcon           https://rustsec.org/advisories/RUSTSEC-2026-0165.html
+    pqcrypto-mldsa            https://rustsec.org/advisories/RUSTSEC-2026-0166.html
+    pqcrypto-classicmceliece  https://rustsec.org/advisories/RUSTSEC-2026-0167.html
+    pqcrypto-hqc              https://rustsec.org/advisories/RUSTSEC-2026-0168.html
     surf                      https://rustsec.org/advisories/RUSTSEC-2026-0169.html
     tide                      https://rustsec.org/advisories/RUSTSEC-2026-0170.html
     proc-macro-error2         https://rustsec.org/advisories/RUSTSEC-2026-0173.html
@@ -607,11 +609,13 @@ found (152)
     im-rc                     https://rustsec.org/advisories/RUSTSEC-2026-0250.html
     sized-chunks              https://rustsec.org/advisories/RUSTSEC-2026-0251.html
     sp-sized-chunks           https://rustsec.org/advisories/RUSTSEC-2026-0270.html
+    cosmian_kyber             https://rustsec.org/advisories/RUSTSEC-2026-0287.html
+    pqc_kyber                 https://rustsec.org/advisories/RUSTSEC-2026-0289.html
 ---
-As of 2026-09-15, the RustSec Advisory Database contains 236 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 152 (64%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-09-19, the RustSec Advisory Database contains 238 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 162 (68%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 84 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 76 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
   - 6 are existent, unarchived leaves
-  - 4 were updated within the past 365 days
-  - 60 were not identified for other reasons
+  - 3 were updated within the past 365 days
+  - 53 were not identified for other reasons
