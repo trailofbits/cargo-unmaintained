@@ -121,6 +121,7 @@ roots = [{ path = "mock_github", dependent = true }]
 
 [workspace.metadata.unmaintained]
 ignore = [
+    "cfg-if",
     "dashmap",
     "kstring",
     "lazy_static",
