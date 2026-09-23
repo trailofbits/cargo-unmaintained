@@ -48,6 +48,12 @@
     "version": "0.10.3"
   },
   {
+    "name": "cfg-if",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.0.0"
+  },
+  {
     "name": "cloudabi",
     "outdated_deps": [
       {
