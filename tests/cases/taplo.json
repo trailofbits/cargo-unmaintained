@@ -27,6 +27,12 @@
     "version": "0.5.3"
   },
   {
+    "name": "cfg-if",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.0.0"
+  },
+  {
     "name": "countme",
     "outdated_deps": [],
     "repo_status": "Archived",

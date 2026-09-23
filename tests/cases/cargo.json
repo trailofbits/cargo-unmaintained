@@ -18,6 +18,12 @@
     "version": "2.1.0"
   },
   {
+    "name": "cfg-if",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.0.0"
+  },
+  {
     "name": "color-print-proc-macro",
     "outdated_deps": [
       {
