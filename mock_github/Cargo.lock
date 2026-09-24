@@ -2398,9 +2398,9 @@ dependencies = [
 
 [[package]]
 name = "nested_workspace"
-version = "2.0.1"
+version = "3.1.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a752ca8b9c7e679f3c281e4024e006f4cebac5344f86b8b2af3fc9376907aff8"
+checksum = "74b6ed6587aadd39890426d35e1993561a12c6da97aa4e2d2c3cfa918376d3d4"
 dependencies = [
  "anstyle",
  "anyhow",
