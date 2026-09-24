@@ -732,6 +732,58 @@
         "name": "Taiki Endo"
       }
     ],
+    "crossbeam-deque": [
+      {
+        "id": 2347,
+        "kind": "user",
+        "login": "jeehoonkang",
+        "name": "Jeehoon Kang"
+      },
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
+    "crossbeam-epoch": [
+      {
+        "id": 2347,
+        "kind": "user",
+        "login": "jeehoonkang",
+        "name": "Jeehoon Kang"
+      },
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
     "crossbeam-utils": [
       {
         "id": 2347,
@@ -1404,14 +1456,6 @@
         "name": "Sebastian Thiel"
       }
     ],
-    "gix-archive": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
     "gix-attributes": [
       {
         "id": 980,
@@ -1421,14 +1465,6 @@
       }
     ],
     "gix-bitmap": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-blame": [
       {
         "id": 980,
         "kind": "user",
@@ -1493,14 +1529,6 @@
       }
     ],
     "gix-diff": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-dir": [
       {
         "id": 980,
         "kind": "user",
@@ -1580,14 +1608,6 @@
         "name": "Sebastian Thiel"
       }
     ],
-    "gix-imara-diff": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
     "gix-index": [
       {
         "id": 980,
@@ -1604,7 +1624,7 @@
         "name": "Sebastian Thiel"
       }
     ],
-    "gix-merge": [
+    "gix-macros": [
       {
         "id": 980,
         "kind": "user",
@@ -1613,6 +1633,14 @@
       }
     ],
     "gix-negotiate": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-note": [
       {
         "id": 980,
         "kind": "user",
@@ -1740,14 +1768,6 @@
         "name": "Sebastian Thiel"
       }
     ],
-    "gix-status": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
     "gix-submodule": [
       {
         "id": 980,
@@ -1820,7 +1840,7 @@
         "name": "Sebastian Thiel"
       }
     ],
-    "gix-worktree-state": [
+    "gix-worktree-stream": [
       {
         "id": 980,
         "kind": "user",
@@ -1828,7 +1848,7 @@
         "name": "Sebastian Thiel"
       }
     ],
-    "gix-worktree-stream": [
+    "gix-zlib": [
       {
         "id": 980,
         "kind": "user",
@@ -2252,14 +2272,6 @@
         "name": "Josh Stone"
       }
     ],
-    "io-close": [
-      {
-        "id": 58881,
-        "kind": "user",
-        "login": "wufz",
-        "name": null
-      }
-    ],
     "ipnet": [
       {
         "id": 8197,
@@ -2414,14 +2426,6 @@
         "name": "Guy Bedford"
       }
     ],
-    "kstring": [
-      {
-        "id": 6743,
-        "kind": "user",
-        "login": "epage",
-        "name": "Ed Page"
-      }
-    ],
     "libc": [
       {
         "id": 55123,
@@ -2538,14 +2542,6 @@
         "kind": "user",
         "login": "Ralith",
         "name": "Benjamin Saunders"
-      }
-    ],
-    "maybe-async": [
-      {
-        "id": 28057,
-        "kind": "user",
-        "login": "fMeow",
-        "name": "fMeow"
       }
     ],
     "memchr": [
@@ -3552,14 +3548,6 @@
         "name": "Armin Ronacher"
       }
     ],
-    "shell-words": [
-      {
-        "id": 62153,
-        "kind": "user",
-        "login": "tmiasko",
-        "name": "Tomasz Miąsko"
-      }
-    ],
     "shlex": [
       {
         "id": 972,
@@ -3738,14 +3726,6 @@
         "kind": "user",
         "login": "Storyyeller",
         "name": "Robert Grosse"
-      }
-    ],
-    "static_assertions": [
-      {
-        "id": 3832,
-        "kind": "user",
-        "login": "nvzqz",
-        "name": "Nikolai Vazquez"
       }
     ],
     "strsim": [
