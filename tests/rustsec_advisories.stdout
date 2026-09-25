@@ -1,4 +1,4 @@
-238 advisories for unmaintained packages
+241 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -368,6 +368,9 @@ sp-sized-chunks...found
 clear_on_drop...not found
 cosmian_kyber...found
 pqc_kyber...found
+unzip...found
+owned-alloc...leaf
+stack-graphs...found
 not found - error (14)
     block-cipher-trait        https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher              https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -383,13 +386,14 @@ not found - error (14)
     cargo-asm                 https://rustsec.org/advisories/RUSTSEC-2025-0122.html
     core2                     https://rustsec.org/advisories/RUSTSEC-2026-0105.html
     tree-sitter-perl-next     https://rustsec.org/advisories/RUSTSEC-2026-0203.html
-not found - leaf (6)
+not found - leaf (7)
     anymap                    https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject               https://rustsec.org/advisories/RUSTSEC-2021-0144.html
     json                      https://rustsec.org/advisories/RUSTSEC-2022-0081.html
     unic-common               https://rustsec.org/advisories/RUSTSEC-2025-0080.html
     number_prefix             https://rustsec.org/advisories/RUSTSEC-2025-0119.html
     bare-metal                https://rustsec.org/advisories/RUSTSEC-2026-0110.html
+    owned-alloc               https://rustsec.org/advisories/RUSTSEC-2026-0299.html
 not found - recently-updated (3)
     tsify-next                https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
@@ -448,7 +452,7 @@ not found - other (53)
     gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
     smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
     clear_on_drop             https://rustsec.org/advisories/RUSTSEC-2026-0283.html
-found (162)
+found (164)
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce                 https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -611,11 +615,13 @@ found (162)
     sp-sized-chunks           https://rustsec.org/advisories/RUSTSEC-2026-0270.html
     cosmian_kyber             https://rustsec.org/advisories/RUSTSEC-2026-0287.html
     pqc_kyber                 https://rustsec.org/advisories/RUSTSEC-2026-0289.html
+    unzip                     https://rustsec.org/advisories/RUSTSEC-2026-0296.html
+    stack-graphs              https://rustsec.org/advisories/RUSTSEC-2026-0303.html
 ---
-As of 2026-09-19, the RustSec Advisory Database contains 238 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 162 (68%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-09-25, the RustSec Advisory Database contains 241 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 164 (68%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 76 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 77 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
-  - 6 are existent, unarchived leaves
+  - 7 are existent, unarchived leaves
   - 3 were updated within the past 365 days
   - 53 were not identified for other reasons
