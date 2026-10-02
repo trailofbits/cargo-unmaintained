@@ -45,6 +45,12 @@
     "version": "0.1.19"
   },
   {
+    "name": "lazy_static",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.4.0"
+  },
+  {
     "name": "lsp-types",
     "outdated_deps": [
       {
@@ -58,6 +64,12 @@
       "Age": null
     },
     "version": "0.93.2"
+  },
+  {
+    "name": "pin-utils",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "0.1.0"
   },
   {
     "name": "prettytable-rs",
