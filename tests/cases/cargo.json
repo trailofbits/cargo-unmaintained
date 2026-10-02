@@ -63,6 +63,12 @@
     "version": "2.0.0"
   },
   {
+    "name": "lazy_static",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.4.0"
+  },
+  {
     "name": "rand_chacha",
     "outdated_deps": [],
     "repo_status": "Unassociated",

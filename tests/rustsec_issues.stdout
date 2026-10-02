@@ -163,7 +163,11 @@ ignoring `https://www.reddit.com/r/rust/comments/1slnga4/core2_yanked_millions_e
 cornucopia...not found
 serde-regex...not found
 structopt...found
-not found (98)
+toml...not found
+basic-toml...found
+anymap...not found
+anymap3...not found
+not found (101)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -262,7 +266,10 @@ not found (98)
     core2                    https://github.com/rustsec/advisory-db/issues/2788
     cornucopia               https://github.com/rustsec/advisory-db/issues/2841
     serde-regex              https://github.com/rustsec/advisory-db/issues/2925
-found (41)
+    toml                     https://github.com/rustsec/advisory-db/issues/3286
+    anymap                   https://github.com/rustsec/advisory-db/issues/3300
+    anymap3                  https://github.com/rustsec/advisory-db/issues/3300
+found (42)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -304,3 +311,4 @@ found (41)
     libsecp256k1             https://github.com/rustsec/advisory-db/issues/2780
     num-primes               https://github.com/rustsec/advisory-db/issues/2787
     structopt                https://github.com/rustsec/advisory-db/issues/2975
+    basic-toml               https://github.com/rustsec/advisory-db/issues/3286
