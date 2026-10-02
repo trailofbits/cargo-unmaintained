@@ -71,8 +71,20 @@
   {
     "name": "fuchsia-cprng",
     "outdated_deps": [],
-    "repo_status": "Nonexistent",
+    "repo_status": "[..]",
     "version": "0.1.1"
+  },
+  {
+    "name": "lazy_static",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "1.4.0"
+  },
+  {
+    "name": "pin-utils",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "0.1.0"
   },
   {
     "name": "rand_chacha",
