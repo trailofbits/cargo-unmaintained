@@ -167,6 +167,7 @@ toml...not found
 basic-toml...found
 anymap...not found
 anymap3...not found
+pin-utils...found
 not found (101)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
@@ -269,7 +270,7 @@ not found (101)
     toml                     https://github.com/rustsec/advisory-db/issues/3286
     anymap                   https://github.com/rustsec/advisory-db/issues/3300
     anymap3                  https://github.com/rustsec/advisory-db/issues/3300
-found (42)
+found (43)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
@@ -312,3 +313,4 @@ found (42)
     num-primes               https://github.com/rustsec/advisory-db/issues/2787
     structopt                https://github.com/rustsec/advisory-db/issues/2975
     basic-toml               https://github.com/rustsec/advisory-db/issues/3286
+    pin-utils                https://github.com/rustsec/advisory-db/issues/3314
