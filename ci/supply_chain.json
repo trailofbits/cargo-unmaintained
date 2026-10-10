@@ -360,12 +360,6 @@
     ],
     "cargo-platform": [
       {
-        "id": 4282,
-        "kind": "team",
-        "login": "github:rust-lang:release-publishers",
-        "name": "release-publishers"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -3611,24 +3605,6 @@
       }
     ],
     "smol_str": [
-      {
-        "id": 2699,
-        "kind": "user",
-        "login": "matklad",
-        "name": "Alex Kladov"
-      },
-      {
-        "id": 13682,
-        "kind": "team",
-        "login": "github:rust-lang:rust-analyzer",
-        "name": "rust-analyzer"
-      },
-      {
-        "id": 16374,
-        "kind": "user",
-        "login": "Veykril",
-        "name": "Lukas Wirth"
-      },
       {
         "id": 55123,
         "kind": "user",
