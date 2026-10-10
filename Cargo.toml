@@ -123,6 +123,7 @@ roots = [{ path = "mock_github", dependent = true }]
 ignore = [
     "cfg-if",
     "dashmap",
+    "gix-features",
     "kstring",
     "lazy_static",
     "rand_chacha",
