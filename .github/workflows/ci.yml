@@ -121,7 +121,12 @@ jobs:
         run: cargo build $FEATURES --workspace
 
       - name: Test
-        run: cargo test $FEATURES --test ${{ matrix.test }}
+        run: |
+          if [[ '${{ matrix.test }}' = 'ci' ]]; then
+            cargo run -p ci
+          else
+            cargo test $FEATURES --test ${{ matrix.test }}
+          fi
         env:
           GITHUB_TOKEN: ${{ github.token }}
 

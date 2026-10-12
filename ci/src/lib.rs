@@ -114,9 +114,10 @@ fn hack_feature_powerset_udeps() {
             "--feature-powerset",
             "--at-least-one-of=crates-index,tame-index",
             // `test-ei` and `test-rustsec` gate only test files, and this check analyzes just the
-            // library and binary. So including those features would only increase the number of
-            // `udeps` runs.
-            "--exclude-features=test-ei,test-rustsec",
+            // library and binary. Similarly, the purpose of `__use_cargo_run_-p_ci__` is just to
+            // direct users to run the `ci` binary. So including those features would only increase
+            // the number of `udeps` runs.
+            "--exclude-features=test-ei,test-rustsec,__use_cargo_run_-p_ci__",
             "udeps",
         ])
         .assert()
