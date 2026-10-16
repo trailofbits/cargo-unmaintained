@@ -72,6 +72,45 @@
     "version": "0.1.0"
   },
   {
+    "name": "pprof",
+    "outdated_deps": [
+      {
+        "name": "criterion",
+        "req": "^0.3",
+        "version_latest": null,
+        "version_used": "0.3.6"
+      },
+      {
+        "name": "inferno",
+        "req": "^0.11",
+        "version_latest": null,
+        "version_used": "0.11.11"
+      },
+      {
+        "name": "nix",
+        "req": "^0.24",
+        "version_latest": null,
+        "version_used": "0.24.2"
+      },
+      {
+        "name": "symbolic-demangle",
+        "req": "^8.0",
+        "version_latest": null,
+        "version_used": "8.8.0"
+      },
+      {
+        "name": "thiserror",
+        "req": "^1.0",
+        "version_latest": null,
+        "version_used": "1.0.37"
+      }
+    ],
+    "repo_status": {
+      "Age": null
+    },
+    "version": "0.9.1"
+  },
+  {
     "name": "prettytable-rs",
     "outdated_deps": [
       {
