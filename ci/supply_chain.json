@@ -584,20 +584,6 @@
         "name": "Jiahao XU"
       }
     ],
-    "const-oid": [
-      {
-        "id": 267,
-        "kind": "user",
-        "login": "tarcieri",
-        "name": "Tony Arcieri"
-      },
-      {
-        "id": 4457,
-        "kind": "team",
-        "login": "github:rustcrypto:formats",
-        "name": "formats"
-      }
-    ],
     "core-foundation": [
       {
         "id": 5,
@@ -2397,14 +2383,6 @@
       }
     ],
     "libc": [
-      {
-        "id": 55123,
-        "kind": "user",
-        "login": "rust-lang-owner",
-        "name": null
-      }
-    ],
-    "libm": [
       {
         "id": 55123,
         "kind": "user",
