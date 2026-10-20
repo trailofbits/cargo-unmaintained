@@ -1,4 +1,4 @@
-243 advisories for unmaintained packages
+247 advisories for unmaintained packages
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -47,17 +47,13 @@ routing...found
 safe_app...error:
 ```
     Updating crates.io index
-error: failed to select a version for the requirement `zip = "~0.2.3"`
-  version 0.2.3 is yanked
-  version 0.2.5 is yanked
-  version 0.2.6 is yanked
-  version 0.2.7 is yanked
-  version 0.2.8 is yanked
-  version 0.2.9 is yanked
+error: failed to select a version for the requirement `clap = "~2.14.0"`
+  version 2.14.0 is yanked
+  version 2.14.1 is yanked
 location searched: crates.io index
-required by package `rust_sodium-sys v0.3.0`
-    ... which satisfies dependency `rust_sodium-sys = "~0.3.0"` of package `rust_sodium v0.3.0`
-    ... which satisfies dependency `rust_sodium = "~0.3.0"` of package `safe_app v0.1.0`
+required by package `resource_proof v0.4.0`
+    ... which satisfies dependency `resource_proof = "~0.4.0"` of package `routing v0.31.0`
+    ... which satisfies dependency `routing = "~0.31.0"` of package `safe_app v0.1.0`
     ... which satisfies dependency `safe_app = "*"` of package `safe_app-temp-package v0.1.0 ([..])`
 ```
 safe_authenticator...error:
@@ -97,15 +93,7 @@ required by package `quic-p2p v0.2.1`
     ... which satisfies dependency `safe-api = "*"` of package `safe-api-temp-package v0.1.0 ([..])`
 ```
 jsonrpc-quic...found
-office...error:
-```
-    Updating crates.io index
-error: failed to select a version for the requirement `zip = "^0.1.19"`
-  version 0.1.19 is yanked
-location searched: crates.io index
-required by package `office v0.8.0`
-    ... which satisfies dependency `office = "*"` of package `office-temp-package v0.1.0 ([..])`
-```
+office...found
 aesni...found
 aes-soft...found
 aes-ctr...found
@@ -381,22 +369,15 @@ sp-sized-chunks...found
 clear_on_drop...not found
 cosmian_kyber...found
 pqc_kyber...found
-unzip...error:
-```
-    Updating crates.io index
-error: failed to select a version for the requirement `zip = "^0.2.6"`
-  version 0.2.6 is yanked
-  version 0.2.7 is yanked
-  version 0.2.8 is yanked
-  version 0.2.9 is yanked
-location searched: crates.io index
-required by package `unzip v0.1.0`
-    ... which satisfies dependency `unzip = "*"` of package `unzip-temp-package v0.1.0 ([..])`
-```
+unzip...found
 owned-alloc...leaf
 stack-graphs...found
 anymap2...leaf
-not found - error (16)
+zvariant...found
+zbus_names...found
+zvariant_derive...found
+basic-toml...found
+not found - error (14)
     block-cipher-trait        https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher              https://rustsec.org/advisories/RUSTSEC-2020-0057.html
     stream-cipher             https://rustsec.org/advisories/RUSTSEC-2020-0058.html
@@ -404,7 +385,6 @@ not found - error (16)
     safe_authenticator        https://rustsec.org/advisories/RUSTSEC-2020-0084.html
     safe_vault                https://rustsec.org/advisories/RUSTSEC-2020-0085.html
     safe-api                  https://rustsec.org/advisories/RUSTSEC-2021-0024.html
-    office                    https://rustsec.org/advisories/RUSTSEC-2021-0034.html
     miscreant                 https://rustsec.org/advisories/RUSTSEC-2021-0062.html
     cargo-download            https://rustsec.org/advisories/RUSTSEC-2021-0133.html
     cosmwasm                  https://rustsec.org/advisories/RUSTSEC-2024-0004.html
@@ -412,7 +392,6 @@ not found - error (16)
     cargo-asm                 https://rustsec.org/advisories/RUSTSEC-2025-0122.html
     core2                     https://rustsec.org/advisories/RUSTSEC-2026-0105.html
     tree-sitter-perl-next     https://rustsec.org/advisories/RUSTSEC-2026-0203.html
-    unzip                     https://rustsec.org/advisories/RUSTSEC-2026-0296.html
 not found - leaf (8)
     anymap                    https://rustsec.org/advisories/RUSTSEC-2021-0065.html
     traitobject               https://rustsec.org/advisories/RUSTSEC-2021-0144.html
@@ -480,7 +459,7 @@ not found - other (53)
     gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
     smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
     clear_on_drop             https://rustsec.org/advisories/RUSTSEC-2026-0283.html
-found (163)
+found (169)
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce                 https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -500,6 +479,7 @@ found (163)
     term_size                 https://rustsec.org/advisories/RUSTSEC-2020-0163.html
     interfaces2               https://rustsec.org/advisories/RUSTSEC-2021-0002.html
     jsonrpc-quic              https://rustsec.org/advisories/RUSTSEC-2021-0025.html
+    office                    https://rustsec.org/advisories/RUSTSEC-2021-0034.html
     aesni                     https://rustsec.org/advisories/RUSTSEC-2021-0059.html
     aes-soft                  https://rustsec.org/advisories/RUSTSEC-2021-0060.html
     aes-ctr                   https://rustsec.org/advisories/RUSTSEC-2021-0061.html
@@ -643,12 +623,17 @@ found (163)
     sp-sized-chunks           https://rustsec.org/advisories/RUSTSEC-2026-0270.html
     cosmian_kyber             https://rustsec.org/advisories/RUSTSEC-2026-0287.html
     pqc_kyber                 https://rustsec.org/advisories/RUSTSEC-2026-0289.html
+    unzip                     https://rustsec.org/advisories/RUSTSEC-2026-0296.html
     stack-graphs              https://rustsec.org/advisories/RUSTSEC-2026-0303.html
+    zvariant                  https://rustsec.org/advisories/RUSTSEC-2026-0370.html
+    zbus_names                https://rustsec.org/advisories/RUSTSEC-2026-0371.html
+    zvariant_derive           https://rustsec.org/advisories/RUSTSEC-2026-0372.html
+    basic-toml                https://rustsec.org/advisories/RUSTSEC-2026-0374.html
 ---
-As of 2026-10-16, the RustSec Advisory Database contains 243 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 163 (67%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-10-20, the RustSec Advisory Database contains 247 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 169 (68%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 80 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
-  - 16 do not build
+- Of the 78 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+  - 14 do not build
   - 8 are existent, unarchived leaves
   - 3 were updated within the past 365 days
   - 53 were not identified for other reasons
