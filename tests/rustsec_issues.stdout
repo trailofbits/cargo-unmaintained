@@ -20,7 +20,7 @@ dirs-sys-rs...not found
 ignoring `https://www.reddit.com/r/rust/comments/ga7f56/why_dirs_and_directories_repositories_have_been/` from `https://github.com/rustsec/advisory-db/issues/282`
 ignoring `https://www.reddit.com/r/rust/comments/ga7f56/why_dirs_and_directories_repositories_have_been/foyqipp/` from `https://github.com/rustsec/advisory-db/issues/282`
 rust-xcb...not found
-office...not found
+office...found
 crate...not found
 calamine...not found
 ab-glyph...not found
@@ -168,7 +168,7 @@ basic-toml...found
 anymap...not found
 anymap3...not found
 pin-utils...found
-not found (102)
+not found (101)
     term                     https://github.com/rustsec/advisory-db/issues/134 
     termcolor                https://github.com/rustsec/advisory-db/issues/173 
     term                     https://github.com/rustsec/advisory-db/issues/173 
@@ -182,7 +182,6 @@ not found (102)
     dirs-rs                  https://github.com/rustsec/advisory-db/issues/282 
     dirs-sys-rs              https://github.com/rustsec/advisory-db/issues/282 
     rust-xcb                 https://github.com/rustsec/advisory-db/issues/653 
-    office                   https://github.com/rustsec/advisory-db/issues/742 
     crate                    https://github.com/rustsec/advisory-db/issues/742 
     calamine                 https://github.com/rustsec/advisory-db/issues/742 
     ab-glyph                 https://github.com/rustsec/advisory-db/issues/867 
@@ -271,10 +270,11 @@ not found (102)
     toml                     https://github.com/rustsec/advisory-db/issues/3286
     anymap                   https://github.com/rustsec/advisory-db/issues/3300
     anymap3                  https://github.com/rustsec/advisory-db/issues/3300
-found (42)
+found (43)
     chan                     https://github.com/rustsec/advisory-db/issues/173 
     rust-crypto              https://github.com/rustsec/advisory-db/issues/173 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/173 
+    office                   https://github.com/rustsec/advisory-db/issues/742 
     sodiumoxide              https://github.com/rustsec/advisory-db/issues/1090
     serde_cbor               https://github.com/rustsec/advisory-db/issues/1110
     cbor                     https://github.com/rustsec/advisory-db/issues/1110
