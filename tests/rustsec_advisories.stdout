@@ -1,4 +1,5 @@
-247 advisories for unmaintained packages
+248 advisories for unmaintained packages
+jwt...found
 lz4-compress...found
 serial...not found
 tempdir...found
@@ -459,7 +460,8 @@ not found - other (53)
     gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
     smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
     clear_on_drop             https://rustsec.org/advisories/RUSTSEC-2026-0283.html
-found (169)
+found (170)
+    jwt                       https://rustsec.org/advisories/RUSTSEC-2016-0007.html
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
     boxfnonce                 https://rustsec.org/advisories/RUSTSEC-2019-0040.html
@@ -630,7 +632,7 @@ found (169)
     zvariant_derive           https://rustsec.org/advisories/RUSTSEC-2026-0372.html
     basic-toml                https://rustsec.org/advisories/RUSTSEC-2026-0374.html
 ---
-As of 2026-10-20, the RustSec Advisory Database contains 247 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 169 (68%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-10-27, the RustSec Advisory Database contains 248 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 170 (68%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
 - Of the 78 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
