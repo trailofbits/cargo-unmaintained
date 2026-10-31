@@ -78,7 +78,7 @@ jobs:
 
       - uses: taiki-e/install-action@v2.87.32
         with:
-          tool: cargo-audit, cargo-hack, cargo-udeps
+          tool: cargo-audit, cargo-hack, cargo-nested, cargo-udeps
 
       - name: Install CI tools
         if: ${{ matrix.test == 'ci' }}
@@ -90,10 +90,6 @@ jobs:
           cargo install cargo-dylint dylint-link || true
           cargo install cargo-license            || true
           cargo install cargo-supply-chain       || true
-
-      - name: Install general tools
-        run: |
-          cargo install cargo-nested             || true
 
       - name: Enable verbose logging
         if: ${{ runner.debug == 1 }}
