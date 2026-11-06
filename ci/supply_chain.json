@@ -1110,18 +1110,6 @@
     ],
     "flate2": [
       {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      },
-      {
-        "id": 4333,
-        "kind": "user",
-        "login": "joshtriplett",
-        "name": "Josh Triplett"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -1196,18 +1184,6 @@
     ],
     "futures": [
       {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -1215,18 +1191,6 @@
       }
     ],
     "futures-channel": [
-      {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
       {
         "id": 55123,
         "kind": "user",
@@ -1236,18 +1200,6 @@
     ],
     "futures-core": [
       {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -1255,18 +1207,6 @@
       }
     ],
     "futures-executor": [
-      {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
       {
         "id": 55123,
         "kind": "user",
@@ -1276,18 +1216,6 @@
     ],
     "futures-io": [
       {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -1295,18 +1223,6 @@
       }
     ],
     "futures-macro": [
-      {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
       {
         "id": 55123,
         "kind": "user",
@@ -1316,18 +1232,6 @@
     ],
     "futures-sink": [
       {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -1336,18 +1240,6 @@
     ],
     "futures-task": [
       {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -1355,18 +1247,6 @@
       }
     ],
     "futures-util": [
-      {
-        "id": 5149,
-        "kind": "user",
-        "login": "cramertj",
-        "name": "Taylor Cramer"
-      },
-      {
-        "id": 33035,
-        "kind": "user",
-        "login": "taiki-e",
-        "name": "Taiki Endo"
-      },
       {
         "id": 55123,
         "kind": "user",
