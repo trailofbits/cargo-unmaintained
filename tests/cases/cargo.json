@@ -57,6 +57,12 @@
     "version": "0.17.0"
   },
   {
+    "name": "humantime",
+    "outdated_deps": [],
+    "repo_status": "Archived",
+    "version": "2.1.0"
+  },
+  {
     "name": "im-rc",
     "outdated_deps": [],
     "repo_status": "Archived",
