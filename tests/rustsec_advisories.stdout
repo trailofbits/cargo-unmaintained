@@ -1,4 +1,4 @@
-252 advisories for unmaintained packages
+256 advisories for unmaintained packages
 jwt...found
 lz4-compress...found
 serial...not found
@@ -382,6 +382,10 @@ astral-tokio-tar...found
 pin-utils...found
 astral-tl...found
 ocipkg...found
+humantime...found
+chrono...recently updated
+chrono-tz...found
+chrono-tz-build...found
 not found - error (14)
     block-cipher-trait        https://rustsec.org/advisories/RUSTSEC-2020-0018.html
     block-cipher              https://rustsec.org/advisories/RUSTSEC-2020-0057.html
@@ -406,10 +410,11 @@ not found - leaf (8)
     bare-metal                https://rustsec.org/advisories/RUSTSEC-2026-0110.html
     owned-alloc               https://rustsec.org/advisories/RUSTSEC-2026-0299.html
     anymap2                   https://rustsec.org/advisories/RUSTSEC-2026-0319.html
-not found - recently-updated (3)
+not found - recently-updated (4)
     tsify-next                https://rustsec.org/advisories/RUSTSEC-2025-0048.html
     google-apis-common        https://rustsec.org/advisories/RUSTSEC-2025-0066.html
     unic-cli                  https://rustsec.org/advisories/RUSTSEC-2025-0087.html
+    chrono                    https://rustsec.org/advisories/RUSTSEC-2026-0543.html
 not found - other (53)
     serial                    https://rustsec.org/advisories/RUSTSEC-2017-0008.html
     typemap                   https://rustsec.org/advisories/RUSTSEC-2019-0039.html
@@ -464,7 +469,7 @@ not found - other (53)
     gumdrop                   https://rustsec.org/advisories/RUSTSEC-2026-0214.html
     smallstr                  https://rustsec.org/advisories/RUSTSEC-2026-0215.html
     clear_on_drop             https://rustsec.org/advisories/RUSTSEC-2026-0283.html
-found (174)
+found (177)
     jwt                       https://rustsec.org/advisories/RUSTSEC-2016-0007.html
     lz4-compress              https://rustsec.org/advisories/RUSTSEC-2017-0007.html
     tempdir                   https://rustsec.org/advisories/RUSTSEC-2018-0017.html
@@ -639,11 +644,14 @@ found (174)
     pin-utils                 https://rustsec.org/advisories/RUSTSEC-2026-0441.html
     astral-tl                 https://rustsec.org/advisories/RUSTSEC-2026-0444.html
     ocipkg                    https://rustsec.org/advisories/RUSTSEC-2026-0449.html
+    humantime                 https://rustsec.org/advisories/RUSTSEC-2026-0542.html
+    chrono-tz                 https://rustsec.org/advisories/RUSTSEC-2026-0555.html
+    chrono-tz-build           https://rustsec.org/advisories/RUSTSEC-2026-0559.html
 ---
-As of 2026-11-06, the RustSec Advisory Database contains 252 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 174 (69%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
+As of 2026-11-17, the RustSec Advisory Database contains 256 active advisories for unmaintained packages. Using the above conditions, `cargo-unmaintained` automatically identifies 177 (69%) of them. These results can be reproduced by running the [`rustsec_advisories`] example within this repository.
 ---
-- Of the 78 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
+- Of the 79 packages in the RustSec Advisory Database _not_ identified by `cargo-unmaintained`:
   - 14 do not build
   - 8 are existent, unarchived leaves
-  - 3 were updated within the past 365 days
+  - 4 were updated within the past 365 days
   - 53 were not identified for other reasons
