@@ -264,26 +264,6 @@
         "kind": "user",
         "login": "KodrAus",
         "name": "Ashley Mannix"
-      },
-      {
-        "id": 55123,
-        "kind": "user",
-        "login": "rust-lang-owner",
-        "name": null
-      }
-    ],
-    "block-buffer": [
-      {
-        "id": 2398,
-        "kind": "team",
-        "login": "github:rustcrypto:utils",
-        "name": "utils"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
       }
     ],
     "borsh": [
@@ -686,6 +666,38 @@
         "name": "Sam"
       }
     ],
+    "crossbeam": [
+      {
+        "id": 1,
+        "kind": "user",
+        "login": "alexcrichton",
+        "name": "Alex Crichton"
+      },
+      {
+        "id": 2347,
+        "kind": "user",
+        "login": "jeehoonkang",
+        "name": "Jeehoon Kang"
+      },
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2495,
+        "kind": "user",
+        "login": "aturon",
+        "name": "Aaron Turon"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
     "crossbeam-channel": [
       {
         "id": 2347,
@@ -764,6 +776,26 @@
         "name": "Taiki Endo"
       }
     ],
+    "crossbeam-queue": [
+      {
+        "id": 2356,
+        "kind": "team",
+        "login": "github:crossbeam-rs:admins",
+        "name": "admins"
+      },
+      {
+        "id": 2915,
+        "kind": "user",
+        "login": "Amanieu",
+        "name": "Amanieu d'Antras"
+      },
+      {
+        "id": 33035,
+        "kind": "user",
+        "login": "taiki-e",
+        "name": "Taiki Endo"
+      }
+    ],
     "crossbeam-utils": [
       {
         "id": 2347,
@@ -788,20 +820,6 @@
         "kind": "user",
         "login": "taiki-e",
         "name": "Taiki Endo"
-      }
-    ],
-    "crypto-common": [
-      {
-        "id": 2370,
-        "kind": "team",
-        "login": "github:rustcrypto:traits",
-        "name": "traits"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
       }
     ],
     "curl": [
@@ -906,20 +924,6 @@
         "name": null
       }
     ],
-    "digest": [
-      {
-        "id": 2370,
-        "kind": "team",
-        "login": "github:rustcrypto:traits",
-        "name": "traits"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
-      }
-    ],
     "dispatch2": [
       {
         "id": 3246,
@@ -952,6 +956,14 @@
         "kind": "user",
         "login": "yaahc",
         "name": "Jane Losare-Lusby"
+      }
+    ],
+    "dua-core": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
       }
     ],
     "dunce": [
@@ -1254,20 +1266,6 @@
         "name": null
       }
     ],
-    "generic-array": [
-      {
-        "id": 1793,
-        "kind": "user",
-        "login": "fizyk20",
-        "name": "Bartłomiej Kamiński"
-      },
-      {
-        "id": 5704,
-        "kind": "user",
-        "login": "novacrazy",
-        "name": "Nova"
-      }
-    ],
     "getrandom": [
       {
         "id": 563,
@@ -1378,6 +1376,14 @@
         "name": "Sebastian Thiel"
       }
     ],
+    "gix-dir": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
     "gix-discover": [
       {
         "id": 980,
@@ -1387,14 +1393,6 @@
       }
     ],
     "gix-error": [
-      {
-        "id": 980,
-        "kind": "user",
-        "login": "Byron",
-        "name": "Sebastian Thiel"
-      }
-    ],
-    "gix-features": [
       {
         "id": 980,
         "kind": "user",
@@ -1443,6 +1441,14 @@
       }
     ],
     "gix-ignore": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-imara-diff": [
       {
         "id": 980,
         "kind": "user",
@@ -1515,6 +1521,14 @@
       }
     ],
     "gix-packetline": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-parallel": [
       {
         "id": 980,
         "kind": "user",
@@ -1610,6 +1624,14 @@
         "name": "Sebastian Thiel"
       }
     ],
+    "gix-status": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
     "gix-submodule": [
       {
         "id": 980,
@@ -1675,6 +1697,14 @@
       }
     ],
     "gix-worktree": [
+      {
+        "id": 980,
+        "kind": "user",
+        "login": "Byron",
+        "name": "Sebastian Thiel"
+      }
+    ],
+    "gix-worktree-state": [
       {
         "id": 980,
         "kind": "user",
@@ -2100,6 +2130,14 @@
         "kind": "user",
         "login": "cuviper",
         "name": "Josh Stone"
+      }
+    ],
+    "io-close": [
+      {
+        "id": 58881,
+        "kind": "user",
+        "login": "wufz",
+        "name": null
       }
     ],
     "ipnet": [
@@ -3268,46 +3306,20 @@
         "name": "Anthony Ramine"
       }
     ],
-    "sha1": [
-      {
-        "id": 267,
-        "kind": "user",
-        "login": "tarcieri",
-        "name": "Tony Arcieri"
-      },
-      {
-        "id": 2369,
-        "kind": "team",
-        "login": "github:rustcrypto:hashes",
-        "name": "hashes"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
-      }
-    ],
-    "sha1-checked": [
-      {
-        "id": 2369,
-        "kind": "team",
-        "login": "github:rustcrypto:hashes",
-        "name": "hashes"
-      },
-      {
-        "id": 5059,
-        "kind": "user",
-        "login": "newpavlov",
-        "name": "Artyom Pavlov"
-      }
-    ],
     "sha1_smol": [
       {
         "id": 39,
         "kind": "user",
         "login": "mitsuhiko",
         "name": "Armin Ronacher"
+      }
+    ],
+    "sha1dc": [
+      {
+        "id": 1546,
+        "kind": "user",
+        "login": "srijs",
+        "name": "Sam"
       }
     ],
     "shlex": [
@@ -3886,14 +3898,6 @@
         "name": "Sean McArthur"
       }
     ],
-    "typenum": [
-      {
-        "id": 243,
-        "kind": "user",
-        "login": "paholg",
-        "name": "Paho Lurie-Gregg"
-      }
-    ],
     "uluru": [
       {
         "id": 5,
@@ -4086,14 +4090,6 @@
         "kind": "user",
         "login": "waych",
         "name": "Mike Waychison"
-      }
-    ],
-    "version_check": [
-      {
-        "id": 3864,
-        "kind": "user",
-        "login": "SergioBenitez",
-        "name": "Sergio Benitez"
       }
     ],
     "walkdir": [
