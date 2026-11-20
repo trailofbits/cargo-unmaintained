@@ -2904,18 +2904,6 @@
     ],
     "regex": [
       {
-        "id": 19,
-        "kind": "team",
-        "login": "github:rust-lang-nursery:regex-owners",
-        "name": "regex-owners"
-      },
-      {
-        "id": 189,
-        "kind": "user",
-        "login": "BurntSushi",
-        "name": "Andrew Gallant"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -2924,12 +2912,6 @@
     ],
     "regex-automata": [
       {
-        "id": 189,
-        "kind": "user",
-        "login": "BurntSushi",
-        "name": "Andrew Gallant"
-      },
-      {
         "id": 55123,
         "kind": "user",
         "login": "rust-lang-owner",
@@ -2937,18 +2919,6 @@
       }
     ],
     "regex-syntax": [
-      {
-        "id": 19,
-        "kind": "team",
-        "login": "github:rust-lang-nursery:regex-owners",
-        "name": "regex-owners"
-      },
-      {
-        "id": 189,
-        "kind": "user",
-        "login": "BurntSushi",
-        "name": "Andrew Gallant"
-      },
       {
         "id": 55123,
         "kind": "user",
